@@ -17,65 +17,37 @@ abstract class NodeInfoLocal implements Built<NodeInfoLocal, NodeInfoLocalBuilde
   factory NodeInfoLocal([void Function(NodeInfoLocalBuilder) updates]) = _$NodeInfoLocal;
 }
 
+abstract class NodeInfoRemote implements Built<NodeInfoRemote, NodeInfoRemoteBuilder> {
+  static Serializer<NodeInfoRemote> get serializer => _$nodeInfoRemoteSerializer;
 
-/// Collect all the serializers required for the protocol
-/// with stcompact
-Serializers collectSerializers() {
-  final serBuilder = Serializers().toBuilder();
+  PublicKey get appPublicKey;
+  PublicKey get nodePublicKey;
+  NetAddress get nodeAddress;
 
-  // Serializers for common types:
-  for (final commonSer in commonSerializers) {
-    serBuilder.add(commonSer);
-  }
-
-  // Serializers for compound protocol messages:
-  serBuilder.add(NodeInfoLocal.serializer);
-
-  return serBuilder.build();
+  NodeInfoRemote._();
+  factory NodeInfoRemote([void Function(NodeInfoRemoteBuilder) updates]) = _$NodeInfoRemote;
 }
-
-final serializers = collectSerializers();
-
 
 @BuiltUnion()
-class SimpleUnion extends _$SimpleUnion {
-  static Serializer<SimpleUnion> get serializer => _$simpleUnionSerializer;
+class NodeInfo extends _$NodeInfo {
+  static Serializer<NodeInfo> get serializer => _$nodeInfoSerializer;
 
-  SimpleUnion.empty() : super.empty();
-  SimpleUnion.integer(int integer) : super.integer(integer);
-  SimpleUnion.tuple(int tupleInt, String tupleString)
-      : super.tuple(tupleInt, tupleString);
-  SimpleUnion.string(String string) : super.string(string);
-  SimpleUnion.builtList(BuiltList<int> builtList) : super.builtList(builtList);
+  NodeInfo.local(NodeInfoLocal nodeInfoLocal) : super.local(nodeInfoLocal);
+  NodeInfo.remote(NodeInfoRemote nodeInfoRemote) : super.remote(nodeInfoRemote);
 }
+
+abstract class NodeStatus implements Built<NodeStatus, NodeStatusBuilder> {
+  static Serializer<NodeStatus> get serializer => _$nodeStatusSerializer;
+
+  bool get isOpen;
+  NodeInfo get info;
+
+  NodeStatus._();
+  factory NodeStatus([void Function(NodeStatusBuilder) updates]) = _$NodeStatus;
+}
+
 
 /*
-#[derive(Arbitrary, Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct NodeInfoLocal {
-    #[serde(with = "ser_b64")]
-    pub node_public_key: PublicKey,
-}
-
-#[derive(Arbitrary, Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct NodeInfoRemote {
-    #[serde(with = "ser_b64")]
-    pub app_public_key: PublicKey,
-    #[serde(with = "ser_b64")]
-    pub node_public_key: PublicKey,
-    pub node_address: NetAddress,
-}
-
-#[derive(Arbitrary, Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub enum NodeInfo {
-    Local(NodeInfoLocal),
-    Remote(NodeInfoRemote),
-}
-
-#[derive(Arbitrary, Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct NodeStatus {
-    pub is_open: bool,
-    pub info: NodeInfo,
-}
 
 #[derive(Arbitrary, Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub struct CreateNodeLocal {
@@ -144,3 +116,25 @@ pub struct UserToServerAck {
     pub inner: UserToServer,
 }
 */
+
+
+// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
+
+/// Collect all the serializers required for the protocol
+/// with stcompact
+Serializers collectSerializers() {
+  final serBuilder = Serializers().toBuilder();
+
+  // Serializers for common types:
+  for (final commonSer in commonSerializers) {
+    serBuilder.add(commonSer);
+  }
+
+  // Serializers for compound protocol messages:
+  serBuilder.add(NodeInfoLocal.serializer);
+
+  return serBuilder.build();
+}
+
+final serializers = collectSerializers();
