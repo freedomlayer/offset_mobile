@@ -27,6 +27,7 @@ class WrappedStringGenerator
 
 
 
+/*
 /// class name should be of the form: "__ClassName".
 /// This function returns "ClassName"
 String calcClassName(Element element) {
@@ -43,26 +44,26 @@ String calcClassName(Element element) {
 
   return className.substring(2);
 }
+*/
 
 /// Generate code for a new-type class that wraps a string.
 /// When serialized, a simple json string will be created.
 String generateWrappedString(Element element, ConstantReader annotation) {
-  final className = calcClassName(element);
+  final className = element.name;
 
   return '''
 @immutable
-class $className extends __$className {
+class _\$$className {
   final String inner;
 
-  static Serializer<$className> serializer = ${className}Serializer();
-  $className(this.inner);
+  _\$$className(this.inner);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) {
       return true;
     }
-    if (other is $className) {
+    if (other is _\$$className) {
       return inner == other.inner;
     } else {
       return false;
@@ -86,7 +87,7 @@ class $className extends __$className {
 
 class ${className}Serializer implements StructuredSerializer<$className> {
   @override
-  final Iterable<Type> types = const [$className];
+  final Iterable<Type> types = const [$className, _\$$className];
   @override
   final String wireName = '$className';
 

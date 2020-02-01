@@ -5,61 +5,88 @@ import 'package:offst_mobile/utils/wrapped_string_builder.dart';
 part 'common.g.dart';
 
 @WrappedString()
-class __PublicKey {}
+class PublicKey extends _$PublicKey {
+  PublicKey(String inner) : super(inner);
+}
 
 @WrappedString()
-class __PrivateKey {}
+class PrivateKey extends _$PrivateKey {
+  PrivateKey(String inner) : super(inner);
+}
 
 @WrappedString()
-class __Uid {}
+class Uid extends _$Uid {
+  Uid(String inner) : super(inner);
+}
 
 @WrappedString()
-class __NetAddress {}
+class NetAddress extends _$NetAddress {
+  NetAddress(String inner) : super(inner);
+}
 
 @WrappedString()
-class __NodeName {}
+class NodeName extends _$NodeName {
+  NodeName(String inner) : super(inner);
+}
 
 @WrappedString()
-class __NodeId {}
+class NodeId extends _$NodeId {
+  NodeId(String inner) : super(inner);
+}
 
 @WrappedString()
-class __Currency {}
+class Currency extends _$Currency {
+  Currency(String inner) : super(inner);
+}
 
 @WrappedString()
-class __HashResult {}
+class HashResult extends _$HashResult {
+  HashResult(String inner) : super(inner);
+}
 
 @WrappedString()
-class __HashedLock {}
+class HashedLock extends _$HashedLock {
+  HashedLock(String inner) : super(inner);
+}
 
 @WrappedString()
-class __InvoiceId {}
+class InvoiceId extends _$InvoiceId {
+  InvoiceId(String inner) : super(inner);
+}
 
 @WrappedString()
-class __PaymentId {}
+class PaymentId extends _$PaymentId {
+  PaymentId(String inner) : super(inner);
+}
 
 @WrappedString()
-class __PlainLock {}
+class PlainLock extends _$PlainLock {
+  PlainLock(String inner) : super(inner);
+}
 
 @WrappedString()
-class __RandValue {}
+class RandValue extends _$RandValue {
+  RandValue(String inner) : super(inner);
+}
 
 @WrappedString()
-class __Signature {}
-
+class Signature extends _$Signature {
+  Signature(String inner) : super(inner);
+}
 
 final commonSerializers = <Serializer>[
-  PublicKey.serializer,
-  PrivateKey.serializer,
-  Uid.serializer,
-  NetAddress.serializer,
-  NodeName.serializer,
-  NodeId.serializer,
-  Currency.serializer,
-  HashResult.serializer,
-  HashedLock.serializer,
-  InvoiceId.serializer,
-  PaymentId.serializer,
-  PlainLock.serializer,
-  RandValue.serializer,
-  Signature.serializer,
+  PublicKeySerializer(),
+  PrivateKeySerializer(),
+  UidSerializer(),
+  NetAddressSerializer(),
+  NodeNameSerializer(),
+  NodeIdSerializer(),
+  CurrencySerializer(),
+  HashResultSerializer(),
+  HashedLockSerializer(),
+  InvoiceIdSerializer(),
+  PaymentIdSerializer(),
+  PlainLockSerializer(),
+  RandValueSerializer(),
+  SignatureSerializer(),
 ];
