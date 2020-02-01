@@ -6,59 +6,45 @@ import 'wrapped_string_builder.dart';
 part 'common.g.dart';
 
 @WrappedString()
-// ignore: unused_element
 class __PublicKey {}
 
 @WrappedString()
-// ignore: unused_element
 class __PrivateKey {}
 
 @WrappedString()
-// ignore: unused_element
 class __Uid {}
 
 @WrappedString()
-// ignore: unused_element
 class __NetAddress {}
 
 @WrappedString()
-// ignore: unused_element
 class __NodeName {}
 
 @WrappedString()
-// ignore: unused_element
 class __NodeId {}
 
 @WrappedString()
-// ignore: unused_element
 class __Currency {}
 
 @WrappedString()
-// ignore: unused_element
 class __HashResult {}
 
 @WrappedString()
-// ignore: unused_element
 class __HashedLock {}
 
 @WrappedString()
-// ignore: unused_element
 class __InvoiceId {}
 
 @WrappedString()
-// ignore: unused_element
 class __PaymentId {}
 
 @WrappedString()
-// ignore: unused_element
 class __PlainLock {}
 
 @WrappedString()
-// ignore: unused_element
 class __RandValue {}
 
 @WrappedString()
-// ignore: unused_element
 class __Signature {}
 
 
