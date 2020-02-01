@@ -7,7 +7,7 @@ targets:
 builders:
   wrapped_string:
     target: ":offst_mobile"
-    import: "package:offst_mobile/protocol/wrapped_string_builder.dart"
+    import: "package:offst_mobile/utils/wrapped_string_builder.dart"
     builder_factories: ["wrappedStringBuilder"]
     build_extensions: {".dart": [".wrapped_string.g.part"]}
     auto_apply: dependents
