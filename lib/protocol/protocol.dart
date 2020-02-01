@@ -46,15 +46,14 @@ abstract class NodeStatus implements Built<NodeStatus, NodeStatusBuilder> {
   factory NodeStatus([void Function(NodeStatusBuilder) updates]) = _$NodeStatus;
 }
 
-abstract class CreateLocalNode implements Built<CreateLocalNode, CreateLocalNodeBuilder> {
-  static Serializer<CreateLocalNode> get serializer => _$createLocalNodeSerializer;
+abstract class CreateNodeLocal implements Built<CreateNodeLocal, CreateNodeLocalBuilder> {
+  static Serializer<CreateNodeLocal> get serializer => _$createNodeLocalSerializer;
 
   NodeName get nodeName;
 
-  CreateLocalNode._();
-  factory CreateLocalNode([void Function(CreateLocalNodeBuilder) updates]) = _$CreateLocalNode;
+  CreateNodeLocal._();
+  factory CreateNodeLocal([void Function(CreateNodeLocalBuilder) updates]) = _$CreateNodeLocal;
 }
-
 /*
 
 #[derive(Arbitrary, Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
