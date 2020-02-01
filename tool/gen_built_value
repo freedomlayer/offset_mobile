@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+
+# A util to help generate boilerplate code for structs and unions (created with
+# BuiltValue and BuiltUnion)
+
+import sys
+import argparse
+
+STRUCT_TEMPLATE = '''
+abstract class {class_name} implements Built<{class_name}, {builder_name}> {{
+  static Serializer<{class_name}> get serializer => _${serializer_name};
+
+  // int get myInt;
+
+  {class_name}._();
+  factory {class_name}([void Function({builder_name}) updates]) = _${class_name};
+}}
+'''
+
+def decapitalize(s):
+    """
+    Decapitalize first letter of a string
+    """
+    if len(s) == 0:
+        return s
+    else:
+        return s[0].lower() + s[1:]
+
+
+def gen_struct(class_name):
+    builder_name = class_name + 'Builder'
+    serializer_name = decapitalize(class_name) + 'Serializer'
+
+    return STRUCT_TEMPLATE.format(class_name=class_name, builder_name=builder_name,
+            serializer_name=serializer_name).strip()
+
+UNION_TEMPLATE = '''
+@BuiltUnion()
+class {class_name} extends _${class_name} {{
+  static Serializer<{class_name}> get serializer => _${serializer_name};
+
+  // {class_name}.variant(int myInt) : super.variant(myInt);
+}}
+'''
+
+def gen_union(class_name):
+    serializer_name = decapitalize(class_name) + 'Serializer'
+
+    return UNION_TEMPLATE.format(class_name=class_name,
+            serializer_name=serializer_name).strip()
+
+def run():
+    parser = argparse.ArgumentParser(description='BuiltValue boilerplate generator')
+    g = parser.add_mutually_exclusive_group(required=True)
+    g.add_argument("-s", '--struct', type=str, help="Struct")
+    g.add_argument("-u", '--union',  type=str, help="Tagged Union")
+    args = parser.parse_args()
+
+    if args.struct is not None:
+        print(gen_struct(args.struct))
+        return 0
+
+    if args.union is not None:
+        print(gen_union(args.union))
+        return 0
+
+    # We shouldn't get here
+    assert False
+
+if __name__ == '__main__':
+    sys.exit(run())
