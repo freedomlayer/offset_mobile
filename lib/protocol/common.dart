@@ -1,234 +1,80 @@
-import 'package:built_value/built_value.dart';
+import 'package:meta/meta.dart';
+
 import 'package:built_value/serializer.dart';
+import 'wrapped_string_builder.dart';
 
 part 'common.g.dart';
 
-// ------------- PublicKey -----------------------------------------
+@WrappedString()
+// ignore: unused_element
+class __PublicKey {}
 
-abstract class PublicKey implements Built<PublicKey, PublicKeyBuilder> {
-  String get inner;
+@WrappedString()
+// ignore: unused_element
+class __PrivateKey {}
 
-  factory PublicKey([Function(PublicKeyBuilder) updates]) = _$PublicKey;
-  PublicKey._();
-}
+@WrappedString()
+// ignore: unused_element
+class __Uid {}
 
-Serializer<PublicKey> publicKeySerializer = PublicKeySerializer();
+@WrappedString()
+// ignore: unused_element
+class __NetAddress {}
 
-class PublicKeySerializer implements StructuredSerializer<PublicKey> {
-  @override
-  final Iterable<Type> types = const [PublicKey, _$PublicKey];
-  @override
-  final String wireName = 'PublicKey';
+@WrappedString()
+// ignore: unused_element
+class __NodeName {}
 
-  @override
-  Iterable<Object> serialize(Serializers serializers, PublicKey object,
-      {FullType specifiedType = FullType.unspecified}) {
-    return <Object>[object.inner];
-  }
+@WrappedString()
+// ignore: unused_element
+class __NodeId {}
 
-  @override
-  PublicKey deserialize(Serializers serializers, Iterable<Object> serialized,
-      {FullType specifiedType = FullType.unspecified}) {
-    
-    final result = PublicKeyBuilder();
-    final iterator = serialized.iterator;
-    iterator.moveNext();
-    result.inner = iterator.current;
+@WrappedString()
+// ignore: unused_element
+class __Currency {}
 
-    return result.build();
-  }
-}
+@WrappedString()
+// ignore: unused_element
+class __HashResult {}
 
-// ---------------- PrivateKey ---------------------------------
+@WrappedString()
+// ignore: unused_element
+class __HashedLock {}
 
-abstract class PrivateKey implements Built<PrivateKey, PrivateKeyBuilder> {
-  String get inner;
+@WrappedString()
+// ignore: unused_element
+class __InvoiceId {}
 
-  factory PrivateKey([Function(PrivateKeyBuilder) updates]) = _$PrivateKey;
-  PrivateKey._();
-}
+@WrappedString()
+// ignore: unused_element
+class __PaymentId {}
 
-Serializer<PrivateKey> privateKeySerializer = PrivateKeySerializer();
+@WrappedString()
+// ignore: unused_element
+class __PlainLock {}
 
-class PrivateKeySerializer implements StructuredSerializer<PrivateKey> {
-  @override
-  final Iterable<Type> types = const [PrivateKey, _$PrivateKey];
-  @override
-  final String wireName = 'PrivateKey';
+@WrappedString()
+// ignore: unused_element
+class __RandValue {}
 
-  @override
-  Iterable<Object> serialize(Serializers serializers, PrivateKey object,
-      {FullType specifiedType = FullType.unspecified}) {
-    return <Object>[object.inner];
-  }
-
-  @override
-  PrivateKey deserialize(Serializers serializers, Iterable<Object> serialized,
-      {FullType specifiedType = FullType.unspecified}) {
-    
-    final result = PrivateKeyBuilder();
-    final iterator = serialized.iterator;
-    iterator.moveNext();
-    result.inner = iterator.current;
-
-    return result.build();
-  }
-}
+@WrappedString()
+// ignore: unused_element
+class __Signature {}
 
 
-// ---------------- Uid ---------------------------------
-
-abstract class Uid implements Built<Uid, UidBuilder> {
-  String get inner;
-
-  factory Uid([Function(UidBuilder) updates]) = _$Uid;
-  Uid._();
-}
-
-Serializer<Uid> uidSerializer = UidSerializer();
-
-class UidSerializer implements StructuredSerializer<Uid> {
-  @override
-  final Iterable<Type> types = const [Uid, _$Uid];
-  @override
-  final String wireName = 'Uid';
-
-  @override
-  Iterable<Object> serialize(Serializers serializers, Uid object,
-      {FullType specifiedType = FullType.unspecified}) {
-    return <Object>[object.inner];
-  }
-
-  @override
-  Uid deserialize(Serializers serializers, Iterable<Object> serialized,
-      {FullType specifiedType = FullType.unspecified}) {
-    
-    final result = UidBuilder();
-    final iterator = serialized.iterator;
-    iterator.moveNext();
-    result.inner = iterator.current;
-
-    return result.build();
-  }
-}
-
-
-// ---------------- NetAddress ---------------------------------
-
-abstract class NetAddress implements Built<NetAddress, NetAddressBuilder> {
-  String get inner;
-
-  factory NetAddress([Function(NetAddressBuilder) updates]) = _$NetAddress;
-  NetAddress._();
-}
-
-Serializer<NetAddress> netAddressSerializer = NetAddressSerializer();
-
-class NetAddressSerializer implements StructuredSerializer<NetAddress> {
-  @override
-  final Iterable<Type> types = const [NetAddress, _$NetAddress];
-  @override
-  final String wireName = 'NetAddress';
-
-  @override
-  Iterable<Object> serialize(Serializers serializers, NetAddress object,
-      {FullType specifiedType = FullType.unspecified}) {
-    return <Object>[object.inner];
-  }
-
-  @override
-  NetAddress deserialize(Serializers serializers, Iterable<Object> serialized,
-      {FullType specifiedType = FullType.unspecified}) {
-    
-    final result = NetAddressBuilder();
-    final iterator = serialized.iterator;
-    iterator.moveNext();
-    result.inner = iterator.current;
-
-    return result.build();
-  }
-}
-
-// ---------------- NodeName ---------------------------------
-
-abstract class NodeName implements Built<NodeName, NodeNameBuilder> {
-  String get inner;
-
-  factory NodeName([Function(NodeNameBuilder) updates]) = _$NodeName;
-  NodeName._();
-}
-
-Serializer<NodeName> nodeNameSerializer = NodeNameSerializer();
-
-class NodeNameSerializer implements StructuredSerializer<NodeName> {
-  @override
-  final Iterable<Type> types = const [NodeName, _$NodeName];
-  @override
-  final String wireName = 'NodeName';
-
-  @override
-  Iterable<Object> serialize(Serializers serializers, NodeName object,
-      {FullType specifiedType = FullType.unspecified}) {
-    return <Object>[object.inner];
-  }
-
-  @override
-  NodeName deserialize(Serializers serializers, Iterable<Object> serialized,
-      {FullType specifiedType = FullType.unspecified}) {
-    
-    final result = NodeNameBuilder();
-    final iterator = serialized.iterator;
-    iterator.moveNext();
-    result.inner = iterator.current;
-
-    return result.build();
-  }
-}
-
-
-// ---------------- NodeId ------------------------------
-
-abstract class NodeId implements Built<NodeId, NodeIdBuilder> {
-  String get inner;
-
-  factory NodeId([Function(NodeIdBuilder) updates]) = _$NodeId;
-  NodeId._();
-}
-
-Serializer<NodeId> nodeIdSerializer = NodeIdSerializer();
-
-class NodeIdSerializer implements StructuredSerializer<NodeId> {
-  @override
-  final Iterable<Type> types = const [NodeId, _$NodeId];
-  @override
-  final String wireName = 'NodeId';
-
-  @override
-  Iterable<Object> serialize(Serializers serializers, NodeId object,
-      {FullType specifiedType = FullType.unspecified}) {
-    return <Object>[object.inner];
-  }
-
-  @override
-  NodeId deserialize(Serializers serializers, Iterable<Object> serialized,
-      {FullType specifiedType = FullType.unspecified}) {
-    
-    final result = NodeIdBuilder();
-    final iterator = serialized.iterator;
-    iterator.moveNext();
-    result.inner = iterator.current;
-
-    return result.build();
-  }
-}
-
-
-// Exported serializers:
 final commonSerializers = <Serializer>[
-  publicKeySerializer,
-  privateKeySerializer,
-  uidSerializer,
-  netAddressSerializer,
-  nodeNameSerializer,
-  nodeIdSerializer,
+  PublicKey.serializer,
+  PrivateKey.serializer,
+  Uid.serializer,
+  NetAddress.serializer,
+  NodeName.serializer,
+  NodeId.serializer,
+  Currency.serializer,
+  HashResult.serializer,
+  HashedLock.serializer,
+  InvoiceId.serializer,
+  PaymentId.serializer,
+  PlainLock.serializer,
+  RandValue.serializer,
+  Signature.serializer,
 ];

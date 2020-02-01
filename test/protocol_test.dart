@@ -18,7 +18,7 @@ void main() {
         (serializers.toBuilder()..addPlugin(CustomJsonPlugin())).build();
 
     test('PublicKey serialization', () {
-      final publicKey = PublicKey((b) => b..inner = 'MyPublicKey');
+      final publicKey = PublicKey('MyPublicKey');
       final serialized = serializersWithPlugin.serialize(publicKey,
           specifiedType: FullType(PublicKey));
 

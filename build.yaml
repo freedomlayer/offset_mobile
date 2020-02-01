@@ -1,0 +1,15 @@
+targets:
+  $default:
+    builders:
+      offst_mobile|wrapped_string:
+        enabled: true
+
+builders:
+  wrapped_string:
+    target: ":offst_mobile"
+    import: "package:offst_mobile/protocol/wrapped_string_builder.dart"
+    builder_factories: ["wrappedStringBuilder"]
+    build_extensions: {".dart": [".wrapped_string.g.part"]}
+    auto_apply: dependents
+    build_to: cache
+    applies_builders: ["source_gen|combining_builder"]
