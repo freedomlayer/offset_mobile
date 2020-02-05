@@ -157,6 +157,11 @@ Serializers collectSerializers() {
     serBuilder.add(commonSer);
   }
 
+  // Serializers for common types:
+  for (final compactSer in compactSerializers) {
+    serBuilder.add(compactSer);
+  }
+
   // Serializers for compound protocol messages:
   serBuilder.add(NodeInfoLocal.serializer);
 
