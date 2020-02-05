@@ -673,6 +673,7 @@ final compactSerializers = <Serializer>[
   _$openPaymentSerializer,
   _$compactReportSerializer,
   _$compactToUserAckSerializer,
+  _$compactToUserSerializer,
   _$userToCompactSerializer,
   _$userToCompactAckSerializer,
 ];

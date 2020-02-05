@@ -13,7 +13,7 @@ abstract class NodeInfoLocal
     implements Built<NodeInfoLocal, NodeInfoLocalBuilder> {
   static Serializer<NodeInfoLocal> get serializer => _$nodeInfoLocalSerializer;
 
-  PublicKey get publicKey;
+  PublicKey get nodePublicKey;
 
   NodeInfoLocal._();
   factory NodeInfoLocal([void Function(NodeInfoLocalBuilder) updates]) =
@@ -120,6 +120,7 @@ class ServerToUserAck extends _$ServerToUserAck {
   ServerToUserAck.serverToUser(ServerToUser serverToUser)
       : super.serverToUser(serverToUser);
   ServerToUserAck.ack(Uid uid) : super.ack(uid);
+  ServerToUserAck.node(NodeId nodeId, CompactToUser compactToUser) : super.node(nodeId, compactToUser);
 }
 
 @BuiltUnion()
@@ -206,6 +207,9 @@ Serializers collectSerializers() {
   serBuilder.addBuilderFactory(
           const FullType(BuiltMap, const [const FullType(PaymentId), const FullType(OpenPayment)]),
           () => new MapBuilder<PaymentId, OpenPayment>());
+  serBuilder.addBuilderFactory(
+          const FullType(BuiltMap, const [const FullType(NodeName), const FullType(NodeStatus)]),
+          () => new MapBuilder<NodeName, NodeStatus>());
 
   return serBuilder.build();
 }
