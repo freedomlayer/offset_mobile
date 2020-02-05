@@ -164,6 +164,48 @@ Serializers collectSerializers() {
 
   // Serializers for compound protocol messages:
   serBuilder.add(NodeInfoLocal.serializer);
+  serBuilder.add(NodeInfoRemote.serializer);
+  serBuilder.add(NodeInfo.serializer);
+  serBuilder.add(NodeStatus.serializer);
+  serBuilder.add(CreateNodeLocal.serializer);
+  serBuilder.add(CreateNodeRemote.serializer);
+  serBuilder.add(ResponseOpenNode.serializer);
+  serBuilder.add(CreateNode.serializer);
+  serBuilder.add(ServerToUser.serializer);
+  serBuilder.add(ServerToUserAck.serializer);
+  serBuilder.add(UserToServer.serializer);
+  serBuilder.add(UserToServerAck.serializer);
+
+  serBuilder.addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(RelayAddress)]),
+          () => new ListBuilder<RelayAddress>());
+  serBuilder.addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(NamedIndexServerAddress)]),
+          () => new ListBuilder<NamedIndexServerAddress>());
+  serBuilder.addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(NamedRelayAddress)]),
+          () => new ListBuilder<NamedRelayAddress>());
+  serBuilder.addBuilderFactory(
+          const FullType(BuiltMap, const [const FullType(Currency), const FullType(I128)]),
+          () => new MapBuilder<Currency, I128>());
+  serBuilder.addBuilderFactory(
+          const FullType(BuiltMap, const [const FullType(Currency), const FullType(CurrencyReport)]),
+          () => new MapBuilder<Currency, CurrencyReport>());
+  serBuilder.addBuilderFactory(
+          const FullType(BuiltMap, const [const FullType(Currency), const FullType(BalanceInfo)]),
+          () => new MapBuilder<Currency, BalanceInfo>());
+  serBuilder.addBuilderFactory(
+          const FullType(BuiltMap, const [const FullType(Currency), const FullType(ConfigReport)]),
+          () => new MapBuilder<Currency, ConfigReport>());
+  serBuilder.addBuilderFactory(
+          const FullType(BuiltMap, const [const FullType(PublicKey), const FullType(FriendReport)]),
+          () => new MapBuilder<PublicKey, FriendReport>());
+  serBuilder.addBuilderFactory(
+          const FullType(BuiltMap, const [const FullType(InvoiceId), const FullType(OpenInvoice)]),
+          () => new MapBuilder<InvoiceId, OpenInvoice>());
+  serBuilder.addBuilderFactory(
+          const FullType(BuiltMap, const [const FullType(PaymentId), const FullType(OpenPayment)]),
+          () => new MapBuilder<PaymentId, OpenPayment>());
 
   return serBuilder.build();
 }
