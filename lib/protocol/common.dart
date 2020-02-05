@@ -74,6 +74,21 @@ class Signature extends _$Signature {
   Signature(String inner) : super(inner);
 }
 
+@WrappedString()
+class U128 extends _$U128 {
+  U128(String inner) : super(inner);
+}
+
+@WrappedString()
+class I128 extends _$I128 {
+  I128(String inner) : super(inner);
+}
+
+@WrappedString()
+class U64 extends _$U64 {
+  U64(String inner) : super(inner);
+}
+
 final commonSerializers = <Serializer>[
   PublicKeySerializer(),
   PrivateKeySerializer(),
@@ -89,4 +104,7 @@ final commonSerializers = <Serializer>[
   PlainLockSerializer(),
   RandValueSerializer(),
   SignatureSerializer(),
+  U128Serializer(),
+  I128Serializer(),
+  U64Serializer(),
 ];

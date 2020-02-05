@@ -5,27 +5,33 @@ import 'package:built_union/built_union.dart';
 import 'package:meta/meta.dart';
 
 import 'common.dart';
+import 'compact.dart';
 
 part 'protocol.g.dart';
 
-abstract class NodeInfoLocal implements Built<NodeInfoLocal, NodeInfoLocalBuilder> {
+abstract class NodeInfoLocal
+    implements Built<NodeInfoLocal, NodeInfoLocalBuilder> {
   static Serializer<NodeInfoLocal> get serializer => _$nodeInfoLocalSerializer;
 
   PublicKey get publicKey;
 
   NodeInfoLocal._();
-  factory NodeInfoLocal([void Function(NodeInfoLocalBuilder) updates]) = _$NodeInfoLocal;
+  factory NodeInfoLocal([void Function(NodeInfoLocalBuilder) updates]) =
+      _$NodeInfoLocal;
 }
 
-abstract class NodeInfoRemote implements Built<NodeInfoRemote, NodeInfoRemoteBuilder> {
-  static Serializer<NodeInfoRemote> get serializer => _$nodeInfoRemoteSerializer;
+abstract class NodeInfoRemote
+    implements Built<NodeInfoRemote, NodeInfoRemoteBuilder> {
+  static Serializer<NodeInfoRemote> get serializer =>
+      _$nodeInfoRemoteSerializer;
 
   PublicKey get appPublicKey;
   PublicKey get nodePublicKey;
   NetAddress get nodeAddress;
 
   NodeInfoRemote._();
-  factory NodeInfoRemote([void Function(NodeInfoRemoteBuilder) updates]) = _$NodeInfoRemote;
+  factory NodeInfoRemote([void Function(NodeInfoRemoteBuilder) updates]) =
+      _$NodeInfoRemote;
 }
 
 @BuiltUnion()
@@ -46,79 +52,97 @@ abstract class NodeStatus implements Built<NodeStatus, NodeStatusBuilder> {
   factory NodeStatus([void Function(NodeStatusBuilder) updates]) = _$NodeStatus;
 }
 
-abstract class CreateNodeLocal implements Built<CreateNodeLocal, CreateNodeLocalBuilder> {
-  static Serializer<CreateNodeLocal> get serializer => _$createNodeLocalSerializer;
+abstract class CreateNodeLocal
+    implements Built<CreateNodeLocal, CreateNodeLocalBuilder> {
+  static Serializer<CreateNodeLocal> get serializer =>
+      _$createNodeLocalSerializer;
 
   NodeName get nodeName;
 
   CreateNodeLocal._();
-  factory CreateNodeLocal([void Function(CreateNodeLocalBuilder) updates]) = _$CreateNodeLocal;
-}
-/*
-
-#[derive(Arbitrary, Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct CreateNodeRemote {
-    pub node_name: NodeName,
-    #[serde(with = "ser_b64")]
-    pub app_private_key: PrivateKey,
-    #[serde(with = "ser_b64")]
-    pub node_public_key: PublicKey,
-    pub node_address: NetAddress,
+  factory CreateNodeLocal([void Function(CreateNodeLocalBuilder) updates]) =
+      _$CreateNodeLocal;
 }
 
-#[allow(clippy::large_enum_variant)]
-#[derive(Arbitrary, Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub enum ResponseOpenNode {
-    Success(NodeName, NodeId, AppPermissions, CompactReport), // (node_name, node_id, compact_report)
-    Failure(NodeName),
+abstract class CreateNodeRemote
+    implements Built<CreateNodeRemote, CreateNodeRemoteBuilder> {
+  static Serializer<CreateNodeRemote> get serializer =>
+      _$createNodeRemoteSerializer;
+
+  NodeName get nodeName;
+  PrivateKey get appPrivateKey;
+  PublicKey get nodePublicKey;
+  NetAddress get nodeAddress;
+
+  CreateNodeRemote._();
+  factory CreateNodeRemote([void Function(CreateNodeRemoteBuilder) updates]) =
+      _$CreateNodeRemote;
 }
 
-pub type NodesStatus = HashMap<NodeName, NodeStatus>;
+@BuiltUnion()
+class ResponseOpenNode extends _$ResponseOpenNode {
+  static Serializer<ResponseOpenNode> get serializer =>
+      _$responseOpenNodeSerializer;
 
-#[derive(Arbitrary, Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub enum CreateNode {
-    CreateNodeLocal(CreateNodeLocal),
-    CreateNodeRemote(CreateNodeRemote),
+  ResponseOpenNode.success(NodeName nodeName, NodeId nodeId,
+      AppPermissions appPermissions, CompactReport compactReport)
+      : super.success(nodeName, nodeId, appPermissions, compactReport);
+  ResponseOpenNode.failure(NodeName nodeName) : super.failure(nodeName);
 }
 
-#[allow(clippy::large_enum_variant)]
-#[derive(Arbitrary, Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub enum ServerToUser {
-    ResponseOpenNode(ResponseOpenNode),
-    // TODO: Should add a serde hint here?
-    /// A map of all nodes and their current status
-    NodesStatus(NodesStatus),
-    /// A message received from a specific node
-    Node(NodeId, CompactToUser), // (node_id, compact_to_user)
+@BuiltUnion()
+class CreateNode extends _$CreateNode {
+  static Serializer<CreateNode> get serializer => _$createNodeSerializer;
+
+  CreateNode.createNodeLocal(CreateNodeLocal createNodeLocal)
+      : super.createNodeLocal(createNodeLocal);
+  CreateNode.createNodeRemote(CreateNodeRemote createNodeRemote)
+      : super.createNodeRemote(createNodeRemote);
 }
 
-#[allow(clippy::large_enum_variant)]
-#[derive(Arbitrary, Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub enum ServerToUserAck {
-    ServerToUser(ServerToUser),
-    #[serde(with = "ser_b64")]
-    Ack(Uid),
+@BuiltUnion()
+class ServerToUser extends _$ServerToUser {
+  static Serializer<ServerToUser> get serializer => _$serverToUserSerializer;
+
+  ServerToUser.responseOpenNode(ResponseOpenNode responseOpenNode)
+      : super.responseOpenNode(responseOpenNode);
+  ServerToUser.nodesStatus(BuiltMap<NodeName, NodeStatus> nodesStatus)
+      : super.nodesStatus(nodesStatus);
+  ServerToUser.node(NodeId nodeId, CompactToUser compactToUser)
+      : super.node(nodeId, compactToUser);
 }
 
-#[allow(clippy::large_enum_variant)]
-#[derive(Arbitrary, Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub enum UserToServer {
-    CreateNode(CreateNode),
-    RemoveNode(NodeName),
-    RequestOpenNode(NodeName),
-    CloseNode(NodeId), // node_id
-    /// A message sent to a specific node
-    Node(NodeId, UserToCompact), // (node_id, user_to_compact)
+@BuiltUnion()
+class ServerToUserAck extends _$ServerToUserAck {
+  static Serializer<ServerToUserAck> get serializer =>
+      _$serverToUserAckSerializer;
+
+  ServerToUserAck.serverToUser(ServerToUser serverToUser)
+      : super.serverToUser(serverToUser);
+  ServerToUserAck.ack(Uid uid) : super.ack(uid);
 }
 
-#[derive(Arbitrary, Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct UserToServerAck {
-    #[serde(with = "ser_b64")]
-    pub request_id: Uid,
-    pub inner: UserToServer,
-}
-*/
+@BuiltUnion()
+class UserToServer extends _$UserToServer {
+  static Serializer<UserToServer> get serializer => _$userToServerSerializer;
 
+  UserToServer.createNode(CreateNode createNode) : super.createNode(createNode);
+  UserToServer.removeNode(NodeName nodeName) : super.removeNode(nodeName);
+  UserToServer.requestOpenNode(NodeName nodeName)
+      : super.requestOpenNode(nodeName);
+  UserToServer.closeNode(NodeId nodeId) : super.closeNode(nodeId);
+  UserToServer.node(NodeId nodeId, UserToCompact userToCompact)
+      : super.node(nodeId, userToCompact);
+}
+
+@BuiltUnion()
+class UserToServerAck extends _$UserToServerAck {
+  static Serializer<UserToServerAck> get serializer =>
+      _$userToServerAckSerializer;
+
+  UserToServerAck.requestId(Uid uid) : super.requestId(uid);
+  UserToServerAck.inner(UserToServer inner) : super.inner(inner);
+}
 
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
