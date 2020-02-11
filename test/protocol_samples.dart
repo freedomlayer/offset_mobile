@@ -62,69 +62,6 @@ r'''
           }
         ],
         "friends": {
-          "AgECAgECAQIAAgAAAQIBAAEBAAACAgIAAgAAAgABAQA": {
-            "name": " ",
-            "currencyConfigs": {
-              "dccabccdddbdd": {
-                "rate": {
-                  "mul": 1,
-                  "add": 1
-                },
-                "remoteMaxDebt": "2",
-                "isOpen": true
-              },
-              "ab": {
-                "rate": {
-                  "mul": 1,
-                  "add": 0
-                },
-                "remoteMaxDebt": "2",
-                "isOpen": true
-              }
-            },
-            "optLastIncomingMoveToken": {
-              "prefixHash": "AQACAAIBAAACAgACAgABAAAAAAIBAAIAAgEAAQEBAQA",
-              "tokenInfo": {
-                "mc": {
-                  "localPublicKey": "AAAAAgABAgIBAgIAAAACAQEBAQIBAgAAAQECAQEAAgI",
-                  "remotePublicKey": "AAIAAAIAAgAAAQACAgIAAAICAAEAAQABAgEAAAICAgA",
-                  "balances": {
-                    "aaccdcbccbabbbb": {
-                      "balance": "-2",
-                      "localPendingDebt": "2",
-                      "remotePendingDebt": "1"
-                    },
-                    "cadd": {
-                      "balance": "0",
-                      "localPendingDebt": "0",
-                      "remotePendingDebt": "1"
-                    }
-                  }
-                },
-                "counters": {
-                  "inconsistencyCounter": "1",
-                  "moveTokenCounter": "0"
-                }
-              },
-              "randNonce": "AAEBAAAAAgEBAAABAQIBAQ",
-              "newToken": "AAICAAEBAgICAgAAAgIAAgIAAQIAAAECAAICAgECAAICAAICAAACAAIBAgEBAQAAAgECAAAAAAIAAgIAAQABAA"
-            },
-            "liveness": "online",
-            "channelStatus": {
-              "inconsistent": {
-                "localResetTerms": {
-                  "abdbcbdcbdaba": "-2"
-                },
-                "optRemoteResetTerms": {
-                  "resetToken": "AAIAAQICAQEBAgIBAQIBAAIAAAIAAAIAAgECAgABAQAAAQABAAACAgABAQECAgAAAgAAAAIAAAIBAgEAAgECAA",
-                  "balanceForReset": {
-                    "baaaaacdaabcdab": "-1"
-                  }
-                }
-              }
-            },
-            "status": "enabled"
-          },
           "AAIBAAEBAQECAQABAQICAQEAAAEBAgAAAAECAgEAAAI": {
             "name": "mp",
             "currencyConfigs": {
@@ -172,6 +109,69 @@ r'''
               }
             },
             "status": "enabled"
+          },
+          "AgECAgECAQIAAgAAAQIBAAEBAAACAgIAAgAAAgABAQA": {
+            "name": " ",
+            "currencyConfigs": {
+              "dccabccdddbdd": {
+                "rate": {
+                  "mul": 1,
+                  "add": 1
+                },
+                "remoteMaxDebt": "2",
+                "isOpen": true
+              },
+              "ab": {
+                "rate": {
+                  "mul": 1,
+                  "add": 0
+                },
+                "remoteMaxDebt": "2",
+                "isOpen": true
+              }
+            },
+            "optLastIncomingMoveToken": {
+              "prefixHash": "AQACAAIBAAACAgACAgABAAAAAAIBAAIAAgEAAQEBAQA",
+              "tokenInfo": {
+                "mc": {
+                  "localPublicKey": "AAAAAgABAgIBAgIAAAACAQEBAQIBAgAAAQECAQEAAgI",
+                  "remotePublicKey": "AAIAAAIAAgAAAQACAgIAAAICAAEAAQABAgEAAAICAgA",
+                  "balances": {
+                    "cadd": {
+                      "balance": "0",
+                      "localPendingDebt": "0",
+                      "remotePendingDebt": "1"
+                    },
+                    "aaccdcbccbabbbb": {
+                      "balance": "-2",
+                      "localPendingDebt": "2",
+                      "remotePendingDebt": "1"
+                    }
+                  }
+                },
+                "counters": {
+                  "inconsistencyCounter": "1",
+                  "moveTokenCounter": "0"
+                }
+              },
+              "randNonce": "AAEBAAAAAgEBAAABAQIBAQ",
+              "newToken": "AAICAAEBAgICAgAAAgIAAgIAAQIAAAECAAICAgECAAICAAICAAACAAIBAgEBAQAAAgECAAAAAAIAAgIAAQABAA"
+            },
+            "liveness": "online",
+            "channelStatus": {
+              "inconsistent": {
+                "localResetTerms": {
+                  "abdbcbdcbdaba": "-2"
+                },
+                "optRemoteResetTerms": {
+                  "resetToken": "AAIAAQICAQEBAgIBAQIBAAIAAAIAAAIAAgECAgABAQAAAQABAAACAgABAQECAgAAAgAAAAIAAAIBAgEAAgECAA",
+                  "balanceForReset": {
+                    "baaaaacdaabcdab": "-1"
+                  }
+                }
+              }
+            },
+            "status": "enabled"
           }
         },
         "openInvoices": {},
@@ -182,11 +182,9 @@ r'''
             "destPublicKey": "AgIAAgECAAECAgECAgECAQACAQECAgAAAQIAAQICAgA",
             "destPayment": "1",
             "description": "U[",
+            "generation": "0",
             "status": {
-              "foundRoute": [
-                "AAABAQICAAABAgEBAAAAAg",
-                "0"
-              ]
+              "searchingRoute": "AQECAgAAAQIBAQAAAAIAAQ"
             }
           }
         }
@@ -197,78 +195,81 @@ r'''
 ''',
 r'''
 {
-  "node": [
-    "0",
-    {
-      "paymentFees": {
-        "paymentId": "AQABAAACAQEAAgIAAAECAg",
-        "response": "unreachable"
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "node": [
-    "2",
-    {
-      "responseVerifyCommit": {
-        "requestId": "AgEBAgIAAAIBAgAAAAEBAg",
-        "status": "success"
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "node": [
-    "1",
-    {
-      "paymentDone": {
-        "paymentId": "AAIAAQEBAQECAAACAAEAAQ",
-        "status": {
-          "success": [
-            {
-              "responseHash": "AQABAAECAQIAAAAAAAEBAQABAQIAAAECAAIAAAIBAAE",
-              "invoiceId": "AgIAAAEAAAECAQIAAQIBAgECAAABAAABAAACAAECAAA",
-              "currency": {
-                "currency": "bbaaaaacbadbc"
-              },
-              "srcPlainLock": "AQEBAgACAAABAgEAAQICAgACAAEBAgAAAAEAAAACAgA",
-              "destPlainLock": "AAIBAAABAAABAAACAQACAgACAQECAQECAAECAgEBAAE",
-              "isComplete": true,
-              "destPayment": "2",
-              "totalDestPayment": "1",
-              "signature": "AgECAAEBAQAAAQIAAgACAgABAAEAAAABAgAAAAACAQEBAAICAAICAAECAQACAgAAAgAAAQAAAAICAAAAAgACAg"
+  "responseOpenNode": {
+    "success": [
+      "",
+      "0",
+      {
+        "routes": false,
+        "buyer": false,
+        "seller": false,
+        "config": false
+      },
+      {
+        "localPublicKey": "AAIBAQACAgAAAQICAQABAgECAgICAQECAgAAAgECAAA",
+        "indexServers": [
+          {
+            "publicKey": "AgEAAQICAQICAgICAgECAQACAAEBAQEBAgAAAgABAAE",
+            "address": {
+              "address": "cabbacaabcaabcbacbdccaacaacaadbbaaaaacbadbcbccbdbabbdcabcabaaacabcadacdbcadaccdbbbabcbddcbcabaddaaaa"
             },
-            "0",
-            "AAAAAQACAQAAAgAAAgEAAQ"
-          ]
+            "name": "5"
+          },
+          {
+            "publicKey": "AAICAAAAAgACAgACAAAAAAABAAIBAAACAAACAQABAgE",
+            "address": {
+              "address": "cabbcabbaacccddacbababdddaaaaacccabbaaabdddbccdaabdadcaddccbccdcccdbddacaabdbbdbcdaaddacababbacdbbbadcbbaddbcdcdbcdaaacacccaaaadcccbbdbbdccabbdbdda"
+            },
+            "name": "« "
+          }
+        ],
+        "optConnectedIndexServer": null,
+        "relays": [
+          {
+            "publicKey": "AgECAgIBAgAAAAEBAAABAQABAQIAAQICAgABAAACAgI",
+            "address": {
+              "address": "aaaacabddcdcdabaaddbbdcdccbdadddcbddcddababbbababbcacadcdcacbcbbaadbcdcabcdcbacdaacbacdbdcdbaaadddabaacbaddcbccacbdaadcdbcbcabdbdcbcb"
+            },
+            "name": "󠀁@"
+          }
+        ],
+        "friends": {},
+        "openInvoices": {
+          "AgEBAgAAAgACAAICAAIAAQABAAABAgIAAAABAQEBAgA": {
+            "currency": "bcadcabbadbdbd",
+            "totalDestPayment": "0",
+            "description": "񸔖",
+            "isCommited": false,
+            "generation": "1"
+          }
+        },
+        "openPayments": {
+          "AAAAAgEBAAIBAgAAAQECAQ": {
+            "invoiceId": "AQEBAAACAgIBAQABAQICAQACAQACAQICAAEAAQEAAgI",
+            "currency": "acdaabcac",
+            "destPublicKey": "AQEBAgEAAQECAQEBAAABAQIAAQICAQICAAACAQAAAQE",
+            "destPayment": "1",
+            "description": "",
+            "generation": "0",
+            "status": {
+              "sending": "1"
+            }
+          },
+          "AgACAQIAAAIBAAIBAQEAAA": {
+            "invoiceId": "AAECAgABAAECAgIBAAECAAICAgIAAAAAAAIBAAIBAQA",
+            "currency": "cbbcbddad",
+            "destPublicKey": "AgECAgEAAQEAAgIAAAEAAQECAAEBAAEBAgICAAICAAI",
+            "destPayment": "1",
+            "description": "䎷",
+            "generation": "1",
+            "status": {
+              "failure": "AAIBAgEBAgICAAEAAgEAAQ"
+            }
+          }
         }
       }
-    }
-  ]
-}
-''',
-r'''
-{
-  "nodesStatus": {
-    "": {
-      "isOpen": false,
-      "info": {
-        "local": {
-          "nodePublicKey": "AAECAAEAAQACAAAAAQICAAIBAgIBAQIAAgIAAgABAAA"
-        }
-      }
-    }
+    ]
   }
-}
-''',
-r'''
-{
-  "nodesStatus": {}
 }
 ''',
 r'''
@@ -281,149 +282,26 @@ r'''
 r'''
 {
   "responseOpenNode": {
-    "success": [
-      "}?",
-      "0",
-      {
-        "routes": true,
-        "buyer": false,
-        "seller": true,
-        "config": false
-      },
-      {
-        "localPublicKey": "AgIBAAICAgECAAIBAQEBAQICAAIAAgABAQECAAIAAAE",
-        "indexServers": [],
-        "optConnectedIndexServer": null,
-        "relays": [
-          {
-            "publicKey": "AAEAAQABAgEBAQECAgAAAgECAQEAAQECAgIAAAACAgE",
-            "address": {
-              "address": "bdbcdaaddacababbacdbbbadcbbaddbcdcdbcdaaacacccaaaadcccbbdbbdccabbdbddadbadacdbacbbabacdbbcaaaacabddcdcdabaaddbbdcdc"
-            },
-            "name": " J"
-          }
-        ],
-        "friends": {
-          "AgEBAAICAQIBAAICAAIAAAACAAEBAgABAAABAgIAAQI": {
-            "name": "",
-            "currencyConfigs": {},
-            "optLastIncomingMoveToken": null,
-            "liveness": "offline",
-            "channelStatus": {
-              "consistent": {
-                "currencyReports": {
-                  "aadbcd": {
-                    "balance": "-2",
-                    "localPendingDebt": "2",
-                    "remotePendingDebt": "1"
-                  }
-                }
-              }
-            },
-            "status": "enabled"
-          },
-          "AAEAAgABAQEBAAEBAgEAAgEBAgAAAQAAAgECAQICAgA": {
-            "name": "",
-            "currencyConfigs": {
-              "addcbc": {
-                "rate": {
-                  "mul": 0,
-                  "add": 1
-                },
-                "remoteMaxDebt": "2",
-                "isOpen": true
-              }
-            },
-            "optLastIncomingMoveToken": {
-              "prefixHash": "AQABAQICAgIAAAICAQEBAQICAQEBAAEAAQACAgAAAAA",
-              "tokenInfo": {
-                "mc": {
-                  "localPublicKey": "AgIAAAICAQECAgEBAQICAgIAAQACAAABAQIBAQIAAAI",
-                  "remotePublicKey": "AAIAAgIAAgABAAEAAAECAgAAAAEBAQECAAICAAEAAgA",
-                  "balances": {
-                    "b": {
-                      "balance": "1",
-                      "localPendingDebt": "0",
-                      "remotePendingDebt": "2"
-                    }
-                  }
-                },
-                "counters": {
-                  "inconsistencyCounter": "2",
-                  "moveTokenCounter": "0"
-                }
-              },
-              "randNonce": "AQEAAAIBAAIBAQABAQABAg",
-              "newToken": "AAAAAgEBAAIBAgAAAQECAQEBAQAAAgICAQEAAQECAgEAAgEAAgECAgABAAEBAAICAQECAAEBAgIAAAAAAAEBAg"
-            },
-            "liveness": "offline",
-            "channelStatus": {
-              "consistent": {
-                "currencyReports": {
-                  "cbcadaacbcb": {
-                    "balance": "-1",
-                    "localPendingDebt": "1",
-                    "remotePendingDebt": "2"
-                  }
-                }
-              }
-            },
-            "status": "disabled"
-          }
-        },
-        "openInvoices": {
-          "AQABAQABAQEAAQAAAAACAgEBAgIAAgIBAgIBAAEBAAI": {
-            "currency": "ac",
-            "totalDestPayment": "2",
-            "description": "G"
-          },
-          "AQIAAAIBAAIBAQEAAAABAgIAAQABAgICAQABAgACAgI": {
-            "currency": "ba",
-            "totalDestPayment": "0",
-            "description": "J"
-          }
-        },
-        "openPayments": {
-          "AQEBAgABAgEBAQACAAABAg": {
-            "invoiceId": "AAEBAAIBAAEBAQAAAQABAAABAAIAAAIAAAAAAAIBAQE",
-            "currency": "abcaacbaaa",
-            "destPublicKey": "AgEAAAABAgACAQABAQEBAgEBAAIAAAAAAAEAAgABAgA",
-            "destPayment": "0",
-            "description": "",
-            "status": {
-              "foundRoute": [
-                "AQIAAgICAQAAAAIBAAABAQ",
-                "1"
-              ]
-            }
-          },
-          "AgIAAgIAAgIBAgEAAAECAA": {
-            "invoiceId": "AQEAAgIBAAAAAgEBAgACAQIBAQICAgABAAIBAAEBAAE",
-            "currency": "aaccc",
-            "destPublicKey": "AAABAQIBAgIBAAACAAICAgAAAgIAAAIAAgABAAAAAAI",
-            "destPayment": "0",
-            "description": "e|",
-            "status": {
-              "sending": "0"
-            }
-          }
-        }
-      }
-    ]
+    "failure": ""
   }
 }
 ''',
 r'''
 {
-  "node": [
-    "1",
-    {
-      "responseVerifyCommit": {
-        "requestId": "AAACAQACAQEBAAEBAQEBAA",
-        "status": "failure"
+  "nodesStatus": {
+    "8": {
+      "isOpen": false,
+      "info": {
+        "remote": {
+          "appPublicKey": "AgAAAgACAAEAAAAAAgIAAgACAQACAAECAgECAQEBAgA",
+          "nodePublicKey": "AQEBAgABAgEBAQACAAABAgABAQACAQABAQEAAAEAAQA",
+          "nodeAddress": {
+            "address": "babbabcacabcaacbaaacbbcabbbcbadbadbdababaddcaaacacccdabbcbcccbcaccabbdaadcbcdbabccdbcddacaabdcbccababbaccccdddddddbcaddccbaaccadbbabbccddbaacabdbaadddbbdcbccacdcdccbbaab"
+          }
+        }
       }
     }
-  ]
+  }
 }
 ''',
 r'''
@@ -431,138 +309,60 @@ r'''
   "node": [
     "2",
     {
-      "paymentCommit": {
-        "paymentId": "AQEAAQACAAACAQIAAQICAQ",
-        "commit": {
-          "responseHash": "AgACAAEAAgAAAAABAQECAAECAgEAAQACAQAAAAEAAQA",
-          "srcPlainLock": "AQABAQICAQACAAIBAQEBAAIAAQEAAQABAAIAAAABAQE",
-          "destHashedLock": "AgICAQECAAECAgECAgICAgEAAQACAQIBAgEBAQACAAI",
-          "destPayment": "2",
-          "totalDestPayment": "1",
-          "invoiceId": "AAIAAAEBAAAAAQEBAQACAgICAQIBAQEAAAABAgAAAgA",
-          "currency": "adddbbdcbc",
-          "signature": "AAEAAQIBAgIBAgEBAAIBAQACAgAAAAEBAAEBAAICAgEBAgEAAgEAAQABAQICAgEAAgICAQAAAQICAQICAAECAA"
-        }
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "node": [
-    "1",
-    {
-      "paymentFees": {
-        "paymentId": "AgIAAAIBAAEAAAEBAgIAAA",
-        "response": {
-          "fees": [
-            "1",
-            "AAEAAAAAAgEBAgEAAAEBAg"
-          ]
-        }
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "nodesStatus": {
-    "󋩆\u0015": {
-      "isOpen": true,
-      "info": {
-        "remote": {
-          "appPublicKey": "AgEAAQECAgEBAgACAQAAAgACAgABAAEAAQIAAQACAQE",
-          "nodePublicKey": "AgIAAQEBAgACAgEBAQECAgIAAgIAAgIBAQIBAAEAAAE",
-          "nodeAddress": {
-            "address": "caaaccddadddcddbdddabdbcbccabbcdadbdcabbdacccabadcbcdccbdcacdbdbdbccbd"
-          }
-        }
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "node": [
-    "1",
-    {
       "report": {
-        "localPublicKey": "AgIBAAIAAgECAAABAQEBAQABAQAAAAIBAQAAAgAAAQE",
-        "indexServers": [
-          {
-            "publicKey": "AQAAAAIAAgICAgAAAgICAgAAAQECAQIAAQEAAgABAAI",
-            "address": {
-              "address": "dcbdcdbbcbbbadabbadcabcdddabaadbdcdacadabcabcabdcdbcc"
-            },
-            "name": "2"
-          },
-          {
-            "publicKey": "AQEBAgAAAQIAAAEBAQAAAQEAAAICAgEBAgABAQIAAQA",
-            "address": {
-              "address": "ccbaaccdaababacdcbdacdacc"
-            },
-            "name": "\u001e"
-          }
-        ],
-        "optConnectedIndexServer": "AAECAAACAgIBAgIBAQIBAAAAAQECAgAAAQACAQEBAAI",
+        "localPublicKey": "AQABAAEBAgICAQACAgIBAAABAgIBAgIAAQIAAAIBAQA",
+        "indexServers": [],
+        "optConnectedIndexServer": "AgIAAAIBAAEAAAEBAgIAAAABAAICAQABAAAAAAIBAQI",
         "relays": [
           {
-            "publicKey": "AgAAAgAAAQAAAgICAAICAAEBAQECAgECAAABAAEAAAI",
+            "publicKey": "AQIAAQIBAQICAgEAAQECAgEAAQECAgEBAgACAQAAAgA",
             "address": {
-              "address": "dbcdadbbaccccdccbdbdaabdcddcabacbaacacbaccdbdccaadacaacbbbdabdcabcaaabccbadbcbadccaccabbbcbdbddcaddcabadddbdbbdaadbcaadaaabbddacbcbadaaddccdaaddacb"
+              "address": "acadbcdbcdddbcccdcdcbbbcaaaccddadddcddbdddabdbcbccabbcdadbdcabbdacccabadcbcdccbdcacdbdbdbccbdcddaccdadadcacacabbacdaaaadaabcbcdaabdcbdcdbbcbbbadabbadcabcdddabaadbdcdacadabcabcabdcdbccccddccbcdaaccadcdcdbbaaccbaaccdaababacdcbdacd"
             },
-            "name": "3"
+            "name": ""
           }
         ],
         "friends": {
-          "AQAAAQEAAQICAAEAAQACAAIBAQIBAgACAgEAAAECAAE": {
-            "name": "￹",
+          "AgECAQIBAAEAAQIAAAICAgECAgEBAgEAAAABAQICAAA": {
+            "name": "",
             "currencyConfigs": {
-              "abdbdcbadbadc": {
+              "dababaddcbc": {
                 "rate": {
-                  "mul": 0,
-                  "add": 2
-                },
-                "remoteMaxDebt": "0",
-                "isOpen": false
-              },
-              "b": {
-                "rate": {
-                  "mul": 1,
+                  "mul": 2,
                   "add": 1
                 },
-                "remoteMaxDebt": "1",
-                "isOpen": false
+                "remoteMaxDebt": "0",
+                "isOpen": true
               }
             },
-            "optLastIncomingMoveToken": null,
-            "liveness": "online",
-            "channelStatus": {
-              "consistent": {
-                "currencyReports": {
-                  "dbcd": {
-                    "balance": "1",
-                    "localPendingDebt": "0",
-                    "remotePendingDebt": "2"
-                  },
-                  "addddcadaab": {
-                    "balance": "1",
-                    "localPendingDebt": "0",
-                    "remotePendingDebt": "1"
+            "optLastIncomingMoveToken": {
+              "prefixHash": "AQICAAEBAQEBAQECAQIBAAIBAQACAQEBAgECAQEBAQI",
+              "tokenInfo": {
+                "mc": {
+                  "localPublicKey": "AQIBAQABAQIBAgABAgIAAQIAAAEAAgABAAICAAABAgI",
+                  "remotePublicKey": "AgECAQAAAAABAAICAQAAAgIBAAABAQIAAAEAAQICAgI",
+                  "balances": {
+                    "ccaadacaacbb": {
+                      "balance": "1",
+                      "localPendingDebt": "0",
+                      "remotePendingDebt": "2"
+                    },
+                    "caaa": {
+                      "balance": "2",
+                      "localPendingDebt": "0",
+                      "remotePendingDebt": "0"
+                    }
                   }
+                },
+                "counters": {
+                  "inconsistencyCounter": "0",
+                  "moveTokenCounter": "0"
                 }
-              }
+              },
+              "randNonce": "AgEBAAABAQIAAAEAAgIBAQ",
+              "newToken": "AAIBAgIBAgEBAAICAgICAQICAAIBAgAAAAAAAgABAgICAgECAQACAAABAgIBAgIBAAACAQAAAgACAgIBAAECAA"
             },
-            "status": "disabled"
-          },
-          "AQABAQAAAAACAgEBAQACAQABAAIAAgIBAAIBAAIAAgA": {
-            "name": "..",
-            "currencyConfigs": {},
-            "optLastIncomingMoveToken": null,
-            "liveness": "online",
+            "liveness": "offline",
             "channelStatus": {
               "consistent": {
                 "currencyReports": {}
@@ -572,125 +372,54 @@ r'''
           }
         },
         "openInvoices": {
-          "AAEAAAACAAAAAAIAAAECAQABAQAAAAICAgABAAIAAQE": {
-            "currency": "abad",
+          "AQECAQAAAgAAAgEAAgIBAQECAgIAAgAAAAACAgABAQA": {
+            "currency": "bddbccba",
             "totalDestPayment": "1",
-            "description": "?"
-          },
-          "AgIAAQECAQEBAAIAAAIAAgICAAACAgEBAAAAAAIBAAI": {
-            "currency": "adbbacda",
-            "totalDestPayment": "1",
-            "description": "¬"
+            "description": "",
+            "isCommited": false,
+            "generation": "1"
           }
         },
-        "openPayments": {}
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "nodesStatus": {}
-}
-''',
-r'''
-{
-  "responseOpenNode": {
-    "failure": "覓觾"
-  }
-}
-''',
-r'''
-{
-  "nodesStatus": {}
-}
-''',
-r'''
-{
-  "node": [
-    "2",
-    {
-      "responseVerifyCommit": {
-        "requestId": "AgEAAgICAgACAQACAgIBAQ",
-        "status": "success"
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "nodesStatus": {
-    "\u0001¤": {
-      "isOpen": true,
-      "info": {
-        "local": {
-          "nodePublicKey": "AQIBAgIBAQEAAgECAAECAQAAAgEAAgICAQABAAABAAA"
-        }
-      }
-    },
-    "": {
-      "isOpen": true,
-      "info": {
-        "remote": {
-          "appPublicKey": "AQAAAAACAgIAAQEBAgECAAEAAQABAAEBAAIBAQABAAE",
-          "nodePublicKey": "AAACAAEAAQIBAQACAgECAgACAgECAQEBAgAAAQECAQI",
-          "nodeAddress": {
-            "address": "cbcccdbabccccbabadcbbbbddcabaacbbdaaacadaccaaacdacbcacadddccbccacccaaaccaadcbbbdbabcaaddacbacbbabbdddaddacbaacdbcbcbdaaaacbaabaadccccacabdbabbddccabdbbdddcaaccabbcccbadbacbbbcbddccdcbdabd"
-          }
-        }
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "responseOpenNode": {
-    "failure": "C"
-  }
-}
-''',
-r'''
-{
-  "node": [
-    "0",
-    {
-      "report": {
-        "localPublicKey": "AgACAAEBAQECAQECAAIBAAEAAAAAAAECAQIAAgACAQI",
-        "indexServers": [],
-        "optConnectedIndexServer": "AQEAAAABAAACAAECAgABAgEAAQECAAECAgIBAgIBAQA",
-        "relays": [
-          {
-            "publicKey": "AQACAgECAAICAgIBAAEAAAACAQABAAECAgIAAQECAgA",
-            "address": {
-              "address": "abbaaadddcbdddcaddcbaddbdbcbddaaadccbabaabbcdcbddadadcaaaddaaabadccbbbdbbaadcdcdbaacacadcbdcbbbcadabccdddcabbbaababbddbcccaabacbcbbdbabbccdacadacbccadabbbaacddabbcdbccbdbcc"
-            },
-            "name": "▨"
+        "openPayments": {
+          "AgEAAAICAQEAAgIBAAICAg": {
+            "invoiceId": "AgACAQACAgIBAQABAAIAAQACAAIAAgIAAQAAAAICAQI",
+            "currency": "ddaccdcddbcbac",
+            "destPublicKey": "AAICAgEAAQAAAQAAAQACAQAAAgACAQAAAAACAgIAAQE",
+            "destPayment": "2",
+            "description": "9",
+            "generation": "0",
+            "status": {
+              "sending": "0"
+            }
           },
-          {
-            "publicKey": "AgIBAgACAAEAAQEAAAIAAgEAAgICAQICAQAAAQABAgA",
-            "address": {
-              "address": "aacdcbabdcbdcadbdbcdbbbcaaabcadbcbdbdcbcaabbaabcaacdccabbbadcbbcdaccdabbbdadadcdbccccaadbbabcadcdacadbcabbacbbcdbabccdbdaccdddaddcbbac"
-            },
-            "name": "象"
+          "AgEAAgEAAgACAAIAAgICAQ": {
+            "invoiceId": "AQIBAAACAAICAAEBAgABAAEAAAEBAAECAgABAAEAAgA",
+            "currency": "ddadabadc",
+            "destPublicKey": "AgIAAgIBAQEAAAIBAAICAAEBAAEBAQIAAgICAQEAAQE",
+            "destPayment": "1",
+            "description": "",
+            "generation": "0",
+            "status": {
+              "success": [
+                {
+                  "responseHash": "AAIBAgEBAQEAAgIBAQABAgACAAIBAAIBAgEAAgICAQA",
+                  "invoiceId": "AgEAAgAAAQICAgACAgECAQIAAgAAAQIAAgICAQIBAgA",
+                  "currency": {
+                    "currency": "ddddcad"
+                  },
+                  "srcPlainLock": "AAAAAAEBAgACAgABAgABAAECAQACAgIAAQECAQEBAAI",
+                  "destPlainLock": "AAACAAICAgAAAgIBAQAAAAACAQACAgEAAQIAAgACAAE",
+                  "isComplete": true,
+                  "destPayment": "0",
+                  "totalDestPayment": "1",
+                  "signature": "AgEAAQIAAQAAAAIAAAAAAgAAAQIBAAEBAAAAAgICAAEAAgABAQIAAAABAQIAAgACAgEAAQECAAIAAQIAAAAAAQ"
+                },
+                "0",
+                "AQECAgECAQEBAQIBAQACAg"
+              ]
+            }
           }
-        ],
-        "friends": {},
-        "openInvoices": {
-          "AQIBAAIAAgEBAQIAAgEBAgECAQACAgACAQEAAAIAAgE": {
-            "currency": "ccbdccdbbcd",
-            "totalDestPayment": "0",
-            "description": "p"
-          },
-          "AgABAgACAAACAgACAQIBAAIAAAACAQIAAQECAgIAAAI": {
-            "currency": "a",
-            "totalDestPayment": "2",
-            "description": "x"
-          }
-        },
-        "openPayments": {}
+        }
       }
     }
   ]
@@ -698,104 +427,27 @@ r'''
 ''',
 r'''
 {
-  "nodesStatus": {}
-}
-''',
-r'''
-{
   "responseOpenNode": {
-    "failure": "\"¬"
+    "failure": "0"
   }
 }
 ''',
 r'''
 {
   "nodesStatus": {
-    "d}": {
-      "isOpen": false,
-      "info": {
-        "local": {
-          "nodePublicKey": "AgACAgEAAgABAgEAAQEAAQEAAgAAAQACAAABAAACAAE"
-        }
-      }
-    },
-    "": {
-      "isOpen": true,
-      "info": {
-        "remote": {
-          "appPublicKey": "AgABAQABAgICAgIBAgEBAAEBAAEAAQABAgECAAECAQE",
-          "nodePublicKey": "AQACAQABAgIBAgABAQECAQEAAAICAAAAAQABAAECAAI",
-          "nodeAddress": {
-            "address": "caaabdbadccbdbbbababbcdbbcdcbbdabbadcbbbaccbcabcdbbabddaccadbcddbdaa"
-          }
-        }
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "nodesStatus": {
-    "F ": {
-      "isOpen": true,
-      "info": {
-        "remote": {
-          "appPublicKey": "AQECAgICAAICAgICAQECAQIBAAAAAQECAQIAAgACAgI",
-          "nodePublicKey": "AQAAAgICAQACAAECAQAAAgEBAQICAQIBAAEAAAEAAgE",
-          "nodeAddress": {
-            "address": "dbcccadbccbcdcbcabbdadccaabcaacdbdbadddadbbcaabaabadbdc"
-          }
-        }
-      }
-    },
-    "]\u0003": {
+    "�": {
       "isOpen": false,
       "info": {
         "remote": {
-          "appPublicKey": "AgIBAgIAAgICAAECAAEBAQEBAgICAQEAAAECAgICAgI",
-          "nodePublicKey": "AQICAgACAQECAAECAAEAAQECAAAAAAEBAgAAAAECAgA",
+          "appPublicKey": "AgECAQIBAAICAQECAQIAAAIAAAEBAQEAAAAAAgEAAgE",
+          "nodePublicKey": "AgEBAQEAAgICAgECAAEAAgAAAQAAAgABAAICAQECAgE",
           "nodeAddress": {
-            "address": "dbccacaabccbbaababdcabacabbabbbadbccbddcadaacacabaccadcd"
+            "address": "daaacadaccaaacdacbcacadddccbccacccaaaccaadcbbbdbabcaaddacbacbbabbddd"
           }
         }
       }
     }
   }
-}
-''',
-r'''
-{
-  "responseOpenNode": {
-    "failure": "F]"
-  }
-}
-''',
-r'''
-{
-  "responseOpenNode": {
-    "failure": "\t"
-  }
-}
-''',
-r'''
-{
-  "node": [
-    "0",
-    {
-      "paymentDone": {
-        "paymentId": "AAEAAAECAgIBAQEBAAIAAA",
-        "status": {
-          "failure": "AQEBAgAAAQACAAEBAAECAQ"
-        }
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "nodesStatus": {}
 }
 ''',
 r'''
@@ -804,17 +456,73 @@ r'''
     "0",
     {
       "paymentCommit": {
-        "paymentId": "AQIAAQEAAQIAAgAAAAIAAg",
+        "paymentId": "AAECAgECAgECAgEAAQABAQ",
         "commit": {
-          "responseHash": "AgEBAAICAQEAAAECAgECAQECAgACAgABAQAAAgABAgA",
-          "srcPlainLock": "AQIBAAIBAQICAAAAAgEBAAAAAgICAgAAAQABAAAAAQA",
-          "destHashedLock": "AgIBAAIBAgAAAAIAAAACAQEAAQIBAgAAAQICAAABAAA",
+          "responseHash": "AgAAAAAAAAACAgEAAAAAAAECAAICAAECAQICAgEBAQA",
+          "srcPlainLock": "AAABAAAAAAICAAAAAAECAgEBAQEBAgEAAAEBAgIBAAI",
+          "destHashedLock": "AgICAgEBAQEAAQIAAgIAAQABAQEBAgABAgABAQEBAAE",
           "destPayment": "0",
-          "totalDestPayment": "1",
-          "invoiceId": "AAICAgABAgICAAABAAEBAgEAAQIBAAAAAAEAAgEBAgI",
-          "currency": "cbaacadbbadd",
-          "signature": "AAACAQECAAAAAAEBAQECAAIAAgEBAAEBAQICAQABAAIBAgICAgAAAgIBAAEBAAEAAgAAAAIAAgIBAAIAAAIBAQ"
+          "totalDestPayment": "2",
+          "invoiceId": "AQIAAQABAAIBAAEAAgIBAQECAgEBAAECAAAAAgABAgA",
+          "currency": "bbbdddabc",
+          "signature": "AQEBAgEBAgACAQABAAAAAAABAgECAAIAAgECAQAAAQEAAAABAAACAAECAgABAgEAAQECAAECAgIBAgIBAQACAg"
         }
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "failure": "}傠"
+  }
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "failure": "￶꺤"
+  }
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "failure": ""
+  }
+}
+''',
+r'''
+{
+  "nodesStatus": {
+    "SR": {
+      "isOpen": true,
+      "info": {
+        "local": {
+          "nodePublicKey": "AgABAQICAQABAAEBAAEBAQABAAAAAgICAQEAAgEAAgE"
+        }
+      }
+    },
+    "": {
+      "isOpen": false,
+      "info": {
+        "local": {
+          "nodePublicKey": "AAICAgEBAAICAQICAgICAQEAAgEBAgIBAAIAAgIAAQE"
+        }
+      }
+    }
+  }
+}
+''',
+r'''
+{
+  "node": [
+    "1",
+    {
+      "paymentFees": {
+        "paymentId": "AgACAgACAAEAAAAAAgIAAQ",
+        "response": "unreachable"
       }
     }
   ]
@@ -829,315 +537,16 @@ r'''
 ''',
 r'''
 {
-  "node": [
-    "0",
-    {
-      "report": {
-        "localPublicKey": "AQABAgAAAAEAAQABAQIBAQEAAgIAAAEAAQIAAgABAgI",
-        "indexServers": [],
-        "optConnectedIndexServer": null,
-        "relays": [],
-        "friends": {},
-        "openInvoices": {
-          "AAAAAAABAgIAAAICAgAAAQAAAQICAAEBAAAAAQEAAQA": {
-            "currency": "bcd",
-            "totalDestPayment": "0",
-            "description": ""
-          },
-          "AgABAAECAAECAgIAAAABAAECAAABAAAAAgIBAgAAAAE": {
-            "currency": "babcadac",
-            "totalDestPayment": "1",
-            "description": "^𲳰"
-          }
-        },
-        "openPayments": {
-          "AgACAQEBAgABAQAAAQEAAQ": {
-            "invoiceId": "AQABAgEBAAICAAEAAAABAgACAQEAAAABAQACAgEBAAI",
-            "currency": "adadcdaabbacd",
-            "destPublicKey": "AAECAAEBAgAAAAECAQABAgICAQEAAAIBAQIBAAICAgA",
-            "destPayment": "1",
-            "description": "L‚",
-            "status": {
-              "searchingRoute": "AgIAAgIBAQICAgEAAQECAQ"
-            }
-          },
-          "AAABAQACAAAAAQACAgABAg": {
-            "invoiceId": "AQIAAQEAAQABAQICAAECAgIAAQICAQICAgICAQICAAI",
-            "currency": "baaabddc",
-            "destPublicKey": "AQEAAQAAAAEAAQIAAAIBAgABAQICAgABAAEBAAAAAQA",
-            "destPayment": "2",
-            "description": "ᦦ",
-            "status": {
-              "failure": "AQICAgICAgICAAIAAgECAA"
-            }
-          }
-        }
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "responseOpenNode": {
-    "failure": "+‌"
-  }
-}
-''',
-r'''
-{
-  "nodesStatus": {
-    "": {
-      "isOpen": false,
-      "info": {
-        "remote": {
-          "appPublicKey": "AQAAAgICAAACAgICAAEBAAECAgAAAQEAAQABAQAAAgA",
-          "nodePublicKey": "AgABAAACAgEBAgECAAIAAQACAgABAAABAQIBAQEBAgA",
-          "nodeAddress": {
-            "address": "addbacabbbddbabaaddcccdbabaabaacdcddadaaadbdcbaaacacaaaacababdadaccddcdabbcdaccbaadbcbbbccabdbbcdaadbaccdacdbbbadcdbbcbddaaddbdabacbddadcbbadbddbacbbdaadca"
-          }
-        }
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "node": [
-    "0",
-    {
-      "report": {
-        "localPublicKey": "AQABAgICAQACAgEBAgACAgIBAQEBAgEBAQECAAABAgA",
-        "indexServers": [
-          {
-            "publicKey": "AgABAgEAAgEBAAAAAQABAgABAQAAAQEBAAIBAAECAAA",
-            "address": {
-              "address": "dcacbdccbdadcabdcdddb"
-            },
-            "name": ":\""
-          },
-          {
-            "publicKey": "AAEBAAAAAAIBAgABAAACAQIBAAAAAAIAAgECAAEBAgE",
-            "address": {
-              "address": "cdccccadbaddabcbdacccbbbddbdaacbbbcdddbdbccacbcabcccadcdcabcbdcaacbacdbdabbcaaabcdcddbcbacbddabcbcddabaaabcdbaddadaacddbabcacbabccdadcddccdcbbbcbadbbcadacdbbdddcccaccdcddddbddbdaacbadcdcdaadbdddbcddcbbccacdaabbcddacdacdcbbadcdcdadacccabcccacbac"
-            },
-            "name": ""
-          }
-        ],
-        "optConnectedIndexServer": null,
-        "relays": [
-          {
-            "publicKey": "AgAAAAIBAAEBAQABAAACAQICAAABAgABAQEBAgEBAAA",
-            "address": {
-              "address": "ccdadacadabcbcccaccdbdbadadadccbcacbacbbdabdbcabdbbdbabdccdcdcadcbcdcbacacbcdadbaaacbabdbddaacccacbbdbaaacdbcccddcdbdccabcaadadbcdabbacddcbaddcc"
-            },
-            "name": "N«"
-          },
-          {
-            "publicKey": "AgIBAAIAAgACAQEAAgAAAgAAAgEAAgIAAgECAAIBAgI",
-            "address": {
-              "address": "aacdbcabcadbdabcacdbdaddabbbbdbcdcbaabdacbcabcacbacacccaacbdddddccbbdbbbabdddcccababdccdbbbadacbdcbdaaaacabbcdaabdccccdaaccbaacdabbddaccbbaacaadbcccbadbdbbbcaaabacddcdbdccadc"
-            },
-            "name": "u"
-          }
-        ],
-        "friends": {
-          "AgACAQEAAAABAgIAAgABAgEBAAEAAgEAAAICAQIAAgE": {
-            "name": "",
-            "currencyConfigs": {
-              "bdaa": {
-                "rate": {
-                  "mul": 0,
-                  "add": 2
-                },
-                "remoteMaxDebt": "1",
-                "isOpen": false
-              }
-            },
-            "optLastIncomingMoveToken": {
-              "prefixHash": "AAACAQAAAQICAAAAAQICAAEBAAABAgIBAAEBAgECAgI",
-              "tokenInfo": {
-                "mc": {
-                  "localPublicKey": "AAICAAABAgICAQABAQACAQIBAgEAAgICAQICAQICAgA",
-                  "remotePublicKey": "AQIBAQECAgEBAgEAAQEAAgEAAAABAAIBAAEBAgAAAQA",
-                  "balances": {
-                    "acabcadcbdadbbb": {
-                      "balance": "2",
-                      "localPendingDebt": "0",
-                      "remotePendingDebt": "1"
-                    }
-                  }
-                },
-                "counters": {
-                  "inconsistencyCounter": "1",
-                  "moveTokenCounter": "2"
-                }
-              },
-              "randNonce": "AQABAAACAgAAAgIBAQEBAQ",
-              "newToken": "AgECAAABAQEBAAIAAQACAgAAAQIBAQEBAAIAAAEAAAEBAAACAgEAAAACAAABAAEBAQEAAQAAAQABAQICAAICAA"
-            },
-            "liveness": "offline",
-            "channelStatus": {
-              "inconsistent": {
-                "localResetTerms": {},
-                "optRemoteResetTerms": {
-                  "resetToken": "AAEAAAICAgIBAQIBAAECAgICAQIBAAIAAAEBAQEAAgACAQECAgIBAgICAQAAAQACAQIBAQAAAAEBAQICAQECAQ",
-                  "balanceForReset": {}
-                }
-              }
-            },
-            "status": "enabled"
-          }
-        },
-        "openInvoices": {
-          "AQAAAAIAAgABAQIBAAABAgEBAAEBAgEAAAABAAIBAAE": {
-            "currency": "acaabbadaadac",
-            "totalDestPayment": "1",
-            "description": "ª"
-          }
-        },
-        "openPayments": {
-          "AQEAAQEAAQEBAQAAAgEBAg": {
-            "invoiceId": "AAICAAEAAAIAAAEBAQIBAgACAAECAQEBAAACAQAAAQI",
-            "currency": "dd",
-            "destPublicKey": "AgIBAQABAAACAAAAAAAAAQIAAAIAAgABAgACAQABAgI",
-            "destPayment": "0",
-            "description": "㵡<",
-            "status": {
-              "sending": "1"
-            }
-          },
-          "AAEAAAEAAAIBAQAAAAEBAA": {
-            "invoiceId": "AgABAAACAAAAAAECAgEBAAICAQEBAgABAAAAAgEBAQA",
-            "currency": "abacdb",
-            "destPublicKey": "AQACAgIBAgICAgABAQICAgECAQECAQICAQECAgIBAAE",
-            "destPayment": "1",
-            "description": "\u001f",
-            "status": {
-              "commit": [
-                {
-                  "responseHash": "AQAAAAECAgAAAQEBAgEBAgABAAAAAQECAQIBAgICAQA",
-                  "srcPlainLock": "AAIAAAIBAgEAAAIAAAEBAgIBAQECAAIBAgEAAQECAQI",
-                  "destHashedLock": "AAECAQABAgICAgIAAAIBAAABAQIAAgIAAgEAAQACAAA",
-                  "destPayment": "1",
-                  "totalDestPayment": "0",
-                  "invoiceId": "AAAAAgICAgABAQIAAQAAAQECAQABAAICAAIBAAAAAQA",
-                  "currency": "cbbdbbbbdcdac",
-                  "signature": "AgEAAQEBAQICAQEAAQABAAECAAICAQIAAgIAAgIBAQIAAgACAAEAAAIBAQACAQEBAAEBAQACAQEBAAEBAgABAA"
-                },
-                "0"
-              ]
-            }
-          }
-        }
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "node": [
-    "2",
-    {
-      "paymentFees": {
-        "paymentId": "AAICAAEBAAAAAgAAAQACAQ",
-        "response": "unreachable"
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "responseOpenNode": {
-    "success": [
-      "®",
-      "0",
-      {
-        "routes": false,
-        "buyer": false,
-        "seller": false,
-        "config": true
-      },
-      {
-        "localPublicKey": "AgICAAACAQIAAQICAgABAQICAAECAgECAgIBAAIBAgA",
-        "indexServers": [],
-        "optConnectedIndexServer": null,
-        "relays": [
-          {
-            "publicKey": "AQABAQACAQAAAAEAAQEAAgAAAQEAAAECAQAAAAICAgA",
-            "address": {
-              "address": "dbadacaadcbdaaabbbdccabcdbdccbddbddbdbdadddcccccdbacbbcddbcddacbabaccacddcdcbaddadcbabcaadabbadbbabadddadd"
-            },
-            "name": ""
-          },
-          {
-            "publicKey": "AAABAQEAAAEBAgEAAAAAAQAAAAABAAIBAAACAgIAAgI",
-            "address": {
-              "address": "dba"
-            },
-            "name": ""
-          }
-        ],
-        "friends": {
-          "AgIAAgIBAAICAAABAAAAAQAAAQECAQAAAQABAAICAAI": {
-            "name": "",
-            "currencyConfigs": {},
-            "optLastIncomingMoveToken": null,
-            "liveness": "online",
-            "channelStatus": {
-              "inconsistent": {
-                "localResetTerms": {
-                  "adcadacaad": "-1"
-                },
-                "optRemoteResetTerms": null
-              }
-            },
-            "status": "enabled"
-          }
-        },
-        "openInvoices": {
-          "AgABAgIAAAEBAQEAAQACAQACAgEBAgICAgAAAAACAgE": {
-            "currency": "cbca",
-            "totalDestPayment": "1",
-            "description": ""
-          },
-          "AQIBAgAAAQAAAgEBAgAAAQECAAEAAQECAQEAAAEAAQI": {
-            "currency": "aabdccbca",
-            "totalDestPayment": "1",
-            "description": ".-"
-          }
-        },
-        "openPayments": {
-          "AQECAgECAAABAgIBAgAAAg": {
-            "invoiceId": "AQIBAgABAQABAAIBAgAAAgAAAQIBAgECAgICAAICAgI",
-            "currency": "ddbdabb",
-            "destPublicKey": "AgACAgECAAICAgABAgEBAgEBAgIBAQIAAgABAQAAAgA",
-            "destPayment": "1",
-            "description": "",
-            "status": {
-              "foundRoute": [
-                "AQABAAAAAgACAgEBAAIBAA",
-                "2"
-              ]
-            }
-          }
-        }
-      }
-    ]
-  }
-}
-''',
-r'''
-{
   "nodesStatus": {
     "": {
       "isOpen": true,
       "info": {
-        "local": {
-          "nodePublicKey": "AAEAAgEBAQIAAQECAgABAAEAAgEBAgABAQIBAQAAAgA"
+        "remote": {
+          "appPublicKey": "AQIAAgACAQIAAAAAAQEAAgEBAgICAgIAAQICAQEBAgA",
+          "nodePublicKey": "AQACAQECAgEAAQEAAgAAAAIBAAECAgIBAgICAgEAAQA",
+          "nodeAddress": {
+            "address": "aababbddbcccaabacbcbbdbabbccdacadacbccadabbbaacddabbcdbccbdbcccccdcddbbcbdcdcdbabcbbacaacdcbabdcbdcad"
+          }
         }
       }
     }
@@ -1147,12 +556,51 @@ r'''
 r'''
 {
   "node": [
-    "0",
+    "1",
     {
-      "paymentDone": {
-        "paymentId": "AgACAgACAAIBAgICAgIAAA",
-        "status": {
-          "failure": "AQIAAAAAAQIBAgEAAgIAAQ"
+      "report": {
+        "localPublicKey": "AAEBAgACAgAAAAIAAQACAAAAAgECAgABAAEBAAACAgA",
+        "indexServers": [
+          {
+            "publicKey": "AAEAAAICAQEBAgAAAAEAAQACAQAAAAAAAAACAQECAQA",
+            "address": {
+              "address": "cdccabbbadcbbcdaccdabbbdadadcdbccccaadbbabcadcdacadbcabbacbbcdbabccdbdaccdddaddcbbacacddccdabacdbaddccbabdacdabdaaaacdcabbdccbcaddabbdacccbdccdbbcdacdbccaacdbadcccdcdabcdcbbbcddbdcbcacbaadbacaacadbaabbcbbbbdabcaccbcdbbcacddbccccaab"
+            },
+            "name": ""
+          }
+        ],
+        "optConnectedIndexServer": null,
+        "relays": [
+          {
+            "publicKey": "AAECAQAAAAABAgEAAgEBAgEBAgACAQAAAAEAAgABAAE",
+            "address": {
+              "address": "dbbcdcbbdabbadcbbbaccbcabcdbbabddaccadbcddbdaaadddaabcccddddcbdbaaccbddaacbbcdccaddbcccadbccbcdcbcabbdadccaabcaacdbdbadddadbbcaabaabadbdcddddaacdadbdaccbdbcdddbbccdaabcbdabcdaadbccacaabccbbaababdcabacabbabbbadbccbddcadaacacabaccadcdaadabbcbdbcbdadbdcc"
+            },
+            "name": "V"
+          }
+        ],
+        "friends": {},
+        "openInvoices": {
+          "AAIAAQEAAQIBAAEBAQAAAAIAAAAAAQIAAQEAAQIAAgA": {
+            "currency": "adbb",
+            "totalDestPayment": "2",
+            "description": "}",
+            "isCommited": false,
+            "generation": "2"
+          }
+        },
+        "openPayments": {
+          "AQAAAgABAgABAgEAAgEBAg": {
+            "invoiceId": "AgAAAAIBAQAAAAICAgIAAAEAAQAAAAEAAgIBAAIBAgA",
+            "currency": "aabaa",
+            "destPublicKey": "AQICAAABAAAAAAEAAAEBAQACAgIAAQICAgAAAQABAQI",
+            "destPayment": "2",
+            "description": "񤡆",
+            "generation": "2",
+            "status": {
+              "searchingRoute": "AgEBAAIAAAACAQACAAAAAQ"
+            }
+          }
         }
       }
     }
@@ -1164,18 +612,447 @@ r'''
   "node": [
     "1",
     {
-      "paymentCommit": {
-        "paymentId": "AgICAgEAAQECAQIAAgECAA",
-        "commit": {
-          "responseHash": "AQABAgICAQACAQECAAEBAQACAAICAAABAAECAQAAAgA",
-          "srcPlainLock": "AAIAAQACAAACAQIAAAEBAAEAAgIAAQECAAICAQEAAAI",
-          "destHashedLock": "AAACAAEAAgIAAQACAQEAAAIAAAEBAgECAQEBAgEBAgE",
-          "destPayment": "1",
-          "totalDestPayment": "0",
-          "invoiceId": "AgIBAgAAAAABAgABAgACAgIBAgEAAgAAAgACAQEBAAI",
-          "currency": "bbadda",
-          "signature": "AQABAgICAQICAAIBAQABAQICAgABAgIAAgAAAQACAgACAAEBAQIBAgECAAIBAAABAQIAAAIBAgICAQIBAgEBAg"
+      "responseVerifyCommit": {
+        "requestId": "AgAAAgEBAgAAAAABAQEBAg",
+        "status": "success"
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "nodesStatus": {
+    "": {
+      "isOpen": false,
+      "info": {
+        "remote": {
+          "appPublicKey": "AQICAgIAAAICAQABAQABAAIAAAACAAICAQACAAACAQE",
+          "nodePublicKey": "AQICAAEAAgICAAEAAQICAgAAAQIBAAECAAAAAQABAAE",
+          "nodeAddress": {
+            "address": "cbcdcdddbacdbacadbbcadacabadbcddaccabdaaaabddbacacbabcadaccbcbaccdacaacdccabcbabadcabadcbbdadadcdaabbacddbbbdbacbadccdcbdbbbcdadbdababdcbcdabcdbdbddabacddbddddabaaabddccbaabccdbdcaccbbacacacbbaddadadcccaacaabbbcaddddccbcdbbbbadba"
+          }
         }
+      }
+    },
+    ";󿿾": {
+      "isOpen": false,
+      "info": {
+        "local": {
+          "nodePublicKey": "AgIAAQAAAQECAQEBAQIAAAECAgACAgIBAgIBAgABAgA"
+        }
+      }
+    }
+  }
+}
+''',
+r'''
+{
+  "nodesStatus": {
+    "\u001d": {
+      "isOpen": false,
+      "info": {
+        "remote": {
+          "appPublicKey": "AgAAAAIAAAAAAAECAgECAgEBAQIBAgIAAgIBAAIAAAE",
+          "nodePublicKey": "AAECAQAAAAEAAQICAQICAgACAAIAAgAAAgICAQABAgE",
+          "nodeAddress": {
+            "address": "aaacacaaaacababdadaccddcdabbcdaccbaadbcbbbccabdbbcdaadbaccdacdbbbadcdbbcbddaaddbdabacbdda"
+          }
+        }
+      }
+    }
+  }
+}
+''',
+r'''
+{
+  "node": [
+    "1",
+    {
+      "paymentCommit": {
+        "paymentId": "AAIAAgAAAgEAAAICAQEAAQ",
+        "commit": {
+          "responseHash": "AgACAAIBAAACAQAAAgEAAQICAgEAAgIBAQIAAgICAQE",
+          "srcPlainLock": "AQECAQEBAQIAAAECAAECAgABAgEAAgEBAAAAAQABAgA",
+          "destHashedLock": "AQEAAAEBAQACAQABAgAAAgACAQIAAAECAgIBAQEAAAI",
+          "destPayment": "0",
+          "totalDestPayment": "2",
+          "invoiceId": "AAIAAgACAgEAAgICAQABAAIBAgICAQACAgIAAgEAAAA",
+          "currency": "acdbcdaba",
+          "signature": "AAIAAgECAAEBAgEBAgECAgICAQABAQEBAgICAAECAgECAAIAAgICAAABAAICAAEAAgABAAEAAQICAgAAAQAAAg"
+        }
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "node": [
+    "0",
+    {
+      "paymentFees": {
+        "paymentId": "AAIBAAEAAQACAAIBAgEBAA",
+        "response": "unreachable"
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "nodesStatus": {
+    "ᭆ": {
+      "isOpen": false,
+      "info": {
+        "remote": {
+          "appPublicKey": "AAIAAQAAAAEBAQEAAQACAQEAAQECAQIAAQABAAEBAgI",
+          "nodePublicKey": "AQIAAQIBAAEBAgECAgACAgACAAEBAQAAAQAAAQICAAI",
+          "nodeAddress": {
+            "address": "abbcaaabcdcddbcbacbddabcbcddabaaabcdbaddadaacddbabcacbabccdadcdd"
+          }
+        }
+      }
+    }
+  }
+}
+''',
+r'''
+{
+  "nodesStatus": {
+    "": {
+      "isOpen": false,
+      "info": {
+        "remote": {
+          "appPublicKey": "AQAAAQIBAAACAQEAAAIAAgIAAgABAQIAAgEBAQABAgI",
+          "nodePublicKey": "AgIBAgACAgEAAgEBAgEAAQECAQECAQEAAQIBAQICAgE",
+          "nodeAddress": {
+            "address": "bddbdaacbadcdcdaadbdddbcddcbbccacdaabbcddacdacdcbbadcdcdada"
+          }
+        }
+      }
+    }
+  }
+}
+''',
+r'''
+{
+  "node": [
+    "0",
+    {
+      "report": {
+        "localPublicKey": "AAEBAAEAAAEAAQABAQECAgABAQEBAQIAAgICAgAAAAI",
+        "indexServers": [],
+        "optConnectedIndexServer": null,
+        "relays": [
+          {
+            "publicKey": "AAEAAAIBAgIAAAECAAEBAQECAQEAAAEBAgECAQEBAQA",
+            "address": {
+              "address": "dacadabcbcccaccdbdbadadadccb"
+            },
+            "name": ""
+          }
+        ],
+        "friends": {},
+        "openInvoices": {},
+        "openPayments": {
+          "AAABAgABAAIAAQICAQEBAA": {
+            "invoiceId": "AQAAAAIBAgEAAQACAAIAAAEAAgEBAgIAAQICAgIBAgE",
+            "currency": "d",
+            "destPublicKey": "AQABAQEBAgICAQACAQABAAEAAQIAAgEBAQAAAgAAAgI",
+            "destPayment": "1",
+            "description": "",
+            "generation": "2",
+            "status": {
+              "foundRoute": [
+                "AAIBAgEAAgABAgEAAQECAQ",
+                "2"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "nodesStatus": {
+    "": {
+      "isOpen": false,
+      "info": {
+        "local": {
+          "nodePublicKey": "AAABAgIAAgABAgEBAAEAAgEAAAICAQIAAgECAAABAgA"
+        }
+      }
+    },
+    "": {
+      "isOpen": true,
+      "info": {
+        "remote": {
+          "appPublicKey": "AAABAAEAAgIBAQIBAQEBAQICAgECAgACAQEBAgABAAE",
+          "nodePublicKey": "AAACAgACAAICAgEAAAIBAgIAAAEAAAECAAIBAgACAgA",
+          "nodeAddress": {
+            "address": "ccdbbdcadbbbbaabdadcdddbaacdbcabcadbdabcacdbdaddabbbbdbcdcbaabdacbcabcacbacacccaacbdddddccbbdbbbabdddcccababdccdbbbadacbdcbdaaaacabbcdaabdccccdaaccbaacdabbddaccbbaacaadbcccbadbdbbbcaaabacddcdbdccadcab"
+          }
+        }
+      }
+    }
+  }
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "success": [
+      "",
+      "2",
+      {
+        "routes": false,
+        "buyer": true,
+        "seller": true,
+        "config": false
+      },
+      {
+        "localPublicKey": "AAAAAgEAAAECAgAAAAECAgABAQAAAQICAQABAQIBAgI",
+        "indexServers": [],
+        "optConnectedIndexServer": null,
+        "relays": [],
+        "friends": {
+          "AQAAAgAAAAABAgIBAQACAgEBAQIAAQAAAAIBAQEAAAE": {
+            "name": "",
+            "currencyConfigs": {
+              "dbcacdddbcbdbdb": {
+                "rate": {
+                  "mul": 1,
+                  "add": 2
+                },
+                "remoteMaxDebt": "0",
+                "isOpen": false
+              },
+              "bb": {
+                "rate": {
+                  "mul": 2,
+                  "add": 2
+                },
+                "remoteMaxDebt": "0",
+                "isOpen": false
+              }
+            },
+            "optLastIncomingMoveToken": null,
+            "liveness": "online",
+            "channelStatus": {
+              "inconsistent": {
+                "localResetTerms": {
+                  "dbdacabcc": "1"
+                },
+                "optRemoteResetTerms": {
+                  "resetToken": "AAACAAABAQICAQEBAgACAQIBAAEBAgECAAECAQABAgICAgIAAAIBAAABAQIAAgIAAgEAAQACAAACAAIBAAEAAA",
+                  "balanceForReset": {
+                    "cabbbdddcabcdcb": "1",
+                    "bbbdc": "2"
+                  }
+                }
+              }
+            },
+            "status": "enabled"
+          },
+          "AgEAAQEAAgECAQIBAAICAgECAgECAgIAAQIBAQECAgE": {
+            "name": "&\u0001",
+            "currencyConfigs": {},
+            "optLastIncomingMoveToken": {
+              "prefixHash": "AAIBAAEBAgAAAQAAAQECAAIBAAECAAEAAgICAQACAAI",
+              "tokenInfo": {
+                "mc": {
+                  "localPublicKey": "AQIAAQEAAAABAgICAgEAAQAAAQEBAgIAAgEAAQAAAgI",
+                  "remotePublicKey": "AAACAgEBAQEBAgECAAABAQEBAAIAAQACAgAAAQIBAQE",
+                  "balances": {}
+                },
+                "counters": {
+                  "inconsistencyCounter": "0",
+                  "moveTokenCounter": "0"
+                }
+              },
+              "randNonce": "AgIBAAAAAgAAAQABAQEBAA",
+              "newToken": "AQAAAQABAQICAAICAAICAQIBAgABAgIBAgIAAgACAAAAAQAAAgICAgEBAgEAAQICAgIBAgEAAgAAAQEBAQACAA"
+            },
+            "liveness": "online",
+            "channelStatus": {
+              "inconsistent": {
+                "localResetTerms": {
+                  "dbcaac": "-1"
+                },
+                "optRemoteResetTerms": {
+                  "resetToken": "AgEAAAECAQEAAQECAQAAAAEAAgEAAQECAAEAAAAAAgAAAgAAAgICAgABAAIBAAABAQEAAQIAAgECAAEAAAEAAA",
+                  "balanceForReset": {
+                    "b": "-3"
+                  }
+                }
+              }
+            },
+            "status": "enabled"
+          }
+        },
+        "openInvoices": {
+          "AQABAQEBAgIBAQABAAEAAQIAAgIBAgACAgACAgEBAgA": {
+            "currency": "dcaad",
+            "totalDestPayment": "2",
+            "description": "p",
+            "isCommited": false,
+            "generation": "0"
+          },
+          "AgEBAQABAQIAAQACAQIAAQEAAQEAAQEBAQAAAgEBAgA": {
+            "currency": "aaaacdbacccdabc",
+            "totalDestPayment": "2",
+            "description": "3}",
+            "isCommited": true,
+            "generation": "1"
+          }
+        },
+        "openPayments": {}
+      }
+    ]
+  }
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "success": [
+      "",
+      "1",
+      {
+        "routes": true,
+        "buyer": false,
+        "seller": false,
+        "config": true
+      },
+      {
+        "localPublicKey": "AAIAAQIAAgEAAQICAgACAAACAQEAAQEBAgEBAgACAQA",
+        "indexServers": [
+          {
+            "publicKey": "AAACAgABAQAAAAIAAAEAAgEBAAAAAAECAAIAAQECAQE",
+            "address": {
+              "address": "abdbadbbdcbbccdaaccccacbcdbaabcaaddadbadacaadcbdaaabbbdccabcdbdccbddbddbdbdadddcccccdbacbbcddbcddacbabaccacddcdcbaddadcbabcaadabbadbbabadddaddbbccbaababcaabdadbabcadcbddaaaaaabbdadacaaadbacaabcaadcadacaadaadbcdabcabd"
+            },
+            "name": "4"
+          }
+        ],
+        "optConnectedIndexServer": null,
+        "relays": [
+          {
+            "publicKey": "AAEBAQEBAgEBAAAAAAEAAAECAQIAAAEAAAIBAQIAAAE",
+            "address": {
+              "address": "acdcabccaabdccbcabcbdabbcdcddbabddacbbadbacddadddddbdabbddadacbcbcbdacaddccabbcadcbbacdbaabdcdcbdbcbbccacdbadbbbbdaaadacdcbadaabdddccadcbccccbdcdaaddabacbbbdacbbdbbdcdcadabdbdbbdcbadbababadbadaadcbbbaddadbdacc"
+            },
+            "name": ">끆"
+          },
+          {
+            "publicKey": "AgACAAABAAICAAIAAQEBAgECAQIAAgEAAAEBAgAAAgE",
+            "address": {
+              "address": "bddcbdcabddadbbaaadabdccbbdadcbbdaacdbbbdccdbcccbdbbddcadcbdbadcacaadabacdbadbcadbbbacbcdbbddacdcccbadddaaaddddabaddbcaacaadadaaddbcbdcdccbaacbcabaadadbabddddbdcbacdacbccabdbdcbdccdabadcacbddcdaacbdacabbcccccddcb"
+            },
+            "name": "1"
+          }
+        ],
+        "friends": {
+          "AQABAAACAQABAAICAAACAAEBAAACAgIBAgIAAQECAAI": {
+            "name": "\u0006񑘜",
+            "currencyConfigs": {
+              "dbadcbadaa": {
+                "rate": {
+                  "mul": 2,
+                  "add": 1
+                },
+                "remoteMaxDebt": "2",
+                "isOpen": false
+              },
+              "dbabdaabcaca": {
+                "rate": {
+                  "mul": 0,
+                  "add": 0
+                },
+                "remoteMaxDebt": "1",
+                "isOpen": false
+              }
+            },
+            "optLastIncomingMoveToken": null,
+            "liveness": "online",
+            "channelStatus": {
+              "consistent": {
+                "currencyReports": {}
+              }
+            },
+            "status": "disabled"
+          },
+          "AgABAgECAAIBAQICAgAAAAACAAIBAgABAAIAAQABAAE": {
+            "name": "",
+            "currencyConfigs": {
+              "aadcabddabccccd": {
+                "rate": {
+                  "mul": 0,
+                  "add": 0
+                },
+                "remoteMaxDebt": "2",
+                "isOpen": false
+              }
+            },
+            "optLastIncomingMoveToken": null,
+            "liveness": "online",
+            "channelStatus": {
+              "consistent": {
+                "currencyReports": {
+                  "cdddaacdcacd": {
+                    "balance": "-3",
+                    "localPendingDebt": "1",
+                    "remotePendingDebt": "1"
+                  }
+                }
+              }
+            },
+            "status": "enabled"
+          }
+        },
+        "openInvoices": {},
+        "openPayments": {
+          "AgEBAgEBAgIBAgIAAQEAAA": {
+            "invoiceId": "AgABAgAAAAAAAAIAAgECAgIBAAIAAgIBAAIBAAICAgA",
+            "currency": "ad",
+            "destPublicKey": "AQACAAIBAAAAAgECAAABAgEAAgECAgIBAAACAQECAgE",
+            "destPayment": "0",
+            "description": "",
+            "generation": "2",
+            "status": {
+              "commit": [
+                {
+                  "responseHash": "AgIBAQEBAgECAQICAgABAQEAAgECAgICAAEBAQIAAgE",
+                  "srcPlainLock": "AgECAAICAAEBAAAAAAABAAAAAgICAgACAAACAgAAAgE",
+                  "destHashedLock": "AgAAAQABAQIAAAEAAAIBAQIBAgECAQIAAgACAAEBAAI",
+                  "destPayment": "2",
+                  "totalDestPayment": "2",
+                  "invoiceId": "AAEAAAAAAQIBAQIAAgAAAQEBAgECAQABAgACAgICAAI",
+                  "currency": "bdadadcaca",
+                  "signature": "AgICAAICAgEAAQICAgIAAAEBAQABAgACAAAAAgECAAEAAQACAQIBAgEBAgIAAgIBAAAAAAACAQECAQIBAAABAQ"
+                },
+                "0"
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
+}
+''',
+r'''
+{
+  "node": [
+    "1",
+    {
+      "paymentFees": {
+        "paymentId": "AQAAAgIBAAEAAQEAAAIAAQ",
+        "response": "unreachable"
       }
     }
   ]
@@ -1189,103 +1066,19 @@ r'''
 r'''
 {
   "node": [
-    "0",
+    "2",
     {
-      "report": {
-        "localPublicKey": "AgICAgAAAgABAAEAAgEAAAIAAgICAgEAAQIBAQIBAgA",
-        "indexServers": [
-          {
-            "publicKey": "AgACAgIBAgEBAAEBAAIAAAEBAgICAAEAAAICAQEBAQA",
-            "address": {
-              "address": "dbcccbdbbddcadcbdbadcacaadabacdbadbcadbbbacbcdbbddacdcccbadddaaaddddabaddbcaacaadadaaddbcbdcdccbaacbcabaadadbabddddbdcbacdacbccabdbdcbd"
-            },
-            "name": "뤏"
-          }
-        ],
-        "optConnectedIndexServer": "AgEAAQAAAgABAgICAQECAgIAAAABAQEBAQICAAECAgI",
-        "relays": [],
-        "friends": {
-          "AQEAAQACAgIAAAICAQAAAQABAQIBAQEBAgEBAgICAAE": {
-            "name": "᠎",
-            "currencyConfigs": {
-              "dcddbcdbdb": {
-                "rate": {
-                  "mul": 2,
-                  "add": 2
-                },
-                "remoteMaxDebt": "0",
-                "isOpen": true
-              }
-            },
-            "optLastIncomingMoveToken": {
-              "prefixHash": "AQIAAAEAAgEAAAICAgABAAECAgABAQIAAAEBAQECAgE",
-              "tokenInfo": {
-                "mc": {
-                  "localPublicKey": "AQECAgAAAAIAAQIBAgIAAgAAAgECAQECAQICAQACAQI",
-                  "remotePublicKey": "AQACAgIAAAEBAgIBAgEBAQABAAABAQICAQACAAIAAgE",
-                  "balances": {
-                    "ababdccb": {
-                      "balance": "-3",
-                      "localPendingDebt": "1",
-                      "remotePendingDebt": "2"
-                    },
-                    "ddbdbb": {
-                      "balance": "0",
-                      "localPendingDebt": "2",
-                      "remotePendingDebt": "0"
-                    }
-                  }
-                },
-                "counters": {
-                  "inconsistencyCounter": "1",
-                  "moveTokenCounter": "2"
-                }
-              },
-              "randNonce": "AAACAQIAAQEBAQICAAECAg",
-              "newToken": "AQAAAAECAAAAAQEAAQEAAAAAAQEBAQIAAAICAAICAQEAAAICAAECAQECAQECAQECAgECAgABAQAAAgABAgAAAA"
-            },
-            "liveness": "online",
-            "channelStatus": {
-              "inconsistent": {
-                "localResetTerms": {
-                  "ad": "2",
-                  "dcb": "-3"
-                },
-                "optRemoteResetTerms": {
-                  "resetToken": "AAECAQACAQICAgEAAAIBAQICAQIBAQAAAAICAAIBAgIAAQECAgEBAQECAQIBAgICAAEBAQACAQICAgIAAQEBAg",
-                  "balanceForReset": {
-                    "daddbbaaada": "1",
-                    "bdc": "-1"
-                  }
-                }
-              }
-            },
-            "status": "disabled"
-          }
-        },
-        "openInvoices": {
-          "AAABAAACAQECAQIBAgECAAIAAgABAQACAgEAAgECAAI": {
-            "currency": "aadbacbcdb",
-            "totalDestPayment": "2",
-            "description": "@N"
-          },
-          "AgIAAQECAgIAAQACAQABAgIBAAICAgACAgIBAAECAgI": {
-            "currency": "bbcc",
-            "totalDestPayment": "0",
-            "description": ""
-          }
-        },
-        "openPayments": {
-          "AgABAAEAAgECAQIBAQICAA": {
-            "invoiceId": "AgIBAAAAAAACAQECAQIBAAABAQEAAgACAgAAAAIBAQE",
-            "currency": "cacddaca",
-            "destPublicKey": "AQEAAAIAAQAAAQABAgICAAABAQIAAgACAgICAAACAQI",
-            "destPayment": "0",
-            "description": "",
-            "status": {
-              "sending": "2"
-            }
-          }
+      "paymentCommit": {
+        "paymentId": "AgECAgECAAEBAgAAAgIAAQ",
+        "commit": {
+          "responseHash": "AAICAgIBAQACAAIAAgECAQABAQICAgACAQAAAAIAAQI",
+          "srcPlainLock": "AQAAAAEBAgABAAIBAAICAAIBAgIBAAIAAAICAAABAQI",
+          "destHashedLock": "AAEAAQECAgIBAQABAQECAQIAAgIAAAEAAgABAQACAQA",
+          "destPayment": "1",
+          "totalDestPayment": "0",
+          "invoiceId": "AAECAQECAQIAAQAAAAIBAQEAAAIAAQICAgICAQIBAQI",
+          "currency": "babbdacaacbbac",
+          "signature": "AQACAgIBAgAAAAICAAAAAQABAgIAAQICAQIAAAEBAQEAAgIBAAAAAgAAAgEAAgICAgABAgIBAgIAAQAAAgACAg"
         }
       }
     }
@@ -1294,92 +1087,34 @@ r'''
 ''',
 r'''
 {
-  "node": [
-    "2",
-    {
-      "paymentFees": {
-        "paymentId": "AQECAgIAAgEAAAACAAECAQ",
-        "response": {
-          "fees": [
-            "2",
-            "AQICAQACAAACAgAAAQECAA"
-          ]
+  "nodesStatus": {
+    "": {
+      "isOpen": true,
+      "info": {
+        "remote": {
+          "appPublicKey": "AQACAQEAAgECAgIBAgABAgIAAAEAAQICAQIBAQACAAI",
+          "nodePublicKey": "AgABAgICAgABAAACAgIAAgIAAgAAAgECAgIBAQABAgE",
+          "nodeAddress": {
+            "address": "bbadbbbbaadacbbccdbbbbbabdbcbbbdcdbcdbcbdbddccabbdccdbcbabdbccaabbddcaaccdbcbdabdcdcdccacddbaddbbaacdbabbcbdaa"
+          }
         }
       }
     }
-  ]
+  }
 }
 ''',
 r'''
 {
   "responseOpenNode": {
-    "failure": "‿,"
+    "failure": "‬["
   }
 }
 ''',
 r'''
 {
-  "nodesStatus": {
-    "": {
-      "isOpen": true,
-      "info": {
-        "local": {
-          "nodePublicKey": "AQICAQICAAEAAAIAAgIBAQIBAgIAAQABAAIBAgEBAgE"
-        }
-      }
-    },
-    "u!": {
-      "isOpen": false,
-      "info": {
-        "remote": {
-          "appPublicKey": "AAEBAAIBAAICAQEAAAABAAEBAAACAAAAAQIBAQIBAgA",
-          "nodePublicKey": "AQAAAAIBAQEAAAIAAQICAgICAQIBAQIAAgABAgIBAAE",
-          "nodeAddress": {
-            "address": "bbdacaacbbacbdabbabcdabbcabadad"
-          }
-        }
-      }
-    }
+  "responseOpenNode": {
+    "failure": "B@"
   }
-}
-''',
-r'''
-{
-  "nodesStatus": {
-    "Z7": {
-      "isOpen": false,
-      "info": {
-        "local": {
-          "nodePublicKey": "AQICAgIAAQAAAgICAAICAAIAAAIBAgICAQEAAQIBAgE"
-        }
-      }
-    },
-    "": {
-      "isOpen": false,
-      "info": {
-        "remote": {
-          "appPublicKey": "AAAAAAACAgAAAgEAAgIAAQABAQECAQIBAgEBAAECAAA",
-          "nodePublicKey": "AQEAAQIAAQABAQACAgICAQICAAABAQIAAQIAAAEAAgA",
-          "nodeAddress": {
-            "address": "ddccabbdccdbcbabdbccaabbddcaaccdbcbdabdcdcdccacddbaddbbaacdbabbcb"
-          }
-        }
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "node": [
-    "0",
-    {
-      "paymentFees": {
-        "paymentId": "AgACAQACAgEBAgEBAAICAA",
-        "response": "unreachable"
-      }
-    }
-  ]
 }
 ''',
 r'''
@@ -1457,14 +1192,14 @@ r'''
                   "localPublicKey": "AAEAAAEAAAIBAAECAgIAAAEBAQIAAgAAAAABAAEBAgA",
                   "remotePublicKey": "AAACAQIBAgICAAECAgACAAEBAQIBAgAAAgEBAAIAAgI",
                   "balances": {
-                    "dcdbabcada": {
-                      "balance": "-3",
-                      "localPendingDebt": "1",
-                      "remotePendingDebt": "2"
-                    },
                     "dcbadd": {
                       "balance": "-3",
                       "localPendingDebt": "2",
+                      "remotePendingDebt": "2"
+                    },
+                    "dcdbabcada": {
+                      "balance": "-3",
+                      "localPendingDebt": "1",
                       "remotePendingDebt": "2"
                     }
                   }
@@ -1505,23 +1240,24 @@ r'''
             "destPublicKey": "AQABAgACAAIAAQABAgECAAEAAgICAAEBAgABAQIAAAA",
             "destPayment": "0",
             "description": "￸h",
+            "generation": "2",
             "status": {
               "success": [
                 {
-                  "responseHash": "AAACAgEAAAACAQEBAAIBAAECAAABAQACAAABAgABAgI",
-                  "invoiceId": "AAAAAgACAQEAAgAAAgICAAABAgIAAQABAgAAAAECAAE",
+                  "responseHash": "AQAAAAIBAQEAAgEAAQIAAAEBAAIAAAECAAECAgAAAAI",
+                  "invoiceId": "AAIBAQACAAACAgIAAAECAgABAAECAAAAAQIAAQACAAI",
                   "currency": {
-                    "currency": "babcdccbddbbad"
+                    "currency": "bcdccbddbba"
                   },
-                  "srcPlainLock": "AgICAgABAgIAAQABAAAAAgABAgECAAIAAAAAAgACAgE",
-                  "destPlainLock": "AAACAAABAQICAgEAAgABAQECAAECAAECAAACAQABAQI",
+                  "srcPlainLock": "AgICAgICAAECAgABAAEAAAACAAECAQIAAgAAAAACAAI",
+                  "destPlainLock": "AgEAAAIAAAEBAgICAQACAAEBAQIAAQIAAQIAAAIBAAE",
                   "isComplete": false,
                   "destPayment": "2",
-                  "totalDestPayment": "0",
-                  "signature": "AgEAAQECAQECAAAAAAIAAAAAAAIAAgIBAgABAQICAQIBAQICAgICAgACAQABAAEAAAACAQABAAICAQABAQABAQ"
+                  "totalDestPayment": "1",
+                  "signature": "AAIAAgAAAgEAAQECAQECAAAAAAIAAAAAAAIAAgIBAgABAQICAQIBAQICAgICAgACAQABAAEAAAACAQABAAICAQ"
                 },
-                "2",
-                "AgABAAIAAgACAAEAAgECAA"
+                "0",
+                "AQECAQECAgABAAIAAgACAA"
               ]
             }
           }
@@ -1533,731 +1269,114 @@ r'''
 ''',
 r'''
 {
-  "nodesStatus": {
-    "󍹅": {
-      "isOpen": false,
-      "info": {
-        "remote": {
-          "appPublicKey": "AQECAAACAgABAQEAAQAAAAABAgICAgICAAABAgICAgA",
-          "nodePublicKey": "AgEBAgEBAAIAAgEAAgECAQIBAgEAAQICAgECAQAAAAE",
-          "nodeAddress": {
-            "address": "ddddadaaccddcbcabccbbbadbcadbdcbccababadaaddbdadcdadccdcdcdcdbaababcdacddcacbddbdcbdcbabaabadcbbdccdaacadddbcadbcdaacdcddcc"
-          }
-        }
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "nodesStatus": {
-    "缌": {
-      "isOpen": false,
-      "info": {
-        "remote": {
-          "appPublicKey": "AgAAAAEAAAIAAAABAQAAAgAAAgACAgIBAAECAgIAAQA",
-          "nodePublicKey": "AgICAAIAAAABAgACAAEBAAIAAgEAAAICAQICAAECAAA",
-          "nodeAddress": {
-            "address": "acbbcbcabdadbdbcabaacbcaccdbcbdcddbdcdbbd"
-          }
-        }
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "node": [
-    "2",
-    {
-      "paymentDone": {
-        "paymentId": "AgIAAAIAAAICAgECAgEBAQ",
-        "status": {
-          "failure": "AAABAQICAgIAAgICAQEAAg"
-        }
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "nodesStatus": {
-    "\u001f": {
-      "isOpen": false,
-      "info": {
-        "local": {
-          "nodePublicKey": "AAECAAIBAQIAAgACAQICAQABAgEAAgACAAACAgIBAAI"
-        }
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "nodesStatus": {
-    "": {
-      "isOpen": true,
-      "info": {
-        "remote": {
-          "appPublicKey": "AAAAAQEAAAABAQECAQEAAQECAQIBAQAAAQECAQICAQA",
-          "nodePublicKey": "AQABAgEAAgIBAQEBAQECAAIAAAABAQIAAgACAAACAQI",
-          "nodeAddress": {
-            "address": "ccacdaadbdaddbddbdcacdcaccdaadbbadabbbabcaadcaacacbcacdbdbdbbaadbcddbdacccdaadccdbdacdcbdcbbbcaccaadacbbbaddbddccaaaaaacddabbcbdad"
-          }
-        }
-      }
-    }
-  }
-}
-''',
-r'''
-{
   "responseOpenNode": {
     "success": [
-      "",
-      "2",
-      {
-        "routes": true,
-        "buyer": true,
-        "seller": true,
-        "config": true
-      },
-      {
-        "localPublicKey": "AQACAAICAQIAAQICAQABAgACAQIAAgABAQEBAQEAAgA",
-        "indexServers": [
-          {
-            "publicKey": "AAABAgAAAQIAAAECAgACAAIAAQABAAAAAgEBAgABAAE",
-            "address": {
-              "address": "bcccbddadddbaabbacbbcabadcadabdbdabbbdabccadbbacdcdddb"
-            },
-            "name": "ಳ\t"
-          }
-        ],
-        "optConnectedIndexServer": "AQECAAICAAEBAAACAQEAAAACAQIAAgACAAIBAAABAQA",
-        "relays": [],
-        "friends": {
-          "AAECAAIAAgICAQEBAgEBAgICAAACAQABAgAAAQABAgI": {
-            "name": "",
-            "currencyConfigs": {
-              "ccacbddccacadb": {
-                "rate": {
-                  "mul": 1,
-                  "add": 2
-                },
-                "remoteMaxDebt": "0",
-                "isOpen": false
-              },
-              "ddbdddd": {
-                "rate": {
-                  "mul": 2,
-                  "add": 2
-                },
-                "remoteMaxDebt": "2",
-                "isOpen": true
-              }
-            },
-            "optLastIncomingMoveToken": null,
-            "liveness": "online",
-            "channelStatus": {
-              "consistent": {
-                "currencyReports": {
-                  "bcbcbdbaaaccc": {
-                    "balance": "0",
-                    "localPendingDebt": "1",
-                    "remotePendingDebt": "2"
-                  },
-                  "dbacda": {
-                    "balance": "-1",
-                    "localPendingDebt": "2",
-                    "remotePendingDebt": "1"
-                  }
-                }
-              }
-            },
-            "status": "disabled"
-          },
-          "AQEBAAAAAgECAQECAQEBAgABAQEBAgIBAQAAAQABAQI": {
-            "name": "‟",
-            "currencyConfigs": {
-              "bbddba": {
-                "rate": {
-                  "mul": 1,
-                  "add": 0
-                },
-                "remoteMaxDebt": "1",
-                "isOpen": true
-              },
-              "cbccccdd": {
-                "rate": {
-                  "mul": 1,
-                  "add": 0
-                },
-                "remoteMaxDebt": "1",
-                "isOpen": false
-              }
-            },
-            "optLastIncomingMoveToken": null,
-            "liveness": "online",
-            "channelStatus": {
-              "consistent": {
-                "currencyReports": {
-                  "dbab": {
-                    "balance": "-1",
-                    "localPendingDebt": "2",
-                    "remotePendingDebt": "1"
-                  }
-                }
-              }
-            },
-            "status": "enabled"
-          }
-        },
-        "openInvoices": {},
-        "openPayments": {}
-      }
-    ]
-  }
-}
-''',
-r'''
-{
-  "node": [
-    "2",
-    {
-      "responseVerifyCommit": {
-        "requestId": "AQECAQACAQIBAgEAAQEAAg",
-        "status": "failure"
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "node": [
-    "1",
-    {
-      "report": {
-        "localPublicKey": "AQABAgEBAgEBAgIAAAABAQACAgAAAQIAAgIAAAABAAE",
-        "indexServers": [
-          {
-            "publicKey": "AAEBAgACAgICAAABAgACAQICAAEBAAACAAABAQABAgA",
-            "address": {
-              "address": "cbbdcabbaabcaacababdbdccddaabccaacccccbbcabbcbabdbcdcdbcbbcbbbabaddaddcbbbcbaccdbddcabaacbabccdacaaadb"
-            },
-            "name": "—􆟾"
-          }
-        ],
-        "optConnectedIndexServer": null,
-        "relays": [],
-        "friends": {
-          "AQEAAgECAQIAAQEAAgECAgIAAQABAAAAAAICAgICAQA": {
-            "name": "2",
-            "currencyConfigs": {
-              "aabddccdbcac": {
-                "rate": {
-                  "mul": 0,
-                  "add": 2
-                },
-                "remoteMaxDebt": "2",
-                "isOpen": false
-              },
-              "cad": {
-                "rate": {
-                  "mul": 2,
-                  "add": 0
-                },
-                "remoteMaxDebt": "0",
-                "isOpen": false
-              }
-            },
-            "optLastIncomingMoveToken": {
-              "prefixHash": "AgABAQABAQIAAQAAAgEAAgIAAAICAgACAgICAAAAAAA",
-              "tokenInfo": {
-                "mc": {
-                  "localPublicKey": "AgEAAQIAAQACAQIAAgEAAAEAAQEAAQICAQAAAAICAAE",
-                  "remotePublicKey": "AAECAgIAAQIAAgIAAgICAgIAAgECAAAAAgABAAABAQA",
-                  "balances": {
-                    "cbbadcbabbaa": {
-                      "balance": "1",
-                      "localPendingDebt": "0",
-                      "remotePendingDebt": "0"
-                    }
-                  }
-                },
-                "counters": {
-                  "inconsistencyCounter": "0",
-                  "moveTokenCounter": "0"
-                }
-              },
-              "randNonce": "AAIAAgECAgIAAAICAAICAQ",
-              "newToken": "AQABAQABAQEAAQACAQAAAQIBAQICAAABAQEAAQIAAQACAgEBAgICAAEBAQAAAAECAgIAAgIAAAEBAAICAQEBAQ"
-            },
-            "liveness": "offline",
-            "channelStatus": {
-              "consistent": {
-                "currencyReports": {
-                  "bdabdadbddcdcb": {
-                    "balance": "-3",
-                    "localPendingDebt": "0",
-                    "remotePendingDebt": "0"
-                  }
-                }
-              }
-            },
-            "status": "enabled"
-          }
-        },
-        "openInvoices": {
-          "AQIAAAACAgICAgIAAQICAQICAgICAQECAgEBAAIBAQA": {
-            "currency": "adcdbbcb",
-            "totalDestPayment": "2",
-            "description": "\u001b$"
-          },
-          "AQACAAIBAQECAAECAgICAQIAAAIBAQABAgIAAQAAAQE": {
-            "currency": "accdbabca",
-            "totalDestPayment": "1",
-            "description": "D"
-          }
-        },
-        "openPayments": {
-          "AQACAQECAQEBAQECAAECAQ": {
-            "invoiceId": "AgECAgACAAIAAAECAQIAAgEAAgEAAgEAAgIBAQAAAAE",
-            "currency": "bbcc",
-            "destPublicKey": "AgABAQEAAAIAAgECAAACAAIBAgEAAgABAQACAAAAAAI",
-            "destPayment": "2",
-            "description": "\u000f",
-            "status": {
-              "searchingRoute": "AAICAAIAAAIBAAACAAABAg"
-            }
-          }
-        }
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "nodesStatus": {
-    "": {
-      "isOpen": false,
-      "info": {
-        "local": {
-          "nodePublicKey": "AQECAQIAAgIAAgACAAEAAgAAAgAAAQABAQIAAgEAAgE"
-        }
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "node": [
-    "0",
-    {
-      "responseVerifyCommit": {
-        "requestId": "AAACAAIBAQEAAgAAAAECAQ",
-        "status": "failure"
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "responseOpenNode": {
-    "success": [
-      "8",
-      "1",
-      {
-        "routes": false,
-        "buyer": true,
-        "seller": false,
-        "config": true
-      },
-      {
-        "localPublicKey": "AAEAAgACAQIAAQACAgAAAgICAgAAAgACAgEAAgABAgI",
-        "indexServers": [
-          {
-            "publicKey": "AQEAAgEBAQABAgEAAAEAAQAAAQIAAQICAAEBAQEAAgI",
-            "address": {
-              "address": "abaabaaaadbdcccaccdbcdbbacaccdbcacadaddacabccddabbdcbacababbcdcdbcdcbccdadbabdddbcbcdcbaaddddadcadabaccddcbdababddbcdaadbadbbbabcacbccdcddcacbacbbdcbbabcddcbbdcdcbbbadcbbb"
-            },
-            "name": ""
-          }
-        ],
-        "optConnectedIndexServer": null,
-        "relays": [],
-        "friends": {},
-        "openInvoices": {
-          "AgABAAIAAQACAQECAQABAQEBAAEAAgACAAABAAICAAE": {
-            "currency": "acbddb",
-            "totalDestPayment": "2",
-            "description": "'彅"
-          },
-          "AgEBAAEAAgIAAgACAgECAQIBAAEBAQECAQEBAgAAAgA": {
-            "currency": "bb",
-            "totalDestPayment": "2",
-            "description": "?"
-          }
-        },
-        "openPayments": {}
-      }
-    ]
-  }
-}
-''',
-r'''
-{
-  "nodesStatus": {
-    "¢¥": {
-      "isOpen": true,
-      "info": {
-        "local": {
-          "nodePublicKey": "AQAAAgEAAAICAAEBAQIAAQIAAgACAgECAQIAAgECAgI"
-        }
-      }
-    },
-    "F": {
-      "isOpen": true,
-      "info": {
-        "remote": {
-          "appPublicKey": "AAAAAAAAAAAAAAEBAAAAAAEBAAABAgABAQECAAECAQA",
-          "nodePublicKey": "AQAAAAECAQEBAgEBAQICAAAAAQEBAAICAgIBAQECAAI",
-          "nodeAddress": {
-            "address": "dbaabbcddcdcdcdbadabbdcdabdbbcbacddbadabccaaaaaabcdcddddbcdaddadcacadcaadaaadbddccdbacbcabaddbabacccdabadcbcbaaaaaadcdcabcaccdcaabdbabbccacccabdababdbaddabdcaadacadadddcaadaccdabdcdcbdbadacadcd"
-          }
-        }
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "responseOpenNode": {
-    "failure": ""
-  }
-}
-''',
-r'''
-{
-  "responseOpenNode": {
-    "success": [
-      "򆒁",
+      "`",
       "0",
       {
         "routes": true,
         "buyer": true,
         "seller": false,
-        "config": true
+        "config": false
       },
       {
-        "localPublicKey": "AAABAQICAQEBAAICAgEAAAACAAEAAQEAAQABAQICAQI",
-        "indexServers": [
-          {
-            "publicKey": "AQICAgAAAAABAgEAAAEAAQACAgAAAQAAAgECAQECAgI",
-            "address": {
-              "address": "adadcddbdccbaadbadbaad"
-            },
-            "name": "\"«"
-          }
-        ],
-        "optConnectedIndexServer": null,
-        "relays": [],
-        "friends": {},
-        "openInvoices": {},
-        "openPayments": {
-          "AQAAAQECAAIBAgACAQIAAg": {
-            "invoiceId": "AgIAAAACAAIAAgIAAgIAAQICAQABAgEBAgIBAgEAAAI",
-            "currency": "aabddacacccbdcc",
-            "destPublicKey": "AQEBAgEBAAABAgICAgECAAEBAQEBAQECAQAAAgEAAAI",
-            "destPayment": "2",
-            "description": "0O",
-            "status": {
-              "searchingRoute": "AQEAAQEBAAIBAgICAgIAAg"
-            }
-          }
-        }
-      }
-    ]
-  }
-}
-''',
-r'''
-{
-  "node": [
-    "2",
-    {
-      "report": {
-        "localPublicKey": "AQIBAQACAQEBAgEAAgAAAQIAAgIBAQAAAQIBAAEAAQI",
-        "indexServers": [
-          {
-            "publicKey": "AAIBAQEBAAAAAAIBAgAAAQEBAAAAAAICAQECAQEBAQI",
-            "address": {
-              "address": "ddcabcccbd"
-            },
-            "name": "@"
-          }
-        ],
-        "optConnectedIndexServer": "AgEAAgIBAgIAAgECAgEAAAECAQACAQAAAAACAgIAAQI",
+        "localPublicKey": "AgIAAAICAgICAQECAAACAgABAQEAAQAAAAABAgICAgI",
+        "indexServers": [],
+        "optConnectedIndexServer": "AQICAgIAAgEBAgEBAAIAAgEAAgECAQIBAgEAAQICAgE",
         "relays": [
           {
-            "publicKey": "AAIAAAEBAgACAAABAAIAAAABAgABAAIAAAEBAAEBAAA",
+            "publicKey": "AAAAAQEBAQICAQICAAICAAICAAABAQIBAgEAAQEAAQE",
             "address": {
-              "address": "ddccaccbcdadadcacaaaabaadbbbdbccacaaccbbacbddcdccbdccdcdac"
+              "address": "bccbbbadbcadbdcbccababadaaddbdad"
             },
-            "name": "\u001a"
-          },
-          {
-            "publicKey": "AAABAQIBAQEBAAABAgABAAIAAQABAQEAAgAAAQECAAA",
-            "address": {
-              "address": "abaaddcccacdcaadcdddaaaad"
-            },
-            "name": "1󫛀"
+            "name": "u"
           }
         ],
         "friends": {
-          "AAIAAAABAQIBAgABAQABAAIBAQECAgECAAIBAAEAAQA": {
-            "name": "韲!",
-            "currencyConfigs": {},
-            "optLastIncomingMoveToken": null,
-            "liveness": "online",
-            "channelStatus": {
-              "inconsistent": {
-                "localResetTerms": {
-                  "aacdcaacbbdadbb": "0",
-                  "abcd": "-3"
-                },
-                "optRemoteResetTerms": {
-                  "resetToken": "AQEBAQEBAgABAgAAAQECAgECAgIAAQIAAQABAgICAQEBAAAAAQIAAQABAAACAAEBAAIAAAIBAQABAgABAgACAg",
-                  "balanceForReset": {}
-                }
-              }
-            },
-            "status": "disabled"
-          }
-        },
-        "openInvoices": {},
-        "openPayments": {}
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "node": [
-    "0",
-    {
-      "paymentCommit": {
-        "paymentId": "AQICAAEAAgABAAECAQECAg",
-        "commit": {
-          "responseHash": "AgECAAACAQECAgIBAQACAQABAAAAAgIBAgEBAQABAAI",
-          "srcPlainLock": "AQICAAIAAQAAAQACAgEBAAABAgIBAAICAQACAAIAAgA",
-          "destHashedLock": "AQIBAAAAAgECAAIAAgACAgIBAAIAAQEAAgABAAAAAAE",
-          "destPayment": "1",
-          "totalDestPayment": "2",
-          "invoiceId": "AgIBAgABAQEBAQACAQIBAAAAAgIAAQICAQIAAAIAAAE",
-          "currency": "aadbaaaddbcc",
-          "signature": "AQIBAAEAAAABAAIAAAIBAQECAAICAQECAAICAgACAgIAAgEBAAECAQECAAEAAQAAAAIBAQECAQIBAAACAgAAAg"
-        }
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "node": [
-    "0",
-    {
-      "paymentCommit": {
-        "paymentId": "AAAAAAEBAQIAAgEAAAABAA",
-        "commit": {
-          "responseHash": "AAAAAgEAAAEBAgICAAEBAgABAQECAgICAQIBAQAAAgI",
-          "srcPlainLock": "AAEAAAACAgACAQIBAAEBAQECAgEAAQECAQEAAQECAAE",
-          "destHashedLock": "AgICAQIBAQABAgEAAgEAAAECAAACAgEAAQACAQECAgI",
-          "destPayment": "0",
-          "totalDestPayment": "0",
-          "invoiceId": "AgEBAgACAAECAgIBAgICAgIAAgIAAQAAAAICAQEAAgE",
-          "currency": "bdbdb",
-          "signature": "AgIAAAEBAgABAQIBAQEBAAACAgIBAgIAAgIBAQEBAAIBAgACAgEBAgEBAQIAAAEAAQIAAgACAgEAAgIBAgIBAQ"
-        }
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "node": [
-    "0",
-    {
-      "paymentFees": {
-        "paymentId": "AQECAQECAAECAAABAgIAAQ",
-        "response": "unreachable"
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "nodesStatus": {
-    "Ύ4": {
-      "isOpen": true,
-      "info": {
-        "remote": {
-          "appPublicKey": "AQACAgEAAQICAAICAQIAAQEBAAEAAAIAAAICAgACAQE",
-          "nodePublicKey": "AQIAAQIBAAAAAAICAAECAgECAAACAAEBAAEAAgACAgI",
-          "nodeAddress": {
-            "address": "adcddadcadcdccabbcbacabbbbaacbabddbcbcababbdacddbcbbbdcbbaddbdbacbabcdddcaabaacadaddadacadbcaacddcabdabbbabdaaabcddbcadcccdbcbdbadbbcaaaadbabbbdabbacaaccbacddabddbddacbbcaddbdbcddcadbdadbcdbadcaacccdccadcdddddcbcbadcdcbbdbddccbadcccccbca"
-          }
-        }
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "nodesStatus": {
-    "]": {
-      "isOpen": false,
-      "info": {
-        "remote": {
-          "appPublicKey": "AAACAQACAgAAAgICAQECAgAAAAIAAAICAgECAgICAgE",
-          "nodePublicKey": "AgAAAgIAAgECAQIBAgACAgECAgIBAAABAgEBAAECAAI",
-          "nodeAddress": {
-            "address": "dabadccdabdcacbdadbaacbbbcbdaabdacadbdaccabdbbbadcbcabccaddacabddadabbdcabdcbaabcdbabdddadadbdcbdbacbdbbbac"
-          }
-        }
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "responseOpenNode": {
-    "success": [
-      "",
-      "2",
-      {
-        "routes": false,
-        "buyer": true,
-        "seller": true,
-        "config": true
-      },
-      {
-        "localPublicKey": "AQIAAAIBAQACAQACAQAAAQIBAgAAAgABAQEBAQIBAQI",
-        "indexServers": [
-          {
-            "publicKey": "AAICAgECAQAAAAEAAAACAAIAAQECAgAAAgIAAAABAAA",
-            "address": {
-              "address": "c"
-            },
-            "name": "⁄"
-          },
-          {
-            "publicKey": "AQIBAgIBAgABAAIBAAEBAQIBAQEBAgECAgACAAIBAQI",
-            "address": {
-              "address": "abbcdaabccbaadaaccabdbabcdaaddcaaddabdadcaabacabacadcbadbbccdddacbadcbbaccccadcddbadbccadaaaadbaabbaaccabaddacdacdcdbdbbccdaccdacbdbdcaaacdbcbaaacdbbcddacbdbcaca"
-            },
-            "name": ""
-          }
-        ],
-        "optConnectedIndexServer": "AgEAAAEAAgIAAgECAQEBAQACAQEBAQABAgIAAgIAAAI",
-        "relays": [
-          {
-            "publicKey": "AgIBAgAAAgIBAQACAgEAAgIBAgICAQACAgACAAICAgE",
-            "address": {
-              "address": "cbcadddddbdbabaacbcbacabbbcbddaccacdccaaadbbaabbbdaaaaadddacaaacaadabdddaabdacacabdabacbbdadbddcadcbdcdacaabccdabdcbaaabcdbacdcbabacdcadcadccabdbdbbaaabccabdcdcdbadddcbcba"
-            },
-            "name": ""
-          }
-        ],
-        "friends": {
-          "AQACAAECAgEAAgICAQEBAAICAgEAAQEAAAICAQIBAgI": {
-            "name": "􀀀",
+          "AQEAAgIBAQIBAQIBAgICAQICAQACAgECAQIBAgEBAAE": {
+            "name": "",
             "currencyConfigs": {
-              "abdacaaabbaac": {
+              "dcacbddbdcb": {
                 "rate": {
-                  "mul": 2,
-                  "add": 1
-                },
-                "remoteMaxDebt": "2",
-                "isOpen": true
-              },
-              "addaaac": {
-                "rate": {
-                  "mul": 2,
-                  "add": 2
+                  "mul": 1,
+                  "add": 0
                 },
                 "remoteMaxDebt": "0",
                 "isOpen": true
-              }
-            },
-            "optLastIncomingMoveToken": null,
-            "liveness": "offline",
-            "channelStatus": {
-              "inconsistent": {
-                "localResetTerms": {
-                  "da": "2",
-                  "bcdbcabcbcbdd": "-3"
+              },
+              "a": {
+                "rate": {
+                  "mul": 0,
+                  "add": 0
                 },
-                "optRemoteResetTerms": null
+                "remoteMaxDebt": "1",
+                "isOpen": true
               }
             },
-            "status": "disabled"
+            "optLastIncomingMoveToken": {
+              "prefixHash": "AgICAgABAgECAgECAQEAAAIBAgAAAgECAAAAAQACAAI",
+              "tokenInfo": {
+                "mc": {
+                  "localPublicKey": "AQIBAQACAAECAgICAAIAAAEBAgIBAgACAAIBAgEBAQI",
+                  "remotePublicKey": "AQABAQECAAEAAgICAgAAAAEAAAIAAAABAQAAAgAAAgA",
+                  "balances": {
+                    "bcbddaa": {
+                      "balance": "1",
+                      "localPendingDebt": "2",
+                      "remotePendingDebt": "2"
+                    },
+                    "baacbbc": {
+                      "balance": "0",
+                      "localPendingDebt": "1",
+                      "remotePendingDebt": "0"
+                    }
+                  }
+                },
+                "counters": {
+                  "inconsistencyCounter": "2",
+                  "moveTokenCounter": "2"
+                }
+              },
+              "randNonce": "AAACAQAAAAAAAQABAQABAA",
+              "newToken": "AQECAgABAgACAgACAQEBAAIBAQECAAACAQIAAQEBAgECAgACAgECAQECAgAAAgAAAgICAQICAQEBAQIBAAAAAQ"
+            },
+            "liveness": "online",
+            "channelStatus": {
+              "consistent": {
+                "currencyReports": {}
+              }
+            },
+            "status": "enabled"
           }
         },
         "openInvoices": {
-          "AQECAAIBAAIAAgECAgICAQAAAQACAgIBAAECAgICAQE": {
-            "currency": "cacadbdddcd",
-            "totalDestPayment": "1",
-            "description": ""
-          },
-          "AQIAAQEAAAACAAEAAgEBAQEAAgIBAgICAAEAAAIBAAE": {
-            "currency": "cddadcacba",
-            "totalDestPayment": "2",
-            "description": "\u0015"
+          "AQECAAEBAgAAAAAAAAABAgACAQECAAIAAgECAgEAAQI": {
+            "currency": "babcb",
+            "totalDestPayment": "0",
+            "description": "",
+            "isCommited": false,
+            "generation": "2"
           }
         },
         "openPayments": {
-          "AAICAQICAAACAQABAgABAA": {
-            "invoiceId": "AgIAAQECAQIAAAEAAQIBAgIBAQACAAIAAQIBAQICAAI",
-            "currency": "abbd",
-            "destPublicKey": "AgACAQABAQABAQIAAQEBAQAAAQACAQEAAgACAQIBAQE",
+          "AQABAAEAAgIAAgEBAQIAAA": {
+            "invoiceId": "AAEBAAABAQEBAgICAgACAgIAAAIBAAECAAACAQIBAAE",
+            "currency": "cdadddaddbbdbcb",
+            "destPublicKey": "AAACAgECAAAAAgECAQABAQABAQICAAACAgABAQABAQE",
             "destPayment": "1",
-            "description": "@\u001b",
-            "status": {
-              "failure": "AQABAAIBAgEBAAIBAQABAA"
-            }
-          },
-          "AAACAQABAgIBAgIBAAEBAQ": {
-            "invoiceId": "AQEAAgEAAgEBAgICAQIAAgEAAQIAAgAAAgECAAEAAQE",
-            "currency": "babd",
-            "destPublicKey": "AQEBAAECAQABAQAAAgIBAgAAAgECAQIBAAABAAEAAQI",
-            "destPayment": "1",
-            "description": "",
+            "description": "‾⁜",
+            "generation": "2",
             "status": {
               "commit": [
                 {
-                  "responseHash": "AgIAAQACAQEBAgACAgEBAAACAQAAAQIAAQIAAQAAAQA",
-                  "srcPlainLock": "AgEBAAECAQACAAABAgECAAEBAAAAAAIBAAIBAQAAAQI",
-                  "destHashedLock": "AgIAAAACAQACAQABAQECAAEAAAABAAECAAIAAAEAAQA",
-                  "destPayment": "0",
-                  "totalDestPayment": "2",
-                  "invoiceId": "AQICAQIBAQEBAgECAgACAQECAAECAgIAAAECAQECAgE",
-                  "currency": "bdabccacbcca",
-                  "signature": "AgIBAAECAQACAAECAgIAAAICAAEAAAICAQICAgIBAgACAQAAAQIBAAECAgECAgIAAgIBAAACAAEAAAAAAQABAg"
+                  "responseHash": "AgABAAIBAgEAAgECAAIBAQAAAgEBAAAAAQAAAQEAAQE",
+                  "srcPlainLock": "AAACAAACAAECAgACAAIBAgEAAAIAAAEAAQEBAAIBAQA",
+                  "destHashedLock": "AgICAQEBAQABAQEBAAECAQIAAQIAAQEAAAECAQIAAAA",
+                  "destPayment": "2",
+                  "totalDestPayment": "1",
+                  "invoiceId": "AgAAAQEBAQEAAAICAAEAAQECAgABAAECAQAAAAICAgI",
+                  "currency": "ddcccbacbaba",
+                  "signature": "AAACAAECAgEBAQAAAQEBAQEBAAACAQIBAAIAAgAAAQIAAQACAgICAQABAgEAAAABAAIBAgIAAAICAAECAgIAAg"
                 },
                 "0"
               ]
@@ -2272,12 +1391,113 @@ r'''
 r'''
 {
   "node": [
-    "1",
+    "2",
     {
-      "paymentDone": {
-        "paymentId": "AAAAAAEBAAIAAQIBAAIBAQ",
-        "status": {
-          "failure": "AgECAgEBAgIBAgAAAAECAA"
+      "report": {
+        "localPublicKey": "AQIBAgEBAQACAAACAAIBAQEAAAEBAQAAAAEBAAAAAQE",
+        "indexServers": [
+          {
+            "publicKey": "AQEAAQECAQIBAQAAAQECAQICAQABAAECAQACAgEBAQE",
+            "address": {
+              "address": "dabcabdadcdcccacdaadbdaddbddbdcacdcaccdaadbbadabbbabcaadcaacacbcacdbdbdbbaadbcddbdacccdaadccdbdacdcbdcbbbcaccaadacbb"
+            },
+            "name": "￸"
+          },
+          {
+            "publicKey": "AgIBAAABAgACAgAAAAACAgAAAAECAAICAgEAAAAAAQE",
+            "address": {
+              "address": "adaabdaaaddcdcbbbcddbdadcbbcbbaaacaabdaaaabcdbcccbddadddbaabbacbbcabadcadabdbdabbbdabccadbbacdcdddbdcaaabccaadbcaaadaaadcbacdbcdacdcbbcccbabbbddbabccdcbccccddbaadbbadaadcbdbdbabcbabdddbdabdadaaccddadbbcdaaddadccacbddccacadb"
+            },
+            "name": "\u00064"
+          }
+        ],
+        "optConnectedIndexServer": "AgIAAAIBAQIBAgIBAgECAgICAgECAQIBAQAAAQECAQE",
+        "relays": [
+          {
+            "publicKey": "AgACAQABAAEBAgIBAQAAAQACAAABAQICAQECAQEBAAE",
+            "address": {
+              "address": "bbdcacadbacdaabaccdbdbdcdbcacbadddcbdccaaaccdccbbbaacdddbcbcccddacbcbcabbcbbdcabbaabcaacababdbdccddaabccaacccccbb"
+            },
+            "name": "5A"
+          },
+          {
+            "publicKey": "AgABAAEAAgIBAAIBAgECAQABAAIBAgACAAEAAAACAQA",
+            "address": {
+              "address": "babaddaddcbbbcbaccdbddcabaacbabccdacaaadbcdaccbcdbaddacbaaadddcbdddacbdaabddccdbcaccdadccaddaddabaccdaabcaaadabdaacbcddb"
+            },
+            "name": "]"
+          }
+        ],
+        "friends": {
+          "AgIBAAAAAgIAAQABAgICAAECAAICAAICAgICAAIBAgA": {
+            "name": "",
+            "currencyConfigs": {},
+            "optLastIncomingMoveToken": null,
+            "liveness": "online",
+            "channelStatus": {
+              "consistent": {
+                "currencyReports": {}
+              }
+            },
+            "status": "enabled"
+          }
+        },
+        "openInvoices": {},
+        "openPayments": {
+          "AAIAAgECAAACAAIBAgEAAg": {
+            "invoiceId": "AAEBAAIAAAAAAgIBAQIBAQIBAQACAAACAgACAAACAQA",
+            "currency": "dabdb",
+            "destPublicKey": "AgICAQECAQABAQIBAgACAgACAAIAAQACAAACAAABAAE",
+            "destPayment": "1",
+            "description": "팏",
+            "generation": "0",
+            "status": {
+              "success": [
+                {
+                  "responseHash": "AQEBAAIAAAABAgEAAgIAAAACAQEAAAEBAQIBAQECAAI",
+                  "invoiceId": "AAEAAgACAQIAAQACAgAAAgICAgAAAgACAgEAAgABAgI",
+                  "currency": {
+                    "currency": "bccccbbda"
+                  },
+                  "srcPlainLock": "AQICAAEBAQEAAgIAAgABAAABAAABAQAAAAAAAAICAgI",
+                  "destPlainLock": "AAICAAICAgIAAgIBAgEBAgEBAgEAAQIBAgECAAABAQA",
+                  "isComplete": true,
+                  "destPayment": "0",
+                  "totalDestPayment": "0",
+                  "signature": "AgECAAEAAAEBAgIBAgACAQEAAQACAAEBAgACAAICAAICAgEAAAEAAAABAQECAgIAAAIBAgICAQICAAEAAQICAA"
+                },
+                "2",
+                "AQEAAgEAAQIBAgEAAAABAQ"
+              ]
+            }
+          },
+          "AgECAgABAgAAAAABAQAAAA": {
+            "invoiceId": "AAICAgECAAIBAQIAAQEAAAAAAAICAAACAAIBAgICAAA",
+            "currency": "ddcaccaaacdbb",
+            "destPublicKey": "AQEBAAECAAEAAgIBAQICAgABAQEAAAABAgICAAICAAA",
+            "destPayment": "2",
+            "description": ")",
+            "generation": "1",
+            "status": {
+              "success": [
+                {
+                  "responseHash": "AgEAAQACAAECAgABAgAAAgACAgIAAQIBAAICAAICAgE",
+                  "invoiceId": "AgICAgEAAgICAQEAAAACAgICAgACAAIAAQACAAACAgA",
+                  "currency": {
+                    "currency": "dbadddcdddcdbbc"
+                  },
+                  "srcPlainLock": "AQEAAgECAQECAQIBAQEAAgAAAgIBAQEAAQICAgEAAgE",
+                  "destPlainLock": "AAEAAgACAQEBAgABAgICAgECAAACAQEAAQICAAEAAAE",
+                  "isComplete": false,
+                  "destPayment": "0",
+                  "totalDestPayment": "1",
+                  "signature": "AAAAAQEBAQECAAABAgIBAAEBAAEBAQEAAgEBAgEBAQEBAgABAgECAQICAAIAAgAAAQIBAgACAQACAQACAQACAg"
+                },
+                "0",
+                "AAEAAAAAAQABAQIAAQEBAA"
+              ]
+            }
+          }
         }
       }
     }
@@ -2286,17 +1506,113 @@ r'''
 ''',
 r'''
 {
-  "nodesStatus": {}
-}
-''',
-r'''
-{
   "node": [
-    "2",
+    "1",
     {
-      "responseVerifyCommit": {
-        "requestId": "AgIAAgEAAQECAQICAAABAQ",
-        "status": "failure"
+      "report": {
+        "localPublicKey": "AAIBAQECAAIBAgIBAQIBAQEBAQIAAgIBAgIBAQAAAAA",
+        "indexServers": [
+          {
+            "publicKey": "AgIAAgACAQIAAgABAAEBAAECAgEAAAIBAAIAAQAAAQI",
+            "address": {
+              "address": "ddbcdaadbadbbbabcacbccdcddcacbacbbdcbbabcddcbbdcdcbbbadcbbbcadabbacdacabbdacccaabaaddabacbddbdaddccdbdbbaddadccacbbbabbdcdcbdcccdbacaacbbadddddbcaaaaabaacabbbbaadaccdcdcbaadbbdbccabbdcddddbaabbcddcdcdcdbadabbdcdabdbbcbacddbadabc"
+            },
+            "name": ""
+          },
+          {
+            "publicKey": "AAICAgAAAAECAgABAQEAAgIAAQACAgEBAgICAgAAAAI",
+            "address": {
+              "address": "cdaddadcacadcaadaaadbddccdbacbcabaddbabacccdabadcbcbaaaaaadcdcabcaccdcaabdbabbccacccabdababdbaddabdcaadacadadddcaadaccdabdcdcbdbadacadcdacacadababdabdbbcaaadabbaacbbdaabbbadccddaadadcddbdccbaadbadbaadcdcacdaabaacbabddadbddbdadbadccdcaabaabddacac"
+            },
+            "name": ","
+          }
+        ],
+        "optConnectedIndexServer": null,
+        "relays": [
+          {
+            "publicKey": "AAEBAQEBAgEBAAABAgICAgECAAEBAQEBAQECAQAAAgE",
+            "address": {
+              "address": "cdddbabaaacdaddbcccbdcacbaaadaacacabbcbbaabdacbddbaaddcabcccbdbaadddbabcbbb"
+            },
+            "name": "­\u0003"
+          },
+          {
+            "publicKey": "AAEBAgACAAABAAIAAAABAgABAAIAAAEBAAEBAAAAAAI",
+            "address": {
+              "address": "caccbcdadadcacaaaabaadbbbdbccacaaccbbacbddcdccbdccdcdacbcacccbabbdbccdaacabaabaaddcccacdcaadcdddaaaadbbdddabaccdcdabcbcbcdccadabbabaababcdbda"
+            },
+            "name": "‌𘨯"
+          }
+        ],
+        "friends": {
+          "AAEBAgICAQAAAQECAAEAAQAAAgECAgABAgIAAQIAAgA": {
+            "name": "",
+            "currencyConfigs": {},
+            "optLastIncomingMoveToken": null,
+            "liveness": "offline",
+            "channelStatus": {
+              "inconsistent": {
+                "localResetTerms": {
+                  "ddbcabcdcadccca": "2"
+                },
+                "optRemoteResetTerms": null
+              }
+            },
+            "status": "enabled"
+          }
+        },
+        "openInvoices": {
+          "AgEAAQAAAAICAQIBAQEAAQACAQICAAIAAQAAAQACAgE": {
+            "currency": "dcd",
+            "totalDestPayment": "2",
+            "description": "\u0017",
+            "isCommited": true,
+            "generation": "2"
+          },
+          "AAECAAICAAAAAQICAQIAAQIBAQABAAICAQACAAECAgA": {
+            "currency": "cbdc",
+            "totalDestPayment": "2",
+            "description": "8",
+            "isCommited": true,
+            "generation": "0"
+          }
+        },
+        "openPayments": {
+          "AQEBAAACAgIBAgIAAgIBAQ": {
+            "invoiceId": "AQEAAgECAAICAQECAQEBAgAAAQABAgACAAICAQACAgE",
+            "currency": "dddabcacbcdbbbb",
+            "destPublicKey": "AAECAQICAQAAAAIAAQIBAQEBAAEBAQACAgEAAQICAAI",
+            "destPayment": "0",
+            "description": "",
+            "generation": "0",
+            "status": {
+              "failure": "AAACAgIAAgEBAQIAAQIBAA"
+            }
+          },
+          "AAIAAgICAQACAAEBAAIAAQ": {
+            "invoiceId": "AAAAAAEBAgIBAgACAgICAQIAAQEBAQEAAgECAQAAAAI",
+            "currency": "dadadaadbaa",
+            "destPublicKey": "AAAAAAACAgAAAQEBAgEAAQAAAAEAAgAAAgEBAQIAAgI",
+            "destPayment": "0",
+            "description": "￻)",
+            "generation": "1",
+            "status": {
+              "commit": [
+                {
+                  "responseHash": "AQIAAQABAAAAAgEBAQIBAgEAAAICAAACAAEAAgICAgA",
+                  "srcPlainLock": "AgAAAAAAAQEBAgACAQAAAAEAAAAAAgEAAAEBAgICAAE",
+                  "destHashedLock": "AQIAAQEBAgICAgECAQEAAAICAAEAAAACAgACAQIBAAE",
+                  "destPayment": "2",
+                  "totalDestPayment": "1",
+                  "invoiceId": "AQIBAQABAQIAAQICAgECAQEAAQIBAAIBAAABAgAAAgI",
+                  "currency": "b",
+                  "signature": "AAIBAQICAgIBAQAAAgAAAgEBAgACAAECAgIBAgICAgIAAgIAAQAAAAICAQEAAgEAAAACAAACAgACAgAAAQECAA"
+                },
+                "1"
+              ]
+            }
+          }
+        }
       }
     }
   ]
@@ -2305,18 +1621,88 @@ r'''
 r'''
 {
   "responseOpenNode": {
-    "failure": "_j"
+    "success": [
+      "⁍\u0001",
+      "0",
+      {
+        "routes": true,
+        "buyer": true,
+        "seller": false,
+        "config": true
+      },
+      {
+        "localPublicKey": "AAIAAgICAgIAAAACAgACAAIBAgEAAgICAAEAAgEAAgE",
+        "indexServers": [
+          {
+            "publicKey": "AAECAQIAAAABAQEAAQACAQABAQAAAAEBAgAAAgIBAQI",
+            "address": {
+              "address": "bcbcababbdacddbcbbbdcbbaddbdbacbabcdddcaabaacadaddadacadbcaacddcabdabbbabdaaabcddbcadcccdbcbdbadbbcaaaadbabbbdabbacaaccbacddabddbddacbbcaddbdbcddcadbdadbcdbadca"
+            },
+            "name": ""
+          },
+          {
+            "publicKey": "AQACAQEBAgIBAgEBAAIBAgICAgICAQEBAAIBAQEBAQI",
+            "address": {
+              "address": "dcdcbbdbddccbadcccccbc"
+            },
+            "name": " ஫"
+          }
+        ],
+        "optConnectedIndexServer": "AQEAAQECAAABAAACAQACAgAAAgICAQECAgAAAAIAAAI",
+        "relays": [
+          {
+            "publicKey": "AQICAgICAQIAAAICAAIBAgECAQIAAgIBAgICAQAAAQI",
+            "address": {
+              "address": "abdabadccdabdcacbdadbaacbbbcbdaabdacadbdaccabdbbbadcbcabccaddacabddadabbdcabdcbaabcdbabdddadadbdcbdbacbdbbbacadbdcddacacca"
+            },
+            "name": "Uk"
+          },
+          {
+            "publicKey": "AQECAQECAQIAAgICAQIBAAAAAQAAAAIAAgABAQICAAA",
+            "address": {
+              "address": "abaacccddcdaabbbbdccdadbabbcdaabccbaadaaccabdbabcdaaddcaaddabdadcaabacabacadcbadbbccdddacbadcbbaccccadcddbadbccadaaaadbaabbaaccabaddacdacdcdbdbbccdaccdacbdbdcaaacdbcbaaacdbbcddacbdbcacabdaacdbbcbcaccccdbbadacbdbdcddc"
+            },
+            "name": "텠3"
+          }
+        ],
+        "friends": {},
+        "openInvoices": {
+          "AAIAAgICAQACAQEBAAECAQIAAAACAgABAAICAgACAgI": {
+            "currency": "babaacbcbaca",
+            "totalDestPayment": "2",
+            "description": "",
+            "isCommited": true,
+            "generation": "1"
+          },
+          "AQECAQICAgIAAgICAQECAAECAQIBAQAAAAIAAgEAAAA": {
+            "currency": "abbbdaaaaad",
+            "totalDestPayment": "2",
+            "description": "",
+            "isCommited": false,
+            "generation": "0"
+          }
+        },
+        "openPayments": {}
+      }
+    ]
+  }
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "failure": ""
   }
 }
 ''',
 r'''
 {
   "node": [
-    "2",
+    "1",
     {
       "responseVerifyCommit": {
-        "requestId": "AgICAQIAAQEBAQEBAQAAAQ",
-        "status": "failure"
+        "requestId": "AgABAgEAAAIBAAACAQIBAQ",
+        "status": "success"
       }
     }
   ]
@@ -2331,24 +1717,115 @@ r'''
 ''',
 r'''
 {
+  "responseOpenNode": {
+    "failure": "p"
+  }
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "failure": ""
+  }
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "failure": "1"
+  }
+}
+''',
+r'''
+{
   "node": [
-    "2",
+    "1",
     {
-      "paymentCommit": {
-        "paymentId": "AQAAAgICAgIBAQICAQAAAQ",
-        "commit": {
-          "responseHash": "AQIAAgEAAAIBAAICAAEBAAIAAgEAAgABAgICAQABAQE",
-          "srcPlainLock": "AQICAQEBAgICAAEBAQIBAQIBAgEBAgEAAAABAAIBAAE",
-          "destHashedLock": "AAECAAEAAQAAAgAAAgACAQIAAgIBAgECAAICAQICAAI",
-          "destPayment": "0",
-          "totalDestPayment": "2",
-          "invoiceId": "AAAAAQEAAgEAAQEBAAEAAQEAAgACAQEAAgACAQAAAgE",
-          "currency": "abaa",
-          "signature": "AQIAAQICAQAAAAEBAQIAAAEAAAACAAIAAgABAAEAAgABAgICAQICAQICAAABAgEAAgAAAAIBAAIAAgAAAAEBAA"
+      "paymentFees": {
+        "paymentId": "AQEBAgIAAAIBAgICAgACAA",
+        "response": {
+          "fees": [
+            "1",
+            "AgEBAQICAAIAAQIBAQAAAA"
+          ]
         }
       }
     }
   ]
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "failure": "￷"
+  }
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "success": [
+      "<―",
+      "2",
+      {
+        "routes": false,
+        "buyer": true,
+        "seller": true,
+        "config": true
+      },
+      {
+        "localPublicKey": "AQIAAAACAgECAAICAAABAAECAgAAAAAAAQICAQEAAAA",
+        "indexServers": [
+          {
+            "publicKey": "AgECAQECAgEAAQIBAgICAgECAgABAgICAgECAQEBAQA",
+            "address": {
+              "address": "abcadcbddbbbddcbcbaacbccdbdabdacaaabbaacdcadaddaaacdddadabcaddbcdbcabcbcbddaaaadacdddbbddbaadddaacbdddbdddcacadbdddcddcacbdaacbcddabbcddadcacbadddaaaaaabcdddacccccbdcddcdabbacdacbabdccbaaadccacaaabacacbacdababadcbaccbcbcababccaabdacacccbbbbdbcab"
+            },
+            "name": "%"
+          }
+        ],
+        "optConnectedIndexServer": null,
+        "relays": [
+          {
+            "publicKey": "AgECAQEBAQIBAgIAAgEBAgABAgICAAABAgEBAgIBAAI",
+            "address": {
+              "address": "bdabccacbccadbacdbabbdbdabbbadcdacabbccdadbadcbaddabddbbbbdddcaddcbcbcabbdbaccdbcaabadcccbbbdbdbaaccbcb"
+            },
+            "name": ""
+          },
+          {
+            "publicKey": "AgEBAAEAAAAAAQEAAgABAgEAAgEBAgACAQICAQECAgE",
+            "address": {
+              "address": "bacaddcbcacbbaababcdbabcddacccbaacaaaddddbabacbcaddbdcdbcccddd"
+            },
+            "name": "￰"
+          }
+        ],
+        "friends": {},
+        "openInvoices": {},
+        "openPayments": {
+          "AAEAAQIAAQABAAACAAACAA": {
+            "invoiceId": "AgECAAICAQIBAgACAgECAgACAQIBAAIBAgIAAAABAQA",
+            "currency": "acbcaccb",
+            "destPublicKey": "AgEAAAIBAAACAAEAAAIAAAECAAECAgEAAAABAQECAAA",
+            "destPayment": "0",
+            "description": "",
+            "generation": "0",
+            "status": {
+              "failure": "AgIBAgIBAgIAAAECAQACAA"
+            }
+          }
+        }
+      }
+    ]
+  }
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "failure": "\t"
+  }
 }
 ''',
 r'''
@@ -2390,14 +1867,6 @@ r'''
 r'''
 {
   "nodesStatus": {
-    "": {
-      "isOpen": true,
-      "info": {
-        "local": {
-          "nodePublicKey": "AgICAAACAAICAQICAQACAQEBAAACAQABAQECAAABAgA"
-        }
-      }
-    },
     " 󩣤": {
       "isOpen": true,
       "info": {
@@ -2407,6 +1876,14 @@ r'''
           "nodeAddress": {
             "address": "dbdadadabdccccadcbbaccbdbbabcaababdcdaaccdacdb"
           }
+        }
+      }
+    },
+    "": {
+      "isOpen": true,
+      "info": {
+        "local": {
+          "nodePublicKey": "AgICAAACAAICAQICAQACAQEBAAACAQABAQECAAABAgA"
         }
       }
     }
@@ -2504,8 +1981,12 @@ r'''
             "destPublicKey": "AAABAgACAQIAAgAAAgACAgECAAAAAQEAAgIBAgACAAE",
             "destPayment": "1",
             "description": "",
+            "generation": "2",
             "status": {
-              "failure": "AAEAAgEAAgECAQEAAAABAA"
+              "foundRoute": [
+                "AgECAQEAAAABAAABAgECAA",
+                "1"
+              ]
             }
           }
         }
@@ -2516,57 +1997,16 @@ r'''
 ''',
 r'''
 {
-  "nodesStatus": {}
-}
-''',
-r'''
-{
   "nodesStatus": {
-    "": {
-      "isOpen": false,
-      "info": {
-        "local": {
-          "nodePublicKey": "AQAAAAEAAQABAQECAQICAQEAAgACAgABAgACAQIAAQE"
-        }
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "nodesStatus": {
-    "P?": {
-      "isOpen": false,
+    "": {
+      "isOpen": true,
       "info": {
         "remote": {
-          "appPublicKey": "AQAAAAIAAgICAgEAAAIAAAIBAgACAAEAAQIBAQICAgA",
-          "nodePublicKey": "AgIBAQEAAgABAQIAAgICAQEBAAEAAAACAQEBAAAAAQA",
+          "appPublicKey": "AAEBAQIBAgIBAQACAAICAAECAAIBAgABAQIBAgECAgA",
+          "nodePublicKey": "AQICAAEAAgIBAQEAAAACAAICAgIBAAACAAACAQIAAgA",
           "nodeAddress": {
-            "address": "dbbdccbbdcbdaabdccbaaabbccabddcbabddaacadcdccdcbbccbaaaaaabdadbcdadccacabcabddcbaddabcbddaccbdbddaacbcabadabdbbacbbcacdbbccdccdddcacabaccdbab"
+            "address": "bcddccdbccdddccbaabcacdbbdccbbdcbdaabdccbaaabbccabddcbabddaacadcdccdcbbccbaaaaaabd"
           }
-        }
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "nodesStatus": {
-    "\u0007": {
-      "isOpen": false,
-      "info": {
-        "local": {
-          "nodePublicKey": "AAEBAQECAgACAgIAAAEBAQABAAECAAACAQECAgECAQE"
-        }
-      }
-    },
-    "=": {
-      "isOpen": false,
-      "info": {
-        "local": {
-          "nodePublicKey": "AQECAAEBAgABAgIBAgACAgEBAAIBAAEBAAEBAAABAAE"
         }
       }
     }
@@ -2577,76 +2017,100 @@ r'''
 {
   "responseOpenNode": {
     "success": [
-      "Q",
-      "2",
+      "Hﰑ",
+      "1",
       {
         "routes": true,
-        "buyer": true,
+        "buyer": false,
         "seller": true,
-        "config": false
+        "config": true
       },
       {
-        "localPublicKey": "AQICAgEAAgEAAgIBAgEAAgEBAQIAAQIAAgACAQACAgE",
+        "localPublicKey": "AAABAgIAAAECAAABAQABAgIBAAEBAgICAQABAgAAAgA",
         "indexServers": [],
-        "optConnectedIndexServer": null,
-        "relays": [
-          {
-            "publicKey": "AQAAAAECAQACAQIBAAIAAAACAAIAAQABAQAAAgEBAQI",
-            "address": {
-              "address": "cbcddccaacccacaccdbbccddbcdaabbbbcadabbdccdbdcbbbcbadabcbacbbcabbacbcbdcdbaddababbdaaadabbbaccbcbbbadabcacaccbcaaddcdbcaaabbbccabadcbbcacdbccbccbccddaadbbbbdcbbccdbbcdddacddbaabaddbbbdbccccbbacdcdbadaacbbacbcbadbcbadcabdd"
-            },
-            "name": "©2"
-          }
-        ],
-        "friends": {
-          "AgIBAQACAQIBAgECAAEAAgIAAQEBAAIAAQIBAAACAgA": {
-            "name": "y",
-            "currencyConfigs": {},
-            "optLastIncomingMoveToken": null,
-            "liveness": "offline",
-            "channelStatus": {
-              "consistent": {
-                "currencyReports": {
-                  "bcbbcdd": {
-                    "balance": "-3",
-                    "localPendingDebt": "2",
-                    "remotePendingDebt": "1"
-                  },
-                  "cbbacddcc": {
-                    "balance": "-1",
-                    "localPendingDebt": "2",
-                    "remotePendingDebt": "1"
-                  }
-                }
-              }
-            },
-            "status": "disabled"
+        "optConnectedIndexServer": "AQEBAgIAAQEAAQIAAAIBAgIAAQABAAECAAIAAAEBAAA",
+        "relays": [],
+        "friends": {},
+        "openInvoices": {
+          "AQACAQEBAgEAAQEBAQIBAQAAAAEBAAABAQEBAgIAAgI": {
+            "currency": "accb",
+            "totalDestPayment": "2",
+            "description": "",
+            "isCommited": true,
+            "generation": "2"
           },
-          "AAACAAAAAAIAAgECAgACAQIAAQECAgABAQICAQEAAgE": {
-            "name": ";$",
-            "currencyConfigs": {
-              "caccdbcdccd": {
-                "rate": {
-                  "mul": 0,
-                  "add": 2
-                },
-                "remoteMaxDebt": "1",
-                "isOpen": false
-              }
-            },
-            "optLastIncomingMoveToken": null,
-            "liveness": "online",
-            "channelStatus": {
-              "inconsistent": {
-                "localResetTerms": {
-                  "acdcbdba": "2"
-                },
-                "optRemoteResetTerms": null
-              }
-            },
-            "status": "enabled"
+          "AAEAAAIBAgIAAQIAAQACAAECAQAAAAACAQACAAEAAQI": {
+            "currency": "bccd",
+            "totalDestPayment": "2",
+            "description": "{’",
+            "isCommited": false,
+            "generation": "0"
           }
         },
+        "openPayments": {
+          "AQEBAgIAAAEBAgABAQIAAQ": {
+            "invoiceId": "AgIBAgACAgEBAAIBAAEBAAEBAAABAAEBAAECAAIBAAI",
+            "currency": "ccbcdd",
+            "destPublicKey": "AgEAAgEAAgIBAgEAAgEBAQIAAQIAAgACAQACAgEBAAI",
+            "destPayment": "0",
+            "description": "",
+            "generation": "1",
+            "status": {
+              "commit": [
+                {
+                  "responseHash": "AAIAAAACAAIAAQABAQAAAgEBAQICAgECAgEAAQACAQI",
+                  "srcPlainLock": "AgECAQIBAQAAAgABAgECAgEBAQEAAQIAAQECAAEBAAI",
+                  "destHashedLock": "AgEAAAEAAgIAAgAAAgECAgAAAQAAAQABAQAAAgECAAI",
+                  "destPayment": "0",
+                  "totalDestPayment": "2",
+                  "invoiceId": "AQIAAgECAgIAAAECAQACAAACAAICAgIBAQIAAQEAAQE",
+                  "currency": "cabbacbcbdc",
+                  "signature": "AQICAAACAgAAAgABAgIAAAEAAQIAAAICAAIAAAEAAgABAAECAQACAQABAAEBAgEBAAAAAQEBAQECAgEAAQABAg"
+                },
+                "0"
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "success": [
+      "%",
+      "0",
+      {
+        "routes": true,
+        "buyer": false,
+        "seller": false,
+        "config": true
+      },
+      {
+        "localPublicKey": "AgIBAQIBAQEAAAAAAQAAAAEBAQEBAgAAAAIBAgIBAQE",
+        "indexServers": [
+          {
+            "publicKey": "AQABAAECAQACAQEBAgIBAQIBAgEBAAIAAQECAQEBAQI",
+            "address": {
+              "address": "daadbbbbdcbbccdbbcdddacddbaabaddbbbdbccccbbacdcdbadaacbbacbcbadbcbadcabdddbabdbdaabddbdcbddabbdabbcaccdbcdccdb"
+            },
+            "name": " 嚯"
+          }
+        ],
+        "optConnectedIndexServer": "AQAAAAEBAAABAAECAAEAAAIBAAACAgIAAQIAAQECAAA",
+        "relays": [
+          {
+            "publicKey": "AgACAgEBAAIBAgECAQIAAQACAgABAQEAAgABAgEAAAI",
+            "address": {
+              "address": "dddabbcbbcddbcddccaadcaccbbacddccacdbbdadcdacaddccdcabaaacbadaabaddbbdcbdaacb"
+            },
+            "name": "$"
+          }
+        ],
+        "friends": {},
         "openInvoices": {},
         "openPayments": {}
       }
@@ -2657,284 +2121,32 @@ r'''
 r'''
 {
   "node": [
-    "2",
+    "1",
     {
-      "report": {
-        "localPublicKey": "AQICAQAAAgAAAgABAQEAAAIAAAAAAAICAAEAAAAAAgE",
-        "indexServers": [
-          {
-            "publicKey": "AgICAQICAAAAAQEAAgEAAQIAAgACAAEAAQIAAQEAAgA",
-            "address": {
-              "address": "bcbbdbddbcdccdbabcaabdacbcbabacbabadbdbbadcbdcdaccacbcbcbbcbabbcadaabdddabcdacbacacbadaad"
+      "paymentDone": {
+        "paymentId": "AQABAAICAAIBAgICAAIBAQ",
+        "status": {
+          "success": [
+            {
+              "responseHash": "AQIBAgECAQIAAAEAAAABAAECAAABAQABAAIAAAACAgA",
+              "invoiceId": "AQAAAAIAAAIBAQICAAECAAECAAABAAIBAQECAAIBAgE",
+              "currency": {
+                "currency": "accacbc"
+              },
+              "srcPlainLock": "AQIBAQECAgEAAQAAAQIAAQACAAICAAABAQICAQICAAA",
+              "destPlainLock": "AQECAAECAgABAAABAQABAAIBAQAAAAIAAQAAAAICAgI",
+              "isComplete": false,
+              "destPayment": "0",
+              "totalDestPayment": "2",
+              "signature": "AgABAQEAAgACAgIBAQACAAEBAAAAAgABAQAAAQICAgEAAQEAAgAAAQIBAAACAAACAQICAAEBAgICAAIBAgECAQ"
             },
-            "name": "ꧻs"
-          }
-        ],
-        "optConnectedIndexServer": "AQACAQACAQACAgABAQEAAgACAgIBAQACAAEBAAAAAgA",
-        "relays": [
-          {
-            "publicKey": "AAABAgICAQABAQACAAABAgEAAAIAAAIBAgIAAQECAgI",
-            "address": {
-              "address": "dbbcdcddbadcdbaadbdbbccbacdaacdabcdbaddddccabdadabbbccdababbdcbcdaadcaabbbdcbaabcddbacbbcdbcccdaaaaddadddddbcbddcbbddcbdababcbccabbdadbcabaddbabdadcbbbdaadbddbdaabdbdcadcaddbdcbbcdccbdcbadbbc"
-            },
-            "name": "?"
-          }
-        ],
-        "friends": {},
-        "openInvoices": {},
-        "openPayments": {
-          "AAABAAECAQACAQIAAQABAA": {
-            "invoiceId": "AgICAQECAQABAAIAAgACAQABAAIBAAIAAgAAAAIAAgE",
-            "currency": "dbcc",
-            "destPublicKey": "AQACAQICAgAAAAECAgAAAQIBAQIAAQABAQIAAgAAAAI",
-            "destPayment": "2",
-            "description": "`",
-            "status": {
-              "commit": [
-                {
-                  "responseHash": "AQICAQEBAAEBAgIBAgICAgECAQABAQIAAgIAAAEAAQE",
-                  "srcPlainLock": "AAEAAQAAAQECAgEBAgIAAQIAAQEBAAABAQICAgECAAI",
-                  "destHashedLock": "AgECAQICAgIBAAIBAQECAQABAQAAAQIAAAABAgIBAQA",
-                  "destPayment": "2",
-                  "totalDestPayment": "2",
-                  "invoiceId": "AQIBAgEAAAEBAAECAAECAAABAQABAAACAQIBAgEAAAI",
-                  "currency": "dac",
-                  "signature": "AAECAQIBAQIBAAECAAACAAECAgEAAQIBAAECAAICAAEBAAAAAAACAgACAAIBAQIBAAEAAQEAAgEAAgIAAQECAQ"
-                },
-                "1"
-              ]
-            }
-          }
+            "0",
+            "AgECAgIAAAICAgIAAAECAA"
+          ]
         }
       }
     }
   ]
-}
-''',
-r'''
-{
-  "node": [
-    "2",
-    {
-      "responseVerifyCommit": {
-        "requestId": "AAIAAgAAAAAAAgECAQABAA",
-        "status": "failure"
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "responseOpenNode": {
-    "failure": "?"
-  }
-}
-''',
-r'''
-{
-  "nodesStatus": {
-    "󰀀i": {
-      "isOpen": true,
-      "info": {
-        "remote": {
-          "appPublicKey": "AgACAAIAAAEAAQACAgEBAQEAAQICAgIAAQABAQACAgA",
-          "nodePublicKey": "AAACAgECAAICAQIAAgAAAAICAQICAQEAAAIAAgEBAgE",
-          "nodeAddress": {
-            "address": "cbcdccdcdbbbaccdddcbddacadcdbcaaadbddcacbbaaaaacbacaddbdabbccabacaabaabdbacbddcdaacbbcadadcdbbddcaadcdcddddddcacbbbdabcdccadcbccaabdccababbaccdaaabccbacdccddddbdadabbcdbddcadcbcbcadacdcaddcbddcacbbc"
-          }
-        }
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "node": [
-    "0",
-    {
-      "responseVerifyCommit": {
-        "requestId": "AgACAgIAAgICAQAAAgICAg",
-        "status": "failure"
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "responseOpenNode": {
-    "success": [
-      "",
-      "2",
-      {
-        "routes": true,
-        "buyer": false,
-        "seller": true,
-        "config": false
-      },
-      {
-        "localPublicKey": "AAECAAAAAQIAAAECAQICAAABAAABAAIAAgAAAgEBAgE",
-        "indexServers": [
-          {
-            "publicKey": "AQIBAAIAAAAAAAIAAAAAAQABAgIAAgABAQIAAAIAAAA",
-            "address": {
-              "address": "dccdacabbcbadadddccbacabbabcbcaccddcdbbddaccaababbcbbdccacacbcbbcbbbbbcdadbdddcdabaccacccbbdbbaccbdacaadbcbdddadbdbdacbcabbbdbbcaabbccbabdbdaca"
-            },
-            "name": "X"
-          },
-          {
-            "publicKey": "AQACAAIBAgAAAgEAAAIBAQACAgACAgACAAECAAACAAE",
-            "address": {
-              "address": "dadccbaddcabdaacbbdbccddccdaabccbacbdccbcbcbcdacbdabcddbbdbcddcdbadddcbbbdbacdbcbcadaddccbddbbbaadbbdbcdcccbdad"
-            },
-            "name": "䎋\u0016"
-          }
-        ],
-        "optConnectedIndexServer": null,
-        "relays": [],
-        "friends": {
-          "AAEAAgIBAgICAAICAQEAAgABAAIAAQECAgABAQACAQA": {
-            "name": "!",
-            "currencyConfigs": {
-              "aadbaacadccbab": {
-                "rate": {
-                  "mul": 2,
-                  "add": 0
-                },
-                "remoteMaxDebt": "0",
-                "isOpen": false
-              }
-            },
-            "optLastIncomingMoveToken": null,
-            "liveness": "offline",
-            "channelStatus": {
-              "inconsistent": {
-                "localResetTerms": {},
-                "optRemoteResetTerms": {
-                  "resetToken": "AgEBAAAAAgICAAECAAECAAABAQACAgIBAgECAQIBAQEAAAACAQICAgACAQECAgIAAQIBAAABAgABAQACAAEBAQ",
-                  "balanceForReset": {
-                    "aabca": "2",
-                    "accbbabbbbc": "2"
-                  }
-                }
-              }
-            },
-            "status": "disabled"
-          },
-          "AgEBAgIAAAECAQEBAQACAgACAgEAAQAAAAIAAgIAAgE": {
-            "name": "",
-            "currencyConfigs": {
-              "accbbadbdbba": {
-                "rate": {
-                  "mul": 2,
-                  "add": 1
-                },
-                "remoteMaxDebt": "1",
-                "isOpen": true
-              }
-            },
-            "optLastIncomingMoveToken": null,
-            "liveness": "offline",
-            "channelStatus": {
-              "consistent": {
-                "currencyReports": {
-                  "bdaad": {
-                    "balance": "1",
-                    "localPendingDebt": "0",
-                    "remotePendingDebt": "1"
-                  }
-                }
-              }
-            },
-            "status": "disabled"
-          }
-        },
-        "openInvoices": {
-          "AQICAgACAgACAAAAAAIAAAAAAAIAAQIBAgIBAQAAAgE": {
-            "currency": "acddcbb",
-            "totalDestPayment": "0",
-            "description": ""
-          },
-          "AgEAAAECAgICAAIAAgABAgIBAQECAgEBAQIAAAEBAgE": {
-            "currency": "dcdccbd",
-            "totalDestPayment": "0",
-            "description": ""
-          }
-        },
-        "openPayments": {
-          "AQEAAgIAAgEBAgABAQECAA": {
-            "invoiceId": "AgIAAQIBAgEBAQEAAgAAAQECAAIBAgEBAQEBAQIAAQE",
-            "currency": "cddaddacc",
-            "destPublicKey": "AQIBAQABAgICAgABAAEBAQACAgEBAAEBAAIBAQICAgA",
-            "destPayment": "1",
-            "description": "큯",
-            "status": {
-              "foundRoute": [
-                "AAIBAQAAAgIAAgAAAAECAA",
-                "1"
-              ]
-            }
-          },
-          "AQICAQACAgECAQEBAAIBAA": {
-            "invoiceId": "AAACAgEBAQABAgECAgECAQACAQEAAgICAQIAAgACAQA",
-            "currency": "dd",
-            "destPublicKey": "AQIAAQIBAgIBAAEAAQICAQEBAgIBAAACAQEBAAEBAAI",
-            "destPayment": "1",
-            "description": "",
-            "status": {
-              "searchingRoute": "AAECAgACAgIAAAICAgABAA"
-            }
-          }
-        }
-      }
-    ]
-  }
-}
-''',
-r'''
-{
-  "nodesStatus": {
-    "[": {
-      "isOpen": true,
-      "info": {
-        "local": {
-          "nodePublicKey": "AgECAQIBAAEBAAABAgAAAgAAAQAAAgECAgAAAAIAAgI"
-        }
-      }
-    },
-    "": {
-      "isOpen": false,
-      "info": {
-        "remote": {
-          "appPublicKey": "AQIAAQEBAAABAgIBAAEAAQICAQEBAAEAAAECAQACAQI",
-          "nodePublicKey": "AgIAAAEAAQIBAQAAAQABAAACAgAAAQACAAAAAgIAAQI",
-          "nodeAddress": {
-            "address": "badbdcabcdacbdcbcac"
-          }
-        }
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "nodesStatus": {
-    "񒃝": {
-      "isOpen": false,
-      "info": {
-        "remote": {
-          "appPublicKey": "AgIBAAIAAQIAAQECAAEAAAEAAQICAQEAAgEBAgICAAA",
-          "nodePublicKey": "AQACAQEBAgIAAQEAAQIBAQIBAgICAQIBAAECAQICAgA",
-          "nodeAddress": {
-            "address": "ccadddccbbadccccdbadcdcbbdddddaaccdabcbdbbaadacbdadbabaadbddbbaddcdbbdacdcdadddbdaccccadbddcdbdabcadddadddbdcacbacaaddaddccabbdcaccdadcbbdbbbadbdabdddaabddcbacbacaccdbadbacbaddcdabddbaddaacbbcdabccbdcaccbbdabdbaaadbadadbababcacdddbaaabca"
-          }
-        }
-      }
-    }
-  }
 }
 ''',
 r'''
@@ -2945,26 +2157,932 @@ r'''
 r'''
 {
   "nodesStatus": {
-    "B": {
-      "isOpen": false,
-      "info": {
-        "remote": {
-          "appPublicKey": "AgACAAACAAICAgEBAAEAAQECAgABAAECAAEAAAIAAgI",
-          "nodePublicKey": "AgIAAgIAAQEAAQECAAIBAAACAQAAAgACAAABAAABAAA",
-          "nodeAddress": {
-            "address": "dacbdbbbdadadbcabddbbdaaaccaaacacdacbadbcaacbbdcbccacdabababdcbddbdddcdbcacdbcddcaccdabccbaddadbacdbcbdadcbacaaaccdcaabcbbcbaacbccbbccacaabadabacdacdbaadaababdbcdacdabdccbbbacadaccbabcaabdcdadbcbaacbdcacbcabdc"
-          }
-        }
-      }
-    },
-    " 2": {
-      "isOpen": false,
+    "#": {
+      "isOpen": true,
       "info": {
         "local": {
-          "nodePublicKey": "AAECAQICAgABAAECAgICAAECAgACAAAAAAEAAgIAAgI"
+          "nodePublicKey": "AQICAgICAQAAAQACAQABAgEBAgIBAAAAAgABAAIBAgA"
         }
       }
     }
+  }
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "failure": "|"
+  }
+}
+''',
+r'''
+{
+  "node": [
+    "0",
+    {
+      "report": {
+        "localPublicKey": "AgACAAICAAAAAQACAgABAQIAAAAAAQICAgIBAQABAQI",
+        "indexServers": [],
+        "optConnectedIndexServer": null,
+        "relays": [
+          {
+            "publicKey": "AAEAAAAAAAEAAgIBAQAAAQEBAAIAAQICAQABAAAAAAI",
+            "address": {
+              "address": "bcccdaaaaddadddddbcbddcbbddcbdababcbccabbdadbcabaddbabdadcbbbdaadbddbdaabdbdcadcaddbdcbbcdccbdcbadbbcbcddadababcacdcadabcaddcbcbdbbabadadbbdbccbdbdbbcccbcbaddbddcbbcdccccdadacacbbaaccdcbadccbbdddcdaccbbaaaabcdaccbaccbdbac"
+            },
+            "name": ""
+          }
+        ],
+        "friends": {},
+        "openInvoices": {
+          "AQEAAgEAAgIAAQECAQAAAQEAAgIBAgICAgACAAIAAgA": {
+            "currency": "aac",
+            "totalDestPayment": "1",
+            "description": "N",
+            "isCommited": true,
+            "generation": "1"
+          },
+          "AQIBAgEAAAIAAAAAAAIAAQIAAQABAgECAQECAQABAgA": {
+            "currency": "cadabdaaccaba",
+            "totalDestPayment": "2",
+            "description": ":_",
+            "isCommited": false,
+            "generation": "0"
+          }
+        },
+        "openPayments": {}
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "node": [
+    "0",
+    {
+      "paymentCommit": {
+        "paymentId": "AgIBAgICAgABAgEBAgACAA",
+        "commit": {
+          "responseHash": "AgAAAQABAAICAQEBAQABAgICAgABAAEBAAICAAAAAgI",
+          "srcPlainLock": "AQIAAgIBAgACAAAAAgIBAgIBAQAAAgACAQECAQECAQI",
+          "destHashedLock": "AQABAQEBAgAAAAEBAgICAgIBAgABAgABAAEAAAABAAI",
+          "destPayment": "1",
+          "totalDestPayment": "2",
+          "invoiceId": "AQACAgIBAgABAQIAAAICAQEBAAECAQIAAQICAQIBAgI",
+          "currency": "a",
+          "signature": "AgEAAgIBAQIBAgAAAQEBAQABAgACAAABAAABAAACAgEAAQAAAgEAAgIBAQACAgACAgABAQEBAQEAAAAAAgEBAA"
+        }
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "nodesStatus": {}
+}
+''',
+r'''
+{
+  "node": [
+    "0",
+    {
+      "paymentCommit": {
+        "paymentId": "AgICAAECAgECAQAAAQEBAA",
+        "commit": {
+          "responseHash": "AQEBAQABAQICAAICAQIAAAAAAAACAgAAAQABAgICAAE",
+          "srcPlainLock": "AAEBAAABAQACAgIBAgEBAgICAgICAgICAQEAAQAAAAE",
+          "destHashedLock": "AAECAQAAAQEAAgIBAQABAQECAAIAAgEAAQECAQAAAgE",
+          "destPayment": "2",
+          "totalDestPayment": "2",
+          "invoiceId": "AQIBAAIAAQIAAAAAAgIBAQEBAgAAAAABAAEAAQACAAE",
+          "currency": "cddddbdada",
+          "signature": "AAABAgEBAgICAQACAQEBAQEAAQEAAAIAAQACAQEAAgECAgIBAQACAQICAQABAQICAgIBAgABAgABAAIBAAECAg"
+        }
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "node": [
+    "2",
+    {
+      "responseVerifyCommit": {
+        "requestId": "AQAAAgICAgEBAQACAAEAAg",
+        "status": "success"
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "node": [
+    "1",
+    {
+      "paymentFees": {
+        "paymentId": "AAECAAABAgECAgAAAQAAAQ",
+        "response": "unreachable"
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "nodesStatus": {
+    "񝫰": {
+      "isOpen": false,
+      "info": {
+        "local": {
+          "nodePublicKey": "AAAAAAIAAAAAAQABAgIAAgABAQIAAAIAAAABAQICAQI"
+        }
+      }
+    },
+    "➹": {
+      "isOpen": false,
+      "info": {
+        "remote": {
+          "appPublicKey": "AAABAAEBAAIBAQIAAAIAAgICAAECAQEAAAACAQAAAAI",
+          "nodePublicKey": "AAAAAAEBAQABAQECAgICAAECAAICAQECAQIAAAICAgA",
+          "nodeAddress": {
+            "address": "ccaababbcbbdccacacbcbbcbbbbbcdadbdddcdabaccacccbbdbbaccbdacaadbcbdddadbdbdacbcabbbdbbcaabbccbabdbdacabdcbddadadbdddaacdadabadadccbaddcabdaacbbdbccddccdaabccbacbdccbcbcbcdacbdabcddbbdbcddcdbadddcbbbdbacdbcbcadaddccbddbbbaadbbdbcdccc"
+          }
+        }
+      }
+    }
+  }
+}
+''',
+r'''
+{
+  "node": [
+    "1",
+    {
+      "responseVerifyCommit": {
+        "requestId": "AAIBAgIBAAAAAQAAAQICAg",
+        "status": "success"
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "node": [
+    "1",
+    {
+      "paymentCommit": {
+        "paymentId": "AgIBAQACAAEAAgABAQICAA",
+        "commit": {
+          "responseHash": "AQEAAgEAAgECAQAAAQICAAEAAgAAAgIAAQEAAgIBAgE",
+          "srcPlainLock": "AAEAAAICAAEBAgABAQIBAgAAAAIAAAIBAQAAAAICAgA",
+          "destHashedLock": "AQIAAQIAAAEBAAICAgECAQIBAgEBAQAAAAIBAgICAAI",
+          "destPayment": "2",
+          "totalDestPayment": "2",
+          "invoiceId": "AQAAAQIAAQEAAgABAQEBAAECAQICAgAAAQEBAAABAQA",
+          "currency": "abb",
+          "signature": "AAEBAQABAAIBAAIAAAABAgIAAAAAAQEAAgACAgECAAEBAQICAgECAgECAQEAAgIBAQICAAABAgEBAQEAAgIAAg"
+        }
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "nodesStatus": {
+    "¡>": {
+      "isOpen": false,
+      "info": {
+        "local": {
+          "nodePublicKey": "AQECAgACAQACAQEBAgIAAgIAAAIAAgAAAgACAAACAgE"
+        }
+      }
+    }
+  }
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "failure": "쐉縖"
+  }
+}
+''',
+r'''
+{
+  "nodesStatus": {
+    "": {
+      "isOpen": false,
+      "info": {
+        "local": {
+          "nodePublicKey": "AQICAQACAAIBAgEAAgECAQABAgECAQICAgACAgACAAA"
+        }
+      }
+    }
+  }
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "success": [
+      "",
+      "0",
+      {
+        "routes": true,
+        "buyer": false,
+        "seller": false,
+        "config": true
+      },
+      {
+        "localPublicKey": "AQICAQEAAAIBAQEBAAEBAgICAgEAAAICAgACAgAAAgE",
+        "indexServers": [],
+        "optConnectedIndexServer": "AgICAgACAAIAAQICAQEBAgIBAQECAAABAQIBAQECAQE",
+        "relays": [
+          {
+            "publicKey": "AgIBAgAAAAICAQIAAgAAAgECAgEAAgIBAgEBAQACAQA",
+            "address": {
+              "address": "dccacddcadddcaaddacddcacbcddbaabcacadaaacddaaab"
+            },
+            "name": ""
+          }
+        ],
+        "friends": {
+          "AQIAAQEBAgACAgABAgECAQEBAQACAAABAQIAAgECAQE": {
+            "name": "",
+            "currencyConfigs": {
+              "addacccddacab": {
+                "rate": {
+                  "mul": 1,
+                  "add": 1
+                },
+                "remoteMaxDebt": "1",
+                "isOpen": false
+              }
+            },
+            "optLastIncomingMoveToken": {
+              "prefixHash": "AQEAAgEBAgICAAIAAAEAAAIBAQEBAgAAAAIBAQAAAgI",
+              "tokenInfo": {
+                "mc": {
+                  "localPublicKey": "AAIAAAABAgACAgEBAQEAAgIAAAECAQIAAQEBAAABAgI",
+                  "remotePublicKey": "AQABAAECAgEBAQABAAABAgEAAgECAgIAAAEAAQIBAQA",
+                  "balances": {
+                    "aaaabab": {
+                      "balance": "-3",
+                      "localPendingDebt": "0",
+                      "remotePendingDebt": "2"
+                    }
+                  }
+                },
+                "counters": {
+                  "inconsistencyCounter": "0",
+                  "moveTokenCounter": "1"
+                }
+              },
+              "randNonce": "AgEBAgIBAgAAAQABAAECAg",
+              "newToken": "AgIBAQICAAIBAAIBAgECAQABAQAAAQIAAAIAAAEAAAIBAgIAAAACAAICAgEBAQEBAgAAAgIBAQICAQACAAECAA"
+            },
+            "liveness": "online",
+            "channelStatus": {
+              "consistent": {
+                "currencyReports": {
+                  "cabbccacd": {
+                    "balance": "-1",
+                    "localPendingDebt": "1",
+                    "remotePendingDebt": "0"
+                  },
+                  "ccadddccbbadcc": {
+                    "balance": "2",
+                    "localPendingDebt": "1",
+                    "remotePendingDebt": "2"
+                  }
+                }
+              }
+            },
+            "status": "disabled"
+          }
+        },
+        "openInvoices": {
+          "AgACAgICAgICAgEAAQABAQEAAAEBAgAAAQEAAgABAAI": {
+            "currency": "aadacbd",
+            "totalDestPayment": "1",
+            "description": "",
+            "isCommited": false,
+            "generation": "0"
+          },
+          "AgEBAQICAgAAAAACAgICAgECAQIBAgACAQIAAQAAAgE": {
+            "currency": "ddd",
+            "totalDestPayment": "0",
+            "description": "祋",
+            "isCommited": true,
+            "generation": "1"
+          }
+        },
+        "openPayments": {
+          "AQICAAIBAQAAAQIAAQABAQ": {
+            "invoiceId": "AAIBAQACAgECAAAAAAICAgAAAgAAAQICAAEBAgIBAgI",
+            "currency": "acbaca",
+            "destPublicKey": "AQIBAgICAQIAAgIAAAEAAAECAgIBAgECAAECAgEBAAE",
+            "destPayment": "2",
+            "description": "",
+            "generation": "2",
+            "status": {
+              "failure": "AAACAQECAgABAQACAQABAA"
+            }
+          },
+          "AQECAgEBAAICAAEBAgIAAg": {
+            "invoiceId": "AQEBAQEBAAEBAQECAgICAAIAAQIAAQICAgECAAEBAgE",
+            "currency": "cb",
+            "destPublicKey": "AAIBAQIBAAIAAAIBAQICAQACAgEAAgIBAQECAQABAgE",
+            "destPayment": "0",
+            "description": "󿿾",
+            "generation": "2",
+            "status": {
+              "sending": "2"
+            }
+          }
+        }
+      }
+    ]
+  }
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "failure": ""
+  }
+}
+''',
+r'''
+{
+  "nodesStatus": {
+    "": {
+      "isOpen": false,
+      "info": {
+        "local": {
+          "nodePublicKey": "AAICAAICAAAAAAICAQACAgICAAABAAAAAQAAAAIBAQI"
+        }
+      }
+    }
+  }
+}
+''',
+r'''
+{
+  "node": [
+    "1",
+    {
+      "paymentCommit": {
+        "paymentId": "AQAAAQAAAQEAAQEAAAEBAQ",
+        "commit": {
+          "responseHash": "AgABAgEBAAIBAgACAAACAAICAgEBAAEAAQECAgABAAE",
+          "srcPlainLock": "AgABAAACAAICAgIAAgIAAQEAAQECAAIBAAACAQAAAgA",
+          "destHashedLock": "AgAAAQAAAQAAAgICAgABAQACAgIBAQEAAgAAAgIBAQE",
+          "destPayment": "2",
+          "totalDestPayment": "2",
+          "invoiceId": "AQABAAACAAACAAABAgIBAgIAAgAAAAAAAgIAAQABAQI",
+          "currency": "acbadbc",
+          "signature": "AgEAAgEAAAABAgAAAAECAQACAAEBAgABAgACAAACAAEAAQACAgABAgECAQICAAICAQACAgIAAgICAgICAAECAQ"
+        }
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "failure": "^"
+  }
+}
+''',
+r'''
+{
+  "node": [
+    "2",
+    {
+      "report": {
+        "localPublicKey": "AQEBAAACAQIBAQIAAQECAQEAAAACAgABAQICAQACAAA",
+        "indexServers": [
+          {
+            "publicKey": "AAICAgEBAAEAAgICAAECAQAAAgACAgIAAQABAAEAAAA",
+            "address": {
+              "address": "dcaabcbbcbaacbccbbccacaabadabacdacdbaadaababdbcdacdabdccbbbacadaccbabcaabdcdadbcbaacbdcacbcabdcdacabccdabcdddbddaaabcaddbddabdddcbbaac"
+            },
+            "name": ""
+          }
+        ],
+        "optConnectedIndexServer": "AgIBAgIAAgEBAgAAAgACAgEAAQIBAgICAQIAAAIBAQI",
+        "relays": [
+          {
+            "publicKey": "AgECAQEBAgEBAAAAAgEAAAIBAQEBAAACAQABAAEBAAE",
+            "address": {
+              "address": "dccbaaacbabbbbcdccdcbddacdbddcccdbbdaccdadbdccaacdbbcaabbdcbdbbbabacbbddbcccbdcbaabbdacdacbdacdcccbccdccbdcaababcbabbaddacadddbcbdcddcdcbbbadbcacccdacdbdbcaaaabcddcabbabdbacbdcd"
+            },
+            "name": "K"
+          },
+          {
+            "publicKey": "AgEAAQIAAAEBAgEAAQACAAIAAAECAAABAQACAgACAQE",
+            "address": {
+              "address": "cdadbbcdcabcddcaabcbddcabcdbabdbdbdaddcccbbcabadddbdacaaabbadaddbbccdddacbbddcdbdaadadcacbbcbadcdabcaddacaaadadcbdbaabdacddbabcccaaddcdacdddaacddadbbabcabdbbbddcacaaddbadaa"
+            },
+            "name": ""
+          }
+        ],
+        "friends": {
+          "AQABAQECAgAAAAEBAAECAAEBAAEBAgEAAgEAAgACAgA": {
+            "name": "q/",
+            "currencyConfigs": {
+              "cd": {
+                "rate": {
+                  "mul": 1,
+                  "add": 1
+                },
+                "remoteMaxDebt": "0",
+                "isOpen": true
+              },
+              "ddb": {
+                "rate": {
+                  "mul": 0,
+                  "add": 2
+                },
+                "remoteMaxDebt": "1",
+                "isOpen": true
+              }
+            },
+            "optLastIncomingMoveToken": null,
+            "liveness": "online",
+            "channelStatus": {
+              "inconsistent": {
+                "localResetTerms": {
+                  "ac": "-3"
+                },
+                "optRemoteResetTerms": {
+                  "resetToken": "AQEAAgIBAQIAAgECAgABAAECAQICAQABAQECAAEAAAIBAQIBAQABAAICAgACAgECAAIAAQABAgAAAgEBAgICAg",
+                  "balanceForReset": {}
+                }
+              }
+            },
+            "status": "disabled"
+          }
+        },
+        "openInvoices": {
+          "AQACAQIBAAACAgEAAgAAAgICAAABAQEAAgAAAAEBAgE": {
+            "currency": "bbb",
+            "totalDestPayment": "2",
+            "description": "k~",
+            "isCommited": false,
+            "generation": "2"
+          },
+          "AgACAAABAgIBAgECAAAAAQACAgAAAAEBAgECAQECAAI": {
+            "currency": "bdaabccbdbc",
+            "totalDestPayment": "1",
+            "description": "",
+            "isCommited": false,
+            "generation": "1"
+          }
+        },
+        "openPayments": {
+          "AAECAAECAQICAgACAQEBAQ": {
+            "invoiceId": "AQEAAgAAAgABAgECAAEAAAACAQIBAgEAAQIAAgIBAAE",
+            "currency": "bcaddbdccdbb",
+            "destPublicKey": "AQAAAQIAAgAAAQIBAgECAQABAQACAAIBAAACAgIBAgA",
+            "destPayment": "2",
+            "description": "#?",
+            "generation": "1",
+            "status": {
+              "commit": [
+                {
+                  "responseHash": "AgAAAAIBAQEBAQICAAICAgABAAEBAAECAQABAQICAQA",
+                  "srcPlainLock": "AgAAAAAAAgEBAQEBAgICAAIAAAEAAQECAgIAAgAAAQI",
+                  "destHashedLock": "AgIAAQAAAAIBAQACAgICAQIBAgEAAQEAAQIAAAIBAQA",
+                  "destPayment": "1",
+                  "totalDestPayment": "2",
+                  "invoiceId": "AgACAAEBAQEBAgICAAIAAgEAAQICAAEBAQEAAgICAQE",
+                  "currency": "dccadbadaccbcab",
+                  "signature": "AAIBAAICAgEAAQIBAgAAAAEBAgACAAICAQIBAAEBAgABAAECAgACAQACAgIBAgEBAgAAAgICAgEAAAAAAgIAAA"
+                },
+                "2"
+              ]
+            }
+          },
+          "AgICAAIAAQABAgACAAABAQ": {
+            "invoiceId": "AQEBAAEAAgABAAEAAAEAAQIAAAEBAQACAQICAgABAQI",
+            "currency": "adcbdcadda",
+            "destPublicKey": "AgACAQECAgAAAAEBAQAAAAEAAAABAgEBAgACAgAAAgI",
+            "destPayment": "1",
+            "description": "5'",
+            "generation": "0",
+            "status": {
+              "searchingRoute": "AAICAgACAgECAQIAAAECAA"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "failure": "#"
+  }
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "success": [
+      "N",
+      "1",
+      {
+        "routes": false,
+        "buyer": false,
+        "seller": false,
+        "config": true
+      },
+      {
+        "localPublicKey": "AgEAAQIAAQICAgEBAAICAgAAAgAAAgIAAgAAAQABAgI",
+        "indexServers": [
+          {
+            "publicKey": "AgABAgIBAAABAgEAAgECAgIBAQICAAEAAAICAQAAAAA",
+            "address": {
+              "address": "acacadbccbadcaacabadbcbcbcccabd"
+            },
+            "name": "u⁋"
+          },
+          {
+            "publicKey": "AgACAQEAAAAAAAIAAgIAAAIBAQIBAQIAAQEAAAEBAgE",
+            "address": {
+              "address": "ddcdda"
+            },
+            "name": ""
+          }
+        ],
+        "optConnectedIndexServer": "AAICAQEAAQABAQIBAAIBAAAAAQEBAAECAQAAAAEAAgI",
+        "relays": [
+          {
+            "publicKey": "AAEBAAABAAIBAQIAAQACAQIAAQIBAgACAgICAgIBAQA",
+            "address": {
+              "address": "aaababbbcbccdbbdcbcaabdbcdabadcdcacdadabbaaddaddcaabcbbcbcddcbddbacdbcaacabddddcabcadabdbcaccbbaadcdcdacabaddcaabccadddccbadcddbccdddddbccbcddabccdaaccbbdcbcbbbcacbdddcccbbaadaccdbaadbadbaabcc"
+            },
+            "name": "礳"
+          },
+          {
+            "publicKey": "AQIAAQICAQEAAgEAAAIAAQABAQIAAAIBAQIAAgACAQE",
+            "address": {
+              "address": "cacaadbadddaccabdbcabaaccdcdcbddababcddcdaabcccddbdcbdcbbaacdccaacdddbacabdacabdadcdadacabbddcabbdcccbccdbabaacadaddabbaadabbadadcabaccbbbabbdbbbcadc"
+            },
+            "name": "z"
+          }
+        ],
+        "friends": {
+          "AAIAAQEAAQECAgICAgECAQACAQIBAAIAAAECAAABAgI": {
+            "name": "",
+            "currencyConfigs": {
+              "acc": {
+                "rate": {
+                  "mul": 0,
+                  "add": 1
+                },
+                "remoteMaxDebt": "0",
+                "isOpen": true
+              },
+              "abaacaccb": {
+                "rate": {
+                  "mul": 2,
+                  "add": 1
+                },
+                "remoteMaxDebt": "0",
+                "isOpen": false
+              }
+            },
+            "optLastIncomingMoveToken": null,
+            "liveness": "online",
+            "channelStatus": {
+              "inconsistent": {
+                "localResetTerms": {
+                  "dcccbbcacbaac": "2",
+                  "abdcbcddadaa": "0"
+                },
+                "optRemoteResetTerms": null
+              }
+            },
+            "status": "enabled"
+          },
+          "AQEAAQACAAAAAQIBAAACAAABAQIAAAIBAAEBAQEBAQI": {
+            "name": "",
+            "currencyConfigs": {
+              "bca": {
+                "rate": {
+                  "mul": 1,
+                  "add": 1
+                },
+                "remoteMaxDebt": "0",
+                "isOpen": false
+              }
+            },
+            "optLastIncomingMoveToken": null,
+            "liveness": "online",
+            "channelStatus": {
+              "consistent": {
+                "currencyReports": {
+                  "cbabdbcaaaaa": {
+                    "balance": "-1",
+                    "localPendingDebt": "0",
+                    "remotePendingDebt": "1"
+                  },
+                  "adbc": {
+                    "balance": "2",
+                    "localPendingDebt": "2",
+                    "remotePendingDebt": "0"
+                  }
+                }
+              }
+            },
+            "status": "disabled"
+          }
+        },
+        "openInvoices": {
+          "AgABAAEAAQEBAAICAgABAgIBAQAAAgAAAgACAQACAgA": {
+            "currency": "accdaabdd",
+            "totalDestPayment": "0",
+            "description": "",
+            "isCommited": true,
+            "generation": "0"
+          }
+        },
+        "openPayments": {
+          "AAAAAgABAQIBAAAAAAEAAQ": {
+            "invoiceId": "AAIBAQICAAICAQIBAgICAQEBAQABAAAAAAICAQEAAgE",
+            "currency": "aadabbbcaa",
+            "destPublicKey": "AQECAAICAQEAAAABAAACAgEAAQICAAACAgACAAEAAAE",
+            "destPayment": "0",
+            "description": "(\n",
+            "generation": "2",
+            "status": {
+              "success": [
+                {
+                  "responseHash": "AQABAAIAAgAAAgECAAABAgABAQAAAQIAAQIBAgEBAQA",
+                  "invoiceId": "AgECAAEBAAIBAAEBAAIBAgIAAgICAQAAAgEAAAIAAgE",
+                  "currency": {
+                    "currency": "bdad"
+                  },
+                  "srcPlainLock": "AAECAgIBAAAAAgACAQIAAAACAgABAgABAQICAgACAgI",
+                  "destPlainLock": "AAIBAQAAAAIAAAABAgACAgABAAICAgIAAAICAgACAQA",
+                  "isComplete": false,
+                  "destPayment": "1",
+                  "totalDestPayment": "2",
+                  "signature": "AgAAAgACAgABAAACAQAAAAEAAQEAAQIAAgAAAgABAQIAAAABAAEBAQIAAAIBAQECAgEAAgEBAgEAAQICAgEAAg"
+                },
+                "0",
+                "AgABAAACAQIBAgICAAECAg"
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
+}
+''',
+r'''
+{
+  "node": [
+    "2",
+    {
+      "paymentFees": {
+        "paymentId": "AQIAAAIAAQIBAAIAAgEAAQ",
+        "response": "unreachable"
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "success": [
+      "",
+      "0",
+      {
+        "routes": false,
+        "buyer": false,
+        "seller": false,
+        "config": true
+      },
+      {
+        "localPublicKey": "AQACAgEAAQIAAAECAQIBAQICAgIAAQECAQEBAQIAAgI",
+        "indexServers": [
+          {
+            "publicKey": "AAECAgIBAQIAAQAAAQACAAICAQECAgAAAAACAgABAAA",
+            "address": {
+              "address": "cccdbcdacacbccadcbcaacdbdbddbbacabbaaabbbddcabbbdcabbbcacbdaaaadcbabbbdddbccbcbdacccddddcbbbabbbabdcccacaaacdbdbaadabbbaddbdadccaacbccbcbbaacdcdaabbbcbcbdbbcccdabbbdbcaababaabbcabcddaabddccdbdbdaabdabbcdcadabbcdbdaadadaabdbcdabbcacadcddaddaccd"
+            },
+            "name": ""
+          }
+        ],
+        "optConnectedIndexServer": "AgABAQICAQIBAQIAAAAAAgIAAgIAAgACAAIBAgECAgE",
+        "relays": [
+          {
+            "publicKey": "AAIBAAIBAgABAgABAQACAgAAAQECAgEAAgIAAAICAAE",
+            "address": {
+              "address": "ddbcdaccaababdcbbdacabadbaadcdbddaaccdacadbdcbddadddcadccccabbdaacbccbcbdccbddbdbacaabaddbbaababbbacdbdbbbabddbabbdbadaddbbaccabcbcaaddbdababcddcdcbdcbdadbadcbdabddddba"
+            },
+            "name": ""
+          }
+        ],
+        "friends": {},
+        "openInvoices": {},
+        "openPayments": {
+          "AQAAAQAAAgEAAAAAAgABAA": {
+            "invoiceId": "AQICAQEAAAICAgIBAAAAAgICAAEBAgABAQICAAEAAgI",
+            "currency": "acdaccbba",
+            "destPublicKey": "AQAAAAABAAICAgECAAAAAQIBAQIBAgECAgAAAQACAQI",
+            "destPayment": "0",
+            "description": "B󩎼",
+            "generation": "0",
+            "status": {
+              "searchingRoute": "AgIBAAEBAAAAAAEBAAABAQ"
+            }
+          },
+          "AQEBAAAAAAICAAECAQAAAQ": {
+            "invoiceId": "AQABAgABAQECAQEBAAABAAACAQAAAgIBAQACAAICAQE",
+            "currency": "accabacccacaad",
+            "destPublicKey": "AQABAAACAQAAAgAAAQABAAICAgAAAgICAAEBAgAAAgA",
+            "destPayment": "0",
+            "description": "",
+            "generation": "0",
+            "status": {
+              "commit": [
+                {
+                  "responseHash": "AQEBAgEAAAICAgABAgEBAQECAQIAAAIBAAICAQEBAQA",
+                  "srcPlainLock": "AgICAAECAAACAgAAAgICAgICAQAAAgACAgABAgIAAAI",
+                  "destHashedLock": "AQAAAgAAAQABAgAAAAECAQECAgECAAACAAAAAgECAAA",
+                  "destPayment": "1",
+                  "totalDestPayment": "2",
+                  "invoiceId": "AQICAQABAQIBAQECAAAAAQACAQECAQACAgIAAAIBAQI",
+                  "currency": "dcaaddacdaaba",
+                  "signature": "AAEAAQABAAIAAgABAAEBAAACAQAAAgECAAICAgABAAABAAECAQICAQIAAAIAAgEAAQAAAAEBAQAAAgEAAAEBAg"
+                },
+                "2"
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
+}
+''',
+r'''
+{
+  "nodesStatus": {}
+}
+''',
+r'''
+{
+  "node": [
+    "1",
+    {
+      "report": {
+        "localPublicKey": "AAACAAABAAIBAAEBAAABAgICAgEAAgEBAQEAAgIBAgA",
+        "indexServers": [],
+        "optConnectedIndexServer": "AgICAgICAgACAgIBAAEAAAEAAQIAAgIBAAACAgEAAAE",
+        "relays": [],
+        "friends": {
+          "AQICAAABAQACAQAAAQAAAQEBAQEAAgEAAgECAQIBAAA": {
+            "name": "",
+            "currencyConfigs": {
+              "dbcbcddb": {
+                "rate": {
+                  "mul": 1,
+                  "add": 1
+                },
+                "remoteMaxDebt": "1",
+                "isOpen": true
+              }
+            },
+            "optLastIncomingMoveToken": {
+              "prefixHash": "AgEAAQICAAACAgABAgACAgICAgICAgECAAABAQIBAgE",
+              "tokenInfo": {
+                "mc": {
+                  "localPublicKey": "AgAAAQICAQABAAIBAAEAAAIAAgICAQACAQEBAgIBAgI",
+                  "remotePublicKey": "AQIBAgEAAgIAAgABAAICAgECAAAAAQEBAAICAAICAgI",
+                  "balances": {}
+                },
+                "counters": {
+                  "inconsistencyCounter": "2",
+                  "moveTokenCounter": "1"
+                }
+              },
+              "randNonce": "AQIAAgACAgIAAAACAgEBAQ",
+              "newToken": "AgABAQEBAgAAAgECAQEAAgEAAAABAQEAAgACAAACAAAAAAACAgAAAgECAgEBAQEBAQAAAAAAAgECAgEAAgEAAg"
+            },
+            "liveness": "online",
+            "channelStatus": {
+              "inconsistent": {
+                "localResetTerms": {
+                  "caddcdbbacdcb": "-2"
+                },
+                "optRemoteResetTerms": {
+                  "resetToken": "AQECAgAAAAAAAAIBAQEAAgECAgEAAAEBAgAAAAIBAQECAAAAAAABAgECAgICAgAAAgACAQEAAQEBAgECAAEBAg",
+                  "balanceForReset": {
+                    "bbcacbb": "2"
+                  }
+                }
+              }
+            },
+            "status": "enabled"
+          }
+        },
+        "openInvoices": {},
+        "openPayments": {
+          "AQIAAgEBAAIBAAICAQAAAQ": {
+            "invoiceId": "AQAAAQICAQEBAgIAAQIBAAIAAgIBAAIBAAEBAAICAgA",
+            "currency": "b",
+            "destPublicKey": "AAICAgEBAQEAAQEAAQICAAAAAQIBAgECAAACAQECAgI",
+            "destPayment": "2",
+            "description": "",
+            "generation": "2",
+            "status": {
+              "failure": "AQICAAACAQIAAgICAQIBAA"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "nodesStatus": {
+    "􊍂": {
+      "isOpen": false,
+      "info": {
+        "local": {
+          "nodePublicKey": "AAECAQEBAgEAAQICAgEBAgIAAAIBAQIAAQICAAACAAA"
+        }
+      }
+    },
+    "\u001cm": {
+      "isOpen": true,
+      "info": {
+        "local": {
+          "nodePublicKey": "AAIAAAEAAQECAgIAAgAAAAECAAIAAQECAQIBAQAAAAE"
+        }
+      }
+    }
+  }
+}
+''',
+r'''
+{
+  "node": [
+    "2",
+    {
+      "responseVerifyCommit": {
+        "requestId": "AgACAgEAAQEBAAEAAQICAA",
+        "status": "failure"
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "node": [
+    "1",
+    {
+      "paymentCommit": {
+        "paymentId": "AQEAAQICAgACAAACAAEAAA",
+        "commit": {
+          "responseHash": "AgEAAgACAgIBAgABAgACAQAAAQICAQIBAgIBAAICAgA",
+          "srcPlainLock": "AgECAQIBAAAAAQAAAAEAAAEBAQIAAQIBAAICAQECAgE",
+          "destHashedLock": "AgAAAAIAAQECAAEBAAEAAgIAAAIBAgAAAgACAAECAQA",
+          "destPayment": "0",
+          "totalDestPayment": "0",
+          "invoiceId": "AgECAAIAAgAAAgECAAABAgACAgACAAABAAEBAAIAAQA",
+          "currency": "bca",
+          "signature": "AQACAAICAQABAgECAgEAAgICAgACAAAAAgIAAgACAAEAAgIAAAABAAICAQEAAQICAAEBAQEBAgIBAAEAAgAAAQ"
+        }
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "failure": ""
   }
 }
 ''',
@@ -2974,20 +3092,101 @@ r'''
     "2",
     {
       "paymentCommit": {
-        "paymentId": "AAABAAECAAACAgECAgACAQ",
+        "paymentId": "AQIAAgEBAQECAAEBAAIAAg",
         "commit": {
-          "responseHash": "AQIAAAIAAgIBAAECAQICAgECAAACAQECAQICAQIBAQE",
-          "srcPlainLock": "AgEBAAAAAgEAAAIBAQEBAAACAQABAAEBAAEBAgIBAQI",
-          "destHashedLock": "AAIAAAAAAgEAAgACAgAAAQEBAAAAAAEBAgAAAQIBAQI",
-          "destPayment": "2",
-          "totalDestPayment": "2",
-          "invoiceId": "AgEAAAICAAECAQEAAgEBAgIAAQICAQABAgABAgIBAQI",
-          "currency": "bdccaacdbbca",
-          "signature": "AQAAAgACAQEAAgAAAQAAAAIAAgEAAQEBAQABAQICAQICAAEBAgECAQIAAQICAAICAQIAAAAAAAEAAAABAAAAAg"
+          "responseHash": "AAEBAQIAAAABAQIAAQAAAgACAQECAgECAgICAgECAAE",
+          "srcPlainLock": "AAIAAgAAAQECAQIBAgEBAgECAgAAAAABAAEBAAABAQA",
+          "destHashedLock": "AgAAAQICAgEBAgAAAAECAgACAAABAAICAAACAgABAgE",
+          "destPayment": "0",
+          "totalDestPayment": "0",
+          "invoiceId": "AgIBAQIAAgEAAQECAAICAQICAgEBAAEBAgACAQABAgA",
+          "currency": "bcaacddbadccd",
+          "signature": "AQEBAgABAAIBAQACAAEBAgICAAABAAAAAQEAAgECAgABAgICAAECAgEAAAEAAgEBAgEBAgACAgABAAAAAAIBAA"
         }
       }
     }
   ]
+}
+''',
+r'''
+{
+  "nodesStatus": {
+    "5 ": {
+      "isOpen": false,
+      "info": {
+        "remote": {
+          "appPublicKey": "AgEAAAEBAAIBAQABAAICAAIAAgIBAQIBAgEAAQIAAgA",
+          "nodePublicKey": "AAIAAgIAAQACAgABAAIBAgEBAgIAAAEAAgACAQABAAA",
+          "nodeAddress": {
+            "address": "dcdcbbcbcdcabcbcbabadaccadaccaddcbccccbccdccaccabcddcbbbbcdbaaabaddbcbbaaadbbacaccdaacdccddcbbaaaabdd"
+          }
+        }
+      }
+    }
+  }
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "failure": ""
+  }
+}
+''',
+r'''
+{
+  "responseOpenNode": {
+    "failure": "~"
+  }
+}
+''',
+r'''
+{
+  "node": [
+    "2",
+    {
+      "paymentCommit": {
+        "paymentId": "AAIAAQEBAgACAQABAAABAg",
+        "commit": {
+          "responseHash": "AgEAAAECAAICAgEBAQICAAAAAQEBAAAAAAABAAIBAAA",
+          "srcPlainLock": "AAECAQIBAgAAAQAAAAEBAQEAAAIBAgIAAAICAQAAAAA",
+          "destHashedLock": "AAIBAgEBAAIAAgABAAEAAgIBAQICAAECAAECAgIBAQA",
+          "destPayment": "2",
+          "totalDestPayment": "0",
+          "invoiceId": "AAIAAgACAQICAQEBAAAAAAICAQIAAQIBAgICAgEBAQE",
+          "currency": "badbbcdadabdac",
+          "signature": "AQICAAACAgECAQIBAQEBAgECAgIBAgICAgACAQIBAgEBAAEAAQABAQECAQIAAgICAQIBAAABAAAAAgICAgIBAg"
+        }
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "node": [
+    "1",
+    {
+      "paymentCommit": {
+        "paymentId": "AQIAAQACAgECAgEBAQAAAQ",
+        "commit": {
+          "responseHash": "AAECAQACAAIBAgEAAQEAAgECAgEBAAIBAQIBAAIAAAE",
+          "srcPlainLock": "AAACAQABAAAAAgAAAQECAAIAAQIAAQAAAAABAQABAQI",
+          "destHashedLock": "AQACAQEAAQECAgAAAgIBAgACAgIBAQECAgECAAIAAgA",
+          "destPayment": "1",
+          "totalDestPayment": "1",
+          "invoiceId": "AAICAAAAAgABAgEAAAIAAQEBAgEAAAACAgIBAQACAgE",
+          "currency": "ddacaacbc",
+          "signature": "AAACAAACAgAAAAIBAQEAAAIAAAAAAgIAAQEBAgEBAQACAQIBAgIBAgAAAQEBAAEAAQABAQAAAQIAAQEAAAIAAA"
+        }
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "nodesStatus": {}
 }
 ''',
 ];
@@ -2996,16 +3195,16 @@ r'''
 final userToServer = [
 r'''
 {
-  "createNode": {
-    "createNodeRemote": {
-      "nodeName": "",
-      "appPrivateKey": "AQACAAIBAAECAQIBAQIBAgIBAAABAQEBAQIBAQEAAQIBAAEBAAAAAQAAAQECAQABAAEAAAIAAgICAAABAAICAgIBAgABAQECAQIAAgIBAgICAAICAQ",
-      "nodePublicKey": "AQIBAQEAAQIBAQACAQABAAEBAQECAQIAAQIBAAECAgE",
-      "nodeAddress": {
-        "address": "caaaabcddcabbabdbacbdcddcbbcbdbdbadacaadbcacdadbbcdcabcddcaabcbddcabcdbabdbd"
+  "node": [
+    "0",
+    {
+      "addFriend": {
+        "friendPublicKey": "AgIAAQICAQABAAECAgIAAgICAQIAAQACAQABAAABAgE",
+        "relays": [],
+        "name": ""
       }
     }
-  }
+  ]
 }
 ''',
 r'''
@@ -3015,12 +3214,22 @@ r'''
 ''',
 r'''
 {
-  "requestOpenNode": "㋠"
+  "closeNode": "1"
 }
 ''',
 r'''
 {
-  "removeNode": ""
+  "removeNode": "e"
+}
+''',
+r'''
+{
+  "requestOpenNode": ""
+}
+''',
+r'''
+{
+  "requestOpenNode": "𞼾"
 }
 ''',
 r'''
@@ -3034,7 +3243,111 @@ r'''
 ''',
 r'''
 {
-  "removeNode": "@"
+  "removeNode": "啻￸"
+}
+''',
+r'''
+{
+  "removeNode": "􏿿"
+}
+''',
+r'''
+{
+  "removeNode": "\""
+}
+''',
+r'''
+{
+  "createNode": {
+    "createNodeLocal": {
+      "nodeName": "8"
+    }
+  }
+}
+''',
+r'''
+{
+  "removeNode": "$―"
+}
+''',
+r'''
+{
+  "createNode": {
+    "createNodeLocal": {
+      "nodeName": "["
+    }
+  }
+}
+''',
+r'''
+{
+  "removeNode": "A`"
+}
+''',
+r'''
+{
+  "removeNode": "򸈣"
+}
+''',
+r'''
+{
+  "removeNode": "\u0010R"
+}
+''',
+r'''
+{
+  "createNode": {
+    "createNodeRemote": {
+      "nodeName": "㚭",
+      "appPrivateKey": "AgIAAgACAAABAAECAgAAAgACAQACAAACAAAAAAAAAgAAAAACAQACAgECAQIBAQIBAAEAAQICAAAAAAICAAICAgABAQECAAECAgACAgIAAgICAQIBAA",
+      "nodePublicKey": "AQECAAEAAQIBAQEBAQAAAQEAAQIBAgIBAgICAAEAAQI",
+      "nodeAddress": {
+        "address": "caaacabaabcdcacadacb"
+      }
+    }
+  }
+}
+''',
+r'''
+{
+  "requestOpenNode": ">"
+}
+''',
+r'''
+{
+  "removeNode": "_X"
+}
+''',
+r'''
+{
+  "closeNode": "2"
+}
+''',
+r'''
+{
+  "createNode": {
+    "createNodeRemote": {
+      "nodeName": "",
+      "appPrivateKey": "AQEAAAABAAIAAgABAgIBAQIBAgABAQECAgEBAAICAgEBAgEBAQIAAQABAgABAQEBAAIBAgAAAAECAQEAAAIBAgIBAAIAAQICAAAAAQIAAQIAAQACAQ",
+      "nodePublicKey": "AQICAAICAQICAAEAAAECAgACAAAAAAEBAQICAQACAQE",
+      "nodeAddress": {
+        "address": "cdcbbacdaabbbcbdbcbbbcdbdccbabdabcdacbcaaabdacdcdacaabddcabaadbcccdabbdcbbaadccbccbcbddabcacabacacdadcbcddbacbababcbdbbabcaddccbacbdaccdcbcdccbccbcdacbdacbdabdacbdacaccdccbaabadbadcdccddaac"
+      }
+    }
+  }
+}
+''',
+r'''
+{
+  "node": [
+    "0",
+    {
+      "setFriendRelays": {
+        "friendPublicKey": "AQIAAAICAgIBAgICAgIBAQIAAQABAAECAAABAAAAAgI",
+        "relays": []
+      }
+    }
+  ]
 }
 ''',
 r'''
@@ -3044,13 +3357,68 @@ r'''
 ''',
 r'''
 {
+  "requestOpenNode": "\u0013"
+}
+''',
+r'''
+{
+  "requestOpenNode": ""
+}
+''',
+r'''
+{
+  "requestOpenNode": "O"
+}
+''',
+r'''
+{
+  "node": [
+    "2",
+    {
+      "enableFriend": "AAEBAQECAgAAAQEAAAIAAAEBAgECAQICAQEBAgAAAgI"
+    }
+  ]
+}
+''',
+r'''
+{
+  "node": [
+    "0",
+    {
+      "addInvoice": {
+        "invoiceId": "AQEBAAACAgABAAABAAEBAgEBAgACAQICAAABAAEBAgI",
+        "currency": "accadbcbbc",
+        "totalDestPayment": "2",
+        "description": "#"
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "removeNode": "k⁊"
+}
+''',
+r'''
+{
+  "requestOpenNode": "z"
+}
+''',
+r'''
+{
+  "removeNode": ""
+}
+''',
+r'''
+{
   "createNode": {
     "createNodeRemote": {
-      "nodeName": " ",
-      "appPrivateKey": "AgICAgEAAQEAAQIAAgEBAgIAAgIAAQEAAQEAAQECAAICAgEBAQICAAEBAgACAAABAQECAAACAQIAAQEAAQECAQECAAICAQICAgIBAgABAAEBAAECAQ",
-      "nodePublicKey": "AQAAAQEAAgICAAEBAgIBAAEAAAIAAQACAgIBAgABAgE",
+      "nodeName": "󬈗/",
+      "appPrivateKey": "AQICAgAAAAIBAgACAAIAAQIAAgEAAgIAAAIAAQIAAQIBAAABAgIBAgAAAgEBAAAAAgEBAQIAAAACAQABAgABAAACAgECAgEBAQEAAQECAAABAQIBAA",
+      "nodePublicKey": "AAACAgAAAgABAgECAgEBAAIBAAABAAEAAgAAAgICAgA",
       "nodeAddress": {
-        "address": "baabdacddbabcccaaddcdacdddaacddadbbabcabdbbbddcacaaddbadaaabcdaabccdacccbadaaddbdabcdddbbadabcbcbacdcbcacbacccddbbaacacacbdcacddbaccdcacaabccacbdabcbbcddaacbcadbbdbbccaabccabbbabbacdcabcaadadbccdadabacdcdbdbddbdaabccbdbcdcbbabacb"
+        "address": "cdacbadbbcdabaabaacabb"
       }
     }
   }
@@ -3058,14 +3426,19 @@ r'''
 ''',
 r'''
 {
-  "removeNode": "="
+  "removeNode": ""
+}
+''',
+r'''
+{
+  "removeNode": " "
 }
 ''',
 r'''
 {
   "createNode": {
     "createNodeLocal": {
-      "nodeName": "5㣃"
+      "nodeName": ""
     }
   }
 }
@@ -3077,16 +3450,149 @@ r'''
 ''',
 r'''
 {
-  "removeNode": "뚹&"
+  "createNode": {
+    "createNodeRemote": {
+      "nodeName": "",
+      "appPrivateKey": "AgIAAQABAgEBAQIAAAIBAQIBAgECAAECAAEBAAABAAACAQEBAAACAAABAQABAQEAAAACAAACAgIBAAEAAQECAQACAgIBAQIAAgABAAIBAAICAAECAA",
+      "nodePublicKey": "AAEAAQAAAQICAQAAAgEAAQACAQACAgEBAQECAgABAAE",
+      "nodeAddress": {
+        "address": "baaaddcddbddbcbcaadabaabbbdbdbaddccacdcbadbcbcb"
+      }
+    }
+  }
+}
+''',
+r'''
+{
+  "closeNode": "0"
+}
+''',
+r'''
+{
+  "node": [
+    "2",
+    {
+      "requestVerifyCommit": {
+        "requestId": "AQECAAEBAQEBAAEBAAIAAQ",
+        "commit": {
+          "responseHash": "AgEBAAIBAAEAAQEAAgICAAICAQACAAIBAQACAQEAAQE",
+          "srcPlainLock": "AQABAgEAAQIBAQACAAEAAgAAAgABAAIBAQEBAQIBAQI",
+          "destHashedLock": "AgIBAAAAAQIAAgAAAQEBAAEBAgEBAAEBAAAAAQICAQE",
+          "destPayment": "2",
+          "totalDestPayment": "1",
+          "invoiceId": "AgIBAgIAAgEAAgECAAECAgAAAAICAgABAgIAAAEBAgA",
+          "currency": "cbadaa",
+          "signature": "AgICAAIAAQABAgECAQIBAAABAgIAAgIBAAACAgEBAgICAgIAAAEAAAECAgAAAgEAAgAAAQEBAAICAQIBAAABAA"
+        }
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "requestOpenNode": "\u0015\u0011"
+}
+''',
+r'''
+{
+  "removeNode": "횓"
+}
+''',
+r'''
+{
+  "closeNode": "1"
+}
+''',
+r'''
+{
+  "node": [
+    "2",
+    {
+      "enableFriend": "AAECAAEAAAEAAQIAAAICAQIAAQICAAEAAAABAgIBAAE"
+    }
+  ]
+}
+''',
+r'''
+{
+  "node": [
+    "0",
+    {
+      "removeIndexServer": "AQEAAQEBAAIAAgICAQAAAAAAAAIAAAABAAEBAgIBAAI"
+    }
+  ]
+}
+''',
+r'''
+{
+  "node": [
+    "2",
+    {
+      "addRelay": {
+        "publicKey": "AQACAgICAAABAQAAAAECAAEBAAABAgACAAACAQIBAQI",
+        "address": {
+          "address": "accbadbdbddabccaadbbabbbcabbdaaadbaccaabcdbbddabcbdcdcbbdbaaadbaccacdbbbbdcacbaaaacddddcacacbcbdbcdaaabbdddbcdadbaabaaaccdbaaaadddccccdbcddaadabaaabdddddaacadcabcbd"
+        },
+        "name": "@"
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "node": [
+    "0",
+    {
+      "initPayment": {
+        "paymentId": "AAIAAgEAAQEBAQABAAECAA",
+        "invoiceId": "AAECAgABAAICAAEBAQIBAgABAQACAQEAAQICAgABAgA",
+        "currency": "aa",
+        "destPublicKey": "AAAAAAEBAgIBAAECAgIBAAABAQECAgABAQIBAAABAAA",
+        "destPayment": "0",
+        "description": "~"
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "createNode": {
+    "createNodeRemote": {
+      "nodeName": "",
+      "appPrivateKey": "AQACAQECAgAAAQEAAgEBAAECAgIBAgECAQICAgAAAAICAAIBAAECAgEBAgIAAQABAQEAAgACAgAAAAEAAgACAQECAQICAQICAAICAgECAgICAAICAg",
+      "nodePublicKey": "AgEBAAIBAQACAQIAAgAAAAACAQIBAQEAAgACAAIBAAA",
+      "nodeAddress": {
+        "address": "cbadabcadacbbcbacaaadadbbcb"
+      }
+    }
+  }
 }
 ''',
 r'''
 {
   "createNode": {
     "createNodeLocal": {
-      "nodeName": ""
+      "nodeName": "믫"
     }
   }
+}
+''',
+r'''
+{
+  "removeNode": "⁁\t"
+}
+''',
+r'''
+{
+  "requestOpenNode": "!{"
+}
+''',
+r'''
+{
+  "requestOpenNode": ""
 }
 ''',
 r'''
@@ -3096,7 +3602,94 @@ r'''
 ''',
 r'''
 {
-  "removeNode": "^"
+  "removeNode": "⁕"
+}
+''',
+r'''
+{
+  "requestOpenNode": ""
+}
+''',
+r'''
+{
+  "closeNode": "1"
+}
+''',
+r'''
+{
+  "createNode": {
+    "createNodeRemote": {
+      "nodeName": "󿿾",
+      "appPrivateKey": "AAAAAAACAgECAQIAAQABAQECAAIBAQIBAAEAAQEAAAACAAACAgIBAgACAAAAAgIAAgIBAQECAQABAAEAAQEAAAACAgEAAAICAQECAQAAAAECAQECAQ",
+      "nodePublicKey": "AAAAAgIBAQECAQICAQABAAICAAIAAQABAQABAQEBAQA",
+      "nodeAddress": {
+        "address": "ddacccbaccdcddddbbcaabaacaabddbbdbccbbccbabccbcdbccdccacbdadcadbadbaacccadaadadadddbcdcabdcbacdadacbdacaacbabbbcabdbadacabaacdaadadcbbdabccdabbabdddbdbbcbabaabbadddabcdbcccab"
+      }
+    }
+  }
+}
+''',
+r'''
+{
+  "removeNode": "©"
+}
+''',
+r'''
+{
+  "requestOpenNode": ""
+}
+''',
+r'''
+{
+  "removeNode": ""
+}
+''',
+r'''
+{
+  "node": [
+    "0",
+    {
+      "openFriendCurrency": {
+        "friendPublicKey": "AgABAQIAAAIAAgAAAQICAAEBAAEAAgABAgAAAAIAAgI",
+        "currency": "da"
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "closeNode": "0"
+}
+''',
+r'''
+{
+  "node": [
+    "0",
+    {
+      "addRelay": {
+        "publicKey": "AAEAAAECAAIAAgIAAAABAgIAAQIAAAEBAgIAAgACAAA",
+        "address": {
+          "address": "dcdbbdcddccbabddbdcdcacdbbbbdbaacaacacbdcdcdadcddabccbbbbabbccbacbdcdcdcbabcdcbdbdbaaaadadaaabacddbdcbbdacaddbcdccbaddbba"
+        },
+        "name": "\u0010"
+      }
+    }
+  ]
+}
+''',
+r'''
+{
+  "createNode": {
+    "createNodeLocal": {
+      "nodeName": ""
+    }
+  }
+}
+''',
+r'''
+{
+  "closeNode": "1"
 }
 ''',
 r'''
@@ -3106,36 +3699,7 @@ r'''
 ''',
 r'''
 {
-  "requestOpenNode": "\u0015"
-}
-''',
-r'''
-{
-  "removeNode": "\u000f"
-}
-''',
-r'''
-{
   "closeNode": "1"
-}
-''',
-r'''
-{
-  "createNode": {
-    "createNodeLocal": {
-      "nodeName": "3#"
-    }
-  }
-}
-''',
-r'''
-{
-  "removeNode": ""
-}
-''',
-r'''
-{
-  "requestOpenNode": ""
 }
 ''',
 r'''
@@ -3143,12 +3707,54 @@ r'''
   "node": [
     "0",
     {
-      "openFriendCurrency": {
-        "friendPublicKey": "AgEAAQECAgEAAgAAAAAAAgEBAQEBAgICAAIAAAEAAQE",
-        "currency": "badbbbbddcccaca"
+      "initPayment": {
+        "paymentId": "AQICAgAAAgAAAAEBAAAAAA",
+        "invoiceId": "AgIBAQICAQICAgABAQACAAIBAQECAQICAAEAAAEBAAE",
+        "currency": "aa",
+        "destPublicKey": "AgECAQAAAgEAAgICAAIAAAIBAgIAAAIAAQICAgEBAgI",
+        "destPayment": "0",
+        "description": "~󷅂"
       }
     }
   ]
+}
+''',
+r'''
+{
+  "removeNode": "&y"
+}
+''',
+r'''
+{
+  "createNode": {
+    "createNodeRemote": {
+      "nodeName": "",
+      "appPrivateKey": "AAICAgACAQEAAQIBAQACAQAAAQEBAQEBAgIAAQABAgIBAgIBAAACAQIAAQEAAQABAQABAAEBAgICAQIBAQIBAgEAAQICAQIBAAIAAAICAgAAAgIAAg",
+      "nodePublicKey": "AQECAAABAQECAgACAgEAAgACAAICAgAAAQABAQECAQI",
+      "nodeAddress": {
+        "address": "ccddbcbcaaabdbbcadaccabbdbddcdccaacbdbbdbdabcddbacbddcccacaabbcddadacbcadaacdabcbcacddbccacbcabbdabacbbdcbbbdbcbcdaadbcc"
+      }
+    }
+  }
+}
+''',
+r'''
+{
+  "requestOpenNode": ""
+}
+''',
+r'''
+{
+  "createNode": {
+    "createNodeLocal": {
+      "nodeName": "\n"
+    }
+  }
+}
+''',
+r'''
+{
+  "requestOpenNode": "0⁔"
 }
 ''',
 r'''
@@ -3156,100 +3762,9 @@ r'''
   "node": [
     "2",
     {
-      "cancelPayment": "AQACAgICAAIAAQEBAQECAg"
-    }
-  ]
-}
-''',
-r'''
-{
-  "createNode": {
-    "createNodeRemote": {
-      "nodeName": "軟",
-      "appPrivateKey": "AQACAgIBAQACAgIBAgEBAQEAAQACAgEBAgACAAEAAQAAAAABAAAAAgEAAgICAQABAgECAAAAAQECAAIAAgIBAgEAAQECAAEAAQICAAIBAAICAgECAQ",
-      "nodePublicKey": "AQIAAAICAgIBAAAAAAICAAABAQABAQEBAgICAgACAAE",
-      "nodeAddress": {
-        "address": "daabbbbbbabcabbbabcabdacadcbdcaddadadccdaacabcbcdcdabababdacaaddccdabaccccabbdbaadcbbacbadcabaaacdcdaadbdcd"
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "removeNode": ""
-}
-''',
-r'''
-{
-  "removeNode": ""
-}
-''',
-r'''
-{
-  "closeNode": "1"
-}
-''',
-r'''
-{
-  "closeNode": "1"
-}
-''',
-r'''
-{
-  "node": [
-    "0",
-    {
-      "disableFriend": "AAIBAgIBAAAAAgEBAQABAAEBAAAAAQIAAAEAAAEBAAE"
-    }
-  ]
-}
-''',
-r'''
-{
-  "removeNode": "k"
-}
-''',
-r'''
-{
-  "createNode": {
-    "createNodeRemote": {
-      "nodeName": "]⁋",
-      "appPrivateKey": "AgACAQEAAAAAAAIAAgIAAAIBAQIBAQIAAQEAAAEBAgEAAAACAgIBAAACAAABAgECAgECAAAAAQACAgEBAAEAAQECAQACAQAAAAEBAQABAgEAAAABAA",
-      "nodePublicKey": "AgIBAgABAQAAAQACAQECAAEAAgECAAECAQIAAgICAgI",
-      "nodeAddress": {
-        "address": "cbdaaababbbcbccdbbdcbcaabdbcdabadcdcacdadabbaaddaddcaabcbbcbcddcbddbacdbcaacabddddcabcadabdbcaccbbaadcdcd"
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "createNode": {
-    "createNodeLocal": {
-      "nodeName": "᠎)"
-    }
-  }
-}
-''',
-r'''
-{
-  "createNode": {
-    "createNodeLocal": {
-      "nodeName": ""
-    }
-  }
-}
-''',
-r'''
-{
-  "node": [
-    "0",
-    {
       "ackPaymentDone": [
-        "AAICAQEAAAEAAQICAAIBAg",
-        "AAICAAABAQECAgICAgECAg"
+        "AQABAAIBAAICAQIAAAABAQ",
+        "AgABAAABAgIBAAAAAAECAQ"
       ]
     }
   ]
@@ -3257,12 +3772,29 @@ r'''
 ''',
 r'''
 {
-  "requestOpenNode": "Z?"
+  "node": [
+    "2",
+    {
+      "setFriendCurrencyRate": {
+        "friendPublicKey": "AAAAAgECAQEAAgABAAABAQABAAEAAAAAAQICAgIAAQI",
+        "currency": "cdcaaccbda",
+        "rate": {
+          "mul": 1,
+          "add": 2
+        }
+      }
+    }
+  ]
 }
 ''',
 r'''
 {
-  "closeNode": "0"
+  "requestOpenNode": ">R"
+}
+''',
+r'''
+{
+  "requestOpenNode": ""
 }
 ''',
 r'''
@@ -3276,184 +3808,15 @@ r'''
 ''',
 r'''
 {
-  "closeNode": "2"
-}
-''',
-r'''
-{
-  "requestOpenNode": ""
-}
-''',
-r'''
-{
-  "removeNode": "徊\""
-}
-''',
-r'''
-{
-  "closeNode": "2"
-}
-''',
-r'''
-{
-  "requestOpenNode": "71"
-}
-''',
-r'''
-{
-  "createNode": {
-    "createNodeRemote": {
-      "nodeName": "\t馈",
-      "appPrivateKey": "AQECAQACAAICAgAAAQABAgEAAQEAAAIBAQIBAQACAgEBAgABAgIBAQACAQAAAgABAAEBAgAAAgEBAgACAAIBAQEBAQEAAAEAAAIAAQABAgACAQICAg",
-      "nodePublicKey": "AQIAAAIBAQEAAQECAAICAQAAAAAAAAIAAQEAAgIBAgE",
-      "nodeAddress": {
-        "address": "bddababcddcdaabcccddbdcbdcbbaacdccaacdddbacabdacabdadcdadacabbddcabbdcccbccdbabaacadaddabbaadabbadadcabaccbbbabbdbbbcadccbbdabbbdddcbdcbbbdacddaccabcabaacaccb"
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "createNode": {
-    "createNodeRemote": {
-      "nodeName": "=4",
-      "appPrivateKey": "AgAAAgICAQACAgIAAAIAAQACAgEBAQICAQEAAAEAAQAAAAABAgECAgECAgAAAgICAQACAQEBAQEAAAEAAgIAAAIAAgECAgAAAgACAgABAgICAQABAQ",
-      "nodePublicKey": "AAEAAgAAAAECAQAAAgAAAQECAAACAQABAQEBAQECAAA",
-      "nodeAddress": {
-        "address": "abcabcdacddaabcdaadbccdcccdabbadcbabdbcaaaaacccddcdcabbadbaaddbdddcaccdaabddbcacaaddbbaaccddbdddccbbaadcaacaadabbbcaaccaadcacddbdadbcaaadbcaddbaaacaaacdcbabcbdccadddbbaadcbdadcdcaaaadabdbbcbdcbbdabdbdacbddbdadcbacdadbdddaabaacdbbaaccdaa"
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "requestOpenNode": "ⳙ-"
-}
-''',
-r'''
-{
-  "removeNode": "/￵"
-}
-''',
-r'''
-{
-  "requestOpenNode": ""
-}
-''',
-r'''
-{
-  "requestOpenNode": "5"
-}
-''',
-r'''
-{
-  "createNode": {
-    "createNodeRemote": {
-      "nodeName": "~",
-      "appPrivateKey": "AAIAAQIBAAIAAgEAAQICAgIBAAIAAgABAAAAAQAAAAECAQACAgEAAQIAAAECAQIBAQICAgIAAQECAQEBAQIAAgICAQABAgICAQECAAEAAAEAAgACAg",
-      "nodePublicKey": "AQECAgAAAAACAgABAAACAgICAQICAQECAAECAAECAgI",
-      "nodeAddress": {
-        "address": "cbccadcbcaacdbdbddbbacabbaaabbbddcabbbdcabbbcacbdaaaadcbabbbdddbccbcbdacccddddcbbbabbbabdcccacaaacdbdbaadabbbaddbdadccaacbccb"
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "removeNode": "t"
-}
-''',
-r'''
-{
-  "createNode": {
-    "createNodeRemote": {
-      "nodeName": "9\u0010",
-      "appPrivateKey": "AAEBAAACAQAAAQEBAQABAgIAAAECAgECAAEBAQABAQIBAQACAAAAAAIAAQEAAQACAQABAQIBAAEAAAECAAICAQIAAAACAQAAAQIBAgAAAgICAQIAAg",
-      "nodePublicKey": "AAIAAgIBAgEBAgIBAQACAQECAAIBAgAAAQIAAAICAAI",
-      "nodeAddress": {
-        "address": "cdcadabbcdbdaadadaabdbcdabbcacadcddaddaccdbabddccabadbdccacddbdaccdabadbddbcdaccaababd"
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "removeNode": "\u001c"
-}
-''',
-r'''
-{
-  "createNode": {
-    "createNodeLocal": {
-      "nodeName": "p\u000e"
-    }
-  }
-}
-''',
-r'''
-{
-  "removeNode": "\\."
+  "requestOpenNode": "§B"
 }
 ''',
 r'''
 {
   "node": [
-    "2",
+    "1",
     {
-      "addIndexServer": {
-        "publicKey": "AgEBAgABAAIAAgEAAgIAAgICAAEAAgEAAQEBAAACAAA",
-        "address": {
-          "address": "aacbccbcbdccbddbdbacaabaddbbaababbbacdbdbbbabddbabbdbadaddbbaccabcbcaaddbdababcddcdcbdcbdadbadcbdabddddbaaaabcabaccaacacdbbcbacaadcaaccbadaaccabacccacaadcbcbaacadddddbccaabcccaacacccbadbdcdbccbaddbbad"
-        },
-        "name": ""
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "closeNode": "2"
-}
-''',
-r'''
-{
-  "requestOpenNode": ""
-}
-''',
-r'''
-{
-  "createNode": {
-    "createNodeLocal": {
-      "nodeName": " "
-    }
-  }
-}
-''',
-r'''
-{
-  "createNode": {
-    "createNodeLocal": {
-      "nodeName": "눒,"
-    }
-  }
-}
-''',
-r'''
-{
-  "removeNode": "Q񑫶"
-}
-''',
-r'''
-{
-  "node": [
-    "2",
-    {
-      "cancelInvoice": "AAECAQICAQABAQIBAQECAAAAAQACAQECAQACAgIAAAI"
+      "removeIndexServer": "AgEAAAIBAQAAAQEBAQABAgECAAEBAQABAAACAQEBAQE"
     }
   ]
 }
@@ -3461,62 +3824,10 @@ r'''
 r'''
 {
   "createNode": {
-    "createNodeRemote": {
-      "nodeName": "",
-      "appPrivateKey": "AgAAAgICAAABAQECAgIBAAAAAQEAAAEAAQABAAIAAgABAAEBAAACAQAAAgECAAICAgABAAABAAECAQICAQIAAAIAAgEAAQAAAAEBAQAAAgEAAAEBAg",
-      "nodePublicKey": "AAAAAgEAAAEAAAIBAAAAAAIAAQABAgIBAQAAAgICAgE",
-      "nodeAddress": {
-        "address": "dacdccddacdacac"
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "createNode": {
-    "createNodeRemote": {
-      "nodeName": "⁊",
-      "appPrivateKey": "AQABAAAAAAEAAgICAQIAAAABAgEBAgECAQICAAABAAIBAgIBAQABAgEBAgIBAAEBAgACAgEAAQEAAAAAAQEAAAEBAQEAAAECAQEAAQAAAgAAAQACAQ",
-      "nodePublicKey": "AAEBAAABAgICAgEAAgEBAQEAAgIBAgABAAACAgICAgI",
-      "nodeAddress": {
-        "address": "ddbacbbaaaabaabbcddbccbabccccacacdaaccdbcbcddbd"
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "createNode": {
     "createNodeLocal": {
-      "nodeName": "@O"
+      "nodeName": "`"
     }
   }
-}
-''',
-r'''
-{
-  "createNode": {
-    "createNodeRemote": {
-      "nodeName": "6揄",
-      "appPrivateKey": "AAABAQIBAgECAAABAgIBAAEAAgEAAQAAAgACAgIBAAIBAQECAgECAgECAQIBAAICAAIAAQACAgIBAgAAAAEBAQACAgACAgICAAECAAACAgECAQECAA",
-      "nodePublicKey": "AgACAgIAAAACAgEBAQIAAQEBAQIAAAIBAgEBAAIBAAA",
-      "nodeAddress": {
-        "address": "cdaabdbddccbbcbaabdcbdbdbacacbcdaccddcaddcdbbacdcbdcaddbbbdcdacdbadbbbbaaadbccddadbbcacbbaadacdcdccaa"
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "requestOpenNode": ""
-}
-''',
-r'''
-{
-  "requestOpenNode": "j$"
 }
 ''',
 r'''
@@ -3524,10 +3835,10 @@ r'''
   "createNode": {
     "createNodeRemote": {
       "nodeName": "",
-      "appPrivateKey": "AgEAAQEAAgICAAEAAAABAgACAgIAAAICAgEBAQEAAQEAAQICAAAAAQIBAgECAAACAQECAgIBAQICAAABAgECAQICAAACAQIAAgICAQIBAAAAAAECAg",
-      "nodePublicKey": "AgIAAQICAgEBAgIAAAECAQEBAgEAAQICAgEBAgIAAAI",
+      "appPrivateKey": "AQEAAAECAgIBAgIBAQIAAAAAAAIAAQIAAgIBAQABAgIAAgAAAgAAAQAAAQABAgEBAQIAAgIBAAIAAQEAAgABAQACAgIAAQACAAEBAQEBAgECAAACAA",
+      "nodePublicKey": "AAEBAgAAAgABAQEAAQECAgIAAAIBAQACAgIAAQECAQA",
       "nodeAddress": {
-        "address": "dadadbcaccccdbbbaaaacabdcbaabbcddadccbbbaadcdcbdacbcabddadcaacddcbacdcdabbbbbddbddbbcbacbdbbbdaababaccdddabdcadadd"
+        "address": "adababcdacbccbaaccbddbabacdbadcdbcacabadadcccaadbbdbacbcabcdcabcbdabcbbddbcacdbcbbadcdbdabdabccadccbabdbaabbacadcaaacbbadaabbbaabaaabadbb"
       }
     }
   }
@@ -3540,49 +3851,17 @@ r'''
 ''',
 r'''
 {
-  "requestOpenNode": "«f"
-}
-''',
-r'''
-{
   "node": [
     "1",
     {
-      "closeFriendCurrency": {
-        "friendPublicKey": "AgIBAAICAgIAAgAAAAICAAIAAgABAAICAAAAAQACAgE",
-        "currency": "cdcaa"
-      }
+      "cancelPayment": "AgEBAQIBAQEBAAICAQEAAQ"
     }
   ]
 }
 ''',
 r'''
 {
-  "createNode": {
-    "createNodeRemote": {
-      "nodeName": "",
-      "appPrivateKey": "AAIAAAICAgIBAQIBAAABAgACAQEBAQIAAQEAAgACAAEBAQIAAAABAQIAAQAAAgACAQECAgECAgICAgECAAEAAgACAAABAQIBAgECAQECAQICAAAAAA",
-      "nodePublicKey": "AQABAQAAAQEAAgAAAQICAgEBAgAAAAECAgACAAABAAI",
-      "nodeAddress": {
-        "address": "bbdccdbddabdbdbccdadcacdbcaacddbadccdcccdacdcaacdbcbaacbbbdadbaddcaddcbcbbacbcab"
-      }
-    }
-  }
-}
-''',
-r'''
-{
-  "closeNode": "0"
-}
-''',
-r'''
-{
-  "node": [
-    "0",
-    {
-      "cancelInvoice": "AAECAQAAAQEAAgEBAAEAAgIAAgACAgEBAgECAQABAgA"
-    }
-  ]
+  "requestOpenNode": "/阝"
 }
 ''',
 r'''
@@ -3596,16 +3875,16 @@ r'''
 ''',
 r'''
 {
-  "requestOpenNode": "X¥"
+  "createNode": {
+    "createNodeLocal": {
+      "nodeName": "M"
+    }
+  }
 }
 ''',
 r'''
 {
-  "createNode": {
-    "createNodeLocal": {
-      "nodeName": "K"
-    }
-  }
+  "closeNode": "1"
 }
 ''',
 r'''
@@ -3613,115 +3892,66 @@ r'''
   "node": [
     "1",
     {
-      "addFriend": {
-        "friendPublicKey": "AAIBAAEBAAEAAgEAAQIBAAABAAEBAAICAAACAQECAQI",
-        "relays": [
-          {
-            "publicKey": "AAABAgIBAQEAAAIAAgEAAQEBAAIAAAEBAgEBAQAAAAI",
-            "address": {
-              "address": "dcbccccbccdccaccabcddcbbbbcdbaaabaddbcbbaaadbbacaccdaacdccddcbbaaaabdddabacabdadadcacddcdbbbccddbcaacaadadabccbbbabadbbbbaccbbdddcbabacddbdbadcddabdaccabdaaadadccaa"
-            }
-          }
-        ],
-        "name": ""
-      }
+      "ackPaymentDone": [
+        "AAACAAECAQIAAAAAAgEBAQ",
+        "AQIBAQICAgEBAgEBAQAAAA"
+      ]
     }
   ]
-}
-''',
-r'''
-{
-  "closeNode": "1"
-}
-''',
-r'''
-{
-  "closeNode": "1"
-}
-''',
-r'''
-{
-  "node": [
-    "0",
-    {
-      "setFriendName": {
-        "friendPublicKey": "AQECAAABAAIAAAICAgACAAEAAgIBAAEBAgIAAAICAQI",
-        "name": "雪H"
-      }
-    }
-  ]
-}
-''',
-r'''
-{
-  "closeNode": "1"
-}
-''',
-r'''
-{
-  "node": [
-    "2",
-    {
-      "cancelInvoice": "AQEAAQABAAEBAQIBAgACAgIBAgEAAAEAAAACAgICAgE"
-    }
-  ]
-}
-''',
-r'''
-{
-  "requestOpenNode": "󏅤7"
-}
-''',
-r'''
-{
-  "requestOpenNode": "A"
-}
-''',
-r'''
-{
-  "requestOpenNode": "CY"
-}
-''',
-r'''
-{
-  "requestOpenNode": "񝱘j"
-}
-''',
-r'''
-{
-  "removeNode": "5"
-}
-''',
-r'''
-{
-  "closeNode": "0"
-}
-''',
-r'''
-{
-  "removeNode": ""
 }
 ''',
 r'''
 {
   "createNode": {
-    "createNodeLocal": {
-      "nodeName": ""
+    "createNodeRemote": {
+      "nodeName": ">\n",
+      "appPrivateKey": "AAICAAIBAQAAAAEBAAAAAAIAAgEBAAICAAIAAgACAgIAAgABAQIAAQEAAAEBAAECAAIAAgIAAQIBAQICAQICAQEBAgECAQEBAgIBAAECAAABAQEBAg",
+      "nodePublicKey": "AgACAgICAAIBAAIBAgICAQEAAAEAAAEBAQICAQABAgA",
+      "nodeAddress": {
+        "address": "bbbaadadcacdccbcbaadabbabcbcdaaadccdcbabbdaabcdbbcaddcbcdadbcbcdcadabcccddcaacbbbcaaabbdabcbabdadddbacdbbadbcbccbbcacbbcbadbcacabcbbbbabdadbaabccbbdcbdbcdacbbcbacdacbdadbabcbbccaddacbcdbccddbdbabdbbcdacdbbbcbccacdbaadbbbc"
+      }
     }
   }
 }
 ''',
 r'''
 {
-  "node": [
-    "0",
-    {
-      "setFriendName": {
-        "friendPublicKey": "AAAAAQEAAQECAQACAQEAAQECAgAAAgIBAgACAgIBAQE",
-        "name": "¡6"
-      }
-    }
-  ]
+  "removeNode": ""
+}
+''',
+r'''
+{
+  "closeNode": "2"
+}
+''',
+r'''
+{
+  "closeNode": "2"
+}
+''',
+r'''
+{
+  "closeNode": "2"
+}
+''',
+r'''
+{
+  "requestOpenNode": "­"
+}
+''',
+r'''
+{
+  "requestOpenNode": "򈩴"
+}
+''',
+r'''
+{
+  "removeNode": "¨"
+}
+''',
+r'''
+{
+  "requestOpenNode": ""
 }
 ''',
 r'''
@@ -3731,47 +3961,12 @@ r'''
 ''',
 r'''
 {
-  "node": [
-    "0",
-    {
-      "addInvoice": {
-        "invoiceId": "AAAAAgABAgEAAAIAAQEBAgEAAAACAgIBAQACAgEAAQI",
-        "currency": "ca",
-        "totalDestPayment": "0",
-        "description": "*"
-      }
-    }
-  ]
+  "closeNode": "2"
 }
 ''',
 r'''
 {
-  "removeNode": "￳\u001e"
-}
-''',
-r'''
-{
-  "requestOpenNode": ""
-}
-''',
-r'''
-{
-  "removeNode": "=;"
-}
-''',
-r'''
-{
-  "node": [
-    "2",
-    {
-      "cancelInvoice": "AgECAAABAQEAAQABAAEBAAABAgABAQAAAgAAAQECAAE"
-    }
-  ]
-}
-''',
-r'''
-{
-  "requestOpenNode": ""
+  "closeNode": "0"
 }
 ''',
 ];
