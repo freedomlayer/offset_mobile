@@ -506,6 +506,8 @@ abstract class OpenInvoice implements Built<OpenInvoice, OpenInvoiceBuilder> {
   Currency get currency;
   U128 get totalDestPayment;
   String get description;
+  bool get isCommited;
+  Generation get generation;
 
   OpenInvoice._();
   factory OpenInvoice([void Function(OpenInvoiceBuilder) updates]) = _$OpenInvoice;
@@ -533,6 +535,7 @@ abstract class OpenPayment implements Built<OpenPayment, OpenPaymentBuilder> {
   PublicKey get destPublicKey;
   U128 get destPayment;
   String get description;
+  Generation get generation;
   OpenPaymentStatus get status;
 
   OpenPayment._();
