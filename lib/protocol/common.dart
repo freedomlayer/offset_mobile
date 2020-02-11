@@ -89,6 +89,11 @@ class U64 extends _$U64 {
   U64(String inner) : super(inner);
 }
 
+@WrappedString()
+class Generation extends _$Generation {
+  Generation(String inner) : super(inner);
+}
+
 final commonSerializers = <Serializer>[
   PublicKeySerializer(),
   PrivateKeySerializer(),
@@ -107,4 +112,5 @@ final commonSerializers = <Serializer>[
   U128Serializer(),
   I128Serializer(),
   U64Serializer(),
+  GenerationSerializer(),
 ];
