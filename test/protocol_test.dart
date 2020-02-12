@@ -41,6 +41,24 @@ void main() {
       expect(publicKey, publicKey2);
 
     });
+    test('I128 serialization', () {
+      final i128 = I128(BigInt.parse('123456789012345678901234567890'));
+      final serialized = serializersWithPlugin.serialize(i128,
+          specifiedType: FullType(I128));
+
+      JsonEncoder encoder = JsonEncoder.withIndent('  ');
+      String jsonString = encoder.convert(serialized);
+      // We expect a single number, without a wrap:
+      expect(jsonString, '"123456789012345678901234567890"');
+
+      final decoder = JsonDecoder();
+      final serialized2 = decoder.convert(jsonString);
+      final i128_2 = serializersWithPlugin.deserialize(serialized2,
+          specifiedType: FullType(I128));
+
+      expect(i128, i128_2);
+
+    });
     test('NodeInfoLocal serialization', () {
       final nodeInfoLocal = NodeInfoLocal((b) => b..nodePublicKey = PublicKey('MyPublicKey'));
       final serialized = serializersWithPlugin.serialize(nodeInfoLocal,

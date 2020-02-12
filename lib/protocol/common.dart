@@ -1,6 +1,8 @@
 import 'package:meta/meta.dart';
 import 'package:built_value/serializer.dart';
 import 'package:offst_mobile/utils/wrapped_string_builder.dart';
+import 'package:offst_mobile/utils/wrapped_bigint_builder.dart';
+
 
 part 'common.g.dart';
 
@@ -74,25 +76,27 @@ class Signature extends _$Signature {
   Signature(String inner) : super(inner);
 }
 
-@WrappedString()
+@WrappedBigInt()
 class U128 extends _$U128 {
-  U128(String inner) : super(inner);
+  U128(BigInt inner) : super(inner);
 }
 
-@WrappedString()
+@WrappedBigInt()
 class I128 extends _$I128 {
-  I128(String inner) : super(inner);
+  I128(BigInt inner) : super(inner);
 }
 
-@WrappedString()
+@WrappedBigInt()
 class U64 extends _$U64 {
-  U64(String inner) : super(inner);
+  U64(BigInt inner) : super(inner);
 }
 
-@WrappedString()
+@WrappedBigInt()
 class Generation extends _$Generation {
-  Generation(String inner) : super(inner);
+  Generation(BigInt inner) : super(inner);
 }
+
+
 
 final commonSerializers = <Serializer>[
   PublicKeySerializer(),
