@@ -33,11 +33,13 @@ class CardBuyViewInner extends _$CardBuyViewInner {
   CardBuyViewInner.invoiceSelect() : super.invoiceSelect();
   CardBuyViewInner.invoiceScan() : super.invoiceScan();
   CardBuyViewInner.invoiceFile() : super.invoiceFile();
-  CardBuyViewInner.searchRoute(PaymentId paymentId) : super.searchRoute(paymentId);
+  CardBuyViewInner.paymentProgress(PaymentId paymentId) : super.paymentProgress(paymentId);
+  /*
   CardBuyViewInner.confirmFees(PaymentId paymentId) : super.confirmFees(paymentId);
   CardBuyViewInner.paymentFailed(PaymentId paymentId) : super.paymentFailed(paymentId);
   CardBuyViewInner.sendingPayment(PaymentId paymentId) : super.sendingPayment(paymentId);
   CardBuyViewInner.paymentProof(PaymentId paymentId) : super.paymentProof(paymentId);
+  */
 }
 
 
