@@ -4,7 +4,6 @@ import 'package:built_value/serializer.dart';
 import 'package:built_union/built_union.dart';
 import 'package:meta/meta.dart';
 
-import 'balances.dart';
 import 'buy.dart';
 import 'out_transactions.dart';
 import 'sell.dart';
@@ -21,7 +20,7 @@ class AppView extends _$AppView {
   AppView.buy(BuyView buy) : super.buy(buy);
   AppView.sell(SellView sell) : super.sell(sell);
   AppView.outTransactions(OutTransactionsView outTransactions) : super.outTransactions(outTransactions);
-  AppView.balances(BalancesView balances) : super.balances(balances);
+  AppView.balances() : super.balances();
   AppView.settings(SettingsView settings) : super.settings(settings);
 }
 
