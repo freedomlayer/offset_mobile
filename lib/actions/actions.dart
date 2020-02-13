@@ -121,8 +121,66 @@ class CardSettingsAction extends _$CardSettingsAction {
 class FriendsSettingsAction extends _$FriendsSettingsAction {
   static Serializer<FriendsSettingsAction> get serializer => _$friendsSettingsActionSerializer;
 
-  // TODO:
-  FriendsSettingsAction.variant(int myInt) : super.variant(myInt);
+  FriendsSettingsAction.back() : super.back();
+  FriendsSettingsAction.newFriend(NewFriendAction newFriend) : super.newFriend(newFriend);
+  FriendsSettingsAction.friendSettings(FriendSettingsAction friendSettings) : super.friendSettings(friendSettings);
+  FriendsSettingsAction.shareInfo() : super.shareInfo();
+}
+
+
+@BuiltUnion()
+class NewFriendAction extends _$NewFriendAction {
+  static Serializer<NewFriendAction> get serializer => _$newFriendActionSerializer;
+
+  NewFriendAction.back() : super.back();
+  NewFriendAction.loadFriendScan() : super.loadFriendScan();
+  NewFriendAction.loadFriendFile() : super.loadFriendFile();
+  NewFriendAction.loadFriend(FriendFile friendFile) : super.loadFriend(friendFile);
+}
+
+
+@BuiltUnion()
+class FriendSettingsAction extends _$FriendSettingsAction {
+  static Serializer<FriendSettingsAction> get serializer => _$friendSettingsActionSerializer;
+
+  FriendSettingsAction.back() : super.back();
+  FriendSettingsAction.enable() : super.enable();
+  FriendSettingsAction.disable() : super.disable();
+  FriendSettingsAction.unfriend() : super.unfriend();
+
+  FriendSettingsAction.removeCurrency(Currency currency) : super.removeCurrency(currency);
+  FriendSettingsAction.currencySettings(CurrencySettingsAction currencySettings) : super.currencySettings(currencySettings);
+  FriendSettingsAction.resolve(ResolveAction resolve) : super.resolve(resolve);
+  FriendSettingsAction.newCurrency(NewCurrencyAction newCurrency) : super.newCurrency(newCurrency);
+}
+
+
+@BuiltUnion()
+class CurrencySettingsAction extends _$CurrencySettingsAction {
+  static Serializer<CurrencySettingsAction> get serializer => _$currencySettingsActionSerializer;
+
+  CurrencySettingsAction.back() : super.back();
+  CurrencySettingsAction.open() : super.open();
+  CurrencySettingsAction.close() : super.close();
+  CurrencySettingsAction.update(U128 remoteMaxDebt, Rate rate) : super.update(remoteMaxDebt, rate);
+}
+
+
+@BuiltUnion()
+class ResolveAction extends _$ResolveAction {
+  static Serializer<ResolveAction> get serializer => _$resolveActionSerializer;
+
+  ResolveAction.back() : super.back();
+  ResolveAction.accept() : super.accept();
+}
+
+
+@BuiltUnion()
+class NewCurrencyAction extends _$NewCurrencyAction {
+  static Serializer<NewCurrencyAction> get serializer => _$newCurrencyActionSerializer;
+
+  NewCurrencyAction.back() : super.back();
+  NewCurrencyAction.newCurrency(Currency currency, U128 remoteMaxDebt, Rate rate) : super.newCurrency(currency, remoteMaxDebt, rate);
 }
 
 
@@ -150,8 +208,4 @@ class IndexServersSettingsAction extends _$IndexServersSettingsAction {
   IndexServersSettingsAction.selectNewIndexFile() : super.selectNewIndexFile();
   IndexServersSettingsAction.newIndex(NamedIndexServerAddress indexServer) : super.newIndex(indexServer);
 }
-
-
-
-
 
