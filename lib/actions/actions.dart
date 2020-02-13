@@ -130,8 +130,12 @@ class FriendsSettingsAction extends _$FriendsSettingsAction {
 class RelaysSettingsAction extends _$RelaysSettingsAction {
   static Serializer<RelaysSettingsAction> get serializer => _$relaysSettingsActionSerializer;
 
-  // TODO:
-  RelaysSettingsAction.variant(int myInt) : super.variant(myInt);
+  RelaysSettingsAction.back() : super.back();
+  RelaysSettingsAction.removeRelay(PublicKey relayPublicKey) : super.removeRelay(relayPublicKey);
+  RelaysSettingsAction.selectNewRelay() : super.selectNewRelay();
+  RelaysSettingsAction.selectNewRelayScan() : super.selectNewRelayScan();
+  RelaysSettingsAction.selectNewRelayFile() : super.selectNewRelayFile();
+  RelaysSettingsAction.newRelay(NamedRelayAddress relay) : super.newRelay(relay);
 }
 
 
@@ -139,10 +143,13 @@ class RelaysSettingsAction extends _$RelaysSettingsAction {
 class IndexServersSettingsAction extends _$IndexServersSettingsAction {
   static Serializer<IndexServersSettingsAction> get serializer => _$indexServersSettingsActionSerializer;
 
-  // TODO:
-  IndexServersSettingsAction.variant(int myInt) : super.variant(myInt);
+  IndexServersSettingsAction.back() : super.back();
+  IndexServersSettingsAction.removeIndex(PublicKey indexPublicKey) : super.removeIndex(indexPublicKey);
+  IndexServersSettingsAction.selectNewIndex() : super.selectNewIndex();
+  IndexServersSettingsAction.selectNewIndexScan() : super.selectNewIndexScan();
+  IndexServersSettingsAction.selectNewIndexFile() : super.selectNewIndexFile();
+  IndexServersSettingsAction.newIndex(NamedIndexServerAddress indexServer) : super.newIndex(indexServer);
 }
-
 
 
 
