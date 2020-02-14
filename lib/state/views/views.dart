@@ -16,7 +16,7 @@ part 'views.g.dart';
 class AppView extends _$AppView {
   static Serializer<AppView> get serializer => _$appViewSerializer;
 
-  AppView.main() : super.main();
+  AppView.home() : super.home();
   AppView.buy(BuyView buy) : super.buy(buy);
   AppView.sell(SellView sell) : super.sell(sell);
   AppView.outTransactions(OutTransactionsView outTransactions) : super.outTransactions(outTransactions);
