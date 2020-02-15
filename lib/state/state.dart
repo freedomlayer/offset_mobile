@@ -9,7 +9,10 @@ import '../protocol/common.dart';
 import '../protocol/compact.dart';
 import 'views/views.dart';
 
+export 'views/views.dart';
+
 part 'state.g.dart';
+
 
 @BuiltUnion()
 class NodeStateInner extends _$NodeStateInner {
