@@ -17,6 +17,7 @@ class NodeStateInner extends _$NodeStateInner {
       _$nodeStateInnerSerializer;
 
   NodeStateInner.closed() : super.closed();
+
   /// Already open, but we still don't have all the information.
   NodeStateInner.preOpen() : super.preOpen();
   NodeStateInner.open(NodeName nodeName, NodeId nodeId,
@@ -28,10 +29,20 @@ abstract class NodeState implements Built<NodeState, NodeStateBuilder> {
   static Serializer<NodeState> get serializer => _$nodeStateSerializer;
 
   NodeInfo get info;
-  NodeStateInner get nodeStateInner;
+  NodeStateInner get inner;
 
   NodeState._();
   factory NodeState([void Function(NodeStateBuilder) updates]) = _$NodeState;
+}
+
+@BuiltUnion()
+class ViewState extends _$ViewState {
+  static Serializer<ViewState> get serializer => _$viewStateSerializer;
+
+  ViewState.view(AppView view) : super.view(view);
+  ViewState.transition(
+      AppView oldView, AppView newView, BuiltList<UserToServerAck> nextRequests, Uid pendingRequest)
+      : super.transition(oldView, newView, nextRequests, pendingRequest);
 }
 
 /// Complete app's state. This structure should be enough to draw the application
@@ -39,7 +50,7 @@ abstract class NodeState implements Built<NodeState, NodeStateBuilder> {
 abstract class AppState implements Built<AppState, AppStateBuilder> {
   static Serializer<AppState> get serializer => _$appStateSerializer;
 
-  AppView get appView;
+  ViewState get viewState;
   BuiltMap<NodeName, NodeState> get nodesStates;
 
   AppState._();
