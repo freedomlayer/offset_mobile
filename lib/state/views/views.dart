@@ -9,6 +9,11 @@ import 'out_transactions.dart';
 import 'sell.dart';
 import 'settings.dart';
 
+export 'buy.dart';
+export 'out_transactions.dart';
+export 'sell.dart';
+export 'settings.dart';
+
 part 'views.g.dart';
 
 
