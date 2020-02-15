@@ -123,7 +123,6 @@ class ServerToUserAck extends _$ServerToUserAck {
   ServerToUserAck.serverToUser(ServerToUser serverToUser)
       : super.serverToUser(serverToUser);
   ServerToUserAck.ack(Uid uid) : super.ack(uid);
-  ServerToUserAck.node(NodeId nodeId, CompactToUser compactToUser) : super.node(nodeId, compactToUser);
 }
 
 @BuiltUnion()

@@ -13,9 +13,7 @@ HandleOutput handleServerToUserAck(
   return serverToUserAck.match(
       serverToUser: (serverToUser) =>
           handleServerToUser(appState, serverToUser),
-      ack: (requestId) => handleAck(appState, requestId),
-      node: (nodeId, compactToUser) =>
-          handleNode(appState, nodeId, compactToUser));
+      ack: (requestId) => handleAck(appState, requestId));
 }
 
 HandleOutput handleServerToUser(AppState appState, ServerToUser serverToUser) {
@@ -57,7 +55,3 @@ HandleOutput handleAck(AppState appState, Uid requestId) {
       });
 }
 
-HandleOutput handleNode(
-    AppState appState, NodeId nodeId, CompactToUser compactToUser) {
-  throw UnimplementedError();
-}
