@@ -35,3 +35,4 @@ abstract class HandleOutput
   factory HandleOutput([void Function(HandleOutputBuilder) updates]) =
       _$HandleOutput;
 }
+
