@@ -7,6 +7,9 @@ import 'package:meta/meta.dart';
 import 'common.dart';
 import 'compact.dart';
 
+export 'common.dart';
+export 'compact.dart';
+
 part 'protocol.g.dart';
 
 abstract class NodeInfoLocal
