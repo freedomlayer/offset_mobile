@@ -15,6 +15,9 @@ class SettingsView extends _$SettingsView {
 
   SettingsView.cardSettings(CardSettingsView cardSettings) : super.cardSettings(cardSettings);
   SettingsView.newCard(NewCardView newCard) : super.newCard(newCard);
+  SettingsView.selectCardAddRelay() : super.selectCardAddRelay();
+  SettingsView.selectCardAddIndex() : super.selectCardAddIndex();
+
 }
 
 
