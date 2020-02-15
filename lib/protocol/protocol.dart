@@ -139,13 +139,15 @@ class UserToServer extends _$UserToServer {
       : super.node(nodeId, userToCompact);
 }
 
-@BuiltUnion()
-class UserToServerAck extends _$UserToServerAck {
-  static Serializer<UserToServerAck> get serializer =>
-      _$userToServerAckSerializer;
 
-  UserToServerAck.requestId(Uid uid) : super.requestId(uid);
-  UserToServerAck.inner(UserToServer inner) : super.inner(inner);
+abstract class UserToServerAck implements Built<UserToServerAck, UserToServerAckBuilder> {
+  static Serializer<UserToServerAck> get serializer => _$userToServerAckSerializer;
+
+  Uid get requestId;
+  UserToServer get inner;
+
+  UserToServerAck._();
+  factory UserToServerAck([void Function(UserToServerAckBuilder) updates]) = _$UserToServerAck;
 }
 
 // -----------------------------------------------------------------------
