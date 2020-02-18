@@ -85,6 +85,7 @@ AppState handleResponseOpenNode(
 
 AppState handleNodesStatus(
     AppState appState, BuiltMap<NodeName, NodeStatus> nodesStatus) {
+
   final Map<NodeName, NodeState> newMap = {};
   nodesStatus.forEach((nodeName, nodeStatus) {
     final oldNodeState = appState.nodesStates[nodeName];
@@ -104,7 +105,7 @@ AppState handleNodesStatus(
       if (!nodeStatus.isOpen) {
         newInner = NodeStateInner.closed();
       } else {
-        // isOpen == true:
+        // The new state is open:
         if (oldNodeState.inner.isClosed) {
           newInner = NodeStateInner.preOpen();
         } else {
@@ -117,10 +118,6 @@ AppState handleNodesStatus(
     }
     newMap[nodeName] = newNodeState;
   });
-
-  // TODO: Somehow adjust views when a node is removed or becomes closed?
-  // We will sometimes need to go back etc.
-  throw UnimplementedError();
 
   final newNodesStates = BuiltMap<NodeName, NodeState>(newMap);
   return appState.rebuild((b) => b..nodesStates = newNodesStates.toBuilder());
@@ -193,3 +190,4 @@ AppState handleReport(
 
   return newAppState;
 }
+
