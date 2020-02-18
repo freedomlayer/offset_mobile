@@ -126,14 +126,17 @@ AppState handleNodesStatus(
   return appState.rebuild((b) => b..nodesStates = newNodesStates.toBuilder());
 }
 
-K keyForValue<K, V>(Map<K, V> map, V value) {
+/*
+/// Find a value `k` such that `predicate(k,map[k])`
+K searchMap<K, V>(Map<K, V> map, bool Function(K, V) predicate) {
   for (final entry in map.entries) {
-    if (entry.value == value) {
+    if (predicate(entry.key, entry.value)) {
       return entry.key;
     }
   }
   return null;
 }
+*/
 
 AppState handleNode(
     AppState appState, NodeId nodeId, CompactToUser compactToUser) {
@@ -147,11 +150,46 @@ AppState handleNode(
     paymentDone: (paymentDone) {
       throw UnimplementedError();
     },
-    report: (report) {
-      throw UnimplementedError();
-    },
+    report: (report) => handleReport(appState, nodeId, report),
     responseVerifyCommit: (responseVerifyCommit) {
       throw UnimplementedError();
     },
   );
+}
+
+/// Handle incoming CompactReport
+AppState handleReport(
+    AppState appState, NodeId nodeId, CompactReport compactReport) {
+  AppState newAppState = appState;
+  int numFound = 0;
+
+  appState.nodesStates.forEach((_nodeName, nodeState) {
+    numFound += nodeState.inner.match(
+      closed: () => 0,
+      preOpen: () => 0,
+      open: (nodeName, curNodeId, appPermissions, compactReport) {
+        if (nodeId != curNodeId) {
+          return 0;
+        }
+
+        final newNodesStates = appState.nodesStates.rebuild((b) => b[nodeName] =
+            b[nodeName].rebuild((b) => b
+              ..inner = NodeStateInner.open(
+                  nodeName, nodeId, appPermissions, compactReport)));
+
+        newAppState = newAppState
+            .rebuild((b) => b..nodesStates = newNodesStates.toBuilder());
+
+        return 1;
+      },
+    );
+  });
+
+  if (numFound == 0) {
+    developer.log('Node with nodeId = $nodeId was not found!');
+  } else if (numFound > 1) {
+    developer.log('Node with nodeId = $nodeId was found $numFound times!');
+  }
+
+  return newAppState;
 }
