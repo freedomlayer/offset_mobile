@@ -6,6 +6,6 @@ import 'types.dart';
 import 'handle_shared_file.dart';
 import 'handle_action.dart';
 
-HandleOutput handleAction(AppState appState, AppAction appAction) {
+AppState handleAction(AppState appState, AppAction appAction) {
   throw UnimplementedError();
 }

@@ -6,7 +6,7 @@ import 'handle_action.dart';
 import 'handle_server_to_user_ack.dart';
 
 
-HandleOutput handleAppEvent(AppState appState, AppEvent appEvent) {
+AppState handleAppEvent(AppState appState, AppEvent appEvent) {
   return appEvent.match(
     sharedFile: (filePath) => handleSharedFile(appState, filePath),
     action: (appAction) => handleAction(appState, appAction),

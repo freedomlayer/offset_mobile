@@ -4,6 +4,6 @@ import '../state/state.dart';
 
 import 'types.dart';
 
-HandleOutput handleSharedFile(AppState appState, String filePath) {
+AppState handleSharedFile(AppState appState, String filePath) {
   throw UnimplementedError();
 }

@@ -23,6 +23,7 @@ class AppEvent extends _$AppEvent {
       : super.serverToUserAck(serverToUserAck);
 }
 
+/*
 abstract class HandleOutput
     implements Built<HandleOutput, HandleOutputBuilder> {
   static Serializer<HandleOutput> get serializer => _$handleOutputSerializer;
@@ -35,4 +36,5 @@ abstract class HandleOutput
   factory HandleOutput([void Function(HandleOutputBuilder) updates]) =
       _$HandleOutput;
 }
+*/
 
