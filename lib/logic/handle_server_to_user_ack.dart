@@ -120,6 +120,7 @@ AppState handleNodesStatus(
 
   // TODO: Somehow adjust views when a node is removed or becomes closed?
   // We will sometimes need to go back etc.
+  throw UnimplementedError();
 
   final newNodesStates = BuiltMap<NodeName, NodeState>(newMap);
   return appState.rebuild((b) => b..nodesStates = newNodesStates.toBuilder());
