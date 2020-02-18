@@ -13,7 +13,7 @@ class InTransactionsView extends _$InTransactionsView {
   static Serializer<InTransactionsView> get serializer => _$inTransactionsViewSerializer;
 
   InTransactionsView.home() : super.home();
-  InTransactionsView.transaction(InvoiceId invoiceId) : super.transaction(invoiceId);
-  InTransactionsView.sendInvoice(InvoiceId invoiceId) : super.sendInvoice(invoiceId);
-  InTransactionsView.collected(InvoiceId invoiceId) : super.collected(invoiceId);
+  InTransactionsView.transaction(NodeName nodeName, InvoiceId invoiceId) : super.transaction(nodeName, invoiceId);
+  InTransactionsView.sendInvoice(NodeName nodeName, InvoiceId invoiceId) : super.sendInvoice(nodeName, invoiceId);
+  InTransactionsView.collected(NodeName nodeName, InvoiceId invoiceId) : super.collected(nodeName, invoiceId);
 }

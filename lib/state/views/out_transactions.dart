@@ -12,6 +12,7 @@ class OutTransactionsView extends _$OutTransactionsView {
   static Serializer<OutTransactionsView> get serializer => _$outTransactionsViewSerializer;
 
   OutTransactionsView.home() : super.home();
-  OutTransactionsView.transaction(PaymentId paymentId) : super.transaction(paymentId);
+  OutTransactionsView.transaction(NodeName nodeName, PaymentId paymentId) : super.transaction(nodeName, paymentId);
+  OutTransactionsView.sendProof(NodeName nodeName, PaymentId paymentId) : super.sendProof(nodeName, paymentId);
 }
 

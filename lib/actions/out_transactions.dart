@@ -13,7 +13,7 @@ class OutTransactionsAction extends _$OutTransactionsAction {
   static Serializer<OutTransactionsAction> get serializer => _$outTransactionsActionSerializer;
 
   OutTransactionsAction.back() : super.back();
-  OutTransactionsAction.selectPayment(PaymentId paymentId) : super.selectPayment(paymentId);
-  OutTransactionsAction.discardPayment(PaymentId paymentId) : super.discardPayment(paymentId);
-  OutTransactionsAction.viewPayments() : super.viewPayments();
+  OutTransactionsAction.selectPayment(NodeName nodeName, PaymentId paymentId) : super.selectPayment(nodeName, paymentId);
+  OutTransactionsAction.discardPayment(NodeName nodeName, PaymentId paymentId) : super.discardPayment(nodeName, paymentId);
+  OutTransactionsAction.resendProof() : super.resendProof();
 }

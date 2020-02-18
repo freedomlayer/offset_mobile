@@ -13,6 +13,7 @@ class InTransactionsAction extends _$InTransactionsAction {
   static Serializer<InTransactionsAction> get serializer => _$inTransactionsActionSerializer;
 
   InTransactionsAction.back() : super.back();
+  InTransactionsAction.selectInvoice(NodeName nodeName, InvoiceId invoiceId) : super.selectInvoice(nodeName, invoiceId);
   InTransactionsAction.resendInvoice() : super.resendInvoice();
   InTransactionsAction.collectInvoice() : super.collectInvoice();
   InTransactionsAction.cancelInvoice() : super.cancelInvoice();
