@@ -13,7 +13,6 @@ export 'views/views.dart';
 
 part 'state.g.dart';
 
-
 @BuiltUnion()
 class NodeStateInner extends _$NodeStateInner {
   static Serializer<NodeStateInner> get serializer =>
@@ -39,13 +38,25 @@ abstract class NodeState implements Built<NodeState, NodeStateBuilder> {
 }
 
 @BuiltUnion()
+class OptPendingRequest extends _$OptPendingRequest {
+  static Serializer<OptPendingRequest> get serializer =>
+      _$optPendingRequestSerializer;
+
+  OptPendingRequest.some(Uid pendingRequest) : super.some(pendingRequest);
+  OptPendingRequest.none() : super.none();
+}
+
+@BuiltUnion()
 class ViewState extends _$ViewState {
   static Serializer<ViewState> get serializer => _$viewStateSerializer;
 
   ViewState.view(AppView view) : super.view(view);
   ViewState.transition(
-      AppView oldView, AppView newView, BuiltList<UserToServerAck> nextRequests, Uid pendingRequest)
-      : super.transition(oldView, newView, nextRequests, pendingRequest);
+      AppView oldView,
+      AppView newView,
+      BuiltList<UserToServerAck> nextRequests,
+      OptPendingRequest optPendingRequest)
+      : super.transition(oldView, newView, nextRequests, optPendingRequest);
 }
 
 /// Complete app's state. This structure should be enough to draw the application
