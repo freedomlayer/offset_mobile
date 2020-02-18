@@ -12,6 +12,7 @@ class HomeAction extends _$HomeAction {
   HomeAction.selectBuy() : super.selectBuy();
   HomeAction.selectSell() : super.selectSell();
   HomeAction.selectOutTransactions() : super.selectOutTransactions();
+  HomeAction.selectInTransactions() : super.selectInTransactions();
   HomeAction.selectBalances() : super.selectBalances();
   HomeAction.selectSettings() : super.selectSettings();
 }

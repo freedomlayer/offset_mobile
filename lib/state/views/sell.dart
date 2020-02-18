@@ -14,10 +14,14 @@ class SellView extends _$SellView {
   static Serializer<SellView> get serializer => _$sellViewSerializer;
 
   SellView.selectCard() : super.selectCard();
-  SellView.cardSell(CardSellView cardSell) : super.cardSell(cardSell);
+  SellView.invoiceDetails(NodeName nodeName) : super.invoiceDetails(nodeName);
+  SellView.sendInvoice(NodeName nodeName, InvoiceId invoiceId) : super.sendInvoice(nodeName, invoiceId);
+
+  // SellView.cardSell(CardSellView cardSell) : super.cardSell(cardSell);
 }
 
 
+/*
 abstract class CardSellView implements Built<CardSellView, CardSellViewBuilder> {
   static Serializer<CardSellView> get serializer => _$cardSellViewSerializer;
 
@@ -41,5 +45,5 @@ class CardSellInnerView extends _$CardSellInnerView {
   CardSellInnerView.paymentReceived(InvoiceId invoiceId, Commit commit) : super.paymentReceived(invoiceId, commit);
   CardSellInnerView.paymentCollected(InvoiceId invoiceId, Commit commit) : super.paymentCollected(invoiceId, commit);
 }
-
+*/
 

@@ -15,11 +15,8 @@ class SellAction extends _$SellAction {
 
   SellAction.back() : super.back();
   SellAction.selectCard(NodeName nodeName) : super.selectCard(nodeName);
-  SellAction.invoiceDetails(Currency currency, U128 amount, String description) : super.invoiceDetails(currency, amount, description);
-  SellAction.loadProofScan() : super.loadProofScan();
-  SellAction.loadProofFile() : super.loadProofFile();
-  SellAction.loadProof(Commit commit) : super.loadProof(commit);
+  SellAction.createInvoice(Currency currency, U128 amount, String description) : super.createInvoice(currency, amount, description);
+  SellAction.viewTransaction() : super.viewTransaction();
   SellAction.cancelInvoice(InvoiceId invoiceId) : super.cancelInvoice(invoiceId);
-  SellAction.collectInvoice(InvoiceId invoiceId) : super.collectInvoice(invoiceId);
 }
 

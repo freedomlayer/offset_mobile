@@ -6,11 +6,13 @@ import 'package:meta/meta.dart';
 
 import 'buy.dart';
 import 'out_transactions.dart';
+import 'in_transactions.dart';
 import 'sell.dart';
 import 'settings.dart';
 
 export 'buy.dart';
 export 'out_transactions.dart';
+export 'in_transactions.dart';
 export 'sell.dart';
 export 'settings.dart';
 
@@ -25,6 +27,7 @@ class AppView extends _$AppView {
   AppView.buy(BuyView buy) : super.buy(buy);
   AppView.sell(SellView sell) : super.sell(sell);
   AppView.outTransactions(OutTransactionsView outTransactions) : super.outTransactions(outTransactions);
+  AppView.inTransactions(InTransactionsView inTransactions) : super.inTransactions(inTransactions);
   AppView.balances() : super.balances();
   AppView.settings(SettingsView settings) : super.settings(settings);
 }

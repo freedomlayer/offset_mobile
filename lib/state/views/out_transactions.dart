@@ -11,7 +11,7 @@ part 'out_transactions.g.dart';
 class OutTransactionsView extends _$OutTransactionsView {
   static Serializer<OutTransactionsView> get serializer => _$outTransactionsViewSerializer;
 
-  OutTransactionsView.main() : super.main();
+  OutTransactionsView.home() : super.home();
   OutTransactionsView.transaction(PaymentId paymentId) : super.transaction(paymentId);
 }
 
