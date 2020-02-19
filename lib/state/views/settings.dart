@@ -114,8 +114,6 @@ class RelaysSettingsView extends _$RelaysSettingsView {
 
   RelaysSettingsView.home() : super.home();
   RelaysSettingsView.newRelaySelect() : super.newRelaySelect();
-  RelaysSettingsView.newRelayScan() : super.newRelayScan();
-  RelaysSettingsView.newRelayFile() : super.newRelayFile();
   RelaysSettingsView.newRelayName(PublicKey relayPublicKey, NetAddress relayAddress) : super.newRelayName(relayPublicKey, relayAddress);
 }
 
@@ -128,8 +126,6 @@ class IndexServersSettingsView extends _$IndexServersSettingsView {
 
   IndexServersSettingsView.home() : super.home();
   IndexServersSettingsView.newIndexSelect() : super.newIndexSelect();
-  IndexServersSettingsView.newIndexScan() : super.newIndexScan();
-  IndexServersSettingsView.newIndexFile() : super.newIndexFile();
   IndexServersSettingsView.newIndexName(PublicKey indexPublicKey, NetAddress indexAddress) : super.newIndexName(indexPublicKey, indexAddress);
 }
 
