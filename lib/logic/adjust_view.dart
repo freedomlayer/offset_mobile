@@ -22,26 +22,42 @@ bool isViewValid(AppView appView, Set<NodeName> openNodes) {
 }
 
 bool isBuyViewValid(BuyView buyView, Set<NodeName> openNodes) {
-  throw UnimplementedError();
+  return buyView.match(
+      invoiceSelect: () => true,
+      invoiceInfo: (_invoiceFile) => true,
+      selectCard: (_invoiceFile) => true,
+      paymentProgress: (nodeName, _invoiceFile) => !openNodes.contains(nodeName));
 }
 
 bool isSellViewValid(SellView sellView, Set<NodeName> openNodes) {
-  throw UnimplementedError();
+  return sellView.match(
+      selectCard: () => true,
+      invoiceDetails: (nodeName) => !openNodes.contains(nodeName),
+      sendInvoice: (nodeName, _invoiceId) => !openNodes.contains(nodeName));
 }
 
 bool isOutTransactionsViewValid(OutTransactionsView outTransactionsView, Set<NodeName> openNodes) {
-  throw UnimplementedError();
+  return outTransactionsView.match(
+      home: () => true,
+      transaction: (nodeName, paymentId) => !openNodes.contains(nodeName),
+      sendProof: (nodeName, paymentId) => !openNodes.contains(nodeName));
 }
 
 bool isInTransactionsViewValid(InTransactionsView inTransactionsView, Set<NodeName> openNodes) {
-  throw UnimplementedError();
+  return inTransactionsView.match(
+      home: () => true,
+      transaction: (nodeName, invoiceId) => !openNodes.contains(nodeName),
+      sendInvoice: (nodeName, invoiceId) => !openNodes.contains(nodeName),
+      collected: (nodeName, invoiceId) => !openNodes.contains(nodeName));
 }
 
 bool isSettingsViewValid(SettingsView settingsView, Set<NodeName> openNodes) {
-  throw UnimplementedError();
+  return settingsView.match(
+      cardSettings: (cardSettingsView) => !openNodes.contains(cardSettingsView.nodeName),
+      newCard: (_newCardView) => true,
+      selectCardAddRelay: () => true,
+      selectCardAddIndex: () => true);
 }
-
-
 
 
 /*
