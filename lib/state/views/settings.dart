@@ -13,6 +13,7 @@ part 'settings.g.dart';
 class SettingsView extends _$SettingsView {
   static Serializer<SettingsView> get serializer => _$settingsViewSerializer;
 
+  SettingsView.home() : super.home();
   SettingsView.cardSettings(CardSettingsView cardSettings) : super.cardSettings(cardSettings);
   SettingsView.newCard(NewCardView newCard) : super.newCard(newCard);
   SettingsView.selectCardAddRelay() : super.selectCardAddRelay();
@@ -48,7 +49,7 @@ abstract class CardSettingsView implements Built<CardSettingsView, CardSettingsV
 class CardSettingsInnerView extends _$CardSettingsInnerView {
   static Serializer<CardSettingsInnerView> get serializer => _$cardSettingsInnerViewSerializer;
 
-  CardSettingsInnerView.main() : super.main();
+  CardSettingsInnerView.home() : super.home();
   CardSettingsInnerView.friends(FriendSettingsView friends) : super.friends(friends);
   CardSettingsInnerView.relays(RelaysSettingsView relays) : super.relays(relays);
   CardSettingsInnerView.indexServers(IndexServersSettingsView indexServers) : super.indexServers(indexServers);
@@ -61,7 +62,7 @@ class CardSettingsInnerView extends _$CardSettingsInnerView {
 class FriendsSettingsView extends _$FriendsSettingsView {
   static Serializer<FriendsSettingsView> get serializer => _$friendsSettingsViewSerializer;
 
-  FriendsSettingsView.main() : super.main();
+  FriendsSettingsView.home() : super.home();
   FriendsSettingsView.friendSettings(FriendSettingsView friendSettings) : super.friendSettings(friendSettings);
   FriendsSettingsView.newFriend(NewFriendView newFriend) : super.newFriend(newFriend);
   // Share our node's info
@@ -97,7 +98,7 @@ abstract class FriendSettingsView implements Built<FriendSettingsView, FriendSet
 class FriendSettingsInnerView extends _$FriendSettingsInnerView {
   static Serializer<FriendSettingsInnerView> get serializer => _$friendSettingsInnerViewSerializer;
 
-  FriendSettingsInnerView.main() : super.main();
+  FriendSettingsInnerView.home() : super.home();
   FriendSettingsInnerView.resolve() : super.resolve();
   FriendSettingsInnerView.currencySettings(Currency currency) : super.currencySettings(currency);
   FriendSettingsInnerView.newCurrency() : super.newCurrency();
@@ -111,7 +112,7 @@ class FriendSettingsInnerView extends _$FriendSettingsInnerView {
 class RelaysSettingsView extends _$RelaysSettingsView {
   static Serializer<RelaysSettingsView> get serializer => _$relaysSettingsViewSerializer;
 
-  RelaysSettingsView.main() : super.main();
+  RelaysSettingsView.home() : super.home();
   RelaysSettingsView.newRelaySelect() : super.newRelaySelect();
   RelaysSettingsView.newRelayScan() : super.newRelayScan();
   RelaysSettingsView.newRelayFile() : super.newRelayFile();
@@ -125,7 +126,7 @@ class RelaysSettingsView extends _$RelaysSettingsView {
 class IndexServersSettingsView extends _$IndexServersSettingsView {
   static Serializer<IndexServersSettingsView> get serializer => _$indexServersSettingsViewSerializer;
 
-  IndexServersSettingsView.main() : super.main();
+  IndexServersSettingsView.home() : super.home();
   IndexServersSettingsView.newIndexSelect() : super.newIndexSelect();
   IndexServersSettingsView.newIndexScan() : super.newIndexScan();
   IndexServersSettingsView.newIndexFile() : super.newIndexFile();
