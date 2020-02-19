@@ -6,13 +6,16 @@ import '../state/state.dart';
 
 AppState handleSharedFile(AppState appState, String filePath) {
   // TODO:
+  // - Are we in a state that may be interrupted? If not, return early.
   // - Extract file extension
-  // - Understand if this is a:
+  // - Identify file type:
   //   - invoice (.invoice)
   //   - commit (.commit)
   //   - friend ticket (.friend)
   //   - relay ticket (.relay)
   //   - index ticket (.index)
   //   - remote card ticket (.rcard)
+  // - Transform view
+  //
   throw UnimplementedError();
 }
