@@ -111,7 +111,7 @@ OutTransactionsView adjustOutTransactionsView(
           paymentExists(nodesStates, nodeName, paymentId)
               ? outTransactionsView
               : OutTransactionsView.home(),
-      sendProof: (nodeName, paymentId) =>
+      sendCommit: (nodeName, paymentId) =>
           paymentExists(nodesStates, nodeName, paymentId)
               ? outTransactionsView
               : OutTransactionsView.home());

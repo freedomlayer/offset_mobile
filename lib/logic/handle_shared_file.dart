@@ -9,7 +9,7 @@ AppState handleSharedFile(AppState appState, String filePath) {
   // - Extract file extension
   // - Understand if this is a:
   //   - invoice (.invoice)
-  //   - proof (.commit)
+  //   - commit (.commit)
   //   - friend ticket (.friend)
   //   - relay ticket (.relay)
   //   - index ticket (.index)

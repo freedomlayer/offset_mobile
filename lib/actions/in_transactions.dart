@@ -4,6 +4,7 @@ import 'package:built_union/built_union.dart';
 import 'package:meta/meta.dart';
 
 import '../protocol/common.dart';
+import '../protocol/compact.dart';
 
 part 'in_transactions.g.dart';
 
@@ -14,6 +15,7 @@ class InTransactionsAction extends _$InTransactionsAction {
 
   InTransactionsAction.back() : super.back();
   InTransactionsAction.selectInvoice(NodeName nodeName, InvoiceId invoiceId) : super.selectInvoice(nodeName, invoiceId);
+  InTransactionsAction.applyCommit(Commit commit) : super.applyCommit(commit);
   InTransactionsAction.resendInvoice() : super.resendInvoice();
   InTransactionsAction.collectInvoice() : super.collectInvoice();
   InTransactionsAction.cancelInvoice() : super.cancelInvoice();
