@@ -10,12 +10,22 @@ import 'types.dart';
 import 'handle_shared_file.dart';
 import 'handle_action.dart';
 
+import 'adjust_view.dart';
+
 AppState handleServerToUserAck(
     AppState appState, ServerToUserAck serverToUserAck) {
-  return serverToUserAck.match(
+  final appState1 = serverToUserAck.match(
       serverToUser: (serverToUser) =>
           handleServerToUser(appState, serverToUser),
       ack: (requestId) => handleAck(appState, requestId));
+
+  // We only adjust view if the view is not currently during transition:
+  final viewState = appState1.viewState.match(
+      view: (appView) => ViewState.view(adjustAppView(appView, appState.nodesStates)),
+      transition: (_oldView, _newView, _nextRequests, _optPendingRequest) => appState1.viewState);
+
+  return appState1.rebuild((b) => b..viewState = viewState);
+
 }
 
 AppState handleServerToUser(AppState appState, ServerToUser serverToUser) {
@@ -138,19 +148,11 @@ K searchMap<K, V>(Map<K, V> map, bool Function(K, V) predicate) {
 AppState handleNode(
     AppState appState, NodeId nodeId, CompactToUser compactToUser) {
   return compactToUser.match(
-    paymentFees: (paymentFees) {
-      throw UnimplementedError();
-    },
-    paymentCommit: (paymentCommit) {
-      throw UnimplementedError();
-    },
-    paymentDone: (paymentDone) {
-      throw UnimplementedError();
-    },
+    paymentFees: (paymentFees) => handleNodePaymentFees(appState, nodeId, paymentFees),
+    paymentCommit: (paymentCommit) => handleNodePaymentCommit(appState, nodeId, paymentCommit),
+    paymentDone: (paymentDone) => handleNodePaymentDone(appState, nodeId, paymentDone),
     report: (report) => handleReport(appState, nodeId, report),
-    responseVerifyCommit: (responseVerifyCommit) {
-      throw UnimplementedError();
-    },
+    responseVerifyCommit: (responseVerifyCommit) => handleNodeResponseVerifyCommit(appState, nodeId, responseVerifyCommit),
   );
 }
 
@@ -191,3 +193,22 @@ AppState handleReport(
   return newAppState;
 }
 
+AppState handleNodePaymentFees(AppState appState, NodeId nodeId, PaymentFees paymentFees) {
+  // We currently do nothing here
+  return appState;
+}
+
+AppState handleNodePaymentCommit(AppState appState, NodeId nodeId, PaymentCommit paymentCommit) {
+  // We currently do nothing here
+  return appState;
+}
+
+AppState handleNodePaymentDone(AppState appState, NodeId nodeId, PaymentDone paymentDone) {
+  // We currently do nothing here
+  return appState;
+}
+
+AppState handleNodeResponseVerifyCommit(AppState appState, NodeId nodeId, ResponseVerifyCommit responseVerifyCommit) {
+  // We currently do nothing here
+  return appState;
+}
