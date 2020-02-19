@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 
 import '../actions/actions.dart';
 import '../protocol/protocol.dart';
-import '../state/state.dart';
+// import '../state/state.dart';
 
 
 part 'types.g.dart';

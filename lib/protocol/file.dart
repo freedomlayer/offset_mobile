@@ -22,13 +22,25 @@ abstract class InvoiceFile implements Built<InvoiceFile, InvoiceFileBuilder> {
   factory InvoiceFile([void Function(InvoiceFileBuilder) updates]) = _$InvoiceFile;
 }
 
+// CommitFile is Commit
+// RelayFile is RelayAddress
+
+abstract class IndexServerFile implements Built<IndexServerFile, IndexServerFileBuilder> {
+  static Serializer<IndexServerFile> get serializer => _$indexServerFileSerializer;
+
+  PublicKey get publicKey;
+  NetAddress get address;
+
+  IndexServerFile._();
+  factory IndexServerFile([void Function(IndexServerFileBuilder) updates]) = _$IndexServerFile;
+}
+
 
 abstract class FriendFile implements Built<FriendFile, FriendFileBuilder> {
   static Serializer<FriendFile> get serializer => _$friendFileSerializer;
 
-  PublicKey get friendPublicKey;
+  PublicKey get publicKey;
   BuiltList<RelayAddress> get relays;
-  String get name;
 
   FriendFile._();
   factory FriendFile([void Function(FriendFileBuilder) updates]) = _$FriendFile;

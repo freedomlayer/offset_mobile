@@ -201,7 +201,7 @@ RelaysSettingsView adjustRelaysSettingsView(
   return relaysSettings.match(
       home: () => relaysSettings,
       newRelaySelect: () => relaysSettings,
-      newRelayName: (_a, _b) => relaysSettings);
+      newRelayName: (_) => relaysSettings);
 }
 
 IndexServersSettingsView adjustIndexServersSettingsView(
@@ -210,7 +210,7 @@ IndexServersSettingsView adjustIndexServersSettingsView(
   return indexServersSettings.match(
       home: () => indexServersSettings,
       newIndexSelect: () => indexServersSettings,
-      newIndexName: (_a, _b) => indexServersSettings);
+      newIndexName: (_) => indexServersSettings);
 }
 
 FriendSettingsInnerView adjustFriendSettingsInnerView(

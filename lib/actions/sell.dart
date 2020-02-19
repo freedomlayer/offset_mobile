@@ -4,7 +4,6 @@ import 'package:built_union/built_union.dart';
 import 'package:meta/meta.dart';
 
 import '../protocol/common.dart';
-import '../protocol/compact.dart';
 
 part 'sell.g.dart';
 
