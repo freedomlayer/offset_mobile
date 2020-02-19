@@ -12,15 +12,34 @@ import 'handle_action.dart';
 bool isViewValid(AppView appView, Set<NodeName> openNodes) {
   return appView.match(
       home: () => true,
-      buy: (buyView) => throw UnimplementedError(),
-      sell: (sellView) => throw UnimplementedError(),
-      outTransactions: (outTransactionsView) => throw UnimplementedError(),
-      inTransactions: (outTransactionsView) => throw UnimplementedError(),
+      buy: (buyView) => isBuyViewValid(buyView, openNodes),
+      sell: (sellView) => isSellViewValid(sellView, openNodes),
+      outTransactions: (outTransactionsView) => isOutTransactionsViewValid(outTransactionsView, openNodes),
+      inTransactions: (inTransactionsView) => isInTransactionsViewValid(inTransactionsView, openNodes),
       balances: () => true,
-      settings: (settingsView) => throw UnimplementedError(),
+      settings: (settingsView) => isSettingsViewValid(settingsView, openNodes),
       );
 }
 
+bool isBuyViewValid(BuyView buyView, Set<NodeName> openNodes) {
+  throw UnimplementedError();
+}
+
+bool isSellViewValid(SellView sellView, Set<NodeName> openNodes) {
+  throw UnimplementedError();
+}
+
+bool isOutTransactionsViewValid(OutTransactionsView outTransactionsView, Set<NodeName> openNodes) {
+  throw UnimplementedError();
+}
+
+bool isInTransactionsViewValid(InTransactionsView inTransactionsView, Set<NodeName> openNodes) {
+  throw UnimplementedError();
+}
+
+bool isSettingsViewValid(SettingsView settingsView, Set<NodeName> openNodes) {
+  throw UnimplementedError();
+}
 
 
 
