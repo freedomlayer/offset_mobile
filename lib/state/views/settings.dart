@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 
 import '../../protocol/common.dart';
 import '../../protocol/compact.dart';
+import '../../protocol/file.dart';
 
 part 'settings.g.dart';
 
@@ -22,14 +23,14 @@ class SettingsView extends _$SettingsView {
 }
 
 
-
 @BuiltUnion()
 class NewCardView extends _$NewCardView {
   static Serializer<NewCardView> get serializer => _$newCardViewSerializer;
 
   NewCardView.select() : super.select();
-  NewCardView.local() : super.local();
-  NewCardView.remote() : super.remote();
+  NewCardView.newLocal() : super.newLocal();
+  NewCardView.newRemote() : super.newRemote();
+  NewCardView.newRemoteName(RemoteCardFile remoteCardFile) : super.newRemoteName(remoteCardFile);
 }
 
 

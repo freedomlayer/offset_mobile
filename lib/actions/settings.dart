@@ -29,8 +29,10 @@ class NewCardAction extends _$NewCardAction {
   NewCardAction.selectNewCardLocal() : super.selectNewCardLocal();
   NewCardAction.selectNewCardRemote() : super.selectNewCardRemote();
   NewCardAction.newCardLocal(NodeName nodeName) : super.newCardLocal(nodeName);
-  NewCardAction.newCardRemote(NodeName nodeName, PrivateKey appPrivateKey, PublicKey nodePublicKey, NetAddress nodeAddress)
-      : super.newCardRemote(nodeName, appPrivateKey, nodePublicKey, nodeAddress);
+  NewCardAction.loadCardRemote(RemoteCardFile remoteCardFile)
+      : super.loadCardRemote(remoteCardFile);
+  NewCardAction.newCardRemote(NodeName nodeName, RemoteCardFile remoteCardFile)
+      : super.newCardRemote(nodeName, remoteCardFile);
 }
 
 

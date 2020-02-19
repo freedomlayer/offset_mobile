@@ -35,3 +35,14 @@ abstract class FriendFile implements Built<FriendFile, FriendFileBuilder> {
 }
 
 
+abstract class RemoteCardFile implements Built<RemoteCardFile, RemoteCardFileBuilder> {
+  static Serializer<RemoteCardFile> get serializer => _$remoteCardFileSerializer;
+
+  PublicKey get nodePublicKey;
+  NetAddress get nodeAddress;
+  PrivateKey get appPrivateKey;
+
+  RemoteCardFile._();
+  factory RemoteCardFile([void Function(RemoteCardFileBuilder) updates]) = _$RemoteCardFile;
+}
+
