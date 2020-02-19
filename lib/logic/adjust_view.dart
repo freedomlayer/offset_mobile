@@ -8,57 +8,179 @@ import 'types.dart';
 import 'handle_shared_file.dart';
 import 'handle_action.dart';
 
+bool nodeActive(AppState appState, NodeName nodeName) {
+  final nodeState = appState.nodesStates[nodeName];
+  if (nodeState == null) {
+    return false;
+  }
+  return nodeState.inner.isOpen;
+}
+
+bool nodeExists(AppState appState, NodeName nodeName) {
+  return appState.nodesStates.containsKey(nodeName);
+}
+
+CompactReport getCompactReport(AppState appState, NodeName nodeName) {
+  final nodeState = appState.nodesStates[nodeName];
+  if (nodeState == null) {
+    return null;
+  }
+  return nodeState.inner.match(
+    closed: () => null,
+    preOpen: () => null,
+    open: (nodeName, nodeId, appPermissions, compactReport) => compactReport,
+  );
+}
+
+bool invoiceExists(AppState appState, NodeName nodeName, InvoiceId invoiceId) {
+  final compactReport = getCompactReport(appState, nodeName);
+  if (compactReport == null) {
+    return false;
+  }
+  final openInvoice = compactReport.openInvoices[invoiceId];
+  return openInvoice != null;
+}
+
+bool paymentExists(AppState appState, NodeName nodeName, PaymentId paymentId) {
+  final compactReport = getCompactReport(appState, nodeName);
+  if (compactReport == null) {
+    return false;
+  }
+  final openPayment = compactReport.openPayments[paymentId];
+  return openPayment != null;
+}
+
+FriendReport getFriendReport(
+    AppState appState, NodeName nodeName, PublicKey friendPublicKey) {
+  final compactReport = getCompactReport(appState, nodeName);
+  if (compactReport == null) {
+    return null;
+  }
+  return compactReport.friends[friendPublicKey];
+}
+
+/*
+bool relayExists(AppState appState, NodeName nodeName, PublicKey relayPublicKey) {
+  throw UnimplementedError();
+}
+
+bool indexServerExists(AppState appState, NodeName nodeName, PublicKey indexServerPublicKey) {
+  throw UnimplementedError();
+}
+*/
+
 /// Does the view rely on a card that is both existent and active?
-bool isViewValid(AppView appView, Set<NodeName> openNodes) {
+AppView adjustAppView(AppView appView, AppState appState) {
   return appView.match(
-      home: () => true,
-      buy: (buyView) => isBuyViewValid(buyView, openNodes),
-      sell: (sellView) => isSellViewValid(sellView, openNodes),
-      outTransactions: (outTransactionsView) => isOutTransactionsViewValid(outTransactionsView, openNodes),
-      inTransactions: (inTransactionsView) => isInTransactionsViewValid(inTransactionsView, openNodes),
-      balances: () => true,
-      settings: (settingsView) => isSettingsViewValid(settingsView, openNodes),
-      );
+    home: () => appView,
+    buy: (buyView) => adjustBuyView(buyView, appState),
+    sell: (sellView) => adjustSellView(sellView, appState),
+    outTransactions: (outTransactionsView) =>
+        adjustOutTransactionsView(outTransactionsView, appState),
+    inTransactions: (inTransactionsView) =>
+        adjustInTransactionsView(inTransactionsView, appState),
+    balances: () => appView,
+    settings: (settingsView) => adjustSettingsView(settingsView, appState),
+  );
 }
 
-bool isBuyViewValid(BuyView buyView, Set<NodeName> openNodes) {
+AppView adjustBuyView(BuyView buyView, AppState appState) {
   return buyView.match(
-      invoiceSelect: () => true,
-      invoiceInfo: (_invoiceFile) => true,
-      selectCard: (_invoiceFile) => true,
-      paymentProgress: (nodeName, _invoiceFile) => !openNodes.contains(nodeName));
+      invoiceSelect: () => AppView.buy(buyView),
+      invoiceInfo: (_invoiceFile) => AppView.buy(buyView),
+      selectCard: (_invoiceFile) => AppView.buy(buyView),
+      paymentProgress: (nodeName, _invoiceFile) {
+        return nodeActive(appState, nodeName)
+            ? AppView.buy(buyView)
+            : AppView.home();
+      });
 }
 
-bool isSellViewValid(SellView sellView, Set<NodeName> openNodes) {
+AppView adjustSellView(SellView sellView, AppState appState) {
   return sellView.match(
-      selectCard: () => true,
-      invoiceDetails: (nodeName) => !openNodes.contains(nodeName),
-      sendInvoice: (nodeName, _invoiceId) => !openNodes.contains(nodeName));
+      selectCard: () => AppView.sell(sellView),
+      invoiceDetails: (nodeName) => nodeActive(appState, nodeName)
+          ? AppView.sell(sellView)
+          : AppView.home(),
+      sendInvoice: (nodeName, invoiceId) =>
+          invoiceExists(appState, nodeName, invoiceId)
+              ? AppView.sell(sellView)
+              : AppView.home());
 }
 
-bool isOutTransactionsViewValid(OutTransactionsView outTransactionsView, Set<NodeName> openNodes) {
+AppView adjustOutTransactionsView(
+    OutTransactionsView outTransactionsView, AppState appState) {
   return outTransactionsView.match(
-      home: () => true,
-      transaction: (nodeName, paymentId) => !openNodes.contains(nodeName),
-      sendProof: (nodeName, paymentId) => !openNodes.contains(nodeName));
+      home: () => AppView.outTransactions(outTransactionsView),
+      transaction: (nodeName, paymentId) =>
+          paymentExists(appState, nodeName, paymentId)
+              ? AppView.outTransactions(outTransactionsView)
+              : AppView.home(),
+      sendProof: (nodeName, paymentId) =>
+          paymentExists(appState, nodeName, paymentId)
+              ? AppView.outTransactions(outTransactionsView)
+              : AppView.home());
 }
 
-bool isInTransactionsViewValid(InTransactionsView inTransactionsView, Set<NodeName> openNodes) {
+AppView adjustInTransactionsView(
+    InTransactionsView inTransactionsView, AppState appState) {
+  final calcView = (nodeName, invoiceId) =>
+      invoiceExists(appState, nodeName, invoiceId)
+          ? AppView.inTransactions(inTransactionsView)
+          : AppView.home();
+
   return inTransactionsView.match(
-      home: () => true,
-      transaction: (nodeName, invoiceId) => !openNodes.contains(nodeName),
-      sendInvoice: (nodeName, invoiceId) => !openNodes.contains(nodeName),
-      collected: (nodeName, invoiceId) => !openNodes.contains(nodeName));
+      home: () => AppView.inTransactions(inTransactionsView),
+      transaction: (nodeName, invoiceId) => calcView(nodeName, invoiceId),
+      sendInvoice: (nodeName, invoiceId) => calcView(nodeName, invoiceId),
+      collected: (nodeName, invoiceId) => calcView(nodeName, invoiceId));
 }
 
-bool isSettingsViewValid(SettingsView settingsView, Set<NodeName> openNodes) {
+AppView adjustSettingsView(SettingsView settingsView, AppState appState) {
   return settingsView.match(
-      cardSettings: (cardSettingsView) => !openNodes.contains(cardSettingsView.nodeName),
-      newCard: (_newCardView) => true,
-      selectCardAddRelay: () => true,
-      selectCardAddIndex: () => true);
+      home: () => AppView.settings(settingsView),
+      cardSettings: (cardSettingsView) =>
+          adjustCardSettingsView(cardSettingsView, appState),
+      newCard: (_newCardView) => AppView.settings(settingsView),
+      selectCardAddRelay: () => AppView.settings(settingsView),
+      selectCardAddIndex: () => AppView.settings(settingsView));
 }
 
+AppView adjustCardSettingsView(
+    CardSettingsView cardSettingsView, AppState appState) {
+
+  final homeView = AppView.settings(SettingsView.home());
+  if (!nodeExists(appState, cardSettingsView.nodeName)) {
+    return homeView;
+  }
+
+  final unchangedView = AppView.settings(SettingsView.cardSettings(cardSettingsView));
+
+  return cardSettingsView.inner.match(
+      home: () => unchangedView,
+      friends: (friendSettings) { 
+        final friendReport = getFriendReport(appState, cardSettingsView.nodeName, friendSettings.friendPublicKey);
+        if (friendReport == null) {
+          return homeView;
+        }
+        final friendSettingsInnerView = adjustFriendSettingsInnerView(friendSettings.inner, friendReport);
+        final friendSettingsView = FriendSettingsView((b) => b..friendPublicKey = friendSettings.friendPublicKey
+                                                              ..inner = friendSettingsInnerView);
+        final cardSettingsInnerView = CardSettingsInnerView.friends(friendSettingsView);
+        return AppView.settings(SettingsView.cardSettings(cardSettingsView.rebuild((b) => b..inner = cardSettingsInnerView)));
+
+      },
+      relays: (relaysSettings) => throw UnimplementedError(),
+      indexServers: (indexServersSettingsView) => throw UnimplementedError());
+}
+
+FriendSettingsInnerView adjustFriendSettingsInnerView(FriendSettingsInnerView friendSettingsInner, FriendReport friendReport) {
+  return friendSettingsInner.match(
+      home: () => friendSettingsInner,
+      resolve: () => throw UnimplementedError(),
+      currencySettings: (currency) => throw UnimplementedError(),
+      newCurrency: () => friendSettingsInner);
+}
 
 /*
 AppState adjustView(AppState appState) {
