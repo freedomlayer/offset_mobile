@@ -148,37 +148,51 @@ AppView adjustSettingsView(SettingsView settingsView, AppState appState) {
 
 AppView adjustCardSettingsView(
     CardSettingsView cardSettingsView, AppState appState) {
-
   final homeView = AppView.settings(SettingsView.home());
   if (!nodeExists(appState, cardSettingsView.nodeName)) {
     return homeView;
   }
 
-  final unchangedView = AppView.settings(SettingsView.cardSettings(cardSettingsView));
+  final unchangedView =
+      AppView.settings(SettingsView.cardSettings(cardSettingsView));
 
   return cardSettingsView.inner.match(
       home: () => unchangedView,
-      friends: (friendSettings) { 
-        final friendReport = getFriendReport(appState, cardSettingsView.nodeName, friendSettings.friendPublicKey);
+      friends: (friendSettings) {
+        final friendReport = getFriendReport(appState,
+            cardSettingsView.nodeName, friendSettings.friendPublicKey);
         if (friendReport == null) {
           return homeView;
         }
-        final friendSettingsInnerView = adjustFriendSettingsInnerView(friendSettings.inner, friendReport);
-        final friendSettingsView = FriendSettingsView((b) => b..friendPublicKey = friendSettings.friendPublicKey
-                                                              ..inner = friendSettingsInnerView);
-        final cardSettingsInnerView = CardSettingsInnerView.friends(friendSettingsView);
-        return AppView.settings(SettingsView.cardSettings(cardSettingsView.rebuild((b) => b..inner = cardSettingsInnerView)));
-
+        final friendSettingsInnerView =
+            adjustFriendSettingsInnerView(friendSettings.inner, friendReport);
+        final friendSettingsView = FriendSettingsView((b) => b
+          ..friendPublicKey = friendSettings.friendPublicKey
+          ..inner = friendSettingsInnerView);
+        final cardSettingsInnerView =
+            CardSettingsInnerView.friends(friendSettingsView);
+        return AppView.settings(SettingsView.cardSettings(
+            cardSettingsView.rebuild((b) => b..inner = cardSettingsInnerView)));
       },
       relays: (relaysSettings) => throw UnimplementedError(),
       indexServers: (indexServersSettingsView) => throw UnimplementedError());
 }
 
-FriendSettingsInnerView adjustFriendSettingsInnerView(FriendSettingsInnerView friendSettingsInner, FriendReport friendReport) {
+FriendSettingsInnerView adjustFriendSettingsInnerView(
+    FriendSettingsInnerView friendSettingsInner, FriendReport friendReport) {
   return friendSettingsInner.match(
       home: () => friendSettingsInner,
-      resolve: () => throw UnimplementedError(),
-      currencySettings: (currency) => throw UnimplementedError(),
+      resolve: () => friendReport.channelStatus.isInconsistent
+          ? friendSettingsInner
+          : FriendSettingsInnerView.home(),
+      currencySettings: (currency) {
+        return friendReport.channelStatus.match(
+            inconsistent: (_) => FriendSettingsInnerView.home(),
+            consistent: (channelConsistentReport) =>
+                channelConsistentReport.currencyReports[currency] != null
+                    ? friendSettingsInner
+                    : FriendSettingsInnerView.home());
+      },
       newCurrency: () => friendSettingsInner);
 }
 
