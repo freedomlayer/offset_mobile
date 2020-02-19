@@ -76,11 +76,11 @@ AppView adjustAppView(AppView appView, AppState appState) {
     buy: (buyView) => adjustBuyView(buyView, appState),
     sell: (sellView) => adjustSellView(sellView, appState),
     outTransactions: (outTransactionsView) =>
-        adjustOutTransactionsView(outTransactionsView, appState),
+        AppView.outTransactions(adjustOutTransactionsView(outTransactionsView, appState)),
     inTransactions: (inTransactionsView) =>
-        adjustInTransactionsView(inTransactionsView, appState),
+        AppView.inTransactions(adjustInTransactionsView(inTransactionsView, appState)),
     balances: () => appView,
-    settings: (settingsView) => adjustSettingsView(settingsView, appState),
+    settings: (settingsView) => AppView.settings(adjustSettingsView(settingsView, appState)),
   );
 }
 
@@ -108,59 +108,79 @@ AppView adjustSellView(SellView sellView, AppState appState) {
               : AppView.home());
 }
 
-AppView adjustOutTransactionsView(
+OutTransactionsView adjustOutTransactionsView(
     OutTransactionsView outTransactionsView, AppState appState) {
   return outTransactionsView.match(
-      home: () => AppView.outTransactions(outTransactionsView),
+      home: () => outTransactionsView,
       transaction: (nodeName, paymentId) =>
           paymentExists(appState, nodeName, paymentId)
-              ? AppView.outTransactions(outTransactionsView)
-              : AppView.home(),
+              ? outTransactionsView
+              : OutTransactionsView.home(),
       sendProof: (nodeName, paymentId) =>
           paymentExists(appState, nodeName, paymentId)
-              ? AppView.outTransactions(outTransactionsView)
-              : AppView.home());
+              ? outTransactionsView
+              : OutTransactionsView.home());
 }
 
-AppView adjustInTransactionsView(
+InTransactionsView adjustInTransactionsView(
     InTransactionsView inTransactionsView, AppState appState) {
   final calcView = (nodeName, invoiceId) =>
       invoiceExists(appState, nodeName, invoiceId)
-          ? AppView.inTransactions(inTransactionsView)
-          : AppView.home();
+          ? inTransactionsView
+          : InTransactionsView.home();
 
   return inTransactionsView.match(
-      home: () => AppView.inTransactions(inTransactionsView),
+      home: () => inTransactionsView,
       transaction: (nodeName, invoiceId) => calcView(nodeName, invoiceId),
       sendInvoice: (nodeName, invoiceId) => calcView(nodeName, invoiceId),
       collected: (nodeName, invoiceId) => calcView(nodeName, invoiceId));
 }
 
-AppView adjustSettingsView(SettingsView settingsView, AppState appState) {
+SettingsView adjustSettingsView(SettingsView settingsView, AppState appState) {
   return settingsView.match(
-      home: () => AppView.settings(settingsView),
-      cardSettings: (cardSettingsView) =>
-          adjustCardSettingsView(cardSettingsView, appState),
-      newCard: (_newCardView) => AppView.settings(settingsView),
-      selectCardAddRelay: () => AppView.settings(settingsView),
-      selectCardAddIndex: () => AppView.settings(settingsView));
+      home: () => settingsView,
+      cardSettings: (cardSettingsView) {
+        final nodeState = appState.nodesStates[cardSettingsView.nodeName];
+        if (nodeState == null) {
+          return SettingsView.home();
+        }
+
+        final cardSettingsInnerView = adjustCardSettingsInnerView(cardSettingsView.inner, nodeState);
+        final newCardSettingsView = CardSettingsView((b) => b..nodeName = cardSettingsView.nodeName
+                                                          ..inner = cardSettingsInnerView);
+        return SettingsView.cardSettings(newCardSettingsView);
+      },
+      newCard: (_newCardView) => settingsView,
+      selectCardAddRelay: () => settingsView,
+      selectCardAddIndex: () => settingsView);
 }
 
-AppView adjustCardSettingsView(
-    CardSettingsView cardSettingsView, AppState appState) {
-  final homeView = AppView.settings(SettingsView.home());
-  if (!nodeExists(appState, cardSettingsView.nodeName)) {
-    return homeView;
+CardSettingsInnerView adjustCardSettingsInnerView(
+    CardSettingsInnerView cardSettingsInnerView, NodeState nodeState) {
+
+  final compactReport = nodeState.inner.match(
+    closed: () => null,
+    preOpen: () => null,
+    open: (nodeName, nodeId, appPermissions, compactReport) => compactReport,
+  );
+
+  if (compactReport == null) {
+    return CardSettingsInnerView.home();
   }
 
-  final unchangedView =
-      AppView.settings(SettingsView.cardSettings(cardSettingsView));
-
-  return cardSettingsView.inner.match(
-      home: () => unchangedView,
-      friends: (friendSettings) {
+  return cardSettingsInnerView.match(
+      home: () => cardSettingsInnerView,
+      friends: (friendsSettings) => CardSettingsInnerView.friends(adjustFriendsSettingsView(friendsSettings, compactReport)),
+      /*
         final friendReport = getFriendReport(appState,
             cardSettingsView.nodeName, friendSettings.friendPublicKey);
+        }
+        final compactReport = nodeState.inner.match(
+          closed: () => null,
+          preOpen: () => null,
+          open: (nodeName, nodeId, appPermissions, compactReport) => compactReport,
+        );
+
         if (friendReport == null) {
           return homeView;
         }
@@ -174,10 +194,46 @@ AppView adjustCardSettingsView(
         return AppView.settings(SettingsView.cardSettings(
             cardSettingsView.rebuild((b) => b..inner = cardSettingsInnerView)));
       },
-      relays: (relaysSettings) => throw UnimplementedError(),
-      indexServers: (indexServersSettingsView) => throw UnimplementedError());
+      */
+      relays: (relaysSettings) => CardSettingsInnerView.relays(adjustRelaysSettingsView(relaysSettings, compactReport)),
+      indexServers: (indexServersSettingsView) => CardSettingsInnerView.indexServers(adjustIndexServersSettingsView(indexServersSettingsView, compactReport)));
 }
 
+FriendsSettingsView adjustFriendsSettingsView(FriendsSettingsView friendsSettings, CompactReport compactReport) {
+  return friendsSettings.match(
+      home: () => friendsSettings,
+      friendSettings: (friendSettings) {
+        final friendReport = compactReport.friends[friendSettings.friendPublicKey];
+        if (friendReport == null) {
+          return FriendsSettingsView.home();
+        }
+        final newFriendSettingsInner = adjustFriendSettingsInnerView(friendSettings.inner, friendReport);
+        final newFriendSettings = FriendSettingsView((b) => b..inner = newFriendSettingsInner
+                                          ..friendPublicKey = friendSettings.friendPublicKey);
+        return FriendsSettingsView.friendSettings(newFriendSettings);
+      },
+      newFriend: (_newFriend) => friendsSettings,
+      shareInfo: () => friendsSettings);
+}
+
+
+RelaysSettingsView adjustRelaysSettingsView(RelaysSettingsView relaysSettings, CompactReport compactReport) {
+  /*
+  relaysSettings.match(
+      home: () => relaysSettings,
+      */
+  throw UnimplementedError();
+}
+
+IndexServersSettingsView adjustIndexServersSettingsView(IndexServersSettingsView indexServersSettings, CompactReport compactReport) {
+  throw UnimplementedError();
+}
+
+FriendSettingsInnerView adjustFriendSettingsInnerView(FriendSettingsInnerView friendSettingsInner, FriendReport friendReport) {
+  throw UnimplementedError();
+}
+
+/*
 FriendSettingsInnerView adjustFriendSettingsInnerView(
     FriendSettingsInnerView friendSettingsInner, FriendReport friendReport) {
   return friendSettingsInner.match(
@@ -195,6 +251,7 @@ FriendSettingsInnerView adjustFriendSettingsInnerView(
       },
       newCurrency: () => friendSettingsInner);
 }
+*/
 
 /*
 AppState adjustView(AppState appState) {
