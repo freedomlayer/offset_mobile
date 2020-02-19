@@ -1,21 +1,23 @@
+import 'package:built_collection/built_collection.dart';
+
 import '../protocol/protocol.dart';
 import '../state/state.dart';
 
 
-bool nodeActive(AppState appState, NodeName nodeName) {
-  final nodeState = appState.nodesStates[nodeName];
+bool nodeActive(BuiltMap<NodeName, NodeState> nodesStates, NodeName nodeName) {
+  final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
     return false;
   }
   return nodeState.inner.isOpen;
 }
 
-bool nodeExists(AppState appState, NodeName nodeName) {
-  return appState.nodesStates.containsKey(nodeName);
+bool nodeExists(BuiltMap<NodeName, NodeState> nodesStates, NodeName nodeName) {
+  return nodesStates.containsKey(nodeName);
 }
 
-CompactReport getCompactReport(AppState appState, NodeName nodeName) {
-  final nodeState = appState.nodesStates[nodeName];
+CompactReport getCompactReport(BuiltMap<NodeName, NodeState> nodesStates, NodeName nodeName) {
+  final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
     return null;
   }
@@ -26,8 +28,8 @@ CompactReport getCompactReport(AppState appState, NodeName nodeName) {
   );
 }
 
-bool invoiceExists(AppState appState, NodeName nodeName, InvoiceId invoiceId) {
-  final compactReport = getCompactReport(appState, nodeName);
+bool invoiceExists(BuiltMap<NodeName, NodeState> nodesStates, NodeName nodeName, InvoiceId invoiceId) {
+  final compactReport = getCompactReport(nodesStates, nodeName);
   if (compactReport == null) {
     return false;
   }
@@ -35,8 +37,8 @@ bool invoiceExists(AppState appState, NodeName nodeName, InvoiceId invoiceId) {
   return openInvoice != null;
 }
 
-bool paymentExists(AppState appState, NodeName nodeName, PaymentId paymentId) {
-  final compactReport = getCompactReport(appState, nodeName);
+bool paymentExists(BuiltMap<NodeName, NodeState> nodesStates, NodeName nodeName, PaymentId paymentId) {
+  final compactReport = getCompactReport(nodesStates, nodeName);
   if (compactReport == null) {
     return false;
   }
@@ -44,79 +46,81 @@ bool paymentExists(AppState appState, NodeName nodeName, PaymentId paymentId) {
   return openPayment != null;
 }
 
+/*
 FriendReport getFriendReport(
-    AppState appState, NodeName nodeName, PublicKey friendPublicKey) {
-  final compactReport = getCompactReport(appState, nodeName);
+    BuiltMap<NodeName, NodeState> nodesStates, NodeName nodeName, PublicKey friendPublicKey) {
+  final compactReport = getCompactReport(nodesStates, nodeName);
   if (compactReport == null) {
     return null;
   }
   return compactReport.friends[friendPublicKey];
 }
+*/
 
 // ------------------------------------------------------------
 // ------------------------------------------------------------
 
 
-// Adjust application's view given appState.
-// Relevant mostly for cases where an element is removed or becomes inactive, and the view
-// needs to be adjusted accordingly.
-AppView adjustAppView(AppView appView, AppState appState) {
+/// Adjust application's view given appState.
+/// Relevant mostly for cases where an element is removed or becomes inactive, and the view
+/// needs to be adjusted accordingly.
+AppView adjustAppView(AppView appView, BuiltMap<NodeName, NodeState> nodesStates) {
   return appView.match(
     home: () => appView,
-    buy: (buyView) => adjustBuyView(buyView, appState),
-    sell: (sellView) => adjustSellView(sellView, appState),
+    buy: (buyView) => adjustBuyView(buyView, nodesStates),
+    sell: (sellView) => adjustSellView(sellView, nodesStates),
     outTransactions: (outTransactionsView) => AppView.outTransactions(
-        adjustOutTransactionsView(outTransactionsView, appState)),
+        adjustOutTransactionsView(outTransactionsView, nodesStates)),
     inTransactions: (inTransactionsView) => AppView.inTransactions(
-        adjustInTransactionsView(inTransactionsView, appState)),
+        adjustInTransactionsView(inTransactionsView, nodesStates)),
     balances: () => appView,
     settings: (settingsView) =>
-        AppView.settings(adjustSettingsView(settingsView, appState)),
+        AppView.settings(adjustSettingsView(settingsView, nodesStates)),
   );
 }
 
-AppView adjustBuyView(BuyView buyView, AppState appState) {
+AppView adjustBuyView(BuyView buyView, BuiltMap<NodeName, NodeState> nodesStates) {
   return buyView.match(
       invoiceSelect: () => AppView.buy(buyView),
       invoiceInfo: (_invoiceFile) => AppView.buy(buyView),
       selectCard: (_invoiceFile) => AppView.buy(buyView),
       paymentProgress: (nodeName, _invoiceFile) {
-        return nodeActive(appState, nodeName)
+        return nodeActive(nodesStates, nodeName)
             ? AppView.buy(buyView)
             : AppView.home();
       });
 }
 
-AppView adjustSellView(SellView sellView, AppState appState) {
+AppView adjustSellView(SellView sellView, BuiltMap<NodeName, NodeState> nodesStates) {
   return sellView.match(
       selectCard: () => AppView.sell(sellView),
-      invoiceDetails: (nodeName) => nodeActive(appState, nodeName)
+      invoiceDetails: (nodeName) => nodeActive(nodesStates, nodeName)
           ? AppView.sell(sellView)
           : AppView.home(),
       sendInvoice: (nodeName, invoiceId) =>
-          invoiceExists(appState, nodeName, invoiceId)
+          invoiceExists(nodesStates, nodeName, invoiceId)
               ? AppView.sell(sellView)
               : AppView.home());
 }
 
 OutTransactionsView adjustOutTransactionsView(
-    OutTransactionsView outTransactionsView, AppState appState) {
+    OutTransactionsView outTransactionsView, BuiltMap<NodeName, NodeState> nodesStates) {
   return outTransactionsView.match(
       home: () => outTransactionsView,
       transaction: (nodeName, paymentId) =>
-          paymentExists(appState, nodeName, paymentId)
+          paymentExists(nodesStates, nodeName, paymentId)
               ? outTransactionsView
               : OutTransactionsView.home(),
       sendProof: (nodeName, paymentId) =>
-          paymentExists(appState, nodeName, paymentId)
+          paymentExists(nodesStates, nodeName, paymentId)
               ? outTransactionsView
               : OutTransactionsView.home());
 }
 
 InTransactionsView adjustInTransactionsView(
-    InTransactionsView inTransactionsView, AppState appState) {
+    InTransactionsView inTransactionsView, BuiltMap<NodeName, NodeState> nodesStates) {
   final calcView = (nodeName, invoiceId) =>
-      invoiceExists(appState, nodeName, invoiceId)
+      invoiceExists(nodesStates, nodeName, invoiceId)
           ? inTransactionsView
           : InTransactionsView.home();
 
@@ -127,11 +131,11 @@ InTransactionsView adjustInTransactionsView(
       collected: (nodeName, invoiceId) => calcView(nodeName, invoiceId));
 }
 
-SettingsView adjustSettingsView(SettingsView settingsView, AppState appState) {
+SettingsView adjustSettingsView(SettingsView settingsView, BuiltMap<NodeName, NodeState> nodesStates) {
   return settingsView.match(
       home: () => settingsView,
       cardSettings: (cardSettingsView) {
-        final nodeState = appState.nodesStates[cardSettingsView.nodeName];
+        final nodeState = nodesStates[cardSettingsView.nodeName];
         if (nodeState == null) {
           return SettingsView.home();
         }
