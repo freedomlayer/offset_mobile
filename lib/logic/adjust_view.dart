@@ -1,12 +1,6 @@
-import 'package:built_collection/built_collection.dart';
-
-import '../actions/actions.dart';
 import '../protocol/protocol.dart';
 import '../state/state.dart';
 
-import 'types.dart';
-import 'handle_shared_file.dart';
-import 'handle_action.dart';
 
 bool nodeActive(AppState appState, NodeName nodeName) {
   final nodeState = appState.nodesStates[nodeName];
@@ -59,28 +53,25 @@ FriendReport getFriendReport(
   return compactReport.friends[friendPublicKey];
 }
 
-/*
-bool relayExists(AppState appState, NodeName nodeName, PublicKey relayPublicKey) {
-  throw UnimplementedError();
-}
+// ------------------------------------------------------------
+// ------------------------------------------------------------
 
-bool indexServerExists(AppState appState, NodeName nodeName, PublicKey indexServerPublicKey) {
-  throw UnimplementedError();
-}
-*/
 
-/// Does the view rely on a card that is both existent and active?
+// Adjust application's view given appState.
+// Relevant mostly for cases where an element is removed or becomes inactive, and the view
+// needs to be adjusted accordingly.
 AppView adjustAppView(AppView appView, AppState appState) {
   return appView.match(
     home: () => appView,
     buy: (buyView) => adjustBuyView(buyView, appState),
     sell: (sellView) => adjustSellView(sellView, appState),
-    outTransactions: (outTransactionsView) =>
-        AppView.outTransactions(adjustOutTransactionsView(outTransactionsView, appState)),
-    inTransactions: (inTransactionsView) =>
-        AppView.inTransactions(adjustInTransactionsView(inTransactionsView, appState)),
+    outTransactions: (outTransactionsView) => AppView.outTransactions(
+        adjustOutTransactionsView(outTransactionsView, appState)),
+    inTransactions: (inTransactionsView) => AppView.inTransactions(
+        adjustInTransactionsView(inTransactionsView, appState)),
     balances: () => appView,
-    settings: (settingsView) => AppView.settings(adjustSettingsView(settingsView, appState)),
+    settings: (settingsView) =>
+        AppView.settings(adjustSettingsView(settingsView, appState)),
   );
 }
 
@@ -145,9 +136,11 @@ SettingsView adjustSettingsView(SettingsView settingsView, AppState appState) {
           return SettingsView.home();
         }
 
-        final cardSettingsInnerView = adjustCardSettingsInnerView(cardSettingsView.inner, nodeState);
-        final newCardSettingsView = CardSettingsView((b) => b..nodeName = cardSettingsView.nodeName
-                                                          ..inner = cardSettingsInnerView);
+        final cardSettingsInnerView =
+            adjustCardSettingsInnerView(cardSettingsView.inner, nodeState);
+        final newCardSettingsView = CardSettingsView((b) => b
+          ..nodeName = cardSettingsView.nodeName
+          ..inner = cardSettingsInnerView);
         return SettingsView.cardSettings(newCardSettingsView);
       },
       newCard: (_newCardView) => settingsView,
@@ -157,7 +150,6 @@ SettingsView adjustSettingsView(SettingsView settingsView, AppState appState) {
 
 CardSettingsInnerView adjustCardSettingsInnerView(
     CardSettingsInnerView cardSettingsInnerView, NodeState nodeState) {
-
   final compactReport = nodeState.inner.match(
     closed: () => null,
     preOpen: () => null,
@@ -170,70 +162,53 @@ CardSettingsInnerView adjustCardSettingsInnerView(
 
   return cardSettingsInnerView.match(
       home: () => cardSettingsInnerView,
-      friends: (friendsSettings) => CardSettingsInnerView.friends(adjustFriendsSettingsView(friendsSettings, compactReport)),
-      /*
-        final friendReport = getFriendReport(appState,
-            cardSettingsView.nodeName, friendSettings.friendPublicKey);
-        }
-        final compactReport = nodeState.inner.match(
-          closed: () => null,
-          preOpen: () => null,
-          open: (nodeName, nodeId, appPermissions, compactReport) => compactReport,
-        );
-
-        if (friendReport == null) {
-          return homeView;
-        }
-        final friendSettingsInnerView =
-            adjustFriendSettingsInnerView(friendSettings.inner, friendReport);
-        final friendSettingsView = FriendSettingsView((b) => b
-          ..friendPublicKey = friendSettings.friendPublicKey
-          ..inner = friendSettingsInnerView);
-        final cardSettingsInnerView =
-            CardSettingsInnerView.friends(friendSettingsView);
-        return AppView.settings(SettingsView.cardSettings(
-            cardSettingsView.rebuild((b) => b..inner = cardSettingsInnerView)));
-      },
-      */
-      relays: (relaysSettings) => CardSettingsInnerView.relays(adjustRelaysSettingsView(relaysSettings, compactReport)),
-      indexServers: (indexServersSettingsView) => CardSettingsInnerView.indexServers(adjustIndexServersSettingsView(indexServersSettingsView, compactReport)));
+      friends: (friendsSettings) => CardSettingsInnerView.friends(
+          adjustFriendsSettingsView(friendsSettings, compactReport)),
+      relays: (relaysSettings) => CardSettingsInnerView.relays(
+          adjustRelaysSettingsView(relaysSettings, compactReport)),
+      indexServers: (indexServersSettingsView) =>
+          CardSettingsInnerView.indexServers(adjustIndexServersSettingsView(
+              indexServersSettingsView, compactReport)));
 }
 
-FriendsSettingsView adjustFriendsSettingsView(FriendsSettingsView friendsSettings, CompactReport compactReport) {
+FriendsSettingsView adjustFriendsSettingsView(
+    FriendsSettingsView friendsSettings, CompactReport compactReport) {
   return friendsSettings.match(
       home: () => friendsSettings,
       friendSettings: (friendSettings) {
-        final friendReport = compactReport.friends[friendSettings.friendPublicKey];
+        final friendReport =
+            compactReport.friends[friendSettings.friendPublicKey];
         if (friendReport == null) {
           return FriendsSettingsView.home();
         }
-        final newFriendSettingsInner = adjustFriendSettingsInnerView(friendSettings.inner, friendReport);
-        final newFriendSettings = FriendSettingsView((b) => b..inner = newFriendSettingsInner
-                                          ..friendPublicKey = friendSettings.friendPublicKey);
+        final newFriendSettingsInner =
+            adjustFriendSettingsInnerView(friendSettings.inner, friendReport);
+        final newFriendSettings = FriendSettingsView((b) => b
+          ..inner = newFriendSettingsInner
+          ..friendPublicKey = friendSettings.friendPublicKey);
         return FriendsSettingsView.friendSettings(newFriendSettings);
       },
       newFriend: (_newFriend) => friendsSettings,
       shareInfo: () => friendsSettings);
 }
 
-
-RelaysSettingsView adjustRelaysSettingsView(RelaysSettingsView relaysSettings, CompactReport compactReport) {
-  /*
-  relaysSettings.match(
+RelaysSettingsView adjustRelaysSettingsView(
+    RelaysSettingsView relaysSettings, CompactReport compactReport) {
+  return relaysSettings.match(
       home: () => relaysSettings,
-      */
-  throw UnimplementedError();
+      newRelaySelect: () => relaysSettings,
+      newRelayName: (_a, _b) => relaysSettings);
 }
 
-IndexServersSettingsView adjustIndexServersSettingsView(IndexServersSettingsView indexServersSettings, CompactReport compactReport) {
-  throw UnimplementedError();
+IndexServersSettingsView adjustIndexServersSettingsView(
+    IndexServersSettingsView indexServersSettings,
+    CompactReport compactReport) {
+  return indexServersSettings.match(
+      home: () => indexServersSettings,
+      newIndexSelect: () => indexServersSettings,
+      newIndexName: (_a, _b) => indexServersSettings);
 }
 
-FriendSettingsInnerView adjustFriendSettingsInnerView(FriendSettingsInnerView friendSettingsInner, FriendReport friendReport) {
-  throw UnimplementedError();
-}
-
-/*
 FriendSettingsInnerView adjustFriendSettingsInnerView(
     FriendSettingsInnerView friendSettingsInner, FriendReport friendReport) {
   return friendSettingsInner.match(
@@ -251,12 +226,4 @@ FriendSettingsInnerView adjustFriendSettingsInnerView(
       },
       newCurrency: () => friendSettingsInner);
 }
-*/
 
-/*
-AppState adjustView(AppState appState) {
-  for (final closedNodeName in closedNodes) {
-    appState.viewState.match(
-  }
-}
-*/
