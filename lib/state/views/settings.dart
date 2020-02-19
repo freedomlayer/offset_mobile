@@ -50,7 +50,7 @@ class CardSettingsInnerView extends _$CardSettingsInnerView {
   static Serializer<CardSettingsInnerView> get serializer => _$cardSettingsInnerViewSerializer;
 
   CardSettingsInnerView.home() : super.home();
-  CardSettingsInnerView.friends(FriendSettingsView friends) : super.friends(friends);
+  CardSettingsInnerView.friends(FriendsSettingsView friends) : super.friends(friends);
   CardSettingsInnerView.relays(RelaysSettingsView relays) : super.relays(relays);
   CardSettingsInnerView.indexServers(IndexServersSettingsView indexServers) : super.indexServers(indexServers);
 }
