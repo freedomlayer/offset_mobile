@@ -13,8 +13,6 @@ class BuyView extends _$BuyView {
   static Serializer<BuyView> get serializer => _$buyViewSerializer;
 
   BuyView.invoiceSelect() : super.invoiceSelect();
-  BuyView.invoiceScan() : super.invoiceScan();
-  BuyView.invoiceFile() : super.invoiceFile();
   BuyView.invoiceInfo(InvoiceFile invoiceFile) : super.invoiceInfo(invoiceFile);
   BuyView.selectCard(InvoiceFile invoiceFile) : super.selectCard(invoiceFile);
   BuyView.paymentProgress(NodeName nodeName, PaymentId paymentId) : super.paymentProgress(nodeName, paymentId);

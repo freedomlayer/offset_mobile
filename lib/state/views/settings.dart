@@ -75,10 +75,6 @@ class NewFriendView extends _$NewFriendView {
 
   // Select how to add a friend
   NewFriendView.select() : super.select();
-  // Add a friend by camera scan
-  NewFriendView.scan() : super.scan();
-  // Add a friend by loading a file
-  NewFriendView.file() : super.file();
   // Add a name to the newly loaded friend
   NewFriendView.name(PublicKey friendPublicKey, BuiltList<RelayAddress> relays) : super.name(friendPublicKey, relays);
 }
