@@ -83,14 +83,29 @@ void main() {
       for (final jsonString1 in samples.serverToUserAck) {
         // Attempt to deserialize:
         final serialized1 = decoder.convert(jsonString1);
-        final msg = serializersWithPlugin.deserialize(serialized1,
+        final msg1 = serializersWithPlugin.deserialize(serialized1,
             specifiedType: FullType(ServerToUserAck));
 
         // Make sure that serialization works:
-        final serialized2 = serializersWithPlugin.serialize(msg,
+        final serialized2 = serializersWithPlugin.serialize(msg1,
             specifiedType: FullType(ServerToUserAck));
         String jsonString2 = encoder.convert(serialized2);
 
+        // Deserialize again, and make sure that we get the same message:
+        final serialized3 = decoder.convert(jsonString2);
+        final msg3 = serializersWithPlugin.deserialize(serialized3,
+            specifiedType: FullType(ServerToUserAck));
+        
+        if (msg1 != msg3) {
+          print('============= Not equal! (1) =============');
+          print('msg1 = ');
+          print(msg1);
+          print('msg3 = ');
+          print(msg3);
+          print('\n\n\n\n');
+        }
+
+        // expect(msg1, msg3);
       }
     });
 
@@ -101,13 +116,20 @@ void main() {
       for (final jsonString1 in samples.userToServerAck) {
         // Attempt to deserialize:
         final serialized1 = decoder.convert(jsonString1);
-        final msg = serializersWithPlugin.deserialize(serialized1,
+        final msg1 = serializersWithPlugin.deserialize(serialized1,
             specifiedType: FullType(UserToServerAck));
 
         // Make sure that serialization works:
-        final serialized2 = serializersWithPlugin.serialize(msg,
+        final serialized2 = serializersWithPlugin.serialize(msg1,
             specifiedType: FullType(UserToServerAck));
         String jsonString2 = encoder.convert(serialized2);
+
+        // Deserialize again, and make sure that we get the same message:
+        final serialized3 = decoder.convert(jsonString2);
+        final msg3 = serializersWithPlugin.deserialize(serialized3,
+            specifiedType: FullType(UserToServerAck));
+
+        expect(msg1, msg3);
 
       }
     });
