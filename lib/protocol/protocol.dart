@@ -45,10 +45,20 @@ class NodeInfo extends _$NodeInfo {
   NodeInfo.remote(NodeInfoRemote nodeInfoRemote) : super.remote(nodeInfoRemote);
 }
 
+
+@BuiltUnion()
+class NodeMode extends _$NodeMode {
+  static Serializer<NodeMode> get serializer => _$nodeModeSerializer;
+
+  NodeMode.open(NodeId nodeId) : super.open(nodeId);
+  NodeMode.closed() : super.closed();
+}
+
 abstract class NodeStatus implements Built<NodeStatus, NodeStatusBuilder> {
   static Serializer<NodeStatus> get serializer => _$nodeStatusSerializer;
 
-  bool get isOpen;
+  NodeMode get mode;
+  bool get isEnabled;
   NodeInfo get info;
 
   NodeStatus._();
@@ -103,12 +113,23 @@ class CreateNode extends _$CreateNode {
       : super.createNodeRemote(createNodeRemote);
 }
 
+abstract class NodeOpened implements Built<NodeOpened, NodeOpenedBuilder> {
+  static Serializer<NodeOpened> get serializer => _$nodeOpenedSerializer;
+
+  NodeName get nodeName;
+  NodeId get nodeId;
+  AppPermissions get appPermissions;
+  CompactReport get compactReport;
+
+  NodeOpened._();
+  factory NodeOpened([void Function(NodeOpenedBuilder) updates]) = _$NodeOpened;
+}
+
 @BuiltUnion()
 class ServerToUser extends _$ServerToUser {
   static Serializer<ServerToUser> get serializer => _$serverToUserSerializer;
 
-  ServerToUser.responseOpenNode(ResponseOpenNode responseOpenNode)
-      : super.responseOpenNode(responseOpenNode);
+  ServerToUser.nodeOpened(NodeOpened nodeOpened) : super.nodeOpened(nodeOpened);
   ServerToUser.nodesStatus(BuiltMap<NodeName, NodeStatus> nodesStatus)
       : super.nodesStatus(nodesStatus);
   ServerToUser.node(NodeId nodeId, CompactToUser compactToUser)
@@ -131,22 +152,24 @@ class UserToServer extends _$UserToServer {
 
   UserToServer.createNode(CreateNode createNode) : super.createNode(createNode);
   UserToServer.removeNode(NodeName nodeName) : super.removeNode(nodeName);
-  UserToServer.requestOpenNode(NodeName nodeName)
-      : super.requestOpenNode(nodeName);
-  UserToServer.closeNode(NodeId nodeId) : super.closeNode(nodeId);
+
+  UserToServer.enableNode(NodeName nodeName) : super.enableNode(nodeName);
+  UserToServer.disableNode(NodeName nodeName) : super.disableNode(nodeName);
   UserToServer.node(NodeId nodeId, UserToCompact userToCompact)
       : super.node(nodeId, userToCompact);
 }
 
-
-abstract class UserToServerAck implements Built<UserToServerAck, UserToServerAckBuilder> {
-  static Serializer<UserToServerAck> get serializer => _$userToServerAckSerializer;
+abstract class UserToServerAck
+    implements Built<UserToServerAck, UserToServerAckBuilder> {
+  static Serializer<UserToServerAck> get serializer =>
+      _$userToServerAckSerializer;
 
   Uid get requestId;
   UserToServer get inner;
 
   UserToServerAck._();
-  factory UserToServerAck([void Function(UserToServerAckBuilder) updates]) = _$UserToServerAck;
+  factory UserToServerAck([void Function(UserToServerAckBuilder) updates]) =
+      _$UserToServerAck;
 }
 
 // -----------------------------------------------------------------------
@@ -171,6 +194,8 @@ Serializers collectSerializers() {
   serBuilder.add(NodeInfoLocal.serializer);
   serBuilder.add(NodeInfoRemote.serializer);
   serBuilder.add(NodeInfo.serializer);
+  serBuilder.add(NodeOpened.serializer);
+  serBuilder.add(NodeMode.serializer);
   serBuilder.add(NodeStatus.serializer);
   serBuilder.add(CreateNodeLocal.serializer);
   serBuilder.add(CreateNodeRemote.serializer);
@@ -182,38 +207,47 @@ Serializers collectSerializers() {
   serBuilder.add(UserToServerAck.serializer);
 
   serBuilder.addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(RelayAddress)]),
-          () => new ListBuilder<RelayAddress>());
+      const FullType(BuiltList, const [const FullType(RelayAddress)]),
+      () => new ListBuilder<RelayAddress>());
   serBuilder.addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(NamedIndexServerAddress)]),
-          () => new ListBuilder<NamedIndexServerAddress>());
+      const FullType(
+          BuiltList, const [const FullType(NamedIndexServerAddress)]),
+      () => new ListBuilder<NamedIndexServerAddress>());
   serBuilder.addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(NamedRelayAddress)]),
-          () => new ListBuilder<NamedRelayAddress>());
+      const FullType(BuiltList, const [const FullType(NamedRelayAddress)]),
+      () => new ListBuilder<NamedRelayAddress>());
   serBuilder.addBuilderFactory(
-          const FullType(BuiltMap, const [const FullType(Currency), const FullType(I128)]),
-          () => new MapBuilder<Currency, I128>());
+      const FullType(
+          BuiltMap, const [const FullType(Currency), const FullType(I128)]),
+      () => new MapBuilder<Currency, I128>());
   serBuilder.addBuilderFactory(
-          const FullType(BuiltMap, const [const FullType(Currency), const FullType(CurrencyReport)]),
-          () => new MapBuilder<Currency, CurrencyReport>());
+      const FullType(BuiltMap,
+          const [const FullType(Currency), const FullType(CurrencyReport)]),
+      () => new MapBuilder<Currency, CurrencyReport>());
   serBuilder.addBuilderFactory(
-          const FullType(BuiltMap, const [const FullType(Currency), const FullType(BalanceInfo)]),
-          () => new MapBuilder<Currency, BalanceInfo>());
+      const FullType(BuiltMap,
+          const [const FullType(Currency), const FullType(BalanceInfo)]),
+      () => new MapBuilder<Currency, BalanceInfo>());
   serBuilder.addBuilderFactory(
-          const FullType(BuiltMap, const [const FullType(Currency), const FullType(ConfigReport)]),
-          () => new MapBuilder<Currency, ConfigReport>());
+      const FullType(BuiltMap,
+          const [const FullType(Currency), const FullType(ConfigReport)]),
+      () => new MapBuilder<Currency, ConfigReport>());
   serBuilder.addBuilderFactory(
-          const FullType(BuiltMap, const [const FullType(PublicKey), const FullType(FriendReport)]),
-          () => new MapBuilder<PublicKey, FriendReport>());
+      const FullType(BuiltMap,
+          const [const FullType(PublicKey), const FullType(FriendReport)]),
+      () => new MapBuilder<PublicKey, FriendReport>());
   serBuilder.addBuilderFactory(
-          const FullType(BuiltMap, const [const FullType(InvoiceId), const FullType(OpenInvoice)]),
-          () => new MapBuilder<InvoiceId, OpenInvoice>());
+      const FullType(BuiltMap,
+          const [const FullType(InvoiceId), const FullType(OpenInvoice)]),
+      () => new MapBuilder<InvoiceId, OpenInvoice>());
   serBuilder.addBuilderFactory(
-          const FullType(BuiltMap, const [const FullType(PaymentId), const FullType(OpenPayment)]),
-          () => new MapBuilder<PaymentId, OpenPayment>());
+      const FullType(BuiltMap,
+          const [const FullType(PaymentId), const FullType(OpenPayment)]),
+      () => new MapBuilder<PaymentId, OpenPayment>());
   serBuilder.addBuilderFactory(
-          const FullType(BuiltMap, const [const FullType(NodeName), const FullType(NodeStatus)]),
-          () => new MapBuilder<NodeName, NodeStatus>());
+      const FullType(BuiltMap,
+          const [const FullType(NodeName), const FullType(NodeStatus)]),
+      () => new MapBuilder<NodeName, NodeStatus>());
 
   return serBuilder.build();
 }

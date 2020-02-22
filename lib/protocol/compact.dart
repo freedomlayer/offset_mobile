@@ -605,7 +605,7 @@ class UserToCompact extends _$UserToCompact {
 
   // -----[Buyer]-----
   UserToCompact.initPayment(InitPayment initPayment) : super.initPayment(initPayment);
-  UserToCompact.confirmPaymentFees(InitPayment confirmPaymentFees) : super.confirmPaymentFees(confirmPaymentFees);
+  UserToCompact.confirmPaymentFees(ConfirmPaymentFees confirmPaymentFees) : super.confirmPaymentFees(confirmPaymentFees);
   UserToCompact.cancelPayment(PaymentId paymentId) : super.cancelPayment(paymentId);
   UserToCompact.ackPaymentDone(PaymentId paymentId, Uid ackUid) : super.ackPaymentDone(paymentId, ackUid);
 
