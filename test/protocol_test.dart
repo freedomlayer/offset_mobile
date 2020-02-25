@@ -95,17 +95,8 @@ void main() {
         final serialized3 = decoder.convert(jsonString2);
         final msg3 = serializersWithPlugin.deserialize(serialized3,
             specifiedType: FullType(ServerToUserAck));
-        
-        if (msg1 != msg3) {
-          print('============= Not equal! (1) =============');
-          print('msg1 = ');
-          print(msg1);
-          print('msg3 = ');
-          print(msg3);
-          print('\n\n\n\n');
-        }
 
-        // expect(msg1, msg3);
+        expect(msg1, msg3);
       }
     });
 
