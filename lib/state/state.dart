@@ -13,18 +13,27 @@ export 'views/views.dart';
 
 part 'state.g.dart';
 
+
+abstract class NodeOpen implements Built<NodeOpen, NodeOpenBuilder> {
+  static Serializer<NodeOpen> get serializer => _$nodeOpenSerializer;
+
+  NodeName get nodeName;
+  NodeId get nodeId;
+  AppPermissions get appPermissions;
+  CompactReport get compactReport;
+
+  NodeOpen._();
+  factory NodeOpen([void Function(NodeOpenBuilder) updates]) = _$NodeOpen;
+}
+
+
 @BuiltUnion()
 class NodeStateInner extends _$NodeStateInner {
   static Serializer<NodeStateInner> get serializer =>
       _$nodeStateInnerSerializer;
 
   NodeStateInner.closed() : super.closed();
-
-  /// Already open, but we still don't have all the information.
-  NodeStateInner.preOpen() : super.preOpen();
-  NodeStateInner.open(NodeName nodeName, NodeId nodeId,
-      AppPermissions appPermissions, CompactReport compactReport)
-      : super.open(nodeName, nodeId, appPermissions, compactReport);
+  NodeStateInner.open(NodeOpen nodeOpen): super.open(nodeOpen);
 }
 
 abstract class NodeState implements Built<NodeState, NodeStateBuilder> {
