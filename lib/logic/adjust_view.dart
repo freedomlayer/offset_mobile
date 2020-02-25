@@ -23,8 +23,7 @@ CompactReport getCompactReport(BuiltMap<NodeName, NodeState> nodesStates, NodeNa
   }
   return nodeState.inner.match(
     closed: () => null,
-    preOpen: () => null,
-    open: (nodeName, nodeId, appPermissions, compactReport) => compactReport,
+    open: (nodeOpen) => nodeOpen.compactReport,
   );
 }
 
@@ -156,8 +155,7 @@ CardSettingsInnerView adjustCardSettingsInnerView(
     CardSettingsInnerView cardSettingsInnerView, NodeState nodeState) {
   final compactReport = nodeState.inner.match(
     closed: () => null,
-    preOpen: () => null,
-    open: (nodeName, nodeId, appPermissions, compactReport) => compactReport,
+    open: (nodeOpen) => nodeOpen.compactReport,
   );
 
   if (compactReport == null) {

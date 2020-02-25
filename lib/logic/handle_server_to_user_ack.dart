@@ -16,17 +16,17 @@ AppState handleServerToUserAck(
 
   // We only adjust view if the view is not currently during transition:
   final viewState = appState1.viewState.match(
-      view: (appView) => ViewState.view(adjustAppView(appView, appState.nodesStates)),
-      transition: (_oldView, _newView, _nextRequests, _optPendingRequest) => appState1.viewState);
+      view: (appView) =>
+          ViewState.view(adjustAppView(appView, appState.nodesStates)),
+      transition: (_oldView, _newView, _nextRequests, _optPendingRequest) =>
+          appState1.viewState);
 
   return appState1.rebuild((b) => b..viewState = viewState);
-
 }
 
 AppState handleServerToUser(AppState appState, ServerToUser serverToUser) {
   return serverToUser.match(
-      responseOpenNode: (responseOpenNode) =>
-          handleResponseOpenNode(appState, responseOpenNode),
+      nodeOpened: (nodeOpened) => handleNodeOpened(appState, nodeOpened),
       nodesStatus: (nodesStatus) => handleNodesStatus(appState, nodesStatus),
       node: (nodeId, compactToUser) =>
           handleNode(appState, nodeId, compactToUser));
@@ -58,65 +58,64 @@ AppState handleAck(AppState appState, Uid requestId) {
       });
 }
 
-AppState handleResponseOpenNode(
-    AppState appState, ResponseOpenNode responseOpenNode) {
-  return responseOpenNode.match(
-      success: (nodeName, nodeId, appPermissions, compactReport) {
-    final nodeState = appState.nodesStates[nodeName];
-    if (nodeState == null) {
-      developer.log('Node $nodeName does not exist!');
-      return appState;
-    }
-    return nodeState.inner.match(
-      closed: () {
-        developer.log('Node $nodeName is closed!');
-        return appState;
-      },
-      preOpen: () {
-        final newNodeState = nodeState.rebuild((b) => b
-          ..inner = NodeStateInner.open(
-              nodeName, nodeId, appPermissions, compactReport));
-        return appState.rebuild((b) => b..nodesStates[nodeName] = newNodeState);
-      },
-      open: (_, _a, _b, _c) {
-        developer.log('Node $nodeName is already open!');
-        return appState;
-      },
-    );
-  }, failure: (nodeName) {
+AppState handleNodeOpened(AppState appState, NodeOpened nodeOpened) {
+  final nodeState = appState.nodesStates[nodeOpened.nodeName];
+  if (nodeState == null) {
+    developer.log('Node ${nodeOpened.nodeName} does not exist!');
     return appState;
-  });
+  }
+
+  final nodeOpen = NodeOpen((b) => b
+    ..nodeName = nodeOpened.nodeName
+    ..nodeId = nodeOpened.nodeId
+    ..appPermissions = nodeOpened.appPermissions.toBuilder()
+    ..compactReport = nodeOpened.compactReport.toBuilder());
+
+  final newNodeState =
+      nodeState.rebuild((b) => b..inner = NodeStateInner.open(nodeOpen));
+  return appState
+      .rebuild((b) => b..nodesStates[nodeOpened.nodeName] = newNodeState);
 }
 
 AppState handleNodesStatus(
     AppState appState, BuiltMap<NodeName, NodeStatus> nodesStatus) {
-
   final Map<NodeName, NodeState> newMap = {};
   nodesStatus.forEach((nodeName, nodeStatus) {
     final oldNodeState = appState.nodesStates[nodeName];
     NodeState newNodeState;
+
     if (oldNodeState == null) {
+      // Node did not exist before:
+      final newInner = nodeStatus.mode.match(
+        open: (nodeId) {
+          developer.log(
+              "Node $nodeName is online but we never received a NodeOpened message!");
+          return NodeStateInner.closed();
+        },
+        closed: () => NodeStateInner.closed(),
+      );
+
       // Node did not exist before.
       // We are going to create a new node:
       newNodeState = NodeState((b) => b
         ..info = nodeStatus.info
-        ..inner = nodeStatus.isOpen
-            ? NodeStateInner.preOpen()
-            : NodeStateInner.closed());
+        ..inner = newInner);
     } else {
       // Node existed before.
       // We copy the given info, and adjust the activeness status:
-      NodeStateInner newInner;
-      if (!nodeStatus.isOpen) {
-        newInner = NodeStateInner.closed();
-      } else {
-        // The new state is open:
-        if (oldNodeState.inner.isClosed) {
-          newInner = NodeStateInner.preOpen();
-        } else {
-          newInner = oldNodeState.inner;
-        }
-      }
+      final newInner = nodeStatus.mode.match(
+        open: (nodeId) {
+          oldNodeState.inner.match(
+              open: (nodeOpen) => oldNodeState.inner,
+              closed: () {
+                developer.log(
+                    "Node $nodeName is online but we never received a NodeOpened message!");
+                return NodeStateInner.closed();
+              });
+        },
+        closed: () => NodeStateInner.closed(),
+      );
+
       newNodeState = oldNodeState.rebuild((b) => b
         ..info = nodeStatus.info
         ..inner = newInner);
@@ -143,11 +142,15 @@ K searchMap<K, V>(Map<K, V> map, bool Function(K, V) predicate) {
 AppState handleNode(
     AppState appState, NodeId nodeId, CompactToUser compactToUser) {
   return compactToUser.match(
-    paymentFees: (paymentFees) => handleNodePaymentFees(appState, nodeId, paymentFees),
-    paymentCommit: (paymentCommit) => handleNodePaymentCommit(appState, nodeId, paymentCommit),
-    paymentDone: (paymentDone) => handleNodePaymentDone(appState, nodeId, paymentDone),
+    paymentFees: (paymentFees) =>
+        handleNodePaymentFees(appState, nodeId, paymentFees),
+    paymentCommit: (paymentCommit) =>
+        handleNodePaymentCommit(appState, nodeId, paymentCommit),
+    paymentDone: (paymentDone) =>
+        handleNodePaymentDone(appState, nodeId, paymentDone),
     report: (report) => handleReport(appState, nodeId, report),
-    responseVerifyCommit: (responseVerifyCommit) => handleNodeResponseVerifyCommit(appState, nodeId, responseVerifyCommit),
+    responseVerifyCommit: (responseVerifyCommit) =>
+        handleNodeResponseVerifyCommit(appState, nodeId, responseVerifyCommit),
   );
 }
 
@@ -160,16 +163,20 @@ AppState handleReport(
   appState.nodesStates.forEach((_nodeName, nodeState) {
     numFound += nodeState.inner.match(
       closed: () => 0,
-      preOpen: () => 0,
-      open: (nodeName, curNodeId, appPermissions, compactReport) {
-        if (nodeId != curNodeId) {
+      open: (nodeOpen) {
+      // open: (nodeName, curNodeId, appPermissions, compactReport) {
+        if (nodeId != nodeOpen.nodeId) {
           return 0;
         }
 
-        final newNodesStates = appState.nodesStates.rebuild((b) => b[nodeName] =
-            b[nodeName].rebuild((b) => b
-              ..inner = NodeStateInner.open(
-                  nodeName, nodeId, appPermissions, compactReport)));
+        final newNodeOpen = NodeOpen((b) => b..nodeName = nodeOpen.nodeName
+                                             ..nodeId = nodeOpen.nodeId
+                                             ..appPermissions = nodeOpen.appPermissions.toBuilder()
+                                             ..compactReport = compactReport.toBuilder());
+
+        final newNodesStates = appState.nodesStates.rebuild((b) => b[nodeOpen.nodeName] =
+            b[nodeOpen.nodeName].rebuild((b) => b
+              ..inner = NodeStateInner.open(newNodeOpen)));
 
         newAppState = newAppState
             .rebuild((b) => b..nodesStates = newNodesStates.toBuilder());
@@ -188,22 +195,26 @@ AppState handleReport(
   return newAppState;
 }
 
-AppState handleNodePaymentFees(AppState appState, NodeId nodeId, PaymentFees paymentFees) {
+AppState handleNodePaymentFees(
+    AppState appState, NodeId nodeId, PaymentFees paymentFees) {
   // We currently do nothing here
   return appState;
 }
 
-AppState handleNodePaymentCommit(AppState appState, NodeId nodeId, PaymentCommit paymentCommit) {
+AppState handleNodePaymentCommit(
+    AppState appState, NodeId nodeId, PaymentCommit paymentCommit) {
   // We currently do nothing here
   return appState;
 }
 
-AppState handleNodePaymentDone(AppState appState, NodeId nodeId, PaymentDone paymentDone) {
+AppState handleNodePaymentDone(
+    AppState appState, NodeId nodeId, PaymentDone paymentDone) {
   // We currently do nothing here
   return appState;
 }
 
-AppState handleNodeResponseVerifyCommit(AppState appState, NodeId nodeId, ResponseVerifyCommit responseVerifyCommit) {
+AppState handleNodeResponseVerifyCommit(AppState appState, NodeId nodeId,
+    ResponseVerifyCommit responseVerifyCommit) {
   // We currently do nothing here
   return appState;
 }
