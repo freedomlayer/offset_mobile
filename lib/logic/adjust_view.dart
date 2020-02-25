@@ -147,8 +147,8 @@ SettingsView adjustSettingsView(SettingsView settingsView, BuiltMap<NodeName, No
         return SettingsView.cardSettings(newCardSettingsView);
       },
       newCard: (_newCardView) => settingsView,
-      selectCardAddRelay: () => settingsView,
-      selectCardAddIndex: () => settingsView);
+      selectCardAddRelay: (_) => settingsView,
+      selectCardAddIndex: (_) => settingsView);
 }
 
 CardSettingsInnerView adjustCardSettingsInnerView(
