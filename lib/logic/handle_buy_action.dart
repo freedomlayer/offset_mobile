@@ -95,7 +95,6 @@ AppState handleBuyAction(
               oldView, newView, nextRequests, optPendingRequest));
       },
       cancelPayment: () {
-
         PaymentId paymentId;
         NodeName nodeName;
 
@@ -113,13 +112,12 @@ AppState handleBuyAction(
           developer.log(
               'handleBuyAction(): Received cancelPayment action during incorrect view');
           return createState(AppView.buy(buyView));
-
         }
 
         final nodeId = nodeIdByNodeName(nodeName, nodesStates);
         if (nodeId == null) {
-          developer
-              .log('handleBuyAction(): cancelPayment: node $nodeName is not open');
+          developer.log(
+              'handleBuyAction(): cancelPayment: node $nodeName is not open');
           return createState(AppView.home());
         }
 
@@ -133,7 +131,8 @@ AppState handleBuyAction(
           ..requestId = requestId
           ..inner = userToServer);
 
-        final oldView = AppView.buy(BuyView.paymentProgress(nodeName, paymentId));
+        final oldView =
+            AppView.buy(BuyView.paymentProgress(nodeName, paymentId));
         final newView = AppView.home();
 
         final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
@@ -143,6 +142,5 @@ AppState handleBuyAction(
           ..nodesStates = nodesStates.toBuilder()
           ..viewState = ViewState.transition(
               oldView, newView, nextRequests, optPendingRequest));
-
       });
 }
