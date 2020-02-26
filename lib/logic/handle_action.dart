@@ -25,24 +25,84 @@ AppState handleAction(AppState appState, AppAction appAction) {
     return appState;
   }
 
-  return appAction.match(
-      home: (homeAction) =>
-          handleHomeAction(appView, appState.nodesStates, homeAction),
-      buy: (buyAction) =>
-          handleBuyAction(appView, appState.nodesStates, buyAction),
-      sell: (sellAction) =>
-          handleSellAction(appView, appState.nodesStates, sellAction),
-      inTransactions: (inTransactionsAction) => handleInTransactionsAction(
-          appView, appState.nodesStates, inTransactionsAction),
-      outTransactions: (outTransactionsAction) => handleOutTransactionsAction(
-          appView, appState.nodesStates, outTransactionsAction),
-      balances: (balancesAction) =>
-          handleBalancesAction(appView, appState.nodesStates, balancesAction),
-      settings: (settingsAction) =>
-          handleSettingsAction(appView, appState.nodesStates, settingsAction));
+  BuyView buyView;
+  SellView sellView;
+  InTransactionsView inTransactionsView;
+  OutTransactionsView outTransactionsView;
+  SettingsView settingsView;
+
+  appView.match(
+      home: () => true,
+      buy: (buyView0) => buyView = buyView0,
+      sell: (sellView0) => sellView = sellView0,
+      inTransactions: (inTransactionsView0) =>
+          inTransactionsView = inTransactionsView0,
+      outTransactions: (outTransactionsView0) =>
+          outTransactionsView = outTransactionsView0,
+      balances: () => true,
+      settings: (settingsView0) => settingsView = settingsView0);
+
+  return appAction.match(home: (homeAction) {
+    if (appView.isHome) {
+      return handleHomeAction(appState.nodesStates, homeAction);
+    } else {
+      developer
+          .log('handleAction(): Received home action when not in home view');
+      return appState;
+    }
+  }, buy: (buyAction) {
+    if (buyView != null) {
+      return handleBuyAction(buyView, appState.nodesStates, buyAction);
+    } else {
+      developer.log('handleAction(): Received buy action when not in buy view');
+      return appState;
+    }
+  }, sell: (sellAction) {
+    if (sellView != null) {
+      return handleSellAction(sellView, appState.nodesStates, sellAction);
+    } else {
+      developer
+          .log('handleAction(): Received sell action when not in sell view');
+      return appState;
+    }
+  }, inTransactions: (inTransactionsAction) {
+    if (inTransactionsView != null) {
+      return handleInTransactionsAction(
+          inTransactionsView, appState.nodesStates, inTransactionsAction);
+    } else {
+      developer.log(
+          'handleAction(): Received inTransactions action when not in inTransactions view');
+      return appState;
+    }
+  }, outTransactions: (outTransactionsAction) {
+    if (outTransactionsView != null) {
+      return handleOutTransactionsAction(
+          outTransactionsView, appState.nodesStates, outTransactionsAction);
+    } else {
+      developer.log(
+          'handleAction(): Received outTransactions action when not in outTransactions view');
+      return appState;
+    }
+  }, balances: (balancesAction) {
+    if (appView.isBalances) {
+      return handleBalancesAction(appState.nodesStates, balancesAction);
+    } else {
+      developer.log(
+          'handleAction(): Received balances action when not in balances view');
+      return appState;
+    }
+  }, settings: (settingsAction) {
+    if (settingsView != null) {
+      return handleSettingsAction(settingsView, appState.nodesStates, settingsAction);
+    } else {
+      developer.log(
+          'handleAction(): Received settings action when not in settings view');
+      return appState;
+    }
+  });
 }
 
-AppState handleHomeAction(AppView appView,
+AppState handleHomeAction(
     BuiltMap<NodeName, NodeState> nodesStates, HomeAction homeAction) {
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
@@ -59,13 +119,11 @@ AppState handleHomeAction(AppView appView,
       selectSettings: () => createState(AppView.settings(SettingsView.home())));
 }
 
-
-AppState handleBalancesAction(AppView appView,
+AppState handleBalancesAction(
     BuiltMap<NodeName, NodeState> nodesStates, BalancesAction balancesAction) {
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
     ..viewState = ViewState.view(appView));
 
-  return balancesAction.match(
-      back: () => createState(AppView.home()));
+  return balancesAction.match(back: () => createState(AppView.home()));
 }

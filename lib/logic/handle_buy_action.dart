@@ -4,7 +4,17 @@ import '../actions/actions.dart';
 import '../protocol/protocol.dart';
 import '../state/state.dart';
 
-AppState handleBuyAction(AppView appView,
+AppState handleBuyAction(BuyView buyView,
     BuiltMap<NodeName, NodeState> nodesStates, BuyAction buyAction) {
-  throw UnimplementedError();
+
+  final createState = (AppView appView) => AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.view(appView));
+
+  return buyAction.match(
+      back: () => createState(AppView.home()),
+      loadInvoice: (invoiceFile) => createState(AppView.buy(BuyView.invoiceInfo(invoiceFile))),
+      confirmInvoice: () => throw UnimplementedError(),
+      selectCard: (nodeName) => throw UnimplementedError(),
+      cancelPayment: () => throw UnimplementedError());
 }

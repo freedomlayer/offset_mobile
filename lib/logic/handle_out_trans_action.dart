@@ -5,7 +5,7 @@ import '../protocol/protocol.dart';
 import '../state/state.dart';
 
 AppState handleOutTransactionsAction(
-    AppView appView,
+    OutTransactionsView outTransactionsView,
     BuiltMap<NodeName, NodeState> nodesStates,
     OutTransactionsAction outTransactionsAction) {
   throw UnimplementedError();
