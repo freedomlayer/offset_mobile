@@ -10,6 +10,13 @@ import 'sell.dart';
 import 'balances.dart';
 import 'settings.dart';
 
+export 'buy.dart';
+export 'home.dart';
+export 'out_transactions.dart';
+export 'sell.dart';
+export 'balances.dart';
+export 'settings.dart';
+
 part 'actions.g.dart';
 
 
