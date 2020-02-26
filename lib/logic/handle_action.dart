@@ -47,14 +47,14 @@ AppState handleAction(AppState appState, AppAction appAction) {
       return handleHomeAction(appState.nodesStates, homeAction);
     } else {
       developer
-          .log('handleAction(): Received home action when not in home view');
+          .log('handleAction(): Received home action during incorrect view');
       return appState;
     }
   }, buy: (buyAction) {
     if (buyView != null) {
       return handleBuyAction(buyView, appState.nodesStates, buyAction);
     } else {
-      developer.log('handleAction(): Received buy action when not in buy view');
+      developer.log('handleAction(): Received buy action during incorrect view');
       return appState;
     }
   }, sell: (sellAction) {
@@ -62,7 +62,7 @@ AppState handleAction(AppState appState, AppAction appAction) {
       return handleSellAction(sellView, appState.nodesStates, sellAction);
     } else {
       developer
-          .log('handleAction(): Received sell action when not in sell view');
+          .log('handleAction(): Received sell action during incorrect view');
       return appState;
     }
   }, inTransactions: (inTransactionsAction) {
@@ -71,7 +71,7 @@ AppState handleAction(AppState appState, AppAction appAction) {
           inTransactionsView, appState.nodesStates, inTransactionsAction);
     } else {
       developer.log(
-          'handleAction(): Received inTransactions action when not in inTransactions view');
+          'handleAction(): Received inTransactions action during incorrect view');
       return appState;
     }
   }, outTransactions: (outTransactionsAction) {
@@ -80,7 +80,7 @@ AppState handleAction(AppState appState, AppAction appAction) {
           outTransactionsView, appState.nodesStates, outTransactionsAction);
     } else {
       developer.log(
-          'handleAction(): Received outTransactions action when not in outTransactions view');
+          'handleAction(): Received outTransactions action during incorrect view');
       return appState;
     }
   }, balances: (balancesAction) {
@@ -88,7 +88,7 @@ AppState handleAction(AppState appState, AppAction appAction) {
       return handleBalancesAction(appState.nodesStates, balancesAction);
     } else {
       developer.log(
-          'handleAction(): Received balances action when not in balances view');
+          'handleAction(): Received balances action during incorrect view');
       return appState;
     }
   }, settings: (settingsAction) {
@@ -96,7 +96,7 @@ AppState handleAction(AppState appState, AppAction appAction) {
       return handleSettingsAction(settingsView, appState.nodesStates, settingsAction);
     } else {
       developer.log(
-          'handleAction(): Received settings action when not in settings view');
+          'handleAction(): Received settings action during incorrect view');
       return appState;
     }
   });
