@@ -1,5 +1,6 @@
 import 'package:built_collection/built_collection.dart';
 import 'dart:developer' as developer;
+import 'dart:math';
 
 import '../actions/actions.dart';
 import '../protocol/protocol.dart';
@@ -11,7 +12,7 @@ import 'handle_out_trans_action.dart';
 import 'handle_in_trans_action.dart';
 import 'handle_settings_action.dart';
 
-AppState handleAction(AppState appState, AppAction appAction) {
+AppState handleAction(AppState appState, AppAction appAction, Random rand) {
   final appView = appState.viewState.match(
       view: (appView) => appView,
       transition: (_a, _b, _c, _d) {
@@ -52,7 +53,7 @@ AppState handleAction(AppState appState, AppAction appAction) {
     }
   }, buy: (buyAction) {
     if (buyView != null) {
-      return handleBuyAction(buyView, appState.nodesStates, buyAction);
+      return handleBuyAction(buyView, appState.nodesStates, buyAction, rand);
     } else {
       developer.log('handleAction(): Received buy action during incorrect view');
       return appState;

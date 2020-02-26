@@ -1,21 +1,36 @@
 import 'dart:developer' as developer;
+import 'dart:math';
 
 import 'package:built_collection/built_collection.dart';
 
 import '../actions/actions.dart';
 import '../protocol/protocol.dart';
 import '../state/state.dart';
+import '../rand.dart';
 
-AppState handleBuyAction(BuyView buyView,
-    BuiltMap<NodeName, NodeState> nodesStates, BuyAction buyAction) {
+NodeId nodeIdByNodeName(
+    NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates) {
+  final nodeState = nodesStates[nodeName];
+  if (nodeState == null) {
+    return null;
+  }
+  return nodeState.inner
+      .match(closed: () => null, open: (nodeOpen) => nodeOpen.nodeId);
+}
 
+AppState handleBuyAction(
+    BuyView buyView,
+    BuiltMap<NodeName, NodeState> nodesStates,
+    BuyAction buyAction,
+    Random rand) {
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
     ..viewState = ViewState.view(appView));
 
   return buyAction.match(
       back: () => createState(AppView.home()),
-      loadInvoice: (invoiceFile) => createState(AppView.buy(BuyView.invoiceInfo(invoiceFile))),
+      loadInvoice: (invoiceFile) =>
+          createState(AppView.buy(BuyView.invoiceInfo(invoiceFile))),
       confirmInvoice: () {
         final invoiceFile = buyView.match(
             invoiceSelect: () => null,
@@ -26,31 +41,59 @@ AppState handleBuyAction(BuyView buyView,
         if (invoiceFile != null) {
           return createState(AppView.buy(BuyView.selectCard(invoiceFile)));
         } else {
-          developer.log('handleBuyAction(): Received confirmInvoice action during incorrect view');
+          developer.log(
+              'handleBuyAction(): Received confirmInvoice action during incorrect view');
           return createState(AppView.buy(buyView));
         }
       },
       selectCard: (nodeName) {
+        final nodeId = nodeIdByNodeName(nodeName, nodesStates);
+        if (nodeId == null) {
+          developer
+              .log('handleBuyAction(): selectCard: node $nodeName is not open');
+          return createState(AppView.home());
+        }
+
         final invoiceFile = buyView.match(
             invoiceSelect: () => null,
             invoiceInfo: (_) => null,
             selectCard: (invoiceFile) => invoiceFile,
             paymentProgress: (_a, _b) => null);
 
-        if (invoiceFile != null) {
-          /*
-          final requestId = genRequestId();
-          final serverToUser = ServerToUser.node(nodeId, compactToUser);
-          final userToServerAck = UserToServerAck((b) => b..requestId = requetId
-                                                       ..inner = serverToUser);
-          return createState(AppView.buy(BuyView.paymentProgress(nodeName, paymentId)));
-          */
-          throw UnimplementedError();
-        } else {
-          developer.log('handleBuyAction(): Received selectCard action during incorrect view');
+        if (invoiceFile == null) {
+          developer.log(
+              'handleBuyAction(): Received selectCard action during incorrect view');
           return createState(AppView.buy(buyView));
         }
 
+        final requestId = genUid(rand);
+        final paymentId = genPaymentId(rand);
+        final initPayment = InitPayment((b) => b
+          ..paymentId = paymentId
+          ..invoiceId = invoiceFile.invoiceId
+          ..currency = invoiceFile.currency
+          ..destPublicKey = invoiceFile.destPublicKey
+          ..destPayment = invoiceFile.destPayment
+          ..description = invoiceFile.description);
+        final userToCompact = UserToCompact.initPayment(initPayment);
+        final userToServer = UserToServer.node(nodeId, userToCompact);
+        final userToServerAck = UserToServerAck((b) => b
+          ..requestId = requestId
+          ..inner = userToServer);
+
+        final oldView = AppView.buy(BuyView.selectCard(invoiceFile));
+        final newView =
+            AppView.buy(BuyView.paymentProgress(nodeName, paymentId));
+
+        final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
+        final optPendingRequest = OptPendingRequest.none();
+
+        return AppState((b) => b
+          ..nodesStates = nodesStates.toBuilder()
+          ..viewState = ViewState.transition(
+              oldView, newView, nextRequests, optPendingRequest));
       },
-      cancelPayment: () => throw UnimplementedError());
+      cancelPayment: () {
+        throw UnimplementedError();
+      });
 }
