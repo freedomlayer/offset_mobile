@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'dart:math';
 import 'protocol/protocol.dart';
 
-const int UID_LENGTH = 16;
+const int UID_LEN = 16;
+const int PAYMENT_ID_LEN = 16;
 
 // final Random _random = Random.secure();
 
@@ -15,7 +16,12 @@ String _randBytesB64(Random rand, int length) {
 
 /// Generate a random Uid
 Uid genUid(Random rand) {
-  return Uid(_randBytesB64(rand, UID_LENGTH));
+  return Uid(_randBytesB64(rand, UID_LEN));
+}
+
+/// Generate a random PaymentId
+PaymentId genPaymentId(Random rand) {
+  return PaymentId(_randBytesB64(rand, PAYMENT_ID_LEN));
 }
 
 
