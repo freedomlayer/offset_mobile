@@ -4,6 +4,7 @@ import 'package:test/test.dart';
 
 import 'package:offst_mobile/protocol/common.dart';
 import 'package:offst_mobile/protocol/protocol.dart';
+import 'package:offst_mobile/protocol/serialize.dart';
 import 'package:offst_mobile/utils/json_plugin.dart';
 
 
@@ -11,14 +12,6 @@ import 'protocol_samples.dart' as samples;
 
 void main() {
   group('common serialize', () {
-    /*
-    final serBuilder = Serializers().toBuilder();
-    for (final commonSer in commonSerializers) {
-      serBuilder.add(commonSer);
-    }
-
-    Serializers serializers = serBuilder.build();
-    */
 
     final serializersWithPlugin =
         (serializers.toBuilder()..addPlugin(CommJsonPlugin())).build();
@@ -123,6 +116,18 @@ void main() {
         expect(msg1, msg3);
 
       }
+    });
+  });
+  group('Protocol serialize api', () {
+    test('Basic serialize and deserialize example', () {
+      final publicKey = PublicKey('MyPublicKey');
+      final data = serializeMsg(publicKey);
+      final publicKey2 = deserializeMsg<PublicKey>(data);
+      expect(publicKey, publicKey2);
+    });
+
+    test('Deserialize exception', () {
+      expect(() => deserializeMsg<PublicKey>('InvalidData'), throwsA(TypeMatcher<SerializeError>()));
     });
   });
 }

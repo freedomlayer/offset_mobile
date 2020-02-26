@@ -4,14 +4,15 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 
+import '../error.dart';
+
 @immutable
 class WrappedString {
   const WrappedString();
 }
 
-class WrappedStringError implements Exception {
-  String cause;
-  WrappedStringError(this.cause);
+class WrappedStringError extends AppError {
+  WrappedStringError(cause): super(cause);
 }
 
 Builder wrappedStringBuilder(BuilderOptions options) =>

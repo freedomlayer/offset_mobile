@@ -4,14 +4,15 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 
+import '../error.dart';
+
 @immutable
 class WrappedBigInt {
   const WrappedBigInt();
 }
 
-class WrappedBigIntError implements Exception {
-  String cause;
-  WrappedBigIntError(this.cause);
+class WrappedBigIntError extends AppError {
+  WrappedBigIntError(cause): super(cause);
 }
 
 Builder wrappedBigIntBuilder(BuilderOptions options) =>
