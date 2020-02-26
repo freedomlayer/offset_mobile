@@ -127,7 +127,8 @@ InTransactionsView adjustInTransactionsView(
       home: () => inTransactionsView,
       transaction: (nodeName, invoiceId) => calcView(nodeName, invoiceId),
       sendInvoice: (nodeName, invoiceId) => calcView(nodeName, invoiceId),
-      collected: (nodeName, invoiceId) => calcView(nodeName, invoiceId));
+      collected: (nodeName, invoiceId) => calcView(nodeName, invoiceId),
+      selectCardApplyCommit: (commit) => inTransactionsView);
 }
 
 SettingsView adjustSettingsView(SettingsView settingsView, BuiltMap<NodeName, NodeState> nodesStates) {
@@ -148,7 +149,8 @@ SettingsView adjustSettingsView(SettingsView settingsView, BuiltMap<NodeName, No
       },
       newCard: (_newCardView) => settingsView,
       selectCardAddRelay: (_) => settingsView,
-      selectCardAddIndex: (_) => settingsView);
+      selectCardAddIndex: (_) => settingsView,
+      selectCardAddFriend: (_) => settingsView);
 }
 
 CardSettingsInnerView adjustCardSettingsInnerView(

@@ -4,6 +4,7 @@ import 'package:built_union/built_union.dart';
 import 'package:meta/meta.dart';
 
 import '../../protocol/common.dart';
+import '../../protocol/protocol.dart';
 
 part 'in_transactions.g.dart';
 
@@ -16,4 +17,5 @@ class InTransactionsView extends _$InTransactionsView {
   InTransactionsView.transaction(NodeName nodeName, InvoiceId invoiceId) : super.transaction(nodeName, invoiceId);
   InTransactionsView.sendInvoice(NodeName nodeName, InvoiceId invoiceId) : super.sendInvoice(nodeName, invoiceId);
   InTransactionsView.collected(NodeName nodeName, InvoiceId invoiceId) : super.collected(nodeName, invoiceId);
+  InTransactionsView.selectCardApplyCommit(Commit commit) : super.selectCardApplyCommit(commit);
 }

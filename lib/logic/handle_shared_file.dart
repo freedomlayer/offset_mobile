@@ -28,6 +28,28 @@ const String INDEX_EXT = '.index';
 const String REMOTE_CARD_EXT = '.rcard';
 
 
+class DeserializeError implements Exception {
+  String cause;
+  DeserializeError(this.cause);
+}
+
+// TODO: Handle exceptions from deserializeData.
+// Deserialize:
+T deserializeData<T>(String data) {
+  try {
+    final decoder = JsonDecoder();
+    final serialized = decoder.convert(data);
+    final serializersWithPlugin =
+          (serializers.toBuilder()..addPlugin(CommJsonPlugin())).build();
+
+    return serializersWithPlugin.deserialize(serialized, specifiedType: FullType(T));
+  } catch (e) {
+    developer.log('deserializeData() error: $e');
+    throw DeserializeError;
+  }
+}
+
+
 /// May we interrupt a certain AppView?
 bool isInterruptible(AppView appView) {
   return appView.match(
@@ -109,49 +131,59 @@ AppState handleSharedFile(AppState appState, String filePath) {
     }
     break;
   }
-
-  return appState.rebuild((b) => b..viewState = ViewState.view(newAppView));
+    return appState.rebuild((b) => b..viewState = ViewState.view(newAppView));
 }
-
-
-// TODO: Handle exceptions from deserializeData.
-// Deserialize:
-T deserializeData<T>(String data) {
-  final decoder = JsonDecoder();
-  final serialized = decoder.convert(data);
-  final serializersWithPlugin =
-        (serializers.toBuilder()..addPlugin(CommJsonPlugin())).build();
-
-  return serializersWithPlugin.deserialize(serialized, specifiedType: FullType(T));
-}
-
 
 AppView handleSharedInvoice(AppView oldAppView, String data) {
-  final invoiceFile = deserializeData<InvoiceFile>(data);
-  return AppView.buy(BuyView.invoiceInfo(invoiceFile));
+  try {
+    final invoiceFile = deserializeData<InvoiceFile>(data);
+    return AppView.buy(BuyView.invoiceInfo(invoiceFile));
+  } on DeserializeError {
+    return oldAppView;
+  }
 }
 
 AppView handleSharedCommit(AppView oldAppView, String data) {
-  throw UnimplementedError();
+  try {
+    final commit = deserializeData<Commit>(data);
+    return AppView.inTransactions(InTransactionsView.selectCardApplyCommit(commit));
+  } on DeserializeError {
+    return oldAppView;
+  }
 }
 
 AppView handleSharedFriend(AppView oldAppView, String data) {
-  // final friendFile = deserializeData<FriendFile>(data);
-  throw UnimplementedError();
-  // final settings = SettingsView.selectCardAdd
-  // return AppView.settings(settings);
+  try {
+    final friendFile = deserializeData<FriendFile>(data);
+    return AppView.settings(SettingsView.selectCardAddFriend(friendFile));
+  } on DeserializeError {
+    return oldAppView;
+  }
 }
 
 AppView handleSharedRelay(AppView oldAppView, String data) {
-  final relayAddress = deserializeData<RelayAddress>(data);
-  return AppView.settings(SettingsView.selectCardAddRelay(relayAddress));
+  try {
+    final relayAddress = deserializeData<RelayAddress>(data);
+    return AppView.settings(SettingsView.selectCardAddRelay(relayAddress));
+  } on DeserializeError {
+    return oldAppView;
+  }
 }
 
 AppView handleSharedIndex(AppView oldAppView, String data) {
-  final indexServerFile = deserializeData<IndexServerFile>(data);
-  return AppView.settings(SettingsView.selectCardAddIndex(indexServerFile));
+  try {
+    final indexServerFile = deserializeData<IndexServerFile>(data);
+    return AppView.settings(SettingsView.selectCardAddIndex(indexServerFile));
+  } on DeserializeError {
+    return oldAppView;
+  }
 }
 
 AppView handleSharedRemoteCard(AppView oldAppView, String data) {
-  throw UnimplementedError();
+  try {
+    final remoteCardFile = deserializeData<RemoteCardFile>(data);
+    return AppView.settings(SettingsView.newCard(NewCardView.newRemoteName(remoteCardFile)));
+  } on DeserializationError {
+    return oldAppView;
+  }
 }

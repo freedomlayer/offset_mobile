@@ -19,6 +19,7 @@ class SettingsView extends _$SettingsView {
   SettingsView.newCard(NewCardView newCard) : super.newCard(newCard);
   SettingsView.selectCardAddRelay(RelayAddress relayAddress) : super.selectCardAddRelay(relayAddress);
   SettingsView.selectCardAddIndex(IndexServerFile indexServerFile) : super.selectCardAddIndex(indexServerFile);
+  SettingsView.selectCardAddFriend(FriendFile friendFile) : super.selectCardAddFriend(friendFile);
 }
 
 
