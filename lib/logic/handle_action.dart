@@ -7,6 +7,7 @@ AppState handleAction(AppState appState, AppAction appAction) {
       home: (homeAction) => handleHomeAction(appState, homeAction),
       buy: (buyAction) => handleBuyAction(appState, buyAction),
       sell: (sellAction) => handleSellAction(appState, sellAction),
+      inTransactions: (inTransactionsAction) => handleInTransactionsAction(appState, inTransactionsAction),
       outTransactions: (outTransactionsAction) => handleOutTransactionsAction(appState, outTransactionsAction),
       balances: (balancesAction) => handleBalancesAction(appState, balancesAction),
       settings: (settingsAction) => handleSettingsAction(appState, settingsAction));
@@ -22,6 +23,10 @@ AppState handleBuyAction(AppState appState, BuyAction buyAction) {
 }
 
 AppState handleSellAction(AppState appState, SellAction sellAction) {
+  throw UnimplementedError();
+}
+
+AppState handleInTransactionsAction(AppState appState, InTransactionsAction inTransactionsAction) {
   throw UnimplementedError();
 }
 
