@@ -17,7 +17,6 @@ part 'state.g.dart';
 abstract class NodeOpen implements Built<NodeOpen, NodeOpenBuilder> {
   static Serializer<NodeOpen> get serializer => _$nodeOpenSerializer;
 
-  NodeName get nodeName;
   NodeId get nodeId;
   AppPermissions get appPermissions;
   CompactReport get compactReport;

@@ -66,7 +66,6 @@ AppState handleNodeOpened(AppState appState, NodeOpened nodeOpened) {
   }
 
   final nodeOpen = NodeOpen((b) => b
-    ..nodeName = nodeOpened.nodeName
     ..nodeId = nodeOpened.nodeId
     ..appPermissions = nodeOpened.appPermissions.toBuilder()
     ..compactReport = nodeOpened.compactReport.toBuilder());
@@ -160,7 +159,7 @@ AppState handleReport(
   AppState newAppState = appState;
   int numFound = 0;
 
-  appState.nodesStates.forEach((_nodeName, nodeState) {
+  appState.nodesStates.forEach((nodeName, nodeState) {
     numFound += nodeState.inner.match(
       closed: () => 0,
       open: (nodeOpen) {
@@ -169,13 +168,12 @@ AppState handleReport(
           return 0;
         }
 
-        final newNodeOpen = NodeOpen((b) => b..nodeName = nodeOpen.nodeName
-                                             ..nodeId = nodeOpen.nodeId
+        final newNodeOpen = NodeOpen((b) => b..nodeId = nodeOpen.nodeId
                                              ..appPermissions = nodeOpen.appPermissions.toBuilder()
                                              ..compactReport = compactReport.toBuilder());
 
-        final newNodesStates = appState.nodesStates.rebuild((b) => b[nodeOpen.nodeName] =
-            b[nodeOpen.nodeName].rebuild((b) => b
+        final newNodesStates = appState.nodesStates.rebuild((b) => b[nodeName] =
+            b[nodeName].rebuild((b) => b
               ..inner = NodeStateInner.open(newNodeOpen)));
 
         newAppState = newAppState
