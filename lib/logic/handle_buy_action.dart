@@ -95,22 +95,98 @@ AppState handleBuyAction(
               oldView, newView, nextRequests, optPendingRequest));
       },
       confirmFees: () {
-        /*
-        final invoiceFile = buyView.match(
-            invoiceSelect: () => null,
-            invoiceInfo: (invoiceFile) => invoiceFile,
-            selectCard: (_) => null,
-            paymentProgress: (_a, _b) => null);
+        PaymentId paymentId;
+        NodeName nodeName;
 
-        if (invoiceFile != null) {
-          return createState(AppView.buy(BuyView.selectCard(invoiceFile)));
-        } else {
+        buyView.match(
+            invoiceSelect: () => null,
+            invoiceInfo: (_) => null,
+            selectCard: (_) => null,
+            paymentProgress: (nodeName0, paymentId0) {
+              nodeName = nodeName0;
+              paymentId = paymentId0;
+              return null;
+            });
+
+        if (nodeName == null) {
           developer.log(
-              'handleBuyAction(): Received confirmInvoice action during incorrect view');
+              'handleBuyAction(): Received confirmFees action during incorrect view');
           return createState(AppView.buy(buyView));
         }
-        */
-        throw UnimplementedError();
+
+        // At this point paymentId and nodeName should be non null.
+
+        // Send a ConfirmPaymentFees message:
+
+        // nodeState is not null because we managed to get nodeId earlier
+        NodeId nodeId;
+        Uid confirmId;
+
+        final nodeState = nodesStates[nodeName];
+        if (nodeState == null) {
+          developer.log(
+              'handleBuyAction(): confirmFees: node $nodeName does not exist!');
+          return createState(AppView.home());
+        }
+
+        final newState = nodeState.inner.match(closed: () {
+          developer
+              .log('handleBuyAction(): confirmFees: node $nodeName is closed!');
+          return createState(AppView.home());
+        }, open: (nodeOpen) {
+          final openPayment = nodeOpen.compactReport.openPayments[paymentId];
+          if (openPayment == null) {
+            developer.log(
+                'handleBuyAction(): confirmFees: payment $paymentId does not exist!');
+            return createState(AppView.home());
+          }
+
+          openPayment.status.match(
+              searchingRoute: (_) => null,
+              foundRoute: (confirmId0, _fees) {
+                confirmId = confirmId0;
+                return null;
+              },
+              sending: (_) => null,
+              commit: (_a, _b) => null,
+              success: (_a, _b, _c) => null,
+              failure: (_) => null);
+
+          if (confirmId == null) {
+            developer.log(
+                'handleBuyAction(): confirmFees: payment $paymentId is not waiting for confirmation!');
+            return createState(AppView.buy(buyView));
+          }
+          return null;
+        });
+
+        // If any error occured, we return early:
+        if (newState != null) {
+          return newState;
+        }
+
+        final confirmPaymentFees = ConfirmPaymentFees((b) => b
+          ..paymentId = paymentId
+          ..confirmId = confirmId);
+        final userToCompact =
+            UserToCompact.confirmPaymentFees(confirmPaymentFees);
+        final userToServer = UserToServer.node(nodeId, userToCompact);
+        final requestId = genUid(rand);
+        final userToServerAck = UserToServerAck((b) => b
+          ..requestId = requestId
+          ..inner = userToServer);
+
+        final oldView =
+            AppView.buy(BuyView.paymentProgress(nodeName, paymentId));
+        final newView = AppView.home();
+
+        final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
+        final optPendingRequest = OptPendingRequest.none();
+
+        return AppState((b) => b
+          ..nodesStates = nodesStates.toBuilder()
+          ..viewState = ViewState.transition(
+              oldView, newView, nextRequests, optPendingRequest));
       },
       cancelPayment: () {
         PaymentId paymentId;
