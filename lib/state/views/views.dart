@@ -26,8 +26,8 @@ class AppView extends _$AppView {
   AppView.home() : super.home();
   AppView.buy(BuyView buy) : super.buy(buy);
   AppView.sell(SellView sell) : super.sell(sell);
-  AppView.outTransactions(OutTransactionsView outTransactions) : super.outTransactions(outTransactions);
   AppView.inTransactions(InTransactionsView inTransactions) : super.inTransactions(inTransactions);
+  AppView.outTransactions(OutTransactionsView outTransactions) : super.outTransactions(outTransactions);
   AppView.balances() : super.balances();
   AppView.settings(SettingsView settings) : super.settings(settings);
 }
