@@ -14,7 +14,8 @@ class BuyAction extends _$BuyAction {
 
   BuyAction.back() : super.back();
   BuyAction.loadInvoice(InvoiceFile invoiceFile) : super.loadInvoice(invoiceFile);
-  BuyAction.confirmInvoice() : super.confirmInvoice();
+  BuyAction.confirmInfo() : super.confirmInfo();
   BuyAction.selectCard(NodeName nodeName) : super.selectCard(nodeName);
+  BuyAction.confirmFees() : super.confirmFees();
   BuyAction.cancelPayment() : super.cancelPayment();
 }

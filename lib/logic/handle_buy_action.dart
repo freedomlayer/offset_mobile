@@ -31,7 +31,7 @@ AppState handleBuyAction(
       back: () => createState(AppView.home()),
       loadInvoice: (invoiceFile) =>
           createState(AppView.buy(BuyView.invoiceInfo(invoiceFile))),
-      confirmInvoice: () {
+      confirmInfo: () {
         final invoiceFile = buyView.match(
             invoiceSelect: () => null,
             invoiceInfo: (invoiceFile) => invoiceFile,
@@ -93,6 +93,24 @@ AppState handleBuyAction(
           ..nodesStates = nodesStates.toBuilder()
           ..viewState = ViewState.transition(
               oldView, newView, nextRequests, optPendingRequest));
+      },
+      confirmFees: () {
+        /*
+        final invoiceFile = buyView.match(
+            invoiceSelect: () => null,
+            invoiceInfo: (invoiceFile) => invoiceFile,
+            selectCard: (_) => null,
+            paymentProgress: (_a, _b) => null);
+
+        if (invoiceFile != null) {
+          return createState(AppView.buy(BuyView.selectCard(invoiceFile)));
+        } else {
+          developer.log(
+              'handleBuyAction(): Received confirmInvoice action during incorrect view');
+          return createState(AppView.buy(buyView));
+        }
+        */
+        throw UnimplementedError();
       },
       cancelPayment: () {
         PaymentId paymentId;
