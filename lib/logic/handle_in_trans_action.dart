@@ -30,7 +30,7 @@ AppState handleInTransactionsAction(
       selectInvoice: (nodeName, invoiceId) => createState(
           AppView.inTransactions(
               InTransactionsView.transaction(nodeName, invoiceId))),
-      applyCommit: (commit) => handleInTransactionsApplyCommitAction(commit, inTransactionsView, nodesStates),
+      applyCommit: (nodeName, commit) => handleInTransactionsApplyCommitAction(nodeName, commit, inTransactionsView, nodesStates),
       resendInvoice: () {
         final newAppState = inTransactionsView.match(
             home: () => null,
@@ -55,6 +55,7 @@ AppState handleInTransactionsAction(
 }
 
 AppState handleInTransactionsApplyCommitAction(
+    NodeName nodeName,
     Commit commit,
     InTransactionsView inTransactionsView,
     BuiltMap<NodeName, NodeState> nodesStates) {
