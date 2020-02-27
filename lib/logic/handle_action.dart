@@ -60,7 +60,7 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
     }
   }, sell: (sellAction) {
     if (sellView != null) {
-      return handleSellAction(sellView, appState.nodesStates, sellAction);
+      return handleSellAction(sellView, appState.nodesStates, sellAction, rand);
     } else {
       developer
           .log('handleAction(): Received sell action during incorrect view');
