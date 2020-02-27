@@ -69,7 +69,7 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
   }, inTransactions: (inTransactionsAction) {
     if (inTransactionsView != null) {
       return handleInTransactionsAction(
-          inTransactionsView, appState.nodesStates, inTransactionsAction);
+          inTransactionsView, appState.nodesStates, inTransactionsAction, rand);
     } else {
       developer.log(
           'handleAction(): Received inTransactions action during incorrect view');
