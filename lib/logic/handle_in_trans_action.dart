@@ -53,7 +53,7 @@ AppState handleInTransactionsAction(
           return newAppState;
         }
       },
-      collectInvoice: () => handleInTransactionsCollectInvoiceAction(inTransactionsView, nodesStates),
+      collectInvoice: () => handleInTransactionsCollectInvoiceAction(inTransactionsView, nodesStates, rand),
       cancelInvoice: () => handleInTransactionsCancelInvoiceAction(inTransactionsView, nodesStates));
 }
 
@@ -114,8 +114,70 @@ AppState handleInTransactionsApplyCommitAction(
 
 AppState handleInTransactionsCollectInvoiceAction(
     InTransactionsView inTransactionsView,
-    BuiltMap<NodeName, NodeState> nodesStates) {
-  throw UnimplementedError();
+    BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
+
+  final createState = (AppView appView) => AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.view(appView));
+
+  // Find nodeName and invoiceId:
+  NodeName nodeName;
+  InvoiceId invoiceId;
+
+  inTransactionsView.match(
+      home: () => null,
+      transaction: (nodeName0, invoiceId0) {
+        nodeName = nodeName0;
+        invoiceId = invoiceId0;
+      },
+      sendInvoice: (_a, _b) => null,
+      collected: (_a, _b) => null,
+      selectCardApplyCommit: (_) => null);
+
+  if (nodeName == null) {
+    developer.log(
+        'handleInTransactionsCollectInvoiceAction(): node $nodeName does not exist!');
+    return createState(AppView.inTransactions(InTransactionsView.home()));
+  }
+
+  final nodeState = nodesStates[nodeName];
+  if (nodeState == null) {
+    developer.log(
+        'handleInTransactionsCollectInvoiceAction(): node $nodeName does not exist!');
+    return createState(AppView.inTransactions(inTransactionsView));
+  }
+
+  final nodeOpen = nodeState.inner.match(
+      open: (nodeOpen) => nodeOpen,
+      closed: () => null);
+
+  final nodeId = nodeOpen.nodeId;
+  if (nodeId == null) {
+    developer.log(
+        'handleInTransactionsCollectInvoiceAction(): node $nodeName is not open!');
+    return createState(AppView.inTransactions(inTransactionsView));
+  }
+
+  final userToCompact = UserToCompact.commitInvoice(invoiceId);
+  final userToServer = UserToServer.node(nodeId, userToCompact);
+  final requestId = genUid(rand);
+  final userToServerAck = UserToServerAck((b) => b
+    ..requestId = requestId
+    ..inner = userToServer);
+
+  final oldView = AppView.inTransactions(inTransactionsView);
+  // TODO: In the future we might want to be able to know the full `commit`
+  // value at this point, so that we can later save an `invoice + commit` file.
+  // This requires a change at the protocol level
+  final newView = AppView.inTransactions(InTransactionsView.collected(nodeName, invoiceId));
+
+  final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
+  final optPendingRequest = OptPendingRequest.none();
+
+  return AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.transition(
+        oldView, newView, nextRequests, optPendingRequest));
 }
 
 AppState handleInTransactionsCancelInvoiceAction(
