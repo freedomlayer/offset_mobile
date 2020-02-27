@@ -25,8 +25,28 @@ AppState handleSellAction(
       createInvoice: (currency, amount, description) =>
           handleSellCreateInvoiceAction(
               currency, amount, description, sellView, nodesStates, rand),
-      viewTransaction: () => throw UnimplementedError(),
-      cancelInvoice: (invoiceId) => throw UnimplementedError());
+      viewTransaction: () {
+        // Find nodeName:
+        NodeName nodeName;
+        InvoiceId invoiceId;
+        sellView.match(
+            selectCard: () => null,
+            invoiceDetails: (_) => null,
+            sendInvoice: (nodeName0, invoiceId0) {
+              nodeName = nodeName0;
+              invoiceId = invoiceId0;
+            });
+
+        if (nodeName == null) {
+          developer
+              .log('handleSellAction(): Received action during incorrect view');
+          return createState(AppView.home());
+        }
+        return createState(AppView.inTransactions(
+            InTransactionsView.transaction(nodeName, invoiceId)));
+      },
+      cancelInvoice: () =>
+          handleSellCancelInvoiceAction(sellView, nodesStates, rand));
 }
 
 AppState handleSellCreateInvoiceAction(
@@ -36,7 +56,6 @@ AppState handleSellCreateInvoiceAction(
     SellView sellView,
     BuiltMap<NodeName, NodeState> nodesStates,
     Random rand) {
-
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
     ..viewState = ViewState.view(appView));
@@ -48,25 +67,25 @@ AppState handleSellCreateInvoiceAction(
 
   if (nodeName == null) {
     developer.log(
-        'handleSellAction(): createInvoice: Received confirmInvoice action during incorrect view');
+        'handleSellCreateInvoiceAction(): Received action during incorrect view');
     return createState(AppView.sell(sellView));
   }
 
   // Find nodeId (Make sure that the node is open):
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    developer.log(
-        'handleSellAction(): createInvoice: node $nodeName does not exist!');
-    return createState(AppView.sell(sellView));
+    developer
+        .log('handleSellCreateInvoiceAction(): node $nodeName does not exist!');
+    return createState(AppView.home());
   }
 
   final nodeOpen =
       nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
 
   if (nodeOpen == null) {
-    developer
-        .log('handleSellAction(): createInvoice: node $nodeName is not open!');
-    return createState(AppView.sell(sellView));
+    developer.log(
+        'handleSellCreateInvoiceAction(): createInvoice: node $nodeName is not open!');
+    return createState(AppView.home());
   }
 
   final nodeId = nodeOpen.nodeId;
@@ -79,6 +98,59 @@ AppState handleSellCreateInvoiceAction(
     ..description = description);
 
   final userToCompact = UserToCompact.addInvoice(addInvoice);
+  final userToServer = UserToServer.node(nodeId, userToCompact);
+  final requestId = genUid(rand);
+  final userToServerAck = UserToServerAck((b) => b
+    ..requestId = requestId
+    ..inner = userToServer);
+
+  final oldView = AppView.sell(sellView);
+  final newView = AppView.sell(SellView.sendInvoice(nodeName, invoiceId));
+
+  final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
+  final optPendingRequest = OptPendingRequest.none();
+
+  return AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.transition(
+        oldView, newView, nextRequests, optPendingRequest));
+}
+
+AppState handleSellCancelInvoiceAction(SellView sellView,
+    BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
+  final createState = (AppView appView) => AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.view(appView));
+
+  // Find nodeName:
+  NodeName nodeName;
+  InvoiceId invoiceId;
+  sellView.match(
+      selectCard: () => null,
+      invoiceDetails: (_) => null,
+      sendInvoice: (nodeName0, invoiceId0) {
+        nodeName = nodeName0;
+        invoiceId = invoiceId0;
+      });
+
+  final nodeState = nodesStates[nodeName];
+  if (nodeState == null) {
+    developer
+        .log('handleSellCancelInvoiceAction(): node $nodeName does not exist!');
+    return createState(AppView.home());
+  }
+
+  final nodeId = nodeState.inner.match(
+      open: (nodeOpen) => nodeOpen.nodeId,
+      closed: () => null);
+
+  if (nodeId == null) {
+    developer
+        .log('handleSellCancelInvoiceAction(): node $nodeName is closed!');
+    return createState(AppView.home());
+  }
+
+  final userToCompact = UserToCompact.cancelInvoice(invoiceId);
   final userToServer = UserToServer.node(nodeId, userToCompact);
   final requestId = genUid(rand);
   final userToServerAck = UserToServerAck((b) => b
