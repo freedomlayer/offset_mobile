@@ -4,6 +4,7 @@ import 'protocol/protocol.dart';
 
 const int UID_LEN = 16;
 const int PAYMENT_ID_LEN = 16;
+const int INVOICE_ID_LEN = 32;
 
 // final Random _random = Random.secure();
 
@@ -22,6 +23,11 @@ Uid genUid(Random rand) {
 /// Generate a random PaymentId
 PaymentId genPaymentId(Random rand) {
   return PaymentId(_randBytesB64(rand, PAYMENT_ID_LEN));
+}
+
+/// Generate a random InvoiceId
+InvoiceId genInvoiceId(Random rand) {
+  return InvoiceId(_randBytesB64(rand, INVOICE_ID_LEN));
 }
 
 
