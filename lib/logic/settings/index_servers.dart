@@ -42,18 +42,14 @@ AppState handleIndexServersSettings(
 AppState _handleRemoveIndex(NodeName nodeName, PublicKey indexPublicKey,
     BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
 
-  final createStateInner = (CardSettingsInnerView cardSettingsInnerView) =>
-      AppState((b) => b
-        ..nodesStates = nodesStates.toBuilder()
-        ..viewState = ViewState.view(
-            AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b
-              ..nodeName = nodeName
-              ..inner = cardSettingsInnerView)))));
+  final createState = (AppView appView) => AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.view(appView));
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
     developer.log('_handleRemoveIndex(): node $nodeName does not exist!');
-    return createStateInner(CardSettingsInnerView.indexServers(IndexServersSettingsView.home()));
+    return createState(AppView.settings(SettingsView.home()));
   }
 
   final nodeOpen =
@@ -62,7 +58,7 @@ AppState _handleRemoveIndex(NodeName nodeName, PublicKey indexPublicKey,
   final nodeId = nodeOpen.nodeId;
   if (nodeId == null) {
     developer.log('_handleRemoveIndex(): node $nodeName is not open!');
-    return createStateInner(CardSettingsInnerView.indexServers(IndexServersSettingsView.home()));
+    return createState(AppView.settings(SettingsView.home()));
   }
 
   final userToCompact = UserToCompact.removeIndexServer(indexPublicKey);
@@ -88,18 +84,14 @@ AppState _handleRemoveIndex(NodeName nodeName, PublicKey indexPublicKey,
 AppState _handleNewIndex(NodeName nodeName, NamedIndexServerAddress namedIndexServerAddress,
     BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
 
-  final createStateInner = (CardSettingsInnerView cardSettingsInnerView) =>
-      AppState((b) => b
-        ..nodesStates = nodesStates.toBuilder()
-        ..viewState = ViewState.view(
-            AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b
-              ..nodeName = nodeName
-              ..inner = cardSettingsInnerView)))));
+  final createState = (AppView appView) => AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.view(appView));
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
     developer.log('_handleNewIndex(): node $nodeName does not exist!');
-    return createStateInner(CardSettingsInnerView.indexServers(IndexServersSettingsView.home()));
+    return createState(AppView.settings(SettingsView.home()));
   }
 
   final nodeOpen =
@@ -108,7 +100,7 @@ AppState _handleNewIndex(NodeName nodeName, NamedIndexServerAddress namedIndexSe
   final nodeId = nodeOpen.nodeId;
   if (nodeId == null) {
     developer.log('_handleNewIndex(): node $nodeName is not open!');
-    return createStateInner(CardSettingsInnerView.indexServers(IndexServersSettingsView.home()));
+    return createState(AppView.settings(SettingsView.home()));
   }
 
   final userToCompact = UserToCompact.addIndexServer(namedIndexServerAddress);

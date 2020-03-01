@@ -41,18 +41,14 @@ AppState handleRelaysSettings(
 AppState _handleRemoveRelay(NodeName nodeName, PublicKey relayPublicKey,
     BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
 
-  final createStateInner = (CardSettingsInnerView cardSettingsInnerView) =>
-      AppState((b) => b
-        ..nodesStates = nodesStates.toBuilder()
-        ..viewState = ViewState.view(
-            AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b
-              ..nodeName = nodeName
-              ..inner = cardSettingsInnerView)))));
+  final createState = (AppView appView) => AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.view(appView));
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
     developer.log('_handleRemoveRelay(): node $nodeName does not exist!');
-    return createStateInner(CardSettingsInnerView.relays(RelaysSettingsView.home()));
+    return createState(AppView.settings(SettingsView.home()));
   }
 
   final nodeOpen =
@@ -61,7 +57,7 @@ AppState _handleRemoveRelay(NodeName nodeName, PublicKey relayPublicKey,
   final nodeId = nodeOpen.nodeId;
   if (nodeId == null) {
     developer.log('_handleRemoveRelay(): node $nodeName is not open!');
-    return createStateInner(CardSettingsInnerView.relays(RelaysSettingsView.home()));
+    return createState(AppView.settings(SettingsView.home()));
   }
 
   final userToCompact = UserToCompact.removeRelay(relayPublicKey);
@@ -87,18 +83,14 @@ AppState _handleRemoveRelay(NodeName nodeName, PublicKey relayPublicKey,
 AppState _handleNewRelay(NodeName nodeName, NamedRelayAddress namedRelayAddress,
     BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
 
-  final createStateInner = (CardSettingsInnerView cardSettingsInnerView) =>
-      AppState((b) => b
-        ..nodesStates = nodesStates.toBuilder()
-        ..viewState = ViewState.view(
-            AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b
-              ..nodeName = nodeName
-              ..inner = cardSettingsInnerView)))));
+  final createState = (AppView appView) => AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.view(appView));
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
     developer.log('_handleNewRelay(): node $nodeName does not exist!');
-    return createStateInner(CardSettingsInnerView.relays(RelaysSettingsView.home()));
+    return createState(AppView.settings(SettingsView.home()));
   }
 
   final nodeOpen =
@@ -107,7 +99,7 @@ AppState _handleNewRelay(NodeName nodeName, NamedRelayAddress namedRelayAddress,
   final nodeId = nodeOpen.nodeId;
   if (nodeId == null) {
     developer.log('_handleNewRelay(): node $nodeName is not open!');
-    return createStateInner(CardSettingsInnerView.relays(RelaysSettingsView.home()));
+    return createState(AppView.settings(SettingsView.home()));
   }
 
   final userToCompact = UserToCompact.addRelay(namedRelayAddress);
