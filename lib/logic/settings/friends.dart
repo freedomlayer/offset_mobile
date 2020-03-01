@@ -42,18 +42,18 @@ AppState handleFriendsSettings(
                 ..friendPublicKey = friendPublicKey
                 ..inner = FriendSettingsInnerView.home())))),
       friendSettings: (friendSettingsAction) {
-        final friendPublicKey = friendsSettingsView.match(
+        final friendSettingsView = friendsSettingsView.match(
             home: () => null,
-            friendSettings: (friendSettingsView) => friendSettingsView.friendPublicKey,
+            friendSettings: (friendSettingsView) => friendSettingsView,
             newFriend: (_) => null,
             shareInfo: () => null);
 
-        if (friendPublicKey == null) {
+        if (friendSettingsView == null) {
           developer.log('_handleFriendsSettings(): friendSettings: Incorrect view!');
           return createStateInner(CardSettingsInnerView.friends(friendsSettingsView));
         }
 
-        return _handleFriendSettings(nodeName, friendPublicKey, nodesStates, friendSettingsAction, rand);
+        return _handleFriendSettings(nodeName, friendSettingsView, nodesStates, friendSettingsAction, rand);
       },
       shareInfo: () => createStateInner(CardSettingsInnerView.friends(FriendsSettingsView.shareInfo())));
 }
@@ -141,7 +141,7 @@ AppState _handleAddFriend(
 
 AppState _handleFriendSettings(
     NodeName nodeName,
-    PublicKey friendPublicKey,
+    FriendSettingsView friendSettingsView,
     BuiltMap<NodeName, NodeState> nodesStates,
     FriendSettingsAction friendSettingsAction,
     Random rand) {
