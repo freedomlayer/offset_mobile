@@ -67,7 +67,7 @@ AppState _handleCreateInvoice(
 
   if (nodeName == null) {
     developer.log(
-        'handleSellCreateInvoiceAction(): Received action during incorrect view');
+        '_handleCreateInvoice(): Received action during incorrect view');
     return createState(AppView.sell(sellView));
   }
 
@@ -75,7 +75,7 @@ AppState _handleCreateInvoice(
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
     developer
-        .log('handleSellCreateInvoiceAction(): node $nodeName does not exist!');
+        .log('_handleCreateInvoice(): node $nodeName does not exist!');
     return createState(AppView.home());
   }
 
@@ -84,7 +84,7 @@ AppState _handleCreateInvoice(
 
   if (nodeOpen == null) {
     developer.log(
-        'handleSellCreateInvoiceAction(): createInvoice: node $nodeName is not open!');
+        '_handleCreateInvoice(): createInvoice: node $nodeName is not open!');
     return createState(AppView.home());
   }
 
@@ -136,7 +136,7 @@ AppState _handleCancelInvoice(SellView sellView,
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
     developer
-        .log('handleSellCancelInvoiceAction(): node $nodeName does not exist!');
+        .log('_handleCancelInvoice(): node $nodeName does not exist!');
     return createState(AppView.home());
   }
 
@@ -146,7 +146,7 @@ AppState _handleCancelInvoice(SellView sellView,
 
   if (nodeId == null) {
     developer
-        .log('handleSellCancelInvoiceAction(): node $nodeName is closed!');
+        .log('_handleCancelInvoice(): node $nodeName is closed!');
     return createState(AppView.home());
   }
 

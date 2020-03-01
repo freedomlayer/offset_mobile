@@ -134,7 +134,7 @@ AppState _handleConfirmFees(
 
   if (nodeName == null) {
     developer.log(
-        'handleBuyAction(): Received confirmFees action during incorrect view');
+        '_handleConfirmFees(): Received confirmFees action during incorrect view');
     return createState(AppView.buy(buyView));
   }
 
@@ -149,18 +149,18 @@ AppState _handleConfirmFees(
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
     developer
-        .log('handleBuyAction(): confirmFees: node $nodeName does not exist!');
+        .log('_handleConfirmFees(): confirmFees: node $nodeName does not exist!');
     return createState(AppView.home());
   }
 
   final newState = nodeState.inner.match(closed: () {
-    developer.log('handleBuyAction(): confirmFees: node $nodeName is closed!');
+    developer.log('_handleConfirmFees(): confirmFees: node $nodeName is closed!');
     return createState(AppView.home());
   }, open: (nodeOpen) {
     final openPayment = nodeOpen.compactReport.openPayments[paymentId];
     if (openPayment == null) {
       developer.log(
-          'handleBuyAction(): confirmFees: payment $paymentId does not exist!');
+          '_handleConfirmFees(): confirmFees: payment $paymentId does not exist!');
       return createState(AppView.home());
     }
 
@@ -177,7 +177,7 @@ AppState _handleConfirmFees(
 
     if (confirmId == null) {
       developer.log(
-          'handleBuyAction(): confirmFees: payment $paymentId is not waiting for confirmation!');
+          '_handleConfirmFees(): confirmFees: payment $paymentId is not waiting for confirmation!');
       return createState(AppView.buy(buyView));
     }
     return null;
@@ -234,14 +234,14 @@ AppState _handleCancelPayment(
 
   if (nodeName == null) {
     developer.log(
-        'handleBuyAction(): Received cancelPayment action during incorrect view');
+        '_handleCancelPayment(): Received cancelPayment action during incorrect view');
     return createState(AppView.buy(buyView));
   }
 
   final nodeId = nodeIdByNodeName(nodeName, nodesStates);
   if (nodeId == null) {
     developer
-        .log('handleBuyAction(): cancelPayment: node $nodeName is not open');
+        .log('_handleCancelPayment(): cancelPayment: node $nodeName is not open');
     return createState(AppView.home());
   }
 
