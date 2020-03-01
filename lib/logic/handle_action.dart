@@ -98,7 +98,7 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
   }, settings: (settingsAction) {
     if (settingsView != null) {
       return handleSettingsAction(
-          settingsView, appState.nodesStates, settingsAction);
+          settingsView, appState.nodesStates, settingsAction, rand);
     } else {
       developer.log(
           'handleAction(): Received settings action during incorrect view');
