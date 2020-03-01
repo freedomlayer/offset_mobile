@@ -142,7 +142,7 @@ AppState _handleRemoveRelay(NodeName nodeName, PublicKey relayPublicKey,
 
   final nodeId = nodeOpen.nodeId;
   if (nodeId == null) {
-    developer.log('_handleCollectInvoice(): node $nodeName is not open!');
+    developer.log('_handleRemoveRelay(): node $nodeName is not open!');
     return createStateInner(CardSettingsInnerView.relays(RelaysSettingsView.home()));
   }
 
@@ -179,7 +179,7 @@ AppState _handleNewRelay(NodeName nodeName, NamedRelayAddress namedRelayAddress,
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    developer.log('_handleRemoveRelay(): node $nodeName does not exist!');
+    developer.log('_handleNewRelay(): node $nodeName does not exist!');
     return createStateInner(CardSettingsInnerView.relays(RelaysSettingsView.home()));
   }
 
@@ -188,7 +188,7 @@ AppState _handleNewRelay(NodeName nodeName, NamedRelayAddress namedRelayAddress,
 
   final nodeId = nodeOpen.nodeId;
   if (nodeId == null) {
-    developer.log('_handleCollectInvoice(): node $nodeName is not open!');
+    developer.log('_handleNewRelay(): node $nodeName is not open!');
     return createStateInner(CardSettingsInnerView.relays(RelaysSettingsView.home()));
   }
 
