@@ -33,7 +33,7 @@ bool _isInterruptible(AppView appView) {
       sell: (sellView) => true,
       outTransactions: (_) => true,
       inTransactions: (_) => true,
-      balances: () => true,
+      balances: (_) => true,
       settings: (_) => true,
   );
 }

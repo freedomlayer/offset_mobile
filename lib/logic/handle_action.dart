@@ -10,6 +10,7 @@ import 'handle_buy_action.dart';
 import 'handle_sell_action.dart';
 import 'handle_out_trans_action.dart';
 import 'handle_in_trans_action.dart';
+import 'handle_balances_action.dart';
 import 'handle_settings_action.dart';
 
 AppState handleAction(AppState appState, AppAction appAction, Random rand) {
@@ -30,17 +31,18 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
   SellView sellView;
   InTransactionsView inTransactionsView;
   OutTransactionsView outTransactionsView;
+  BalancesView balancesView;
   SettingsView settingsView;
 
   appView.match(
-      home: () => true,
+      home: () => null,
       buy: (buyView0) => buyView = buyView0,
       sell: (sellView0) => sellView = sellView0,
       inTransactions: (inTransactionsView0) =>
           inTransactionsView = inTransactionsView0,
       outTransactions: (outTransactionsView0) =>
           outTransactionsView = outTransactionsView0,
-      balances: () => true,
+      balances: (balancesView0) => balancesView = balancesView0,
       settings: (settingsView0) => settingsView = settingsView0);
 
   return appAction.match(home: (homeAction) {
@@ -86,7 +88,7 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
       return appState;
     }
   }, balances: (balancesAction) {
-    if (appView.isBalances) {
+    if (balancesView != null) {
       return handleBalancesAction(appState.nodesStates, balancesAction);
     } else {
       developer.log(
@@ -118,15 +120,8 @@ AppState handleHomeAction(
           createState(AppView.inTransactions(InTransactionsView.home())),
       selectOutTransactions: () =>
           createState(AppView.outTransactions(OutTransactionsView.home())),
-      selectBalances: () => createState(AppView.balances()),
+      selectBalances: () =>
+          createState(AppView.balances(BalancesView.selectCard())),
       selectSettings: () => createState(AppView.settings(SettingsView.home())));
 }
 
-AppState handleBalancesAction(
-    BuiltMap<NodeName, NodeState> nodesStates, BalancesAction balancesAction) {
-  final createState = (AppView appView) => AppState((b) => b
-    ..nodesStates = nodesStates.toBuilder()
-    ..viewState = ViewState.view(appView));
-
-  return balancesAction.match(back: () => createState(AppView.home()));
-}

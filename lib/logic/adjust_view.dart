@@ -72,7 +72,7 @@ AppView adjustAppView(AppView appView, BuiltMap<NodeName, NodeState> nodesStates
         adjustOutTransactionsView(outTransactionsView, nodesStates)),
     inTransactions: (inTransactionsView) => AppView.inTransactions(
         adjustInTransactionsView(inTransactionsView, nodesStates)),
-    balances: () => appView,
+    balances: (balancesView) => AppView.balances(adjustBalancesView(balancesView, nodesStates)),
     settings: (settingsView) =>
         AppView.settings(adjustSettingsView(settingsView, nodesStates)),
   );
@@ -129,6 +129,12 @@ InTransactionsView adjustInTransactionsView(
       sendInvoice: (nodeName, invoiceId) => calcView(nodeName, invoiceId),
       collected: (nodeName, invoiceId) => calcView(nodeName, invoiceId),
       selectCardApplyCommit: (commit) => inTransactionsView);
+}
+
+BalancesView adjustBalancesView(
+    BalancesView balancesView, BuiltMap<NodeName, NodeState> nodesStates) {
+  // TODO:
+  throw UnimplementedError();
 }
 
 SettingsView adjustSettingsView(SettingsView settingsView, BuiltMap<NodeName, NodeState> nodesStates) {
