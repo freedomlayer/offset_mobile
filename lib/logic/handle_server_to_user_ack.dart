@@ -142,14 +142,14 @@ AppState handleNode(
     AppState appState, NodeId nodeId, CompactToUser compactToUser) {
   return compactToUser.match(
     paymentFees: (paymentFees) =>
-        handleNodePaymentFees(appState, nodeId, paymentFees),
+        _handleNodePaymentFees(appState, nodeId, paymentFees),
     paymentCommit: (paymentCommit) =>
-        handleNodePaymentCommit(appState, nodeId, paymentCommit),
+        _handleNodePaymentCommit(appState, nodeId, paymentCommit),
     paymentDone: (paymentDone) =>
-        handleNodePaymentDone(appState, nodeId, paymentDone),
+        _handleNodePaymentDone(appState, nodeId, paymentDone),
     report: (report) => handleReport(appState, nodeId, report),
     responseVerifyCommit: (responseVerifyCommit) =>
-        handleNodeResponseVerifyCommit(appState, nodeId, responseVerifyCommit),
+        _handleNodeResponseVerifyCommit(appState, nodeId, responseVerifyCommit),
   );
 }
 
@@ -193,25 +193,25 @@ AppState handleReport(
   return newAppState;
 }
 
-AppState handleNodePaymentFees(
+AppState _handleNodePaymentFees(
     AppState appState, NodeId nodeId, PaymentFees paymentFees) {
   // We currently do nothing here
   return appState;
 }
 
-AppState handleNodePaymentCommit(
+AppState _handleNodePaymentCommit(
     AppState appState, NodeId nodeId, PaymentCommit paymentCommit) {
   // We currently do nothing here
   return appState;
 }
 
-AppState handleNodePaymentDone(
+AppState _handleNodePaymentDone(
     AppState appState, NodeId nodeId, PaymentDone paymentDone) {
   // We currently do nothing here
   return appState;
 }
 
-AppState handleNodeResponseVerifyCommit(AppState appState, NodeId nodeId,
+AppState _handleNodeResponseVerifyCommit(AppState appState, NodeId nodeId,
     ResponseVerifyCommit responseVerifyCommit) {
   // We currently do nothing here
   return appState;

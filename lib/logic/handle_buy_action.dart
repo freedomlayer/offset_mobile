@@ -46,15 +46,15 @@ AppState handleBuyAction(
           return createState(AppView.buy(buyView));
         }
       },
-      selectCard: (nodeName) => handleBuySelectCardAction(
+      selectCard: (nodeName) => _handleSelectCard(
           nodeName, buyView, nodesStates, buyAction, rand),
       confirmFees: () =>
-          handleBuyConfirmFeesAction(buyView, nodesStates, buyAction, rand),
+          _handleConfirmFees(buyView, nodesStates, buyAction, rand),
       cancelPayment: () =>
-          handleBuyCancelPaymentAction(buyView, nodesStates, buyAction, rand));
+          _handleCancelPayment(buyView, nodesStates, buyAction, rand));
 }
 
-AppState handleBuySelectCardAction(
+AppState _handleSelectCard(
     NodeName nodeName,
     BuyView buyView,
     BuiltMap<NodeName, NodeState> nodesStates,
@@ -110,7 +110,7 @@ AppState handleBuySelectCardAction(
         oldView, newView, nextRequests, optPendingRequest));
 }
 
-AppState handleBuyConfirmFeesAction(
+AppState _handleConfirmFees(
     BuyView buyView,
     BuiltMap<NodeName, NodeState> nodesStates,
     BuyAction buyAction,
@@ -210,7 +210,7 @@ AppState handleBuyConfirmFeesAction(
         oldView, newView, nextRequests, optPendingRequest));
 }
 
-AppState handleBuyCancelPaymentAction(
+AppState _handleCancelPayment(
     BuyView buyView,
     BuiltMap<NodeName, NodeState> nodesStates,
     BuyAction buyAction,

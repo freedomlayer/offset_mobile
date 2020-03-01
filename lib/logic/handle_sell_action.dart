@@ -23,7 +23,7 @@ AppState handleSellAction(
       selectCard: (nodeName) =>
           createState(AppView.sell(SellView.invoiceDetails(nodeName))),
       createInvoice: (currency, amount, description) =>
-          handleSellCreateInvoiceAction(
+          _handleCreateInvoice(
               currency, amount, description, sellView, nodesStates, rand),
       viewTransaction: () {
         // Find nodeName:
@@ -46,10 +46,10 @@ AppState handleSellAction(
             InTransactionsView.transaction(nodeName, invoiceId)));
       },
       cancelInvoice: () =>
-          handleSellCancelInvoiceAction(sellView, nodesStates, rand));
+          _handleCancelInvoice(sellView, nodesStates, rand));
 }
 
-AppState handleSellCreateInvoiceAction(
+AppState _handleCreateInvoice(
     Currency currency,
     U128 amount,
     String description,
@@ -116,7 +116,7 @@ AppState handleSellCreateInvoiceAction(
         oldView, newView, nextRequests, optPendingRequest));
 }
 
-AppState handleSellCancelInvoiceAction(SellView sellView,
+AppState _handleCancelInvoice(SellView sellView,
     BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()

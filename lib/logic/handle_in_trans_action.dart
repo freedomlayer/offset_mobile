@@ -34,7 +34,7 @@ AppState handleInTransactionsAction(
       selectInvoice: (nodeName, invoiceId) => createState(
           AppView.inTransactions(
               InTransactionsView.transaction(nodeName, invoiceId))),
-      applyCommit: (nodeName, commit) => handleInTransactionsApplyCommitAction(nodeName, commit, inTransactionsView, nodesStates, rand),
+      applyCommit: (nodeName, commit) => _handleApplyCommit(nodeName, commit, inTransactionsView, nodesStates, rand),
       resendInvoice: () {
         final newAppState = inTransactionsView.match(
             home: () => null,
@@ -53,11 +53,11 @@ AppState handleInTransactionsAction(
           return newAppState;
         }
       },
-      collectInvoice: () => handleInTransactionsCollectInvoiceAction(inTransactionsView, nodesStates, rand),
-      cancelInvoice: () => handleInTransactionsCancelInvoiceAction(inTransactionsView, nodesStates));
+      collectInvoice: () => _handleCollectInvoice(inTransactionsView, nodesStates, rand),
+      cancelInvoice: () => _handleCancelInvoice(inTransactionsView, nodesStates));
 }
 
-AppState handleInTransactionsApplyCommitAction(
+AppState _handleApplyCommit(
     NodeName nodeName,
     Commit commit,
     InTransactionsView inTransactionsView,
@@ -112,7 +112,7 @@ AppState handleInTransactionsApplyCommitAction(
         oldView, newView, nextRequests, optPendingRequest));
 }
 
-AppState handleInTransactionsCollectInvoiceAction(
+AppState _handleCollectInvoice(
     InTransactionsView inTransactionsView,
     BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
 
@@ -180,7 +180,7 @@ AppState handleInTransactionsCollectInvoiceAction(
         oldView, newView, nextRequests, optPendingRequest));
 }
 
-AppState handleInTransactionsCancelInvoiceAction(
+AppState _handleCancelInvoice(
     InTransactionsView inTransactionsView,
     BuiltMap<NodeName, NodeState> nodesStates) {
   throw UnimplementedError();

@@ -21,7 +21,7 @@ const String REMOTE_CARD_EXT = '.rcard';
 
 
 /// May we interrupt a certain AppView?
-bool isInterruptible(AppView appView) {
+bool _isInterruptible(AppView appView) {
   return appView.match(
       home: () => true,
       buy: (buyView) => buyView.match(
@@ -48,7 +48,7 @@ AppState handleSharedFile(AppState appState, String filePath) {
   final interruptible = appState.viewState.match(
       view: (appView) {
         oldAppView = appView;
-        return isInterruptible(appView);
+        return _isInterruptible(appView);
       },
       transition: (_a, _b, _c, _d) => false
   );
@@ -66,32 +66,32 @@ AppState handleSharedFile(AppState appState, String filePath) {
   AppView newAppView;
   switch (extension) {
     case INVOICE_EXT: {
-      newAppView = handleSharedInvoice(oldAppView, data);
+      newAppView = _handleSharedInvoice(oldAppView, data);
     }
     break;
 
     case COMMIT_EXT: {
-      newAppView = handleSharedCommit(oldAppView, data);
+      newAppView = _handleSharedCommit(oldAppView, data);
     }
     break;
 
     case FRIEND_EXT: {
-      newAppView = handleSharedFriend(oldAppView, data);
+      newAppView = _handleSharedFriend(oldAppView, data);
     }
     break;
 
     case RELAY_EXT: {
-      newAppView = handleSharedRelay(oldAppView, data);
+      newAppView = _handleSharedRelay(oldAppView, data);
     }
     break;
 
     case INDEX_EXT: {
-      newAppView = handleSharedIndex(oldAppView, data);
+      newAppView = _handleSharedIndex(oldAppView, data);
     }
     break;
 
     case REMOTE_CARD_EXT: {
-      newAppView = handleSharedRemoteCard(oldAppView, data);
+      newAppView = _handleSharedRemoteCard(oldAppView, data);
     }
     break;
 
@@ -104,7 +104,7 @@ AppState handleSharedFile(AppState appState, String filePath) {
     return appState.rebuild((b) => b..viewState = ViewState.view(newAppView));
 }
 
-AppView handleSharedInvoice(AppView oldAppView, String data) {
+AppView _handleSharedInvoice(AppView oldAppView, String data) {
   try {
     final invoiceFile = deserializeMsg<InvoiceFile>(data);
     return AppView.buy(BuyView.invoiceInfo(invoiceFile));
@@ -113,7 +113,7 @@ AppView handleSharedInvoice(AppView oldAppView, String data) {
   }
 }
 
-AppView handleSharedCommit(AppView oldAppView, String data) {
+AppView _handleSharedCommit(AppView oldAppView, String data) {
   try {
     final commit = deserializeMsg<Commit>(data);
     return AppView.inTransactions(InTransactionsView.selectCardApplyCommit(commit));
@@ -122,7 +122,7 @@ AppView handleSharedCommit(AppView oldAppView, String data) {
   }
 }
 
-AppView handleSharedFriend(AppView oldAppView, String data) {
+AppView _handleSharedFriend(AppView oldAppView, String data) {
   try {
     final friendFile = deserializeMsg<FriendFile>(data);
     return AppView.settings(SettingsView.selectCardAddFriend(friendFile));
@@ -131,7 +131,7 @@ AppView handleSharedFriend(AppView oldAppView, String data) {
   }
 }
 
-AppView handleSharedRelay(AppView oldAppView, String data) {
+AppView _handleSharedRelay(AppView oldAppView, String data) {
   try {
     final relayAddress = deserializeMsg<RelayAddress>(data);
     return AppView.settings(SettingsView.selectCardAddRelay(relayAddress));
@@ -140,7 +140,7 @@ AppView handleSharedRelay(AppView oldAppView, String data) {
   }
 }
 
-AppView handleSharedIndex(AppView oldAppView, String data) {
+AppView _handleSharedIndex(AppView oldAppView, String data) {
   try {
     final indexServerFile = deserializeMsg<IndexServerFile>(data);
     return AppView.settings(SettingsView.selectCardAddIndex(indexServerFile));
@@ -149,7 +149,7 @@ AppView handleSharedIndex(AppView oldAppView, String data) {
   }
 }
 
-AppView handleSharedRemoteCard(AppView oldAppView, String data) {
+AppView _handleSharedRemoteCard(AppView oldAppView, String data) {
   try {
     final remoteCardFile = deserializeMsg<RemoteCardFile>(data);
     return AppView.settings(SettingsView.newCard(NewCardView.newRemoteName(remoteCardFile)));
