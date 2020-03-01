@@ -89,7 +89,7 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
     }
   }, balances: (balancesAction) {
     if (balancesView != null) {
-      return handleBalancesAction(appState.nodesStates, balancesAction);
+      return handleBalancesAction(balancesView, appState.nodesStates, balancesAction);
     } else {
       developer.log(
           'handleAction(): Received balances action during incorrect view');
