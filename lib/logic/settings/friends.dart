@@ -146,14 +146,13 @@ AppState _handleFriendSettings(
     FriendSettingsAction friendSettingsAction,
     Random rand) {
 
-  /*
-  friendSettingsAction.match(
+  return friendSettingsAction.match(
       back: () => throw UnimplementedError(),
       enable: () => throw UnimplementedError(),
       disable: () => throw UnimplementedError(),
       unfriend: () => throw UnimplementedError(),
-      removeCurrency: () => throw UnimplementedError(),
-  */
-
-  throw UnimplementedError();
+      removeCurrency: (currency) => throw UnimplementedError(),
+      currencySettings: (currencySettingsAction) => throw UnimplementedError(),
+      resolve: (resolveAction) => throw UnimplementedError(),
+      newCurrency: (newCurrencyAction) => throw UnimplementedError());
 }
