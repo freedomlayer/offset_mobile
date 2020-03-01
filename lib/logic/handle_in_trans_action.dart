@@ -195,8 +195,6 @@ AppState _handleCancelInvoice(InTransactionsView inTransactionsView,
         return null;
       },
       sendInvoice: (nodeName0, invoiceId0) {
-        nodeName = nodeName0;
-        invoiceId = invoiceId0;
         return null;
       },
       collected: (_a, _b) => null,
@@ -231,11 +229,8 @@ AppState _handleCancelInvoice(InTransactionsView inTransactionsView,
     ..inner = userToServer);
 
   final oldView = AppView.inTransactions(inTransactionsView);
-  // TODO: In the future we might want to be able to know the full `commit`
-  // value at this point, so that we can later save an `invoice + commit` file.
-  // This requires a change at the protocol level
   final newView =
-      AppView.inTransactions(InTransactionsView.collected(nodeName, invoiceId));
+      AppView.inTransactions(InTransactionsView.home());
 
   final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
   final optPendingRequest = OptPendingRequest.none();
