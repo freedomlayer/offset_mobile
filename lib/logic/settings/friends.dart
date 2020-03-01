@@ -62,15 +62,19 @@ AppState _handleNewFriend(
   return newFriendAction.match(
       back: () => createStateInner(
           CardSettingsInnerView.friends(FriendsSettingsView.home())),
-      loadFriend: (friendFile) => throw UnimplementedError(),
-      addFriend: (friendName, friendFile) =>
-          _handleAddFriend(nodeName, nodesStates, friendName, friendFile, rand));
-
+      loadFriend: (friendFile) => createStateInner(
+          CardSettingsInnerView.friends(FriendsSettingsView.newFriend(
+              NewFriendView.name(friendFile.publicKey, friendFile.relays)))),
+      addFriend: (friendName, friendFile) => _handleAddFriend(
+          nodeName, nodesStates, friendName, friendFile, rand));
 }
 
-AppState _handleAddFriend(NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates,
-    String friendName, FriendFile friendFile, Random rand) {
-
+AppState _handleAddFriend(
+    NodeName nodeName,
+    BuiltMap<NodeName, NodeState> nodesStates,
+    String friendName,
+    FriendFile friendFile,
+    Random rand) {
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
     ..viewState = ViewState.view(appView));
@@ -90,9 +94,10 @@ AppState _handleAddFriend(NodeName nodeName, BuiltMap<NodeName, NodeState> nodes
     return createState(AppView.settings(SettingsView.home()));
   }
 
-  final addFriend = AddFriend((b) => b..friendPublicKey = friendFile.publicKey
-                                      ..relays = friendFile.relays.toBuilder()
-                                      ..name = friendName);
+  final addFriend = AddFriend((b) => b
+    ..friendPublicKey = friendFile.publicKey
+    ..relays = friendFile.relays.toBuilder()
+    ..name = friendName);
 
   final userToCompact = UserToCompact.addFriend(addFriend);
   final userToServer = UserToServer.node(nodeId, userToCompact);
@@ -100,13 +105,18 @@ AppState _handleAddFriend(NodeName nodeName, BuiltMap<NodeName, NodeState> nodes
   final userToServerAck = UserToServerAck((b) => b
     ..requestId = requestId
     ..inner = userToServer);
-  
-  final newFriendView = NewFriendView.name(friendFile.publicKey, friendFile.relays);
-  final oldView = AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b..nodeName = nodeName
-                ..inner = CardSettingsInnerView.friends(FriendsSettingsView.newFriend(newFriendView)))));
-  final newView = AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b..nodeName = nodeName
-                ..inner = CardSettingsInnerView.friends(FriendsSettingsView.home()))));
 
+  final newFriendView =
+      NewFriendView.name(friendFile.publicKey, friendFile.relays);
+  final oldView = AppView.settings(SettingsView.cardSettings(CardSettingsView(
+      (b) => b
+        ..nodeName = nodeName
+        ..inner = CardSettingsInnerView.friends(
+            FriendsSettingsView.newFriend(newFriendView)))));
+  final newView =
+      AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b
+        ..nodeName = nodeName
+        ..inner = CardSettingsInnerView.friends(FriendsSettingsView.home()))));
 
   final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
   final optPendingRequest = OptPendingRequest.none();
