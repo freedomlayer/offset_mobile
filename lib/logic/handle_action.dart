@@ -55,7 +55,8 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
     if (buyView != null) {
       return handleBuyAction(buyView, appState.nodesStates, buyAction, rand);
     } else {
-      developer.log('handleAction(): Received buy action during incorrect view');
+      developer
+          .log('handleAction(): Received buy action during incorrect view');
       return appState;
     }
   }, sell: (sellAction) {
@@ -77,8 +78,8 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
     }
   }, outTransactions: (outTransactionsAction) {
     if (outTransactionsView != null) {
-      return handleOutTransactionsAction(
-          outTransactionsView, appState.nodesStates, outTransactionsAction);
+      return handleOutTransactionsAction(outTransactionsView,
+          appState.nodesStates, outTransactionsAction, rand);
     } else {
       developer.log(
           'handleAction(): Received outTransactions action during incorrect view');
@@ -94,7 +95,8 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
     }
   }, settings: (settingsAction) {
     if (settingsView != null) {
-      return handleSettingsAction(settingsView, appState.nodesStates, settingsAction);
+      return handleSettingsAction(
+          settingsView, appState.nodesStates, settingsAction);
     } else {
       developer.log(
           'handleAction(): Received settings action during incorrect view');
