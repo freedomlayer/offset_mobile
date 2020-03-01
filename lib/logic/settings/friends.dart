@@ -49,13 +49,17 @@ AppState handleFriendsSettings(
             shareInfo: () => null);
 
         if (friendSettingsView == null) {
-          developer.log('_handleFriendsSettings(): friendSettings: Incorrect view!');
-          return createStateInner(CardSettingsInnerView.friends(friendsSettingsView));
+          developer
+              .log('_handleFriendsSettings(): friendSettings: Incorrect view!');
+          return createStateInner(
+              CardSettingsInnerView.friends(friendsSettingsView));
         }
 
-        return _handleFriendSettings(nodeName, friendSettingsView, nodesStates, friendSettingsAction, rand);
+        return _handleFriendSettings(nodeName, friendSettingsView, nodesStates,
+            friendSettingsAction, rand);
       },
-      shareInfo: () => createStateInner(CardSettingsInnerView.friends(FriendsSettingsView.shareInfo())));
+      shareInfo: () =>
+          createStateInner(CardSettingsInnerView.friends(FriendsSettingsView.shareInfo())));
 }
 
 AppState _handleNewFriend(
@@ -145,9 +149,26 @@ AppState _handleFriendSettings(
     BuiltMap<NodeName, NodeState> nodesStates,
     FriendSettingsAction friendSettingsAction,
     Random rand) {
+  final createStateFriends = (FriendsSettingsView friendsSettingsView) =>
+      AppState((b) => b
+        ..nodesStates = nodesStates.toBuilder()
+        ..viewState = ViewState.view(
+            AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b
+              ..nodeName = nodeName
+              ..inner = CardSettingsInnerView.friends(friendsSettingsView))))));
 
   return friendSettingsAction.match(
-      back: () => throw UnimplementedError(),
+      back: () => friendSettingsView.inner.match(
+          home: () => createStateFriends(FriendsSettingsView.home()),
+          resolve: () => createStateFriends(FriendsSettingsView.friendSettings(
+              friendSettingsView
+                  .rebuild((b) => b..inner = FriendSettingsInnerView.home()))),
+          currencySettings: (_currency) => createStateFriends(
+              FriendsSettingsView.friendSettings(friendSettingsView
+                  .rebuild((b) => b..inner = FriendSettingsInnerView.home()))),
+          newCurrency: () => createStateFriends(
+              FriendsSettingsView.friendSettings(friendSettingsView
+                  .rebuild((b) => b..inner = FriendSettingsInnerView.home())))),
       enable: () => throw UnimplementedError(),
       disable: () => throw UnimplementedError(),
       unfriend: () => throw UnimplementedError(),
