@@ -67,6 +67,7 @@ class NewFriendAction extends _$NewFriendAction {
 
   NewFriendAction.back() : super.back();
   NewFriendAction.loadFriend(FriendFile friendFile) : super.loadFriend(friendFile);
+  NewFriendAction.addFriend(String friendName, FriendFile friendFile) : super.addFriend(friendName, friendFile);
 }
 
 
