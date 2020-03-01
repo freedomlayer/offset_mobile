@@ -9,6 +9,8 @@ import '../state/state.dart';
 
 import '../rand.dart';
 
+import 'handle_card_settings_action.dart';
+
 AppState handleSettingsAction(
     SettingsView settingsView,
     BuiltMap<NodeName, NodeState> nodesStates,
@@ -50,8 +52,8 @@ AppState handleSettingsAction(
           return createState(AppView.settings(settingsView));
         }
 
-        return _handleCardSettings(
-            cardSettingsView, nodesStates, cardSettingsAction);
+        return handleCardSettingsAction(
+            cardSettingsView, nodesStates, cardSettingsAction, rand);
       },
       selectCard: (nodeName) {
         final cardSettingsView = CardSettingsView((b) => b
@@ -138,11 +140,4 @@ AppState _handleNewCardRemote(NodeName nodeName, RemoteCardFile remoteCardFile,
     ..nodesStates = nodesStates.toBuilder()
     ..viewState = ViewState.transition(
         oldView, newView, nextRequests, optPendingRequest));
-}
-
-AppState _handleCardSettings(
-    CardSettingsView cardSettingsView,
-    BuiltMap<NodeName, NodeState> nodesStates,
-    CardSettingsAction cardSettingsAction) {
-  throw UnimplementedError();
 }
