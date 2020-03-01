@@ -41,8 +41,20 @@ AppState handleFriendsSettings(
               FriendsSettingsView.friendSettings(FriendSettingsView((b) => b
                 ..friendPublicKey = friendPublicKey
                 ..inner = FriendSettingsInnerView.home())))),
-      friendSettings: (friendSettingsAction) =>
-          _handleFriendSettings(nodeName, nodesStates, friendSettingsAction, rand),
+      friendSettings: (friendSettingsAction) {
+        final friendPublicKey = friendsSettingsView.match(
+            home: () => null,
+            friendSettings: (friendSettingsView) => friendSettingsView.friendPublicKey,
+            newFriend: (_) => null,
+            shareInfo: () => null);
+
+        if (friendPublicKey == null) {
+          developer.log('_handleFriendsSettings(): friendSettings: Incorrect view!');
+          return createStateInner(CardSettingsInnerView.friends(friendsSettingsView));
+        }
+
+        return _handleFriendSettings(nodeName, friendPublicKey, nodesStates, friendSettingsAction, rand);
+      },
       shareInfo: () => createStateInner(CardSettingsInnerView.friends(FriendsSettingsView.shareInfo())));
 }
 
@@ -129,8 +141,19 @@ AppState _handleAddFriend(
 
 AppState _handleFriendSettings(
     NodeName nodeName,
+    PublicKey friendPublicKey,
     BuiltMap<NodeName, NodeState> nodesStates,
     FriendSettingsAction friendSettingsAction,
     Random rand) {
+
+  /*
+  friendSettingsAction.match(
+      back: () => throw UnimplementedError(),
+      enable: () => throw UnimplementedError(),
+      disable: () => throw UnimplementedError(),
+      unfriend: () => throw UnimplementedError(),
+      removeCurrency: () => throw UnimplementedError(),
+  */
+
   throw UnimplementedError();
 }
