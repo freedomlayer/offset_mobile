@@ -9,7 +9,7 @@ import '../state/state.dart';
 
 import '../rand.dart';
 
-import 'handle_card_settings_action.dart';
+import 'settings/card.dart';
 
 AppState handleSettingsAction(
     SettingsView settingsView,
