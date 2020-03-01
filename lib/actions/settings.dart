@@ -53,7 +53,9 @@ class FriendsSettingsAction extends _$FriendsSettingsAction {
   static Serializer<FriendsSettingsAction> get serializer => _$friendsSettingsActionSerializer;
 
   FriendsSettingsAction.back() : super.back();
+  FriendsSettingsAction.selectNewFriend() : super.selectNewFriend();
   FriendsSettingsAction.newFriend(NewFriendAction newFriend) : super.newFriend(newFriend);
+  FriendsSettingsAction.selectFriend(PublicKey friendPublicKey) : super.selectFriend(friendPublicKey);
   FriendsSettingsAction.friendSettings(FriendSettingsAction friendSettings) : super.friendSettings(friendSettings);
   FriendsSettingsAction.shareInfo() : super.shareInfo();
 }
