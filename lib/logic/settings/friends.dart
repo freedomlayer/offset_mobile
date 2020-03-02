@@ -400,6 +400,9 @@ AppState _handleNewCurrency(
     return createState(AppView.settings(SettingsView.home()));
   }
 
+  // TODO: Possibly change the protocol in the future, to allow updating
+  // multiple values at the same time?
+
   // Note: We send two messages here (Rate + MaxDebt):
   final userToServers = <UserToServer>[];
 
