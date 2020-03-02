@@ -11,7 +11,7 @@ import 'friends.dart';
 import 'index_servers.dart';
 import 'relays.dart';
 
-// import '../../rand.dart';
+import '../../rand.dart';
 
 AppState handleCardSettingsAction(
     CardSettingsView cardSettingsView,
@@ -24,6 +24,10 @@ AppState handleCardSettingsAction(
 
   return cardSettingsAction.match(
       back: () => createState(AppView.home()),
+      activate: () => _handleActivate(
+          cardSettingsView.nodeName, cardSettingsView, nodesStates, rand),
+      deactivate: () => _handleDeactivate(
+          cardSettingsView.nodeName, cardSettingsView, nodesStates, rand),
       friendsSettings: (friendsSettingsAction) {
         final friendsSettingsView = cardSettingsView.inner.match(
             home: () => null,
@@ -80,4 +84,65 @@ AppState handleCardSettingsAction(
             indexServersSettingsAction,
             rand);
       });
+}
+
+AppState _handleActivate(NodeName nodeName, CardSettingsView cardSettingsView,
+    BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
+  final createState = (AppView appView) => AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.view(appView));
+
+  final nodeState = nodesStates[nodeName];
+  if (nodeState == null) {
+    developer.log('_handleActivate(): node $nodeName does not exist!');
+    return createState(AppView.settings(SettingsView.home()));
+  }
+
+  final userToServer = UserToServer.enableNode(nodeName);
+  final requestId = genUid(rand);
+  final userToServerAck = UserToServerAck((b) => b
+    ..requestId = requestId
+    ..inner = userToServer);
+
+  final oldView = AppView.settings(SettingsView.cardSettings(cardSettingsView));
+  final newView = oldView;
+
+  final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
+  final optPendingRequest = OptPendingRequest.none();
+
+  return AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.transition(
+        oldView, newView, nextRequests, optPendingRequest));
+}
+
+AppState _handleDeactivate(NodeName nodeName, CardSettingsView cardSettingsView,
+    BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
+
+  final createState = (AppView appView) => AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.view(appView));
+
+  final nodeState = nodesStates[nodeName];
+  if (nodeState == null) {
+    developer.log('_handleDeactivate(): node $nodeName does not exist!');
+    return createState(AppView.settings(SettingsView.home()));
+  }
+
+  final userToServer = UserToServer.disableNode(nodeName);
+  final requestId = genUid(rand);
+  final userToServerAck = UserToServerAck((b) => b
+    ..requestId = requestId
+    ..inner = userToServer);
+
+  final oldView = AppView.settings(SettingsView.cardSettings(cardSettingsView));
+  final newView = oldView;
+
+  final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
+  final optPendingRequest = OptPendingRequest.none();
+
+  return AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.transition(
+        oldView, newView, nextRequests, optPendingRequest));
 }

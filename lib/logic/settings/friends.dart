@@ -177,3 +177,4 @@ AppState _handleFriendSettings(
       resolve: (resolveAction) => throw UnimplementedError(),
       newCurrency: (newCurrencyAction) => throw UnimplementedError());
 }
+
