@@ -409,7 +409,7 @@ abstract class ChannelConsistentReport implements Built<ChannelConsistentReport,
 class ChannelStatusReport extends _$ChannelStatusReport {
   static Serializer<ChannelStatusReport> get serializer => _$channelStatusReportSerializer;
 
-  ChannelStatusReport.inconsistent(ChannelConsistentReport channelInconsistentReport) : super.inconsistent(channelInconsistentReport);
+  ChannelStatusReport.inconsistent(ChannelInconsistentReport channelInconsistentReport) : super.inconsistent(channelInconsistentReport);
   ChannelStatusReport.consistent(ChannelConsistentReport channelConsistentReport) : super.consistent(channelConsistentReport);
 }
 
