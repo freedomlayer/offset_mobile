@@ -168,16 +168,21 @@ AppState _handleFriendSettings(
                   .rebuild((b) => b..inner = FriendSettingsInnerView.home()))),
           newCurrency: () =>
               createStateFriends(FriendsSettingsView.friendSettings(friendSettingsView.rebuild((b) => b..inner = FriendSettingsInnerView.home())))),
-      enable: () => _handleEnable(nodeName, friendSettingsView.friendPublicKey, nodesStates, rand),
-      disable: () => _handleDisable(nodeName, friendSettingsView.friendPublicKey, nodesStates, rand),
-      unfriend: () => _handleUnfriend(nodeName, friendSettingsView.friendPublicKey, nodesStates, rand),
+      enableFriend: () => _handleEnableFriend(nodeName, friendSettingsView.friendPublicKey, nodesStates, rand),
+      disableFriend: () => _handleDisableFriend(nodeName, friendSettingsView.friendPublicKey, nodesStates, rand),
+      removeFriend: () => _handleRemoveFriend(nodeName, friendSettingsView.friendPublicKey, nodesStates, rand),
       removeCurrency: (currency) => _handleRemoveCurrency(nodeName, friendSettingsView.friendPublicKey, currency, nodesStates, rand),
-      currencySettings: (currencySettingsAction) => throw UnimplementedError(),
-      resolve: (resolveAction) => throw UnimplementedError(),
-      newCurrency: (newCurrencyAction) => throw UnimplementedError());
+      selectNewCurrency: () => throw UnimplementedError(),
+      newCurrency: (currency, remoteMaxDebt, rate) => throw UnimplementedError(),
+      selectCurrency: (currency) => throw UnimplementedError(),
+      openCurrency: (currency) => throw UnimplementedError(),
+      closeCurrency: (currency) => throw UnimplementedError(),
+      updateCurrency: (currency, remoteMaxDebt, rate) => throw UnimplementedError(),
+      selectResolve: () => throw UnimplementedError(),
+      resolve: () => throw UnimplementedError());
 }
 
-AppState _handleEnable(NodeName nodeName, PublicKey friendPublicKey,
+AppState _handleEnableFriend(NodeName nodeName, PublicKey friendPublicKey,
     BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
@@ -225,7 +230,7 @@ AppState _handleEnable(NodeName nodeName, PublicKey friendPublicKey,
         oldView, newView, nextRequests, optPendingRequest));
 }
 
-AppState _handleDisable(NodeName nodeName, PublicKey friendPublicKey,
+AppState _handleDisableFriend(NodeName nodeName, PublicKey friendPublicKey,
     BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
@@ -273,7 +278,7 @@ AppState _handleDisable(NodeName nodeName, PublicKey friendPublicKey,
         oldView, newView, nextRequests, optPendingRequest));
 }
 
-AppState _handleUnfriend(NodeName nodeName, PublicKey friendPublicKey,
+AppState _handleRemoveFriend(NodeName nodeName, PublicKey friendPublicKey,
     BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()

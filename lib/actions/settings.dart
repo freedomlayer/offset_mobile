@@ -78,43 +78,22 @@ class FriendSettingsAction extends _$FriendSettingsAction {
   static Serializer<FriendSettingsAction> get serializer => _$friendSettingsActionSerializer;
 
   FriendSettingsAction.back() : super.back();
-  FriendSettingsAction.enable() : super.enable();
-  FriendSettingsAction.disable() : super.disable();
-  FriendSettingsAction.unfriend() : super.unfriend();
+  FriendSettingsAction.enableFriend() : super.enableFriend();
+  FriendSettingsAction.disableFriend() : super.disableFriend();
+  FriendSettingsAction.removeFriend() : super.removeFriend();
 
   FriendSettingsAction.removeCurrency(Currency currency) : super.removeCurrency(currency);
-  FriendSettingsAction.currencySettings(CurrencySettingsAction currencySettings) : super.currencySettings(currencySettings);
-  FriendSettingsAction.resolve(ResolveAction resolve) : super.resolve(resolve);
-  FriendSettingsAction.newCurrency(NewCurrencyAction newCurrency) : super.newCurrency(newCurrency);
-}
 
+  FriendSettingsAction.selectNewCurrency() : super.selectNewCurrency();
+  FriendSettingsAction.newCurrency(Currency currency, U128 remoteMaxDebt, Rate rate) : super.newCurrency(currency, remoteMaxDebt, rate);
 
-@BuiltUnion()
-class CurrencySettingsAction extends _$CurrencySettingsAction {
-  static Serializer<CurrencySettingsAction> get serializer => _$currencySettingsActionSerializer;
+  FriendSettingsAction.selectCurrency(Currency currency) : super.selectCurrency(currency);
+  FriendSettingsAction.openCurrency(Currency currency) : super.openCurrency(currency);
+  FriendSettingsAction.closeCurrency(Currency currency) : super.closeCurrency(currency);
+  FriendSettingsAction.updateCurrency(Currency currency, U128 remoteMaxDebt, Rate rate) : super.updateCurrency(currency, remoteMaxDebt, rate);
 
-  CurrencySettingsAction.back() : super.back();
-  CurrencySettingsAction.open() : super.open();
-  CurrencySettingsAction.close() : super.close();
-  CurrencySettingsAction.update(U128 remoteMaxDebt, Rate rate) : super.update(remoteMaxDebt, rate);
-}
-
-
-@BuiltUnion()
-class ResolveAction extends _$ResolveAction {
-  static Serializer<ResolveAction> get serializer => _$resolveActionSerializer;
-
-  ResolveAction.back() : super.back();
-  ResolveAction.accept() : super.accept();
-}
-
-
-@BuiltUnion()
-class NewCurrencyAction extends _$NewCurrencyAction {
-  static Serializer<NewCurrencyAction> get serializer => _$newCurrencyActionSerializer;
-
-  NewCurrencyAction.back() : super.back();
-  NewCurrencyAction.newCurrency(Currency currency, U128 remoteMaxDebt, Rate rate) : super.newCurrency(currency, remoteMaxDebt, rate);
+  FriendSettingsAction.selectResolve() : super.selectResolve();
+  FriendSettingsAction.resolve() : super.resolve();
 }
 
 
