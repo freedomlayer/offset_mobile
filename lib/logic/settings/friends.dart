@@ -166,15 +166,214 @@ AppState _handleFriendSettings(
           currencySettings: (_currency) => createStateFriends(
               FriendsSettingsView.friendSettings(friendSettingsView
                   .rebuild((b) => b..inner = FriendSettingsInnerView.home()))),
-          newCurrency: () => createStateFriends(
-              FriendsSettingsView.friendSettings(friendSettingsView
-                  .rebuild((b) => b..inner = FriendSettingsInnerView.home())))),
-      enable: () => throw UnimplementedError(),
-      disable: () => throw UnimplementedError(),
-      unfriend: () => throw UnimplementedError(),
-      removeCurrency: (currency) => throw UnimplementedError(),
+          newCurrency: () =>
+              createStateFriends(FriendsSettingsView.friendSettings(friendSettingsView.rebuild((b) => b..inner = FriendSettingsInnerView.home())))),
+      enable: () => _handleEnable(nodeName, friendSettingsView.friendPublicKey, nodesStates, rand),
+      disable: () => _handleDisable(nodeName, friendSettingsView.friendPublicKey, nodesStates, rand),
+      unfriend: () => _handleUnfriend(nodeName, friendSettingsView.friendPublicKey, nodesStates, rand),
+      removeCurrency: (currency) => _handleRemoveCurrency(nodeName, friendSettingsView.friendPublicKey, currency, nodesStates, rand),
       currencySettings: (currencySettingsAction) => throw UnimplementedError(),
       resolve: (resolveAction) => throw UnimplementedError(),
       newCurrency: (newCurrencyAction) => throw UnimplementedError());
 }
 
+AppState _handleEnable(NodeName nodeName, PublicKey friendPublicKey,
+    BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
+  final createState = (AppView appView) => AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.view(appView));
+
+  final nodeState = nodesStates[nodeName];
+
+  if (nodeState == null) {
+    developer.log('_handleEnable(): node $nodeName does not exist!');
+    return createState(AppView.settings(SettingsView.home()));
+  }
+
+  final nodeOpen =
+      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
+
+  final nodeId = nodeOpen.nodeId;
+  if (nodeId == null) {
+    developer.log('_handleEnable(): node $nodeName is not open!');
+    return createState(AppView.settings(SettingsView.home()));
+  }
+
+  final userToCompact = UserToCompact.enableFriend(friendPublicKey);
+  final userToServer = UserToServer.node(nodeId, userToCompact);
+  final requestId = genUid(rand);
+  final userToServerAck = UserToServerAck((b) => b
+    ..requestId = requestId
+    ..inner = userToServer);
+
+  final friendsSettingsView =
+      FriendsSettingsView.friendSettings(FriendSettingsView((b) => b
+        ..friendPublicKey = friendPublicKey
+        ..inner = FriendSettingsInnerView.home()));
+  final cardSettingsView = CardSettingsView((b) => b
+    ..nodeName = nodeName
+    ..inner = CardSettingsInnerView.friends(friendsSettingsView));
+  final oldView = AppView.settings(SettingsView.cardSettings(cardSettingsView));
+  final newView = oldView;
+
+  final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
+  final optPendingRequest = OptPendingRequest.none();
+
+  return AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.transition(
+        oldView, newView, nextRequests, optPendingRequest));
+}
+
+AppState _handleDisable(NodeName nodeName, PublicKey friendPublicKey,
+    BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
+  final createState = (AppView appView) => AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.view(appView));
+
+  final nodeState = nodesStates[nodeName];
+
+  if (nodeState == null) {
+    developer.log('_handleDisable(): node $nodeName does not exist!');
+    return createState(AppView.settings(SettingsView.home()));
+  }
+
+  final nodeOpen =
+      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
+
+  final nodeId = nodeOpen.nodeId;
+  if (nodeId == null) {
+    developer.log('_handleDisable(): node $nodeName is not open!');
+    return createState(AppView.settings(SettingsView.home()));
+  }
+
+  final userToCompact = UserToCompact.disableFriend(friendPublicKey);
+  final userToServer = UserToServer.node(nodeId, userToCompact);
+  final requestId = genUid(rand);
+  final userToServerAck = UserToServerAck((b) => b
+    ..requestId = requestId
+    ..inner = userToServer);
+
+  final friendsSettingsView =
+      FriendsSettingsView.friendSettings(FriendSettingsView((b) => b
+        ..friendPublicKey = friendPublicKey
+        ..inner = FriendSettingsInnerView.home()));
+  final cardSettingsView = CardSettingsView((b) => b
+    ..nodeName = nodeName
+    ..inner = CardSettingsInnerView.friends(friendsSettingsView));
+  final oldView = AppView.settings(SettingsView.cardSettings(cardSettingsView));
+  final newView = oldView;
+
+  final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
+  final optPendingRequest = OptPendingRequest.none();
+
+  return AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.transition(
+        oldView, newView, nextRequests, optPendingRequest));
+}
+
+AppState _handleUnfriend(NodeName nodeName, PublicKey friendPublicKey,
+    BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
+  final createState = (AppView appView) => AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.view(appView));
+
+  final nodeState = nodesStates[nodeName];
+
+  if (nodeState == null) {
+    developer.log('_handleUnfriend(): node $nodeName does not exist!');
+    return createState(AppView.settings(SettingsView.home()));
+  }
+
+  final nodeOpen =
+      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
+
+  final nodeId = nodeOpen.nodeId;
+  if (nodeId == null) {
+    developer.log('_handleUnfriend(): node $nodeName is not open!');
+    return createState(AppView.settings(SettingsView.home()));
+  }
+
+  final userToCompact = UserToCompact.removeFriend(friendPublicKey);
+  final userToServer = UserToServer.node(nodeId, userToCompact);
+  final requestId = genUid(rand);
+  final userToServerAck = UserToServerAck((b) => b
+    ..requestId = requestId
+    ..inner = userToServer);
+
+  final friendsSettingsView =
+      FriendsSettingsView.friendSettings(FriendSettingsView((b) => b
+        ..friendPublicKey = friendPublicKey
+        ..inner = FriendSettingsInnerView.home()));
+  final cardSettingsView = CardSettingsView((b) => b
+    ..nodeName = nodeName
+    ..inner = CardSettingsInnerView.friends(friendsSettingsView));
+  final oldView = AppView.settings(SettingsView.cardSettings(cardSettingsView));
+
+  final newCardSettingsView = CardSettingsView((b) => b
+    ..nodeName = nodeName
+    ..inner = CardSettingsInnerView.friends(FriendsSettingsView.home()));
+  final newView =
+      AppView.settings(SettingsView.cardSettings(newCardSettingsView));
+
+  final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
+  final optPendingRequest = OptPendingRequest.none();
+
+  return AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.transition(
+        oldView, newView, nextRequests, optPendingRequest));
+}
+
+AppState _handleRemoveCurrency(NodeName nodeName, PublicKey friendPublicKey,
+    Currency currency, BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
+  final createState = (AppView appView) => AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.view(appView));
+
+  final nodeState = nodesStates[nodeName];
+
+  if (nodeState == null) {
+    developer.log('_handleRemoveCurrency(): node $nodeName does not exist!');
+    return createState(AppView.settings(SettingsView.home()));
+  }
+
+  final nodeOpen =
+      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
+
+  final nodeId = nodeOpen.nodeId;
+  if (nodeId == null) {
+    developer.log('_handleRemoveCurrency(): node $nodeName is not open!');
+    return createState(AppView.settings(SettingsView.home()));
+  }
+
+  final removeFriendCurrency = RemoveFriendCurrency((b) => b
+    ..friendPublicKey = friendPublicKey
+    ..currency = currency);
+  final userToCompact =
+      UserToCompact.removeFriendCurrency(removeFriendCurrency);
+  final userToServer = UserToServer.node(nodeId, userToCompact);
+  final requestId = genUid(rand);
+  final userToServerAck = UserToServerAck((b) => b
+    ..requestId = requestId
+    ..inner = userToServer);
+
+  final friendsSettingsView =
+      FriendsSettingsView.friendSettings(FriendSettingsView((b) => b
+        ..friendPublicKey = friendPublicKey
+        ..inner = FriendSettingsInnerView.home()));
+  final cardSettingsView = CardSettingsView((b) => b
+    ..nodeName = nodeName
+    ..inner = CardSettingsInnerView.friends(friendsSettingsView));
+  final oldView = AppView.settings(SettingsView.cardSettings(cardSettingsView));
+  final newView = oldView;
+
+  final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
+  final optPendingRequest = OptPendingRequest.none();
+
+  return AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.transition(
+        oldView, newView, nextRequests, optPendingRequest));
+}
