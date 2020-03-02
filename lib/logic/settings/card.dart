@@ -94,7 +94,7 @@ AppState _handleEnable(NodeName nodeName, CardSettingsView cardSettingsView,
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    developer.log('_handleActivate(): node $nodeName does not exist!');
+    developer.log('_handleEnable(): node $nodeName does not exist!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -125,7 +125,7 @@ AppState _handleDisable(NodeName nodeName, CardSettingsView cardSettingsView,
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    developer.log('_handleDeactivate(): node $nodeName does not exist!');
+    developer.log('_handleDisable(): node $nodeName does not exist!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
