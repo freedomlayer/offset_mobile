@@ -1,6 +1,54 @@
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+import 'dart:convert';
+import 'dart:async';
+import 'process.dart';
+
+import 'logic/types.dart';
+import 'protocol/protocol.dart';
+import 'protocol/serialize.dart';
+import 'actions/actions.dart';
+
+// import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+
+Future<void> main() async {
+  await loadBinaries();
+
+  final process = await openProcess();
+
+  final eventController = StreamController<AppEvent>();
+
+  process.stdout.transform(utf8.decoder).listen((data) async {
+    // TODO; `deserializeMsg` could raise an exception. How to handle it?
+    final serverToUserAck = deserializeMsg<ServerToUserAck>(data);
+    eventController.add(AppEvent.serverToUserAck(serverToUserAck));
+  });
+
+  process.exitCode.then((exitCode) {
+    developer.log('Process exited with code: $exitCode');
+    eventController.close();
+    // TODO: What to do in this case?
+    // Ideas:
+    // - Close the app?
+    // - Show an error screen and then close the program?
+  });
+
+  process.stderr.transform(utf8.decoder).listen((data) {
+    developer.log("stderr: $data");
+  });
+
+  final _sendUserToServerAck = (UserToServerAck userToServerAck) {
+    final data = serializeMsg<UserToServerAck>(userToServerAck);
+      process.stdin.writeln(data);
+  };
+
+  final _queueAction = (AppAction appAction) => eventController.add(AppEvent.action(appAction));
+
+  // TODO: How to pass arguments into MyApp()?
+  runApp(MyApp());
+}
+
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
