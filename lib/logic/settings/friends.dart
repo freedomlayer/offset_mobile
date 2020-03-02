@@ -172,13 +172,16 @@ AppState _handleFriendSettings(
       disableFriend: () => _handleDisableFriend(nodeName, friendSettingsView.friendPublicKey, nodesStates, rand),
       removeFriend: () => _handleRemoveFriend(nodeName, friendSettingsView.friendPublicKey, nodesStates, rand),
       removeCurrency: (currency) => _handleRemoveCurrency(nodeName, friendSettingsView.friendPublicKey, currency, nodesStates, rand),
-      selectNewCurrency: () => throw UnimplementedError(),
+      selectNewCurrency: () => createStateFriends(FriendsSettingsView.friendSettings(friendSettingsView.rebuild((b) => b
+                  ..inner = FriendSettingsInnerView.newCurrency()))),
       newCurrency: (currency, remoteMaxDebt, rate) => throw UnimplementedError(),
-      selectCurrency: (currency) => throw UnimplementedError(),
+      selectCurrency: (currency) => createStateFriends(FriendsSettingsView.friendSettings(friendSettingsView.rebuild((b) => b
+                  ..inner = FriendSettingsInnerView.currencySettings(currency)))),
       openCurrency: (currency) => throw UnimplementedError(),
       closeCurrency: (currency) => throw UnimplementedError(),
       updateCurrency: (currency, remoteMaxDebt, rate) => throw UnimplementedError(),
-      selectResolve: () => throw UnimplementedError(),
+      selectResolve: () => createStateFriends(FriendsSettingsView.friendSettings(friendSettingsView.rebuild((b) => b
+                  ..inner = FriendSettingsInnerView.resolve()))),
       resolve: () => throw UnimplementedError());
 }
 
