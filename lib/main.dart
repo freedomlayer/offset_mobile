@@ -1,14 +1,23 @@
+import 'dart:math';
 import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
+import 'package:built_collection/built_collection.dart';
 
 import 'dart:convert';
 import 'dart:async';
 import 'process.dart';
 
+import 'state/state.dart';
 import 'logic/types.dart';
+import 'logic/logic.dart';
 import 'protocol/protocol.dart';
 import 'protocol/serialize.dart';
-import 'actions/actions.dart';
+// import 'actions/actions.dart';
+import 'error.dart';
+
+class MainAppError extends AppError {
+  MainAppError(cause) : super(cause);
+}
 
 // import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
@@ -19,14 +28,39 @@ Future<void> main() async {
 
   final eventController = StreamController<AppEvent>();
 
-  process.stdout.transform(utf8.decoder).listen((data) async {
+  // TODO: We use asBroadcastStream() to be able to read the first element.
+  // There is possibly a cleaner way to do this.
+  final fromProcess =
+      process.stdout.transform(utf8.decoder).map((String data) =>
+          // TODO: deserializeMsg might raise an exception. How to handle?
+          deserializeMsg<ServerToUserAck>(data)).asBroadcastStream();
+
+  // The first message must contain the current state of all nodes:
+  final ServerToUserAck serverToUserAck = await fromProcess.first;
+  final serverToUser = serverToUserAck.match(
+      serverToUser: (serverToUser) => serverToUser,
+      ack: (_) => throw MainAppError('Invalid first incoming message'));
+
+  final nodesStatus = serverToUser.match(
+      nodeOpened: (_) => throw MainAppError('Invalid first incoming message'),
+      nodesStatus: (nodesStatus) => nodesStatus,
+      node: (_a, _b) => throw MainAppError('Invalid first incoming message'));
+
+  // Create initial appState (according to first incoming message from stcompact)
+  final preAppState = AppState((b) => b
+    ..viewState = ViewState.view(AppView.home())
+    ..nodesStates = BuiltMap<NodeName, NodeState>().toBuilder());
+  final appState = handleNodesStatus(preAppState, nodesStatus);
+
+  // Handle messages from stcompact:
+  fromProcess.listen((serverToUserAck) {
     // TODO; `deserializeMsg` could raise an exception. How to handle it?
-    final serverToUserAck = deserializeMsg<ServerToUserAck>(data);
     eventController.add(AppEvent.serverToUserAck(serverToUserAck));
   });
 
   process.exitCode.then((exitCode) {
     developer.log('Process exited with code: $exitCode');
+    // TODO: Is this a reasonable place to close the eventController?
     eventController.close();
     // TODO: What to do in this case?
     // Ideas:
@@ -38,122 +72,104 @@ Future<void> main() async {
     developer.log("stderr: $data");
   });
 
-  final _sendUserToServerAck = (UserToServerAck userToServerAck) {
+  // TODO: We need to listen to incoming shared files and send them as `AppEvent.sharedFile(...)`
+
+  final sendUserToServerAck = (UserToServerAck userToServerAck) {
     final data = serializeMsg<UserToServerAck>(userToServerAck);
-      process.stdin.writeln(data);
+    process.stdin.writeln(data);
   };
 
-  final _queueAction = (AppAction appAction) => eventController.add(AppEvent.action(appAction));
+  /*
+  final _queueAction =
+      (AppAction appAction) => eventController.add(AppEvent.action(appAction));
+  */
 
-  // TODO: How to pass arguments into MyApp()?
-  runApp(MyApp());
+  // Secure random generator:
+  final rand = Random.secure();
+
+  runApp(MainApp(appState, eventController, sendUserToServerAck, rand));
 }
 
+/// Attempt to send pending outgoing messages, if any.
+AppState attemptSend(
+    AppState appState, Function(UserToServerAck) sendUserToServerAck) {
+  return appState.viewState.match(
+      view: (_) => appState,
+      transition: (oldView, newView, nextRequests, optPendingRequest) {
+        if (optPendingRequest != OptPendingRequest.none()) {
+          // There is already an outgoing request in progress. We will not send another one
+          // until the previous one is complete.
+          return appState;
+        }
+        if (nextRequests.isEmpty) {
+          developer.log('attemptSend(): Invalid state');
+          return appState;
+        }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+        final nextRequestsList = nextRequests.asList();
+        final userToServerAck = nextRequestsList.removeAt(0);
+        // Send obtained message:
+        sendUserToServerAck(userToServerAck);
+
+        // Update AppState:
+        final newNextRequests = BuiltList<UserToServerAck>(nextRequestsList);
+        return appState.rebuild((b) => b
+          ..viewState = ViewState.transition(oldView, newView, newNextRequests,
+              OptPendingRequest.some(userToServerAck.requestId)));
+      });
+}
+
+class MainApp extends StatefulWidget {
+  final AppState _appState;
+  final StreamController<AppEvent> _eventController;
+  final Function(UserToServerAck) _sendUserToServerAck;
+  final Random _rand;
+
+  MainApp(this._appState, this._eventController, this._sendUserToServerAck,
+      this._rand);
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+  MainAppState createState() {
+    return MainAppState(
+        _appState, _eventController, _sendUserToServerAck, _rand);
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class MainAppState extends State<MainApp> {
+  AppState _appState;
+  final StreamController<AppEvent> _eventController;
+  final Function(UserToServerAck) _sendUserToServerAck;
+  final Random _rand;
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+  MainAppState(this._appState, this._eventController, this._sendUserToServerAck,
+      this._rand);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+  void initState() {
+    super.initState();
+    // Begin handling events:
+    this._eventController.stream.listen((appEvent) {
+      final newAppState = handleAppEvent(this._appState, appEvent, _rand);
+      this._appState = attemptSend(this._appState, this._sendUserToServerAck);
+      setState(() => this._appState = newAppState);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
+    // final appTitle = 'Rust background demo';
+
+    throw UnimplementedError();
+    /*
+    return MaterialApp(
+      title: appTitle,
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(appTitle),
         ),
+        body: MyCustomForm(this._sendData, this._lastNum),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+    */
   }
 }
