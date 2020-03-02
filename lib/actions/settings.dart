@@ -42,8 +42,8 @@ class CardSettingsAction extends _$CardSettingsAction {
   static Serializer<CardSettingsAction> get serializer => _$cardSettingsActionSerializer;
 
   CardSettingsAction.back() : super.back();
-  CardSettingsAction.activate() : super.activate();
-  CardSettingsAction.deactivate() : super.deactivate();
+  CardSettingsAction.enable() : super.enable();
+  CardSettingsAction.disable() : super.disable();
   CardSettingsAction.friendsSettings(FriendsSettingsAction friendsSettings) : super.friendsSettings(friendsSettings);
   CardSettingsAction.relaysSettings(RelaysSettingsAction relaysSettings) : super.relaysSettings(relaysSettings);
   CardSettingsAction.indexServersSettings(IndexServersSettingsAction indexServersSettings) : super.indexServersSettings(indexServersSettings);

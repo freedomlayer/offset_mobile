@@ -24,9 +24,9 @@ AppState handleCardSettingsAction(
 
   return cardSettingsAction.match(
       back: () => createState(AppView.home()),
-      activate: () => _handleActivate(
+      enable: () => _handleEnable(
           cardSettingsView.nodeName, cardSettingsView, nodesStates, rand),
-      deactivate: () => _handleDeactivate(
+      disable: () => _handleDisable(
           cardSettingsView.nodeName, cardSettingsView, nodesStates, rand),
       friendsSettings: (friendsSettingsAction) {
         final friendsSettingsView = cardSettingsView.inner.match(
@@ -86,7 +86,7 @@ AppState handleCardSettingsAction(
       });
 }
 
-AppState _handleActivate(NodeName nodeName, CardSettingsView cardSettingsView,
+AppState _handleEnable(NodeName nodeName, CardSettingsView cardSettingsView,
     BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
@@ -116,7 +116,7 @@ AppState _handleActivate(NodeName nodeName, CardSettingsView cardSettingsView,
         oldView, newView, nextRequests, optPendingRequest));
 }
 
-AppState _handleDeactivate(NodeName nodeName, CardSettingsView cardSettingsView,
+AppState _handleDisable(NodeName nodeName, CardSettingsView cardSettingsView,
     BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
 
   final createState = (AppView appView) => AppState((b) => b
