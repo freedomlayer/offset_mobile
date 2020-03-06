@@ -1,4 +1,4 @@
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'dart:developer' as developer;
@@ -64,10 +64,13 @@ class MainApp extends StatefulWidget {
 }
 
 class MainAppState extends State<MainApp> {
+  /// Have we already connected to the process?
   bool _isReady = false;
+  Process _process;
   AppState _appState;
+  /// Sender side of events channel
   StreamController<AppEvent> _eventController;
-  Function(UserToServerAck) _sendUserToServerAck;
+  /// Secure random generator
   Random _rand;
 
   MainAppState();
@@ -75,7 +78,7 @@ class MainAppState extends State<MainApp> {
   Future<void> initProcess() async {
     await loadBinaries();
 
-    final process = await openProcess();
+    _process = await openProcess();
 
     _eventController = StreamController<AppEvent>();
 
@@ -83,7 +86,7 @@ class MainAppState extends State<MainApp> {
     // TODO: We use asBroadcastStream() to be able to read the first element.
     // There is possibly a cleaner way to do this.
     final fromProcess =
-        process.stdout.transform(utf8.decoder).map((String data) {
+        _process.stdout.transform(utf8.decoder).map((String data) {
             // TODO: deserializeMsg might raise an exception. How to handle?
             return deserializeMsg<ServerToUserAck>(data);
         }).asBroadcastStream();
@@ -111,7 +114,7 @@ class MainAppState extends State<MainApp> {
       _eventController.add(AppEvent.serverToUserAck(serverToUserAck));
     });
 
-    process.exitCode.then((exitCode) {
+    _process.exitCode.then((exitCode) {
       developer.log('Process exited with code: $exitCode');
       // TODO: Is this a reasonable place to close the eventController?
       _eventController.close();
@@ -122,15 +125,15 @@ class MainAppState extends State<MainApp> {
       // - Show an error screen and then close the program?
     });
 
-    process.stderr.transform(utf8.decoder).listen((data) {
+    _process.stderr.transform(utf8.decoder).listen((data) {
       developer.log("stderr: $data");
     });
 
     // TODO: We need to listen to incoming shared files and send them as `AppEvent.sharedFile(...)`
 
-    _sendUserToServerAck = (UserToServerAck userToServerAck) {
+    final sendUserToServerAck = (UserToServerAck userToServerAck) {
       final data = serializeMsg<UserToServerAck>(userToServerAck);
-      process.stdin.writeln(data);
+      _process.stdin.writeln(data);
     };
 
     // Secure random generator:
@@ -139,7 +142,7 @@ class MainAppState extends State<MainApp> {
     // Begin handling events:
     this._eventController.stream.listen((appEvent) {
       final newAppState = handleAppEvent(this._appState, appEvent, _rand);
-      this._appState = attemptSend(this._appState, this._sendUserToServerAck);
+      this._appState = attemptSend(this._appState, sendUserToServerAck);
       setState(() => this._appState = newAppState);
     });
 
