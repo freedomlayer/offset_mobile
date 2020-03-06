@@ -1,6 +1,7 @@
+
+import 'package:flutter/material.dart';
 import 'dart:math';
 import 'dart:developer' as developer;
-import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 
 import 'dart:convert';
@@ -28,12 +29,15 @@ Future<void> main() async {
 
   final eventController = StreamController<AppEvent>();
 
+
   // TODO: We use asBroadcastStream() to be able to read the first element.
   // There is possibly a cleaner way to do this.
   final fromProcess =
-      process.stdout.transform(utf8.decoder).map((String data) =>
+      process.stdout.transform(utf8.decoder).map((String data) {
+          developer.log(data);
           // TODO: deserializeMsg might raise an exception. How to handle?
-          deserializeMsg<ServerToUserAck>(data)).asBroadcastStream();
+          return deserializeMsg<ServerToUserAck>(data);
+      }).asBroadcastStream();
 
   // The first message must contain the current state of all nodes:
   final ServerToUserAck serverToUserAck = await fromProcess.first;
@@ -89,6 +93,7 @@ Future<void> main() async {
 
   runApp(MainApp(appState, eventController, sendUserToServerAck, rand));
 }
+
 
 /// Attempt to send pending outgoing messages, if any.
 AppState attemptSend(
@@ -157,19 +162,20 @@ class MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    // final appTitle = 'Rust background demo';
+    final appTitle = 'Rust background demo';
 
-    throw UnimplementedError();
-    /*
+    developer.log('Inside build()');
+
+    // throw UnimplementedError();
+
     return MaterialApp(
       title: appTitle,
       home: Scaffold(
         appBar: AppBar(
           title: Text(appTitle),
         ),
-        body: MyCustomForm(this._sendData, this._lastNum),
       ),
     );
-    */
   }
 }
+
