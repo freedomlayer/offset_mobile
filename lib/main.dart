@@ -165,8 +165,6 @@ class MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     final appTitle = 'Rust background demo';
 
-    developer.log('Inside build()');
-
     // throw UnimplementedError();
 
     if (!_isReady) {
