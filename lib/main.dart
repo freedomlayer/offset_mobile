@@ -70,8 +70,6 @@ class MainAppState extends State<MainApp> {
   AppState _appState;
   /// Sender side of events channel
   StreamController<AppEvent> _eventController;
-  /// Secure random generator
-  Random _rand;
 
   MainAppState();
 
@@ -137,11 +135,11 @@ class MainAppState extends State<MainApp> {
     };
 
     // Secure random generator:
-    _rand = Random.secure();
+    final rand = Random.secure();
 
     // Begin handling events:
     this._eventController.stream.listen((appEvent) {
-      final newAppState = handleAppEvent(this._appState, appEvent, _rand);
+      final newAppState = handleAppEvent(this._appState, appEvent, rand);
       this._appState = attemptSend(this._appState, sendUserToServerAck);
       setState(() => this._appState = newAppState);
     });
