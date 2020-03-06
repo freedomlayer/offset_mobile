@@ -4,7 +4,7 @@ import 'package:path/path.dart' as path;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
 
-const String STCOMPACT_FILENAME = 'stcompact';
+const String STCOMPACT_FILENAME = 'stcompact-i686';
 
 Future<String> _getBinaryPath() async {
   String dir = (await getApplicationDocumentsDirectory()).path;
@@ -14,7 +14,7 @@ Future<String> _getBinaryPath() async {
 Future<void> loadBinaries() async {
   // Obtain the binary file from assets:
   var bytes =
-      await rootBundle.load("stcompact/$STCOMPACT_FILENAME");
+      await rootBundle.load("external/$STCOMPACT_FILENAME");
 
   // Get the path we want the binary file to live in:
   final String binaryPath = await _getBinaryPath();
