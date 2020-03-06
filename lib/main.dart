@@ -13,7 +13,7 @@ import 'logic/types.dart';
 import 'logic/logic.dart';
 import 'protocol/protocol.dart';
 import 'protocol/serialize.dart';
-// import 'actions/actions.dart';
+import 'actions/actions.dart';
 import 'error.dart';
 
 class MainAppError extends AppError {
@@ -133,11 +133,6 @@ class MainAppState extends State<MainApp> {
       process.stdin.writeln(data);
     };
 
-    /*
-    final _queueAction =
-        (AppAction appAction) => eventController.add(AppEvent.action(appAction));
-    */
-
     // Secure random generator:
     _rand = Random.secure();
 
@@ -152,6 +147,10 @@ class MainAppState extends State<MainApp> {
     setState(() => this._isReady = true);
   }
 
+  /// Queue a user action
+  void _queueAction(AppAction appAction) {
+    _eventController.add(AppEvent.action(appAction));
+  }
 
   @override
   void initState() {
