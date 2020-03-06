@@ -22,77 +22,7 @@ class MainAppError extends AppError {
 
 // import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
-Future<void> main() async {
-  await loadBinaries();
-
-  final process = await openProcess();
-
-  final eventController = StreamController<AppEvent>();
-
-
-  // TODO: We use asBroadcastStream() to be able to read the first element.
-  // There is possibly a cleaner way to do this.
-  final fromProcess =
-      process.stdout.transform(utf8.decoder).map((String data) {
-          developer.log(data);
-          // TODO: deserializeMsg might raise an exception. How to handle?
-          return deserializeMsg<ServerToUserAck>(data);
-      }).asBroadcastStream();
-
-  // The first message must contain the current state of all nodes:
-  final ServerToUserAck serverToUserAck = await fromProcess.first;
-  final serverToUser = serverToUserAck.match(
-      serverToUser: (serverToUser) => serverToUser,
-      ack: (_) => throw MainAppError('Invalid first incoming message'));
-
-  final nodesStatus = serverToUser.match(
-      nodeOpened: (_) => throw MainAppError('Invalid first incoming message'),
-      nodesStatus: (nodesStatus) => nodesStatus,
-      node: (_a, _b) => throw MainAppError('Invalid first incoming message'));
-
-  // Create initial appState (according to first incoming message from stcompact)
-  final preAppState = AppState((b) => b
-    ..viewState = ViewState.view(AppView.home())
-    ..nodesStates = BuiltMap<NodeName, NodeState>().toBuilder());
-  final appState = handleNodesStatus(preAppState, nodesStatus);
-
-  // Handle messages from stcompact:
-  fromProcess.listen((serverToUserAck) {
-    // TODO; `deserializeMsg` could raise an exception. How to handle it?
-    eventController.add(AppEvent.serverToUserAck(serverToUserAck));
-  });
-
-  process.exitCode.then((exitCode) {
-    developer.log('Process exited with code: $exitCode');
-    // TODO: Is this a reasonable place to close the eventController?
-    eventController.close();
-    // TODO: What to do in this case?
-    // Ideas:
-    // - Close the app?
-    // - Show an error screen and then close the program?
-  });
-
-  process.stderr.transform(utf8.decoder).listen((data) {
-    developer.log("stderr: $data");
-  });
-
-  // TODO: We need to listen to incoming shared files and send them as `AppEvent.sharedFile(...)`
-
-  final sendUserToServerAck = (UserToServerAck userToServerAck) {
-    final data = serializeMsg<UserToServerAck>(userToServerAck);
-    process.stdin.writeln(data);
-  };
-
-  /*
-  final _queueAction =
-      (AppAction appAction) => eventController.add(AppEvent.action(appAction));
-  */
-
-  // Secure random generator:
-  final rand = Random.secure();
-
-  runApp(MainApp(appState, eventController, sendUserToServerAck, rand));
-}
+void main() => runApp(MainApp());
 
 
 /// Attempt to send pending outgoing messages, if any.
@@ -125,39 +55,109 @@ AppState attemptSend(
 }
 
 class MainApp extends StatefulWidget {
-  final AppState _appState;
-  final StreamController<AppEvent> _eventController;
-  final Function(UserToServerAck) _sendUserToServerAck;
-  final Random _rand;
-
-  MainApp(this._appState, this._eventController, this._sendUserToServerAck,
-      this._rand);
+  MainApp();
 
   @override
   MainAppState createState() {
-    return MainAppState(
-        _appState, _eventController, _sendUserToServerAck, _rand);
+    return MainAppState();
   }
 }
 
 class MainAppState extends State<MainApp> {
+  bool _isReady = false;
   AppState _appState;
-  final StreamController<AppEvent> _eventController;
-  final Function(UserToServerAck) _sendUserToServerAck;
-  final Random _rand;
+  StreamController<AppEvent> _eventController;
+  Function(UserToServerAck) _sendUserToServerAck;
+  Random _rand;
 
-  MainAppState(this._appState, this._eventController, this._sendUserToServerAck,
-      this._rand);
+  MainAppState();
 
-  @override
-  void initState() {
-    super.initState();
+  Future<void> initProcess() async {
+    await loadBinaries();
+
+    final process = await openProcess();
+
+    _eventController = StreamController<AppEvent>();
+
+
+    // TODO: We use asBroadcastStream() to be able to read the first element.
+    // There is possibly a cleaner way to do this.
+    final fromProcess =
+        process.stdout.transform(utf8.decoder).map((String data) {
+            // TODO: deserializeMsg might raise an exception. How to handle?
+            return deserializeMsg<ServerToUserAck>(data);
+        }).asBroadcastStream();
+
+    // The first message must contain the current state of all nodes:
+    final ServerToUserAck serverToUserAck = await fromProcess.first;
+    final serverToUser = serverToUserAck.match(
+        serverToUser: (serverToUser) => serverToUser,
+        ack: (_) => throw MainAppError('Invalid first incoming message'));
+
+    final nodesStatus = serverToUser.match(
+        nodeOpened: (_) => throw MainAppError('Invalid first incoming message'),
+        nodesStatus: (nodesStatus) => nodesStatus,
+        node: (_a, _b) => throw MainAppError('Invalid first incoming message'));
+
+    // Create initial appState (according to first incoming message from stcompact)
+    final preAppState = AppState((b) => b
+      ..viewState = ViewState.view(AppView.home())
+      ..nodesStates = BuiltMap<NodeName, NodeState>().toBuilder());
+    _appState = handleNodesStatus(preAppState, nodesStatus);
+
+    // Handle messages from stcompact:
+    fromProcess.listen((serverToUserAck) {
+      // TODO; `deserializeMsg` could raise an exception. How to handle it?
+      _eventController.add(AppEvent.serverToUserAck(serverToUserAck));
+    });
+
+    process.exitCode.then((exitCode) {
+      developer.log('Process exited with code: $exitCode');
+      // TODO: Is this a reasonable place to close the eventController?
+      _eventController.close();
+      // TODO: What to do in this case?
+      // Ideas:
+      // - Close the app?
+      // - Show an error screen and then close the program?
+    });
+
+    process.stderr.transform(utf8.decoder).listen((data) {
+      developer.log("stderr: $data");
+    });
+
+    // TODO: We need to listen to incoming shared files and send them as `AppEvent.sharedFile(...)`
+
+    _sendUserToServerAck = (UserToServerAck userToServerAck) {
+      final data = serializeMsg<UserToServerAck>(userToServerAck);
+      process.stdin.writeln(data);
+    };
+
+    /*
+    final _queueAction =
+        (AppAction appAction) => eventController.add(AppEvent.action(appAction));
+    */
+
+    // Secure random generator:
+    _rand = Random.secure();
+
     // Begin handling events:
     this._eventController.stream.listen((appEvent) {
       final newAppState = handleAppEvent(this._appState, appEvent, _rand);
       this._appState = attemptSend(this._appState, this._sendUserToServerAck);
       setState(() => this._appState = newAppState);
     });
+
+    // App is ready to start handling user's actions.
+    setState(() => this._isReady = true);
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Calling an async function. Should set `_isReady = true` when ready.
+    initProcess();
   }
 
   @override
@@ -168,14 +168,25 @@ class MainAppState extends State<MainApp> {
 
     // throw UnimplementedError();
 
-    return MaterialApp(
-      title: appTitle,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(appTitle),
+    if (!_isReady) {
+      return MaterialApp(
+        title: appTitle,
+        home: Scaffold(
+          appBar: AppBar(
+            title: Text('Not ready...'),
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return MaterialApp(
+        title: appTitle,
+        home: Scaffold(
+          appBar: AppBar(
+            title: Text('Ready!'),
+          ),
+        ),
+      );
+    }
   }
 }
 
