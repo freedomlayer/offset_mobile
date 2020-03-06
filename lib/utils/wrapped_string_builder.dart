@@ -1,19 +1,8 @@
-import 'package:meta/meta.dart';
-
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 
-import '../error.dart';
-
-@immutable
-class WrappedString {
-  const WrappedString();
-}
-
-class WrappedStringError extends AppError {
-  WrappedStringError(cause): super(cause);
-}
+import 'wrapped_string.dart';
 
 Builder wrappedStringBuilder(BuilderOptions options) =>
     SharedPartBuilder([WrappedStringGenerator()], 'wrapped_string');

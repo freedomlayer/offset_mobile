@@ -1,19 +1,9 @@
-import 'package:meta/meta.dart';
-
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 
-import '../error.dart';
+import 'wrapped_bigint.dart';
 
-@immutable
-class WrappedBigInt {
-  const WrappedBigInt();
-}
-
-class WrappedBigIntError extends AppError {
-  WrappedBigIntError(cause): super(cause);
-}
 
 Builder wrappedBigIntBuilder(BuilderOptions options) =>
     SharedPartBuilder([WrappedBigIntGenerator()], 'wrapped_bigint');
