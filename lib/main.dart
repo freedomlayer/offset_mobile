@@ -115,6 +115,7 @@ class MainAppState extends State<MainApp> {
       developer.log('Process exited with code: $exitCode');
       // TODO: Is this a reasonable place to close the eventController?
       _eventController.close();
+      throw MainAppError('Remote process closed!');
       // TODO: What to do in this case?
       // Ideas:
       // - Close the app?
