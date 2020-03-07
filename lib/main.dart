@@ -78,8 +78,6 @@ class MainAppState extends State<MainApp> {
   MainAppState();
 
   Future<void> initProcess() async {
-    await loadBinaries();
-
     _process = await openProcess();
 
     _eventController = StreamController<AppEvent>();
