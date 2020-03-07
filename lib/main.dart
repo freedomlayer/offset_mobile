@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'dart:developer' as developer;
+
 import 'package:built_collection/built_collection.dart';
+import 'package:receive_file_intent/receive_file_intent.dart';
 
 import 'dart:convert';
 import 'dart:async';
@@ -15,6 +17,7 @@ import 'protocol/protocol.dart';
 import 'protocol/serialize.dart';
 import 'actions/actions.dart';
 import 'error.dart';
+
 
 class MainAppError extends AppError {
   MainAppError(cause) : super(cause);
@@ -70,6 +73,7 @@ class MainAppState extends State<MainApp> {
   AppState _appState;
   /// Sender side of events channel
   StreamController<AppEvent> _eventController;
+  List<StreamSubscription> _streamSubs = [];
 
   MainAppState();
 
@@ -107,10 +111,12 @@ class MainAppState extends State<MainApp> {
     _appState = handleNodesStatus(preAppState, nodesStatus);
 
     // Handle messages from stcompact:
-    fromProcess.listen((serverToUserAck) {
+    _streamSubs.add(fromProcess.listen((serverToUserAck) {
       // TODO; `deserializeMsg` could raise an exception. How to handle it?
       _eventController.add(AppEvent.serverToUserAck(serverToUserAck));
-    });
+    }, onError: (err) {
+      throw MainAppError('fromProcess listen error: $err');
+    }));
 
     _process.exitCode.then((exitCode) {
       developer.log('Process exited with code: $exitCode');
@@ -123,11 +129,47 @@ class MainAppState extends State<MainApp> {
       // - Show an error screen and then close the program?
     });
 
-    _process.stderr.transform(utf8.decoder).listen((data) {
+    _streamSubs.add(_process.stderr.transform(utf8.decoder).listen((data) {
       developer.log("stderr: $data");
+    }, onError: (err) {
+      throw MainAppError('stderr listen error: $err');
+    }));
+
+
+    // Handle shared files:
+    final handleSharedFiles = (List<String> filePaths) {
+        if (filePaths == null) {
+          developer.log('handleSharedFiles(): Received null filePaths. Aborting');
+          return;
+        }
+        if (filePaths.isEmpty) {
+          developer.log('handleSharedFiles(): Received empty shared filePaths!');
+          return;
+        }
+        if (filePaths.length > 1) {
+          developer.log('handleSharedFiles(): Received more than one file path! Aborting.');
+          return;
+        }
+        // We received exactly one filePath:
+        final filePath = filePaths[0];
+        // Queue shared file event:
+        _eventController.add(AppEvent.sharedFile(filePath));
+    };
+
+    // Listen to incoming shared files:
+    // For sharing files coming from outside the app while the app is in the memory
+    _streamSubs.add(
+        ReceiveFileIntent.getFileStream().listen((List<String> filePaths) {
+          handleSharedFiles(filePaths);
+    }, onError: (err) {
+      throw MainAppError('getIntentDataStreamError: $err');
+    }));
+
+    // For sharing files coming from outside the app while the app is closed
+    ReceiveFileIntent.getInitialFile().then((List<String> filePaths) {
+        handleSharedFiles(filePaths);
     });
 
-    // TODO: We need to listen to incoming shared files and send them as `AppEvent.sharedFile(...)`
 
     final sendUserToServerAck = (UserToServerAck userToServerAck) {
       final data = serializeMsg<UserToServerAck>(userToServerAck);
@@ -138,11 +180,16 @@ class MainAppState extends State<MainApp> {
     final rand = Random.secure();
 
     // Begin handling events:
-    this._eventController.stream.listen((appEvent) {
+    _streamSubs.add(this._eventController.stream.listen((appEvent) {
+
+      debugPrint('appEvent = $appEvent');
+
       final newAppState = handleAppEvent(this._appState, appEvent, rand);
       this._appState = attemptSend(this._appState, sendUserToServerAck);
       setState(() => this._appState = newAppState);
-    });
+    }, onError: (err) {
+      throw MainAppError('_eventController error: $err');
+    }));
 
     // App is ready to start handling user's actions.
     setState(() => this._isReady = true);
@@ -162,10 +209,17 @@ class MainAppState extends State<MainApp> {
   }
 
   @override
+  void dispose() {
+    // Cancel all stream subscriptions:
+    for (final streamSub in _streamSubs) {
+      streamSub.cancel();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final appTitle = 'Rust background demo';
-
-    // throw UnimplementedError();
 
     if (!_isReady) {
       return MaterialApp(

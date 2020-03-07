@@ -431,6 +431,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
+  receive_file_intent:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: e8fb7c1e4e4016359fde36ebf12afec1d28510ed
+      url: "git://github.com/freedomlayer/receive_file_intent.git"
+    source: git
+    version: "1.2.0+1"
   shelf:
     dependency: transitive
     description:
