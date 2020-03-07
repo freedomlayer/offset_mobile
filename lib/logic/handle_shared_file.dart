@@ -58,7 +58,13 @@ AppState handleSharedFile(AppState appState, String filePath) {
   }
 
   // Read file contents:
-  String data = File(filePath).readAsStringSync();
+  String data;
+  try {
+    data = File(filePath).readAsStringSync();
+  } on FileSystemException catch (e) {
+    developer.log('handleSharedFile: Could not read file as string: $e');
+    return appState;
+  }
 
   // Get file extension:
   final extension = path.extension(filePath);
