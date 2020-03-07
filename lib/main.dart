@@ -18,7 +18,6 @@ import 'protocol/serialize.dart';
 import 'actions/actions.dart';
 import 'error.dart';
 
-
 class MainAppError extends AppError {
   MainAppError(cause) : super(cause);
 }
@@ -26,7 +25,6 @@ class MainAppError extends AppError {
 // import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 void main() => runApp(MainApp());
-
 
 /// Attempt to send pending outgoing messages, if any.
 AppState attemptSend(
@@ -71,6 +69,7 @@ class MainAppState extends State<MainApp> {
   bool _isReady = false;
   Process _process;
   AppState _appState;
+
   /// Sender side of events channel
   StreamController<AppEvent> _eventController;
   List<StreamSubscription> _streamSubs = [];
@@ -82,14 +81,13 @@ class MainAppState extends State<MainApp> {
 
     _eventController = StreamController<AppEvent>();
 
-
     // TODO: We use asBroadcastStream() to be able to read the first element.
     // There is possibly a cleaner way to do this.
     final fromProcess =
         _process.stdout.transform(utf8.decoder).map((String data) {
-            // TODO: deserializeMsg might raise an exception. How to handle?
-            return deserializeMsg<ServerToUserAck>(data);
-        }).asBroadcastStream();
+      // TODO: deserializeMsg might raise an exception. How to handle?
+      return deserializeMsg<ServerToUserAck>(data);
+    }).asBroadcastStream();
 
     // The first message must contain the current state of all nodes:
     final ServerToUserAck serverToUserAck = await fromProcess.first;
@@ -133,41 +131,40 @@ class MainAppState extends State<MainApp> {
       throw MainAppError('stderr listen error: $err');
     }));
 
-
     // Handle shared files:
     final handleSharedFiles = (List<String> filePaths) {
-        if (filePaths == null) {
-          developer.log('handleSharedFiles(): Received null filePaths. Aborting');
-          return;
-        }
-        if (filePaths.isEmpty) {
-          developer.log('handleSharedFiles(): Received empty shared filePaths!');
-          return;
-        }
-        if (filePaths.length > 1) {
-          developer.log('handleSharedFiles(): Received more than one file path! Aborting.');
-          return;
-        }
-        // We received exactly one filePath:
-        final filePath = filePaths[0];
-        // Queue shared file event:
-        _eventController.add(AppEvent.sharedFile(filePath));
+      if (filePaths == null) {
+        developer.log('handleSharedFiles(): Received null filePaths. Aborting');
+        return;
+      }
+      if (filePaths.isEmpty) {
+        developer.log('handleSharedFiles(): Received empty shared filePaths!');
+        return;
+      }
+      if (filePaths.length > 1) {
+        developer.log(
+            'handleSharedFiles(): Received more than one file path! Aborting.');
+        return;
+      }
+      // We received exactly one filePath:
+      final filePath = filePaths[0];
+      // Queue shared file event:
+      _eventController.add(AppEvent.sharedFile(filePath));
     };
 
     // Listen to incoming shared files:
     // For sharing files coming from outside the app while the app is in the memory
-    _streamSubs.add(
-        ReceiveFileIntent.getFileStream().listen((List<String> filePaths) {
-          handleSharedFiles(filePaths);
+    _streamSubs
+        .add(ReceiveFileIntent.getFileStream().listen((List<String> filePaths) {
+      handleSharedFiles(filePaths);
     }, onError: (err) {
       throw MainAppError('getIntentDataStreamError: $err');
     }));
 
     // For sharing files coming from outside the app while the app is closed
     ReceiveFileIntent.getInitialFile().then((List<String> filePaths) {
-        handleSharedFiles(filePaths);
+      handleSharedFiles(filePaths);
     });
-
 
     final sendUserToServerAck = (UserToServerAck userToServerAck) {
       final data = serializeMsg<UserToServerAck>(userToServerAck);
@@ -179,7 +176,6 @@ class MainAppState extends State<MainApp> {
 
     // Begin handling events:
     _streamSubs.add(this._eventController.stream.listen((appEvent) {
-
       debugPrint('appEvent = $appEvent');
 
       final newAppState = handleAppEvent(this._appState, appEvent, rand);
@@ -217,15 +213,16 @@ class MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    final appTitle = 'Rust background demo';
+    final appTitle = 'Offset';
 
     if (!_isReady) {
       return MaterialApp(
         title: appTitle,
         home: Scaffold(
           appBar: AppBar(
-            title: Text('Not ready...'),
+            title: Text('Offset'),
           ),
+          body: Center(child: CircularProgressIndicator(value: null)),
         ),
       );
     } else {
@@ -233,11 +230,18 @@ class MainAppState extends State<MainApp> {
         title: appTitle,
         home: Scaffold(
           appBar: AppBar(
-            title: Text('Ready!'),
+            title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                      child: Container(child: BackButton(), alignment: Alignment.centerLeft),
+                      flex: 1),
+                  Expanded(child: Center(child: Text('Offset')), flex: 3),
+                  Spacer(flex: 1),
+                ]),
           ),
         ),
       );
     }
   }
 }
-
