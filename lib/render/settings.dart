@@ -11,18 +11,19 @@ Widget renderSettings(
     SettingsView settingsView,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
-
   final children = <Widget>[];
   for (final entry in nodesStates.entries) {
     final nodeName = entry.key;
     // final nodeState = entry.value;
-    final cardEntry = ListTile(key: Key(nodeName.inner), title: Text('$nodeName'));
+    final cardEntry = ListTile(
+        key: Key(nodeName.inner),
+        title: Text('$nodeName'),
+        onTap: () => queueAction(SettingsAction.selectCard(nodeName)));
     children.add(cardEntry);
   }
 
-  final listView = ListView(
-      padding: const EdgeInsets.all(8),
-      children: children);
+  final listView =
+      ListView(padding: const EdgeInsets.all(8), children: children);
 
   final newCardButton = FloatingActionButton.extended(
       onPressed: () => queueAction(SettingsAction.selectNewCard()),
