@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
-import 'consts.dart';
 
 Future<bool> exitDialog(BuildContext context) async {
   return await showDialog(
-    context: context,
-    builder: (BuildContext context) => AlertDialog(
-      title: Text('Are you sure?'),
-      content: Text('Do you want to exit?'),
-      actions: <Widget>[
-        GestureDetector(
-          onTap: () => Navigator.of(context).pop(false),
-          child: Text("No"),
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: Text('Are you sure?'),
+          content: Text('Do you want to exit?'),
+          actions: <Widget>[
+            GestureDetector(
+              onTap: () => Navigator.of(context).pop(false),
+              child: Text("No"),
+            ),
+            SizedBox(height: 32),
+            GestureDetector(
+              onTap: () => Navigator.of(context).pop(true),
+              child: Text("Yes"),
+            ),
+          ],
         ),
-        SizedBox(height: 32),
-        GestureDetector(
-          onTap: () => Navigator.of(context).pop(true),
-          child: Text("Yes"),
-        ),
-      ],
-    ),
-  ) ?? false;
+      ) ??
+      false;
 }
 
-class InnerFrame extends StatelessWidget {
+class Frame extends StatelessWidget {
   final Widget _title;
   final Widget _body;
   final Function() _backAction;
   final Widget _floatingActionButton;
 
-  InnerFrame(
+  Frame(
       {Widget title,
       Widget body,
       Function() backAction,
@@ -41,7 +41,7 @@ class InnerFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget leading;
-    Future<bool> Function() onWillPop = () async  => await exitDialog(context);
+    Future<bool> Function() onWillPop = () async => await exitDialog(context);
 
     if (_backAction != null) {
       leading = BackButton(onPressed: () => _backAction());
@@ -69,11 +69,9 @@ Widget frame(
     @required Widget body,
     Function() backAction,
     Widget floatingActionButton}) {
-  return MaterialApp(
-      title: APP_TITLE,
-      home: InnerFrame(
-          title: title,
-          body: body,
-          backAction: backAction,
-          floatingActionButton: floatingActionButton));
+  return Frame(
+      title: title,
+      body: body,
+      backAction: backAction,
+      floatingActionButton: floatingActionButton);
 }

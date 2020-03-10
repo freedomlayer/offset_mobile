@@ -21,27 +21,28 @@ import 'frame.dart';
 
 /// This is what we show to the user before we open the process
 Widget renderNotReady() {
-  return frame(
+  final body = frame(
       title: Text(APP_TITLE),
       body: Center(child: CircularProgressIndicator(value: null)));
+  return MaterialApp(title: APP_TITLE, home: body);
 }
 
 /// Rendering when we are connected to the process
 Widget render(AppState appState, Function(AppAction) queueAction) {
-  return appState.viewState.match(
+  final body = appState.viewState.match(
       view: (appView) =>
           renderAppView(appView, appState.nodesStates, queueAction),
       transition: (oldView, newView, nextRequests, optPendingRequest) =>
           renderTransition(oldView, appState.nodesStates));
+
+  return MaterialApp(title: APP_TITLE, home: body);
 }
 
-Widget renderAppView(
-    AppView appView,
-    BuiltMap<NodeName, NodeState> nodesStates,
+Widget renderAppView(AppView appView, BuiltMap<NodeName, NodeState> nodesStates,
     Function(AppAction) queueAction) {
   return appView.match(
-    home: () => renderHome(nodesStates,
-        (homeAction) => queueAction(AppAction.home(homeAction))),
+    home: () => renderHome(
+        nodesStates, (homeAction) => queueAction(AppAction.home(homeAction))),
     buy: (buyView) => renderBuy(buyView, nodesStates,
         (buyAction) => queueAction(AppAction.buy(buyAction))),
     sell: (sellView) => renderSell(sellView, nodesStates,
@@ -56,24 +57,23 @@ Widget renderAppView(
         nodesStates,
         (outTransactionsAction) =>
             queueAction(AppAction.outTransactions(outTransactionsAction))),
-    balances: (balancesView) => renderBalances(
-        balancesView,
-        nodesStates,
+    balances: (balancesView) => renderBalances(balancesView, nodesStates,
         (balancesAction) => queueAction(AppAction.balances(balancesAction))),
-    settings: (settingsView) => renderSettings(
-        settingsView,
-        nodesStates,
+    settings: (settingsView) => renderSettings(settingsView, nodesStates,
         (settingsAction) => queueAction(AppAction.settings(settingsAction))),
   );
 }
 
 /// A transition view: We are waiting for some operations to complete
-Widget renderTransition(AppView oldView,
-    BuiltMap<NodeName, NodeState> nodesStates) {
+Widget renderTransition(
+    AppView oldView, BuiltMap<NodeName, NodeState> nodesStates) {
   final noQueueAction = (AppAction appAction) {
     developer.log('Received action $appAction during transition.');
   };
   // TODO: Possibly add some kind of shading over the old view, to let the user know
   // something is in progress.
-  return renderAppView(oldView, nodesStates, noQueueAction);
+  return Stack(children: <Widget>[
+    renderAppView(oldView, nodesStates, noQueueAction),
+    CircularProgressIndicator(value: null)
+  ]);
 }
