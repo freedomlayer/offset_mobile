@@ -43,8 +43,10 @@ AppState attemptSend(
           return appState;
         }
 
-        final nextRequestsList = nextRequests.asList();
+        final nextRequestsList =
+            List<UserToServerAck>.from(nextRequests.asList());
         final userToServerAck = nextRequestsList.removeAt(0);
+
         // Send obtained message:
         sendUserToServerAck(userToServerAck);
 
