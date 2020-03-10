@@ -76,7 +76,7 @@ AppState _handleNewCard(
 
   return newCardAction.match(
       back: () => newCardView.match(
-          select: () => createState(AppView.home()),
+          select: () => createState(AppView.settings(SettingsView.home())),
           newLocal: () => createState(
               AppView.settings(SettingsView.newCard(NewCardView.select()))),
           newRemote: () => createState(
