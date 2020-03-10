@@ -86,8 +86,10 @@ class MainAppState extends State<MainApp> {
 
     // TODO: We use asBroadcastStream() to be able to read the first element.
     // There is possibly a cleaner way to do this.
-    final fromProcess =
-        _process.stdout.transform(utf8.decoder).map((String data) {
+    final fromProcess = _process.stdout
+        .transform(utf8.decoder)
+        .transform(const LineSplitter())
+        .map((String data) {
       // TODO: deserializeMsg might raise an exception. How to handle?
       return deserializeMsg<ServerToUserAck>(data);
     }).asBroadcastStream();
