@@ -22,6 +22,7 @@ AppState handleSettingsAction(
 
   return settingsAction.match(
       back: () => createState(AppView.home()),
+      selectNewCard: () => createState(AppView.settings(SettingsView.newCard(NewCardView.select()))),
       newCard: (newCardAction) {
         final newCardView = settingsView.match(
             home: () => null,

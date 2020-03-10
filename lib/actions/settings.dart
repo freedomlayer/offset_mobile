@@ -13,6 +13,7 @@ part 'settings.g.dart';
   static Serializer<SettingsAction> get serializer => _$settingsActionSerializer;
 
   SettingsAction.back() : super.back();
+  SettingsAction.selectNewCard() : super.selectNewCard();
   SettingsAction.newCard(NewCardAction newCard) : super.newCard(newCard);
   SettingsAction.cardSettings(CardSettingsAction cardSettings) : super.cardSettings(cardSettings);
   // Select a card (Used for received a shared Relay file or Index file):
