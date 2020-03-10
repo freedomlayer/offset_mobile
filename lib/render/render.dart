@@ -16,19 +16,15 @@ import 'in_transactions.dart';
 import 'out_transactions.dart';
 import 'balances.dart';
 import 'settings.dart';
+import 'frame.dart';
 // import '../error.dart';
+
 
 /// This is what we show to the user before we open the process
 Widget renderNotReady() {
-  return MaterialApp(
-    title: APP_TITLE,
-    home: Scaffold(
-      appBar: AppBar(
-        title: Text(APP_TITLE),
-      ),
-      body: Center(child: CircularProgressIndicator(value: null)),
-    ),
-  );
+  return frame(
+      title: Text(APP_TITLE),
+      body: Center(child: CircularProgressIndicator(value: null)));
 }
 
 /// Rendering when we are connected to the process

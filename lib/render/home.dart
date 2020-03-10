@@ -5,18 +5,52 @@ import '../protocol/protocol.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
 import 'consts.dart';
+import 'frame.dart';
 
-Widget renderHome(BuiltMap<NodeName, NodeState> nodesStates, Function(HomeAction) queueAction) {
+bool isAnyCardActive(BuiltMap<NodeName, NodeState> nodesStates) {
+  for (final entry in nodesStates.asMap().entries) {
+    final nodeState = entry.value;
+    if (nodeState.inner.isOpen) {
+      return true;
+    }
+  }
+  return false;
+}
 
-  return MaterialApp(
-    title: APP_TITLE,
-    home: Scaffold(
-      appBar: AppBar(
-        title: Text(APP_TITLE),
-      ),
-      body: Text('This is the body!'),
-    ),
-  );
+Widget renderHome(BuiltMap<NodeName, NodeState> nodesStates,
+    Function(HomeAction) queueAction) {
+  Widget body;
+  if (!isAnyCardActive(nodesStates)) {
+    // No active cards:
+    body = Center(child: Column(children: [
+      Text('No active cards!'),
+      RaisedButton(
+          onPressed: () => queueAction(HomeAction.selectSettings()),
+          child: Text('Settings')),
+    ]));
+  } else {
+    body = Center(child: Column(children: [
+      RaisedButton(
+          onPressed: () => queueAction(HomeAction.selectBuy()),
+          child: Text('Buy')),
+      RaisedButton(
+          onPressed: () => queueAction(HomeAction.selectSell()),
+          child: Text('Sell')),
+      RaisedButton(
+          onPressed: () => queueAction(HomeAction.selectOutTransactions()),
+          child: Text('Outgoing')),
+      RaisedButton(
+          onPressed: () => queueAction(HomeAction.selectInTransactions()),
+          child: Text('Incoming')),
+      RaisedButton(
+          onPressed: () => queueAction(HomeAction.selectBalances()),
+          child: Text('Balances')),
+      RaisedButton(
+          onPressed: () => queueAction(HomeAction.selectSettings()),
+          child: Text('Settings')),
+    ]));
+  }
+  return frame(title: Text(APP_TITLE), body: body);
 }
 
 /*
