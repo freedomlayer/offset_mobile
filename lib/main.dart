@@ -181,11 +181,9 @@ class MainAppState extends State<MainApp> {
 
     // Begin handling events:
     _streamSubs.add(this._eventController.stream.listen((appEvent) {
-      debugPrint('appEvent = $appEvent');
-
-      final newAppState = handleAppEvent(this._appState, appEvent, rand);
-      this._appState = attemptSend(this._appState, sendUserToServerAck);
-      setState(() => this._appState = newAppState);
+      final newAppState1 = handleAppEvent(this._appState, appEvent, rand);
+      final newAppState2 = attemptSend(newAppState1, sendUserToServerAck);
+      setState(() => this._appState = newAppState2);
     }, onError: (err) {
       throw MainAppError('_eventController error: $err');
     }));
