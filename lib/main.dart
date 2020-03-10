@@ -16,6 +16,7 @@ import 'logic/logic.dart';
 import 'protocol/protocol.dart';
 import 'protocol/serialize.dart';
 import 'actions/actions.dart';
+import 'render/render.dart';
 import 'error.dart';
 
 class MainAppError extends AppError {
@@ -213,35 +214,10 @@ class MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    final appTitle = 'Offset';
-
     if (!_isReady) {
-      return MaterialApp(
-        title: appTitle,
-        home: Scaffold(
-          appBar: AppBar(
-            title: Text('Offset'),
-          ),
-          body: Center(child: CircularProgressIndicator(value: null)),
-        ),
-      );
+      return renderNotReady();
     } else {
-      return MaterialApp(
-        title: appTitle,
-        home: Scaffold(
-          appBar: AppBar(
-            title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                      child: Container(child: BackButton(), alignment: Alignment.centerLeft),
-                      flex: 1),
-                  Expanded(child: Center(child: Text('Offset')), flex: 3),
-                  Spacer(flex: 1),
-                ]),
-          ),
-        ),
-      );
+      return render(_appState, _queueAction);
     }
   }
 }
