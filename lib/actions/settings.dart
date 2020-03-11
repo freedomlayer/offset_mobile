@@ -16,8 +16,12 @@ part 'settings.g.dart';
   SettingsAction.selectNewCard() : super.selectNewCard();
   SettingsAction.newCard(NewCardAction newCard) : super.newCard(newCard);
   SettingsAction.cardSettings(CardSettingsAction cardSettings) : super.cardSettings(cardSettings);
-  // Select a card (Used for received a shared Relay file or Index file):
+  // Pick a card to view card settings
   SettingsAction.selectCard(NodeName nodeName) : super.selectCard(nodeName);
+  // Select a card (Used for handling an imported file)
+  SettingsAction.selectCardSharedIndex(NodeName nodeName, IndexServerFile indexServerFile) : super.selectCardSharedIndex(nodeName, indexServerFile);
+  SettingsAction.selectCardSharedRelay(NodeName nodeName, RelayAddress relayAddress) : super.selectCardSharedRelay(nodeName, relayAddress);
+  SettingsAction.selectCardSharedFriend(NodeName nodeName, FriendFile friendFile) : super.selectCardSharedFriend(nodeName, friendFile);
 }
 
 

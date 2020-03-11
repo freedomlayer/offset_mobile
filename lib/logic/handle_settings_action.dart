@@ -22,7 +22,8 @@ AppState handleSettingsAction(
 
   return settingsAction.match(
       back: () => createState(AppView.home()),
-      selectNewCard: () => createState(AppView.settings(SettingsView.newCard(NewCardView.select()))),
+      selectNewCard: () => createState(
+          AppView.settings(SettingsView.newCard(NewCardView.select()))),
       newCard: (newCardAction) {
         final newCardView = settingsView.match(
             home: () => null,
@@ -62,7 +63,19 @@ AppState handleSettingsAction(
           ..inner = CardSettingsInnerView.home());
         return createState(
             AppView.settings(SettingsView.cardSettings(cardSettingsView)));
-      });
+      },
+      selectCardSharedIndex: (nodeName, indexServerFile) => createState(
+          AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b
+            ..nodeName = nodeName
+            ..inner = CardSettingsInnerView.indexServers(
+                IndexServersSettingsView.newIndexName(indexServerFile)))))),
+      selectCardSharedRelay: (nodeName, relayAddress) => createState(
+          AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b
+            ..nodeName = nodeName
+            ..inner = CardSettingsInnerView.relays(RelaysSettingsView.newRelayName(relayAddress)))))),
+      selectCardSharedFriend: (nodeName, friendFile) => createState(AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b
+        ..nodeName = nodeName
+        ..inner = CardSettingsInnerView.friends(FriendsSettingsView.newFriend(NewFriendView.name(friendFile.publicKey, friendFile.relays))))))));
 }
 
 AppState _handleNewCard(
@@ -96,7 +109,6 @@ AppState _handleNewCard(
 
 AppState _handleNewCardLocal(
     NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
-
   final createNodeLocal = CreateNodeLocal((b) => b..nodeName = nodeName);
   final createNode = CreateNode.createNodeLocal(createNodeLocal);
   final userToServer = UserToServer.createNode(createNode);
@@ -105,7 +117,8 @@ AppState _handleNewCardLocal(
     ..requestId = requestId
     ..inner = userToServer);
 
-  final oldView = AppView.settings(SettingsView.newCard(NewCardView.newLocal()));
+  final oldView =
+      AppView.settings(SettingsView.newCard(NewCardView.newLocal()));
   final newView = AppView.settings(SettingsView.home());
 
   final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
@@ -119,11 +132,11 @@ AppState _handleNewCardLocal(
 
 AppState _handleNewCardRemote(NodeName nodeName, RemoteCardFile remoteCardFile,
     BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
-
-  final createNodeRemote = CreateNodeRemote((b) => b..nodeName = nodeName
-                                                    ..appPrivateKey = remoteCardFile.appPrivateKey
-                                                    ..nodePublicKey = remoteCardFile.nodePublicKey
-                                                    ..nodeAddress = remoteCardFile.nodeAddress);
+  final createNodeRemote = CreateNodeRemote((b) => b
+    ..nodeName = nodeName
+    ..appPrivateKey = remoteCardFile.appPrivateKey
+    ..nodePublicKey = remoteCardFile.nodePublicKey
+    ..nodeAddress = remoteCardFile.nodeAddress);
   final createNode = CreateNode.createNodeRemote(createNodeRemote);
   final userToServer = UserToServer.createNode(createNode);
   final requestId = genUid(rand);
@@ -131,7 +144,8 @@ AppState _handleNewCardRemote(NodeName nodeName, RemoteCardFile remoteCardFile,
     ..requestId = requestId
     ..inner = userToServer);
 
-  final oldView = AppView.settings(SettingsView.newCard(NewCardView.newLocal()));
+  final oldView =
+      AppView.settings(SettingsView.newCard(NewCardView.newLocal()));
   final newView = AppView.settings(SettingsView.home());
 
   final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
