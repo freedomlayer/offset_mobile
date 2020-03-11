@@ -95,7 +95,6 @@ Widget _renderNewCardLocal(BuiltMap<NodeName, NodeState> nodesStates,
   // Saves current node name:
   String _nodeName = '';
 
-  // TODO: Add the ability to pick name:
   final body = Center(
       child: Row(children: [
     Spacer(flex: 1),
@@ -136,7 +135,22 @@ Widget _renderNewCardLocal(BuiltMap<NodeName, NodeState> nodesStates,
 
 Widget _renderNewCardRemote(BuiltMap<NodeName, NodeState> nodesStates,
     Function(NewCardAction) queueAction) {
-  throw UnimplementedError();
+  final body = Center(
+      child: Column(children: [
+    Spacer(flex: 1),
+    Expanded(flex: 1, child: Text('How to add remote card?')),
+    Expanded(
+        flex: 2,
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          RaisedButton(onPressed: () => {}, child: Text('QR code')),
+          RaisedButton(onPressed: () => {}, child: Text('File')),
+        ])),
+  ]));
+
+  return frame(
+      title: Text('New remote card'),
+      body: body,
+      backAction: () => queueAction(NewCardAction.back()));
 }
 
 Widget _renderNewRemoteName(
