@@ -11,6 +11,8 @@ import '../protocol/file.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
 
+import 'card_settings.dart';
+
 import 'frame.dart';
 
 Widget renderSettings(
@@ -19,7 +21,7 @@ Widget renderSettings(
     Function(SettingsAction) queueAction) {
   return settingsView.match(
       home: () => _renderHome(nodesStates, queueAction),
-      cardSettings: (cardSettingsView) => _renderCardSettings(
+      cardSettings: (cardSettingsView) => renderCardSettings(
           cardSettingsView,
           nodesStates,
           (CardSettingsAction cardSettingsAction) =>
@@ -221,14 +223,6 @@ Widget _renderNewRemoteName(
       body: body,
       backAction: () => queueAction(NewCardAction.back()));
 }
-
-Widget _renderCardSettings(
-    CardSettingsView cardSettingsView,
-    BuiltMap<NodeName, NodeState> nodesStates,
-    Function(CardSettingsAction) queueAction) {
-  throw UnimplementedError();
-}
-
 Widget _renderSelectCardAddRelay(
     RelayAddress relayAddress,
     BuiltMap<NodeName, NodeState> nodesStates,
