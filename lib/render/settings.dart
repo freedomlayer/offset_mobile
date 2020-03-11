@@ -138,13 +138,11 @@ Widget _renderNewCardLocal(BuiltMap<NodeName, NodeState> nodesStates,
       backAction: () => queueAction(NewCardAction.back()));
 }
 
-
 Widget _renderNewCardRemote(BuiltMap<NodeName, NodeState> nodesStates,
     Function(NewCardAction) queueAction) {
-
   final Future<void> Function() scanQrCode = () async {
     final remoteCardFile = await qrScan<RemoteCardFile>()
-          .catchError((e) => developer.log('qrScan error: $e'));
+        .catchError((e) => developer.log('qrScan error: $e'));
     if (remoteCardFile != null) {
       // Load the remote card file:
       queueAction(NewCardAction.loadCardRemote(remoteCardFile));
@@ -153,7 +151,7 @@ Widget _renderNewCardRemote(BuiltMap<NodeName, NodeState> nodesStates,
 
   final Future<void> Function() openFileExplorer = () async {
     final remoteCardFile = await pickFromFile<RemoteCardFile>(REMOTE_CARD_EXT)
-          .catchError((e) => developer.log('pickFromFile error: $e'));
+        .catchError((e) => developer.log('pickFromFile error: $e'));
     if (remoteCardFile != null) {
       // Load the remote card file:
       queueAction(NewCardAction.loadCardRemote(remoteCardFile));
@@ -182,7 +180,46 @@ Widget _renderNewRemoteName(
     RemoteCardFile remoteCardFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(NewCardAction) queueAction) {
-  throw UnimplementedError();
+  // Saves current node name:
+  String _nodeName = '';
+
+  final body = Center(
+      child: Row(children: [
+    Spacer(flex: 1),
+    Expanded(
+        flex: 4,
+        child: Column(children: [
+          Expanded(
+              flex: 1,
+              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Text('Name:'),
+                Expanded(
+                    child: TextField(
+                        onChanged: (newNodeName) => _nodeName = newNodeName)),
+              ])),
+          Spacer(flex: 2),
+          Expanded(
+              flex: 1,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    RaisedButton(
+                        onPressed: () => queueAction(
+                            NewCardAction.newCardRemote(
+                                NodeName(_nodeName), remoteCardFile)),
+                        child: Text('Ok')),
+                    RaisedButton(
+                        onPressed: () => queueAction(NewCardAction.back()),
+                        child: Text('Cancel')),
+                  ])),
+        ])),
+    Spacer(flex: 1),
+  ]));
+
+  return frame(
+      title: Text('Remote card name'),
+      body: body,
+      backAction: () => queueAction(NewCardAction.back()));
 }
 
 Widget _renderCardSettings(
@@ -196,19 +233,90 @@ Widget _renderSelectCardAddRelay(
     RelayAddress relayAddress,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
-  throw UnimplementedError();
+  final children = <Widget>[];
+  for (final entry in nodesStates.entries) {
+    final nodeName = entry.key;
+    final nodeState = entry.value;
+
+    // We only show open nodes. (We can not configure closed nodes):
+    if (!nodeState.inner.isOpen) {
+      continue;
+    }
+
+    final cardEntry = ListTile(
+        key: Key(nodeName.inner),
+        title: Text('${nodeName.inner}'),
+        onTap: () => queueAction(SettingsAction.selectCardSharedRelay(nodeName, relayAddress)));
+    children.add(cardEntry);
+  }
+
+  final listView =
+      ListView(padding: const EdgeInsets.all(8), children: children);
+
+  return frame(
+      title: Text('Import Relay'),
+      body: listView,
+      backAction: () => queueAction(SettingsAction.back()));
 }
 
 Widget _renderSelectCardAddIndex(
     IndexServerFile indexServerFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
-  throw UnimplementedError();
+
+  final children = <Widget>[];
+  for (final entry in nodesStates.entries) {
+    final nodeName = entry.key;
+    final nodeState = entry.value;
+
+    // We only show open nodes. (We can not configure closed nodes):
+    if (!nodeState.inner.isOpen) {
+      continue;
+    }
+
+    final cardEntry = ListTile(
+        key: Key(nodeName.inner),
+        title: Text('${nodeName.inner}'),
+        onTap: () => queueAction(SettingsAction.selectCardSharedIndex(nodeName, indexServerFile)));
+    children.add(cardEntry);
+  }
+
+  final listView =
+      ListView(padding: const EdgeInsets.all(8), children: children);
+
+  return frame(
+      title: Text('Import Index Server'),
+      body: listView,
+      backAction: () => queueAction(SettingsAction.back()));
 }
 
 Widget _renderSelectCardAddFriend(
     FriendFile friendFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
-  throw UnimplementedError();
+
+  final children = <Widget>[];
+  for (final entry in nodesStates.entries) {
+    final nodeName = entry.key;
+    final nodeState = entry.value;
+
+    // We only show open nodes. (We can not configure closed nodes):
+    if (!nodeState.inner.isOpen) {
+      continue;
+    }
+
+    final cardEntry = ListTile(
+        key: Key(nodeName.inner),
+        title: Text('${nodeName.inner}'),
+        onTap: () => queueAction(SettingsAction.selectCardSharedFriend(nodeName, friendFile)));
+    children.add(cardEntry);
+  }
+
+  final listView =
+      ListView(padding: const EdgeInsets.all(8), children: children);
+
+  return frame(
+      title: Text('Import Friend'),
+      body: listView,
+      backAction: () => queueAction(SettingsAction.back()));
 }
