@@ -1,13 +1,12 @@
-import 'dart:io';
 import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 
-import 'package:file_picker/file_picker.dart';
+import 'utils/file_picker.dart';
+import 'utils/qr_scan.dart';
 
 import '../protocol/protocol.dart';
-import '../protocol/serialize.dart';
 import '../protocol/file.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
@@ -139,35 +138,26 @@ Widget _renderNewCardLocal(BuiltMap<NodeName, NodeState> nodesStates,
       backAction: () => queueAction(NewCardAction.back()));
 }
 
+
 Widget _renderNewCardRemote(BuiltMap<NodeName, NodeState> nodesStates,
     Function(NewCardAction) queueAction) {
 
+  final Future<void> Function() scanQrCode = () async {
+    final remoteCardFile = await qrScan<RemoteCardFile>()
+          .catchError((e) => developer.log('qrScan error: $e'));
+    if (remoteCardFile != null) {
+      // Load the remote card file:
+      queueAction(NewCardAction.loadCardRemote(remoteCardFile));
+    }
+  };
+
   final Future<void> Function() openFileExplorer = () async {
-    // Choosing FileType.CUSTOM doesn't seem to work with our custom extension,
-    // so we use FileType.ANY instead.
-    final filePath = await FilePicker.getFilePath(
-        type: FileType.ANY, fileExtension: REMOTE_CARD_EXT);
-
-    // Read file contents:
-    String data;
-    try {
-      data = File(filePath).readAsStringSync();
-    } on FileSystemException catch (e) {
-      developer.log('openFileExplorer: Could not read file as string: $e');
-      return null;
+    final remoteCardFile = await pickFromFile<RemoteCardFile>(REMOTE_CARD_EXT)
+          .catchError((e) => developer.log('pickFromFile error: $e'));
+    if (remoteCardFile != null) {
+      // Load the remote card file:
+      queueAction(NewCardAction.loadCardRemote(remoteCardFile));
     }
-
-    RemoteCardFile remoteCardFile;
-
-    try {
-      remoteCardFile = deserializeMsg<RemoteCardFile>(data);
-    } on SerializeError {
-      developer.log('openFileExplorer: Failed to deserialize RemoteCardFile: $data');
-      return null;
-    }
-
-    // Load the remote card file:
-    queueAction(NewCardAction.loadCardRemote(remoteCardFile));
   };
 
   final body = Center(
@@ -177,7 +167,7 @@ Widget _renderNewCardRemote(BuiltMap<NodeName, NodeState> nodesStates,
     Expanded(
         flex: 2,
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          RaisedButton(onPressed: () => {}, child: Text('QR code')),
+          RaisedButton(onPressed: scanQrCode, child: Text('QR code')),
           RaisedButton(onPressed: openFileExplorer, child: Text('File')),
         ])),
   ]));
