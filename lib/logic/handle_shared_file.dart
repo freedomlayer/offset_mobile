@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:developer' as developer;
 
-import 'package:built_value/serializer.dart';
 import 'package:path/path.dart' as path;
 
 import '../protocol/protocol.dart';
@@ -159,7 +158,7 @@ AppView _handleSharedRemoteCard(AppView oldAppView, String data) {
   try {
     final remoteCardFile = deserializeMsg<RemoteCardFile>(data);
     return AppView.settings(SettingsView.newCard(NewCardView.newRemoteName(remoteCardFile)));
-  } on DeserializationError {
+  } on SerializeError {
     return oldAppView;
   }
 }
