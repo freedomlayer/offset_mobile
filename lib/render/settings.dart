@@ -1,7 +1,13 @@
+import 'dart:io';
+import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 
+import 'package:file_picker/file_picker.dart';
+
 import '../protocol/protocol.dart';
+import '../protocol/serialize.dart';
 import '../protocol/file.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
@@ -135,6 +141,33 @@ Widget _renderNewCardLocal(BuiltMap<NodeName, NodeState> nodesStates,
 
 Widget _renderNewCardRemote(BuiltMap<NodeName, NodeState> nodesStates,
     Function(NewCardAction) queueAction) {
+
+  final Future<void> Function() openFileExplorer = () async {
+    final filePath = await FilePicker.getFilePath(
+        type: FileType.ANY, fileExtension: REMOTE_CARD_EXT);
+
+    // Read file contents:
+    String data;
+    try {
+      data = File(filePath).readAsStringSync();
+    } on FileSystemException catch (e) {
+      developer.log('openFileExplorer: Could not read file as string: $e');
+      return null;
+    }
+
+    RemoteCardFile remoteCardFile;
+
+    try {
+      remoteCardFile = deserializeMsg<RemoteCardFile>(data);
+    } on SerializeError {
+      developer.log('openFileExplorer: Failed to deserialize RemoteCardFile: $data');
+      return null;
+    }
+
+    // Load the remote card file:
+    queueAction(NewCardAction.loadCardRemote(remoteCardFile));
+  };
+
   final body = Center(
       child: Column(children: [
     Spacer(flex: 1),
@@ -143,7 +176,7 @@ Widget _renderNewCardRemote(BuiltMap<NodeName, NodeState> nodesStates,
         flex: 2,
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
           RaisedButton(onPressed: () => {}, child: Text('QR code')),
-          RaisedButton(onPressed: () => {}, child: Text('File')),
+          RaisedButton(onPressed: openFileExplorer, child: Text('File')),
         ])),
   ]));
 
