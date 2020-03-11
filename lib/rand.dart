@@ -11,7 +11,9 @@ const int INVOICE_ID_LEN = 32;
 /// Return `length` random bytes, encoded in base64
 String _randBytesB64(Random rand, int length) {
   final values = List<int>.generate(length, (i) => rand.nextInt(0x100));
-  return base64Url.encode(values);
+  final encoded = base64Url.encode(values);
+  // We remove trailing '=' because stcompact does the same.
+  return encoded.replaceAll('=','');
 }
 
 
