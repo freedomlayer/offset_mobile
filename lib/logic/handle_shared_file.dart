@@ -10,15 +10,6 @@ import '../protocol/serialize.dart';
 import '../state/state.dart';
 
 
-// Types of shared file extensions we know how to handle
-const String INVOICE_EXT = '.invoice';
-const String COMMIT_EXT = '.commit';
-const String FRIEND_EXT = '.friend';
-const String RELAY_EXT = '.relay';
-const String INDEX_EXT = '.index';
-const String REMOTE_CARD_EXT = '.rcard';
-
-
 /// May we interrupt a certain AppView?
 bool _isInterruptible(AppView appView) {
   return appView.match(
@@ -66,7 +57,14 @@ AppState handleSharedFile(AppState appState, String filePath) {
   }
 
   // Get file extension:
-  final extension = path.extension(filePath);
+  String extension = path.extension(filePath);
+
+  // Remove trailing dot:
+  if (extension.length > 0) {
+    if (extension[0] == '.') {
+      extension = extension.substring(1);
+    }
+  }
 
   AppView newAppView;
   switch (extension) {

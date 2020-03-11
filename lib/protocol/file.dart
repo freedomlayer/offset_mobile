@@ -9,6 +9,14 @@ import 'compact.dart';
 
 part 'file.g.dart';
 
+// Types of shared file extensions we know how to handle
+const String INVOICE_EXT = 'invoice';
+const String COMMIT_EXT = 'commit';
+const String FRIEND_EXT = 'friend';
+const String RELAY_EXT = 'relay';
+const String INDEX_EXT = 'index';
+const String REMOTE_CARD_EXT = 'rcard';
+
 abstract class InvoiceFile implements Built<InvoiceFile, InvoiceFileBuilder> {
   static Serializer<InvoiceFile> get serializer => _$invoiceFileSerializer;
 
