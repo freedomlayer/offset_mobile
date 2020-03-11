@@ -98,14 +98,14 @@ packages:
       name: built_union
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.1"
+    version: "0.1.2"
   built_union_generator:
     dependency: "direct dev"
     description:
       name: built_union_generator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.1"
+    version: "0.1.2"
   built_value:
     dependency: "direct main"
     description:
