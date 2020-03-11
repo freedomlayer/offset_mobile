@@ -143,6 +143,8 @@ Widget _renderNewCardRemote(BuiltMap<NodeName, NodeState> nodesStates,
     Function(NewCardAction) queueAction) {
 
   final Future<void> Function() openFileExplorer = () async {
+    // Choosing FileType.CUSTOM doesn't seem to work with our custom extension,
+    // so we use FileType.ANY instead.
     final filePath = await FilePicker.getFilePath(
         type: FileType.ANY, fileExtension: REMOTE_CARD_EXT);
 
