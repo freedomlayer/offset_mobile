@@ -41,7 +41,10 @@ Widget _renderHome(NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates,
     children.add(ListTile(
       key: Key(namedRelayAddress.publicKey.inner),
       title: Text(namedRelayAddress.name),
-      trailing: Icon(Icons.remove),
+      trailing: FlatButton(
+          child: Icon(Icons.remove),
+          onPressed: () => queueAction(
+              RelaysSettingsAction.removeRelay(namedRelayAddress.publicKey))),
     ));
   }
 
@@ -63,7 +66,6 @@ Widget _renderNewRelay(
     NodeName nodeName,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(RelaysSettingsAction) queueAction) {
-
   final Future<void> Function() scanQrCode = () async {
     final relayAddress = await qrScan<RelayAddress>()
         .catchError((e) => developer.log('qrScan error: $e'));
@@ -103,7 +105,6 @@ Widget _renderRelayName(
     RelayAddress relayAddress,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(RelaysSettingsAction) queueAction) {
-
   // Saves current relay name:
   String _relayName = '';
 
@@ -130,13 +131,15 @@ Widget _renderRelayName(
                     RaisedButton(
                         // TODO: Add some kind of validation, so that we won't have empty named relay.
                         onPressed: () => queueAction(
-                            RelaysSettingsAction.newRelay(NamedRelayAddress((b) => b
-                                    ..publicKey = relayAddress.publicKey
-                                    ..address = relayAddress.address
-                                    ..name = _relayName))),
+                            RelaysSettingsAction.newRelay(
+                                NamedRelayAddress((b) => b
+                                  ..publicKey = relayAddress.publicKey
+                                  ..address = relayAddress.address
+                                  ..name = _relayName))),
                         child: Text('Ok')),
                     RaisedButton(
-                        onPressed: () => queueAction(RelaysSettingsAction.back()),
+                        onPressed: () =>
+                            queueAction(RelaysSettingsAction.back()),
                         child: Text('Cancel')),
                   ])),
         ])),
