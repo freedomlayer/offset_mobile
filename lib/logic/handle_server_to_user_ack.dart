@@ -110,17 +110,17 @@ AppState handleNodesStatus(
       // Node existed before.
       // We copy the given info, and adjust the activeness status:
       final newInner = nodeStatus.mode.match(
-        open: (nodeId) {
-          oldNodeState.inner.match(
-              open: (nodeOpen) => oldNodeState.inner,
-              closed: () {
-                developer.log(
-                    "Node $nodeName is online but we never received a NodeOpened message!");
-                return NodeStateInner.closed();
-              });
-        },
+        open: (nodeId) => oldNodeState.inner.match(
+            open: (nodeOpen) => NodeStateInner.open(nodeOpen),
+            closed: () {
+              developer.log(
+                  "Node $nodeName is online but we never received a NodeOpened message!");
+              return NodeStateInner.closed();
+            }),
         closed: () => NodeStateInner.closed(),
       );
+
+      assert(newInner != null);
 
       newNodeState = oldNodeState.rebuild((b) => b
         ..info = nodeStatus.info
@@ -171,18 +171,19 @@ AppState handleReport(
     numFound += nodeState.inner.match(
       closed: () => 0,
       open: (nodeOpen) {
-      // open: (nodeName, curNodeId, appPermissions, compactReport) {
+        // open: (nodeName, curNodeId, appPermissions, compactReport) {
         if (nodeId != nodeOpen.nodeId) {
           return 0;
         }
 
-        final newNodeOpen = NodeOpen((b) => b..nodeId = nodeOpen.nodeId
-                                             ..appPermissions = nodeOpen.appPermissions.toBuilder()
-                                             ..compactReport = compactReport.toBuilder());
+        final newNodeOpen = NodeOpen((b) => b
+          ..nodeId = nodeOpen.nodeId
+          ..appPermissions = nodeOpen.appPermissions.toBuilder()
+          ..compactReport = compactReport.toBuilder());
 
         final newNodesStates = appState.nodesStates.rebuild((b) => b[nodeName] =
-            b[nodeName].rebuild((b) => b
-              ..inner = NodeStateInner.open(newNodeOpen)));
+            b[nodeName]
+                .rebuild((b) => b..inner = NodeStateInner.open(newNodeOpen)));
 
         newAppState = newAppState
             .rebuild((b) => b..nodesStates = newNodesStates.toBuilder());
