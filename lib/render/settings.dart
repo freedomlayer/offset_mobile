@@ -126,6 +126,7 @@ Widget _renderNewCardLocal(BuiltMap<NodeName, NodeState> nodesStates,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     RaisedButton(
+                        // TODO: Add some kind of validation, so that we won't have empty named relay.
                         onPressed: () => queueAction(
                             NewCardAction.newCardLocal(NodeName(_nodeName))),
                         child: Text('Ok')),
