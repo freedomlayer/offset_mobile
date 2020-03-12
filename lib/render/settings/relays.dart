@@ -22,7 +22,7 @@ Widget renderRelaysSettings(
       home: () => _renderHome(nodeName, nodesStates, queueAction),
       newRelaySelect: () => _renderNewRelay(nodeName, nodesStates, queueAction),
       newRelayName: (relayAddress) =>
-          _renderRelayName(nodeName, nodesStates, queueAction));
+          _renderRelayName(nodeName, relayAddress, nodesStates, queueAction));
 }
 
 Widget _renderHome(NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates,
@@ -100,7 +100,51 @@ Widget _renderNewRelay(
 
 Widget _renderRelayName(
     NodeName nodeName,
+    RelayAddress relayAddress,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(RelaysSettingsAction) queueAction) {
-  throw UnimplementedError();
+
+  // Saves current relay name:
+  String _relayName = '';
+
+  final body = Center(
+      child: Row(children: [
+    Spacer(flex: 1),
+    Expanded(
+        flex: 4,
+        child: Column(children: [
+          Expanded(
+              flex: 1,
+              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Text('Name:'),
+                Expanded(
+                    child: TextField(
+                        onChanged: (newNodeName) => _relayName = newNodeName)),
+              ])),
+          Spacer(flex: 2),
+          Expanded(
+              flex: 1,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    RaisedButton(
+                        // TODO: Add some kind of validation, so that we won't have empty named relay.
+                        onPressed: () => queueAction(
+                            RelaysSettingsAction.newRelay(NamedRelayAddress((b) => b
+                                    ..publicKey = relayAddress.publicKey
+                                    ..address = relayAddress.address
+                                    ..name = _relayName))),
+                        child: Text('Ok')),
+                    RaisedButton(
+                        onPressed: () => queueAction(RelaysSettingsAction.back()),
+                        child: Text('Cancel')),
+                  ])),
+        ])),
+    Spacer(flex: 1),
+  ]));
+
+  return frame(
+      title: Text('${nodeName.inner}: New relay name'),
+      body: body,
+      backAction: () => queueAction(RelaysSettingsAction.back()));
 }
