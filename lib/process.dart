@@ -97,5 +97,5 @@ Future<Process> openProcess() async {
   final binaryFilename = await _selectBinary(appDir, STCOMPACT_FILENAMES);
   return Process.start(
       binaryFilename, ['--store', path.join(appDir, STORE_DIR)],
-      environment: {'RUST_LOG': 'warn'});
+      environment: {'RUST_LOG': 'error'});
 }
