@@ -3,12 +3,16 @@
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 
-import '../protocol/protocol.dart';
-// import '../protocol/file.dart';
-import '../state/state.dart';
-import '../actions/actions.dart';
+import '../../protocol/protocol.dart';
+// import '../../protocol/file.dart';
+import '../../state/state.dart';
+import '../../actions/actions.dart';
 
-import 'frame.dart';
+import '../frame.dart';
+
+import 'relays.dart';
+import 'friends.dart';
+import 'index_servers.dart';
 
 Widget renderCardSettings(
     CardSettingsView cardSettingsView,
@@ -17,12 +21,25 @@ Widget renderCardSettings(
   final nodeName = cardSettingsView.nodeName;
   return cardSettingsView.inner.match(
       home: () => _renderCardSettingsHome(nodeName, nodesStates, queueAction),
-      friends: (friendsSettingsView) => _renderFriendsSettings(
-          nodeName, friendsSettingsView, nodesStates, queueAction),
-      relays: (relaysSettingsView) => _renderRelaysSettings(
-          nodeName, relaysSettingsView, nodesStates, queueAction),
-      indexServers: (indexServersSettingsView) => _renderIndexServersSettings(
-          nodeName, indexServersSettingsView, nodesStates, queueAction));
+      friends: (friendsSettingsView) => renderFriendsSettings(
+          nodeName,
+          friendsSettingsView,
+          nodesStates,
+          (FriendsSettingsAction friendsSettingsAction) => queueAction(
+              CardSettingsAction.friendsSettings(friendsSettingsAction))),
+      relays: (relaysSettingsView) => renderRelaysSettings(
+          nodeName,
+          relaysSettingsView,
+          nodesStates,
+          (RelaysSettingsAction relaysSettingsAction) => queueAction(
+              CardSettingsAction.relaysSettings(relaysSettingsAction))),
+      indexServers: (indexServersSettingsView) => renderIndexServersSettings(
+          nodeName,
+          indexServersSettingsView,
+          nodesStates,
+          (IndexServersSettingsAction indexServersSettingsAction) =>
+              queueAction(CardSettingsAction.indexServersSettings(
+                  indexServersSettingsAction))));
 }
 
 Widget _renderCardSettingsHome(
@@ -75,7 +92,8 @@ Widget _renderCardSettingsHome(
       : () {
           queueAction(CardSettingsAction.remove());
         };
-  children.add(Center(child: RaisedButton(onPressed: onPressed, child: Text('Remove card'))));
+  children.add(Center(
+      child: RaisedButton(onPressed: onPressed, child: Text('Remove card'))));
 
   final listView =
       ListView(padding: const EdgeInsets.all(8), children: children);
@@ -84,28 +102,4 @@ Widget _renderCardSettingsHome(
       title: Text('Card settings'),
       body: listView,
       backAction: () => queueAction(CardSettingsAction.back()));
-}
-
-Widget _renderFriendsSettings(
-    NodeName nodeName,
-    FriendsSettingsView friendsSettingsView,
-    BuiltMap<NodeName, NodeState> nodesStates,
-    Function(CardSettingsAction) queueAction) {
-  throw UnimplementedError();
-}
-
-Widget _renderRelaysSettings(
-    NodeName nodeName,
-    RelaysSettingsView relaysSettingsView,
-    BuiltMap<NodeName, NodeState> nodesStates,
-    Function(CardSettingsAction) queueAction) {
-  throw UnimplementedError();
-}
-
-Widget _renderIndexServersSettings(
-    NodeName nodeName,
-    IndexServersSettingsView indexServersSettingsView,
-    BuiltMap<NodeName, NodeState> nodesStates,
-    Function(CardSettingsAction) queueAction) {
-  throw UnimplementedError();
 }

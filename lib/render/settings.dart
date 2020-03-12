@@ -11,7 +11,7 @@ import '../protocol/file.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
 
-import 'card_settings.dart';
+import 'settings/card.dart';
 
 import 'frame.dart';
 
