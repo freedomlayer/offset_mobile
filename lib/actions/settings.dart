@@ -115,6 +115,7 @@ class RelaysSettingsAction extends _$RelaysSettingsAction {
   RelaysSettingsAction.back() : super.back();
   RelaysSettingsAction.removeRelay(PublicKey relayPublicKey) : super.removeRelay(relayPublicKey);
   RelaysSettingsAction.selectNewRelay() : super.selectNewRelay();
+  RelaysSettingsAction.loadRelay(RelayAddress relayAddress) : super.loadRelay(relayAddress);
   RelaysSettingsAction.newRelay(NamedRelayAddress relay) : super.newRelay(relay);
 }
 
@@ -126,6 +127,7 @@ class IndexServersSettingsAction extends _$IndexServersSettingsAction {
   IndexServersSettingsAction.back() : super.back();
   IndexServersSettingsAction.removeIndex(PublicKey indexPublicKey) : super.removeIndex(indexPublicKey);
   IndexServersSettingsAction.selectNewIndex() : super.selectNewIndex();
+  IndexServersSettingsAction.loadIndexServer(IndexServerFile indexServerFile) : super.loadIndexServer(indexServerFile);
   IndexServersSettingsAction.newIndex(NamedIndexServerAddress indexServer) : super.newIndex(indexServer);
 }
 

@@ -34,6 +34,8 @@ AppState handleRelaysSettings(
           _handleRemoveRelay(nodeName, relayPublicKey, nodesStates, rand),
       selectNewRelay: () => createStateInner(
           CardSettingsInnerView.relays(RelaysSettingsView.newRelaySelect())),
+      loadRelay: (relayAddress) => createStateInner(
+          CardSettingsInnerView.relays(RelaysSettingsView.newRelayName(relayAddress))),
       newRelay: (namedRelayAddress) =>
           _handleNewRelay(nodeName, namedRelayAddress, nodesStates, rand));
 }

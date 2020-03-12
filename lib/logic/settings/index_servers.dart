@@ -35,6 +35,8 @@ AppState handleIndexServersSettings(
           _handleRemoveIndex(nodeName, indexPublicKey, nodesStates, rand),
       selectNewIndex: () => createStateInner(
           CardSettingsInnerView.indexServers(IndexServersSettingsView.newIndexSelect())),
+      loadIndexServer: (indexServerFile) => createStateInner(
+          CardSettingsInnerView.indexServers(IndexServersSettingsView.newIndexName(indexServerFile))),
       newIndex: (namedIndexServerAddress) =>
           _handleNewIndex(nodeName, namedIndexServerAddress, nodesStates, rand));
 }
