@@ -39,6 +39,7 @@ abstract class NodeState implements Built<NodeState, NodeStateBuilder> {
   static Serializer<NodeState> get serializer => _$nodeStateSerializer;
 
   NodeInfo get info;
+  bool get isEnabled;
   NodeStateInner get inner;
 
   NodeState._();

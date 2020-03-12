@@ -98,6 +98,7 @@ AppState handleNodesStatus(
       // We are going to create a new node:
       newNodeState = NodeState((b) => b
         ..info = nodeStatus.info
+        ..isEnabled = nodeStatus.isEnabled
         ..inner = newInner);
     } else {
       // Node existed before.
@@ -117,6 +118,7 @@ AppState handleNodesStatus(
 
       newNodeState = oldNodeState.rebuild((b) => b
         ..info = nodeStatus.info
+        ..isEnabled = nodeStatus.isEnabled
         ..inner = newInner);
     }
     newMap[nodeName] = newNodeState;
