@@ -8,7 +8,11 @@ import 'package:path_provider/path_provider.dart';
 import 'error.dart';
 
 const ASSETS_DIR = 'external';
-const List<String> STCOMPACT_FILENAMES = ['stcompact_armv7', 'stcompact_aarch64', 'stcompact_i686'];
+const List<String> STCOMPACT_FILENAMES = [
+  'stcompact_armv7',
+  'stcompact_aarch64',
+  'stcompact_i686'
+];
 const String STORE_DIR = 'store';
 
 const String BIN_DIR = 'bin';
@@ -19,11 +23,10 @@ class ProcessError extends AppError {
   ProcessError(cause) : super(cause);
 }
 
-
-Future<void> _loadBinary(String appDir, String assetFile, String destFile) async {
+Future<void> _loadBinary(
+    String appDir, String assetFile, String destFile) async {
   // Obtain the binary file from assets:
-  var bytes =
-      await rootBundle.load(path.join(ASSETS_DIR, assetFile));
+  var bytes = await rootBundle.load(path.join(ASSETS_DIR, assetFile));
 
   // Get the path we want the binary file to live in:
   final String binaryPath = path.join(appDir, BIN_DIR, destFile);
@@ -77,7 +80,7 @@ Future<String> _selectBinary(String appDir, List<String> filenames) async {
   for (final assetFile in filenames) {
     await _loadBinary(appDir, assetFile, TEMP_STCOMPACT);
     final srcPath = path.join(appDir, BIN_DIR, TEMP_STCOMPACT);
-    if (await _canBinaryRun(path.join(appDir, BIN_DIR,  TEMP_STCOMPACT))) {
+    if (await _canBinaryRun(path.join(appDir, BIN_DIR, TEMP_STCOMPACT))) {
       // Move to stcompact:
       final destPath = path.join(appDir, BIN_DIR, STCOMPACT);
       await File(srcPath).rename(destPath);
@@ -89,10 +92,10 @@ Future<String> _selectBinary(String appDir, List<String> filenames) async {
   throw ProcessError('No binary suitable for this platform');
 }
 
-
 Future<Process> openProcess() async {
   final String appDir = (await getApplicationDocumentsDirectory()).path;
   final binaryFilename = await _selectBinary(appDir, STCOMPACT_FILENAMES);
-  return Process.start(binaryFilename, ['--store', path.join(appDir, STORE_DIR)]);
+  return Process.start(
+      binaryFilename, ['--store', path.join(appDir, STORE_DIR)],
+      environment: {'RUST_LOG': 'warn'});
 }
-
