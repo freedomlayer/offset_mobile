@@ -23,13 +23,19 @@ AppState handleCardSettingsAction(
     ..viewState = ViewState.view(appView));
 
   return cardSettingsAction.match(
-      back: () => createState(AppView.home()),
+      back: () => createState(AppView.settings(SettingsView.home())),
       enable: () => _handleEnable(
           cardSettingsView.nodeName, cardSettingsView, nodesStates, rand),
       disable: () => _handleDisable(
           cardSettingsView.nodeName, cardSettingsView, nodesStates, rand),
       remove: () => _handleRemove(
           cardSettingsView.nodeName, cardSettingsView, nodesStates, rand),
+      selectFriends: () => createState(AppView.settings(SettingsView.cardSettings(cardSettingsView.rebuild((b) =>
+                      b..inner = CardSettingsInnerView.friends(FriendsSettingsView.home()))))),
+      selectRelays: () => createState(AppView.settings(SettingsView.cardSettings(cardSettingsView.rebuild((b) =>
+                      b..inner = CardSettingsInnerView.relays(RelaysSettingsView.home()))))),
+      selectIndexServers: () => createState(AppView.settings(SettingsView.cardSettings(cardSettingsView.rebuild((b) =>
+                      b..inner = CardSettingsInnerView.indexServers(IndexServersSettingsView.home()))))),
       friendsSettings: (friendsSettingsAction) {
         final friendsSettingsView = cardSettingsView.inner.match(
             home: () => null,
