@@ -44,11 +44,14 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
   final children = <Widget>[];
   for (final entry in nodesStates.entries) {
     final nodeName = entry.key;
-    // final nodeState = entry.value;
+    final nodeState = entry.value;
     final cardEntry = ListTile(
         key: Key(nodeName.inner),
         title: Text('${nodeName.inner}'),
-        onTap: () => queueAction(SettingsAction.selectCard(nodeName)));
+        trailing: nodeState.inner.isOpen ? Icon(Icons.control_point) : Icon(Icons.error),
+        onTap: () => queueAction(SettingsAction.selectCard(nodeName)),
+        );
+    
     children.add(cardEntry);
   }
 
