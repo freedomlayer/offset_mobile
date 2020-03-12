@@ -8,7 +8,7 @@ import '../protocol/protocol.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
 
-// import 'frame.dart';
+import 'frame.dart';
 
 Widget renderCardSettings(
     CardSettingsView cardSettingsView,
@@ -29,36 +29,62 @@ Widget _renderCardSettingsHome(
     NodeName nodeName,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(CardSettingsAction) queueAction) {
-  throw UnimplementedError();
-}
-
-  /*
   final children = <Widget>[];
-  for (final entry in nodesStates.entries) {
-    final nodeName = entry.key;
-    final nodeState = entry.value;
+  // Node name:
+  children.add(ListTile(title: Text(nodeName.inner)));
 
-    // We only show open nodes. (We can not configure closed nodes):
-    if (!nodeState.inner.isOpen) {
-      continue;
-    }
+  final nodeState = nodesStates[nodeName];
+  // Must be non null:
+  assert(nodeState != null);
 
-    final cardEntry = ListTile(
-        key: Key(nodeName.inner),
-        title: Text('${nodeName.inner}'),
-        onTap: () => queueAction(SettingsAction.selectCardSharedIndex(nodeName, indexServerFile)));
-    children.add(cardEntry);
-  }
+  // Node type:
+  final cardType = nodeState.info.isLocal ? 'local' : 'remote';
+  children.add(ListTile(title: Text('Card type: $cardType')));
+
+  // Node status (Is node connected?)
+  final nodeStatus = nodeState.inner.isOpen ? 'connected' : 'disconnected';
+  children.add(ListTile(title: Text('Node status: $nodeStatus')));
+
+  children.add(SwitchListTile(
+      value: nodeState.isEnabled,
+      title: Text("Enable"),
+      onChanged: (bool newValue) {
+        if (newValue == true) {
+          queueAction(CardSettingsAction.enable());
+        } else {
+          queueAction(CardSettingsAction.disable());
+        }
+      }));
+
+  children.add(ListTile(title: Text('')));
+  children.add(ListTile(
+      title: Text('Friends'),
+      enabled: nodeState.inner.isOpen,
+      onTap: () => queueAction(CardSettingsAction.selectFriends())));
+  children.add(ListTile(
+      title: Text('Relays'),
+      enabled: nodeState.inner.isOpen,
+      onTap: () => queueAction(CardSettingsAction.selectRelays())));
+  children.add(ListTile(
+      title: Text('Index Servers'),
+      enabled: nodeState.inner.isOpen,
+      onTap: () => queueAction(CardSettingsAction.selectIndexServers())));
+
+  final onPressed = nodeState.isEnabled
+      ? null
+      : () {
+          queueAction(CardSettingsAction.remove());
+        };
+  children.add(Center(child: RaisedButton(onPressed: onPressed, child: Text('Remove card'))));
 
   final listView =
       ListView(padding: const EdgeInsets.all(8), children: children);
 
-
   return frame(
       title: Text('Card settings'),
       body: listView,
-      backAction: () => queueAction(SettingsAction.back()));
-  */
+      backAction: () => queueAction(CardSettingsAction.back()));
+}
 
 Widget _renderFriendsSettings(
     NodeName nodeName,
