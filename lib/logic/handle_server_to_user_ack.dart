@@ -18,8 +18,14 @@ AppState handleServerToUserAck(
   final viewState = appState1.viewState.match(
       view: (appView) =>
           ViewState.view(adjustAppView(appView, appState.nodesStates)),
-      transition: (_oldView, _newView, _nextRequests, _optPendingRequest) =>
-          appState1.viewState);
+      transition: (oldView, newView, nextRequests, optPendingRequest) {
+        final adjustOldView = adjustAppView(oldView, appState.nodesStates);
+        if (adjustOldView != oldView) {
+          return ViewState.transition(adjustOldView, adjustOldView, nextRequests, optPendingRequest);
+        } else {
+          return appState1.viewState;
+        }
+      });
 
   return appState1.rebuild((b) => b..viewState = viewState);
 }
