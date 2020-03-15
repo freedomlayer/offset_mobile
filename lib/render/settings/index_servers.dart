@@ -1,15 +1,152 @@
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 
 import '../../protocol/protocol.dart';
-// import '../../protocol/file.dart';
+import '../../protocol/file.dart';
 import '../../state/state.dart';
 import '../../actions/actions.dart';
+
+import '../utils/file_picker.dart';
+import '../utils/qr_scan.dart';
+
+import '../frame.dart';
 
 Widget renderIndexServersSettings(
     NodeName nodeName,
     IndexServersSettingsView indexServersSettingsView,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(IndexServersSettingsAction) queueAction) {
-  throw UnimplementedError();
+  return indexServersSettingsView.match(
+      home: () => _renderHome(nodeName, nodesStates, queueAction),
+      newIndexSelect: () => _renderNewIndexServer(nodeName, nodesStates, queueAction),
+      newIndexName: (indexServerAddress) =>
+          _renderIndexServerName(nodeName, indexServerAddress, nodesStates, queueAction));
+}
+
+Widget _renderHome(NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates,
+    Function(IndexServersSettingsAction) queueAction) {
+  final nodeState = nodesStates[nodeName];
+  assert(nodeState != null);
+
+  final nodeOpen =
+      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
+
+  assert(nodeOpen != null);
+
+  final children = <Widget>[];
+
+  for (final namedIndexServerAddress in nodeOpen.compactReport.indexServers) {
+    children.add(ListTile(
+      key: Key(namedIndexServerAddress.publicKey.inner),
+      title: Text(namedIndexServerAddress.name),
+      trailing: FlatButton(
+          child: Icon(Icons.remove),
+          onPressed: () => queueAction(
+              IndexServersSettingsAction.removeIndex(namedIndexServerAddress.publicKey))),
+    ));
+  }
+
+  final listView = ListView(children: children);
+
+  final newIndexServerButton = FloatingActionButton.extended(
+      onPressed: () => queueAction(IndexServersSettingsAction.selectNewIndex()),
+      label: Text('New IndexServer'),
+      icon: Icon(Icons.add));
+
+  return frame(
+      title: Text('${nodeName.inner}: Index Servers'),
+      body: listView,
+      backAction: () => queueAction(IndexServersSettingsAction.back()),
+      floatingActionButton: newIndexServerButton);
+}
+
+Widget _renderNewIndexServer(
+    NodeName nodeName,
+    BuiltMap<NodeName, NodeState> nodesStates,
+    Function(IndexServersSettingsAction) queueAction) {
+  final Future<void> Function() scanQrCode = () async {
+    final indexServerFile = await qrScan<IndexServerFile>()
+        .catchError((e) => developer.log('qrScan error: $e'));
+    if (indexServerFile != null) {
+      queueAction(IndexServersSettingsAction.loadIndexServer(indexServerFile));
+    }
+  };
+
+  final Future<void> Function() openFileExplorer = () async {
+    final indexServerAddress = await pickFromFile<IndexServerFile>(INDEX_EXT)
+        .catchError((e) => developer.log('pickFromFile error: $e'));
+    if (indexServerAddress != null) {
+      queueAction(IndexServersSettingsAction.loadIndexServer(indexServerAddress));
+    }
+  };
+
+  final body = Center(
+      child: Column(children: [
+    Spacer(flex: 1),
+    Expanded(flex: 1, child: Text('How to add new indexServer?')),
+    Expanded(
+        flex: 2,
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          RaisedButton(onPressed: scanQrCode, child: Text('QR code')),
+          RaisedButton(onPressed: openFileExplorer, child: Text('File')),
+        ])),
+  ]));
+
+  return frame(
+      title: Text('${nodeName.inner}: New Index Server'),
+      body: body,
+      backAction: () => queueAction(IndexServersSettingsAction.back()));
+}
+
+Widget _renderIndexServerName(
+    NodeName nodeName,
+    IndexServerFile indexServerFile,
+    BuiltMap<NodeName, NodeState> nodesStates,
+    Function(IndexServersSettingsAction) queueAction) {
+  // Saves current indexServer name:
+  String _indexServerName = '';
+
+  final body = Center(
+      child: Row(children: [
+    Spacer(flex: 1),
+    Expanded(
+        flex: 4,
+        child: Column(children: [
+          Expanded(
+              flex: 1,
+              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Text('Name:'),
+                Expanded(
+                    child: TextField(
+                        onChanged: (newNodeName) => _indexServerName = newNodeName)),
+              ])),
+          Spacer(flex: 2),
+          Expanded(
+              flex: 1,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    RaisedButton(
+                        // TODO: Add some kind of validation, so that we won't have empty named indexServer.
+                        onPressed: () => queueAction(
+                            IndexServersSettingsAction.newIndex(
+                                NamedIndexServerAddress((b) => b
+                                  ..publicKey = indexServerFile.publicKey
+                                  ..address = indexServerFile.address
+                                  ..name = _indexServerName))),
+                        child: Text('Ok')),
+                    RaisedButton(
+                        onPressed: () =>
+                            queueAction(IndexServersSettingsAction.back()),
+                        child: Text('Cancel')),
+                  ])),
+        ])),
+    Spacer(flex: 1),
+  ]));
+
+  return frame(
+      title: Text('${nodeName.inner}: New Index Server name'),
+      body: body,
+      backAction: () => queueAction(IndexServersSettingsAction.back()));
 }
