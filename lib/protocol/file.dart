@@ -66,3 +66,10 @@ abstract class RemoteCardFile implements Built<RemoteCardFile, RemoteCardFileBui
   factory RemoteCardFile([void Function(RemoteCardFileBuilder) updates]) = _$RemoteCardFile;
 }
 
+
+final fileSerializers = <Serializer>[
+  InvoiceFile.serializer,
+  IndexServerFile.serializer,
+  FriendFile.serializer,
+  RemoteCardFile.serializer,
+];
