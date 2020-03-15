@@ -11,10 +11,11 @@ import '../utils/share_file.dart';
 import '../utils/file_picker.dart';
 import '../utils/qr_scan.dart';
 
-
 import '../../logger.dart';
 
 import '../frame.dart';
+
+import 'friend.dart';
 
 final logger = createLogger('render::settings::friends');
 
@@ -25,7 +26,7 @@ Widget renderFriendsSettings(
     Function(FriendsSettingsAction) queueAction) {
   return friendsSettingsView.match(
       home: () => _renderHome(nodeName, nodesStates, queueAction),
-      friendSettings: (friendSettingsView) => _renderFriendSettings(
+      friendSettings: (friendSettingsView) => renderFriendSettings(
           nodeName,
           friendSettingsView,
           nodesStates,
@@ -91,13 +92,6 @@ Widget _renderHome(NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates,
       floatingActionButton: newFriendButton);
 }
 
-Widget _renderFriendSettings(
-    NodeName nodeName,
-    FriendSettingsView friendSettingsView,
-    BuiltMap<NodeName, NodeState> nodesStates,
-    Function(FriendSettingsAction) queueAction) {
-  throw UnimplementedError();
-}
 
 Widget _renderNewFriend(
     NodeName nodeName,
