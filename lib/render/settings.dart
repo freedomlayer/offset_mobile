@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 
@@ -18,18 +17,21 @@ import '../logger.dart';
 
 final logger = createLogger('render::settings');
 
-
 Widget renderSettings(
     SettingsView settingsView,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
   return settingsView.match(
       home: () => _renderHome(nodesStates, queueAction),
-      cardSettings: (cardSettingsView) => renderCardSettings(
-          cardSettingsView,
-          nodesStates,
-          (CardSettingsAction cardSettingsAction) =>
-              queueAction(SettingsAction.cardSettings(cardSettingsAction))),
+      cardSettings: (cardSettingsView) {
+        final nodeState = nodesStates[cardSettingsView.nodeName];
+        assert(nodeState != null);
+        return renderCardSettings(
+            cardSettingsView,
+            nodeState,
+            (CardSettingsAction cardSettingsAction) =>
+                queueAction(SettingsAction.cardSettings(cardSettingsAction)));
+      },
       newCard: (newCardView) => _renderNewCard(
           newCardView,
           nodesStates,
@@ -50,12 +52,14 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
     final nodeName = entry.key;
     final nodeState = entry.value;
     final cardEntry = ListTile(
-        key: Key(nodeName.inner),
-        title: Text('${nodeName.inner}'),
-        trailing: nodeState.inner.isOpen ? Icon(Icons.control_point) : Icon(Icons.error),
-        onTap: () => queueAction(SettingsAction.selectCard(nodeName)),
-        );
-    
+      key: Key(nodeName.inner),
+      title: Text('${nodeName.inner}'),
+      trailing: nodeState.inner.isOpen
+          ? Icon(Icons.control_point)
+          : Icon(Icons.error),
+      onTap: () => queueAction(SettingsAction.selectCard(nodeName)),
+    );
+
     children.add(cardEntry);
   }
 
@@ -231,6 +235,7 @@ Widget _renderNewRemoteName(
       body: body,
       backAction: () => queueAction(NewCardAction.back()));
 }
+
 Widget _renderSelectCardAddRelay(
     RelayAddress relayAddress,
     BuiltMap<NodeName, NodeState> nodesStates,
@@ -248,7 +253,8 @@ Widget _renderSelectCardAddRelay(
     final cardEntry = ListTile(
         key: Key(nodeName.inner),
         title: Text('${nodeName.inner}'),
-        onTap: () => queueAction(SettingsAction.selectCardSharedRelay(nodeName, relayAddress)));
+        onTap: () => queueAction(
+            SettingsAction.selectCardSharedRelay(nodeName, relayAddress)));
     children.add(cardEntry);
   }
 
@@ -265,7 +271,6 @@ Widget _renderSelectCardAddIndex(
     IndexServerFile indexServerFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
-
   final children = <Widget>[];
   for (final entry in nodesStates.entries) {
     final nodeName = entry.key;
@@ -279,7 +284,8 @@ Widget _renderSelectCardAddIndex(
     final cardEntry = ListTile(
         key: Key(nodeName.inner),
         title: Text('${nodeName.inner}'),
-        onTap: () => queueAction(SettingsAction.selectCardSharedIndex(nodeName, indexServerFile)));
+        onTap: () => queueAction(
+            SettingsAction.selectCardSharedIndex(nodeName, indexServerFile)));
     children.add(cardEntry);
   }
 
@@ -296,7 +302,6 @@ Widget _renderSelectCardAddFriend(
     FriendFile friendFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
-
   final children = <Widget>[];
   for (final entry in nodesStates.entries) {
     final nodeName = entry.key;
@@ -310,7 +315,8 @@ Widget _renderSelectCardAddFriend(
     final cardEntry = ListTile(
         key: Key(nodeName.inner),
         title: Text('${nodeName.inner}'),
-        onTap: () => queueAction(SettingsAction.selectCardSharedFriend(nodeName, friendFile)));
+        onTap: () => queueAction(
+            SettingsAction.selectCardSharedFriend(nodeName, friendFile)));
     children.add(cardEntry);
   }
 

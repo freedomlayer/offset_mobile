@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:built_collection/built_collection.dart';
 
 import '../../protocol/protocol.dart';
 // import '../../protocol/file.dart';
@@ -18,30 +17,45 @@ import '../../actions/actions.dart';
 Widget renderFriendSettings(
     NodeName nodeName,
     FriendSettingsView friendSettingsView,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    NodeState nodeState,
     Function(FriendSettingsAction) queueAction) {
-
   final friendPublicKey = friendSettingsView.friendPublicKey;
   return friendSettingsView.inner.match(
-      home: () => _renderFriendHome(nodeName, friendPublicKey, nodesStates, queueAction),
-      resolve: () => _renderResolve(nodeName, friendPublicKey, nodesStates, queueAction),
-      currencySettings: (currency) => _renderCurrencySettings(nodeName, friendPublicKey, currency, nodesStates, queueAction),
-      newCurrency: () => _renderNewCurrency(nodeName, friendPublicKey, nodesStates, queueAction));
+      home: () => _renderFriendHome(
+          nodeName, friendPublicKey, nodeState, queueAction),
+      resolve: () =>
+          _renderResolve(nodeName, friendPublicKey, nodeState, queueAction),
+      currencySettings: (currency) => _renderCurrencySettings(
+          nodeName, friendPublicKey, currency, nodeState, queueAction),
+      newCurrency: () => _renderNewCurrency(
+          nodeName, friendPublicKey, nodeState, queueAction));
 }
-
 
 Widget _renderFriendHome(
     NodeName nodeName,
     PublicKey friendPublicKey,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    NodeState nodeState,
     Function(FriendSettingsAction) queueAction) {
+
   throw UnimplementedError();
+
+  /*
+  final body = Center(child: Column(children: [
+    Expanded(flex: 1, child: ListTile(title: )),
+    Expanded(flex: 10, listView),
+  ]));
+
+  return frame(
+      title: Text('${nodeName.inner}: Friend Settings'),
+      body: body,
+      backAction: () => queueAction(RelaysSettingsAction.back()));
+  */
 }
 
 Widget _renderResolve(
     NodeName nodeName,
     PublicKey friendPublicKey,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    NodeState nodeState,
     Function(FriendSettingsAction) queueAction) {
   throw UnimplementedError();
 }
@@ -50,7 +64,7 @@ Widget _renderCurrencySettings(
     NodeName nodeName,
     PublicKey friendPublicKey,
     Currency currency,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    NodeState nodeState,
     Function(FriendSettingsAction) queueAction) {
   throw UnimplementedError();
 }
@@ -58,7 +72,7 @@ Widget _renderCurrencySettings(
 Widget _renderNewCurrency(
     NodeName nodeName,
     PublicKey friendPublicKey,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    NodeState nodeState,
     Function(FriendSettingsAction) queueAction) {
   throw UnimplementedError();
 }

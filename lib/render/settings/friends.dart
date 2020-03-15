@@ -22,29 +22,27 @@ final logger = createLogger('render::settings::friends');
 Widget renderFriendsSettings(
     NodeName nodeName,
     FriendsSettingsView friendsSettingsView,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    NodeState nodeState,
     Function(FriendsSettingsAction) queueAction) {
   return friendsSettingsView.match(
-      home: () => _renderHome(nodeName, nodesStates, queueAction),
+      home: () => _renderHome(nodeName, nodeState, queueAction),
       friendSettings: (friendSettingsView) => renderFriendSettings(
           nodeName,
           friendSettingsView,
-          nodesStates,
+          nodeState,
           (FriendSettingsAction friendSettingsAction) => queueAction(
               FriendsSettingsAction.friendSettings(friendSettingsAction))),
       newFriend: (newFriendView) => _renderNewFriend(
           nodeName,
           newFriendView,
-          nodesStates,
+          nodeState,
           (NewFriendAction newFriendAction) =>
               queueAction(FriendsSettingsAction.newFriend(newFriendAction))),
-      shareInfo: () => _renderShareInfo(nodeName, nodesStates, queueAction));
+      shareInfo: () => _renderShareInfo(nodeName, nodeState, queueAction));
 }
 
-Widget _renderHome(NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates,
+Widget _renderHome(NodeName nodeName, NodeState nodeState,
     Function(FriendsSettingsAction) queueAction) {
-  final nodeState = nodesStates[nodeName];
-  assert(nodeState != null);
 
   final nodeOpen =
       nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
@@ -96,17 +94,17 @@ Widget _renderHome(NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates,
 Widget _renderNewFriend(
     NodeName nodeName,
     NewFriendView newFriendView,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    NodeState nodeState,
     Function(NewFriendAction) queueAction) {
   return newFriendView.match(
-      select: () => _renderSelectNewFriend(nodeName, nodesStates, queueAction),
+      select: () => _renderSelectNewFriend(nodeName, nodeState, queueAction),
       name: (friendFile) => _renderNewFriendName(
-          nodeName, friendFile, nodesStates, queueAction));
+          nodeName, friendFile, nodeState, queueAction));
 }
 
 Widget _renderSelectNewFriend(
     NodeName nodeName,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    NodeState nodeState,
     Function(NewFriendAction) queueAction) {
 
   final Future<void> Function() scanQrCode = () async {
@@ -146,7 +144,7 @@ Widget _renderSelectNewFriend(
 Widget _renderNewFriendName(
     NodeName nodeName,
     FriendFile friendFile,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    NodeState nodeState,
     Function(NewFriendAction) queueAction) {
 
   // Saves current relay name:
@@ -196,10 +194,8 @@ Widget _renderNewFriendName(
 
 Widget _renderShareInfo(
     NodeName nodeName,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    NodeState nodeState,
     Function(FriendsSettingsAction) queueAction) {
-  final nodeState = nodesStates[nodeName];
-  assert(nodeState != null);
 
   final nodeOpen =
       nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);

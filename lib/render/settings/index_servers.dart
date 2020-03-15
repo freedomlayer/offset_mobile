@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:built_collection/built_collection.dart';
 
 import '../../protocol/protocol.dart';
 import '../../protocol/file.dart';
@@ -18,19 +17,17 @@ final logger = createLogger('render::settings::index_servers');
 Widget renderIndexServersSettings(
     NodeName nodeName,
     IndexServersSettingsView indexServersSettingsView,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    NodeState nodeState,
     Function(IndexServersSettingsAction) queueAction) {
   return indexServersSettingsView.match(
-      home: () => _renderHome(nodeName, nodesStates, queueAction),
-      newIndexSelect: () => _renderNewIndexServer(nodeName, nodesStates, queueAction),
+      home: () => _renderHome(nodeName, nodeState, queueAction),
+      newIndexSelect: () => _renderNewIndexServer(nodeName, nodeState, queueAction),
       newIndexName: (indexServerAddress) =>
-          _renderIndexServerName(nodeName, indexServerAddress, nodesStates, queueAction));
+          _renderIndexServerName(nodeName, indexServerAddress, nodeState, queueAction));
 }
 
-Widget _renderHome(NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates,
+Widget _renderHome(NodeName nodeName, NodeState nodeState,
     Function(IndexServersSettingsAction) queueAction) {
-  final nodeState = nodesStates[nodeName];
-  assert(nodeState != null);
 
   final nodeOpen =
       nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
@@ -66,7 +63,7 @@ Widget _renderHome(NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates,
 
 Widget _renderNewIndexServer(
     NodeName nodeName,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    NodeState nodeState,
     Function(IndexServersSettingsAction) queueAction) {
   final Future<void> Function() scanQrCode = () async {
     final indexServerFile = await qrScan<IndexServerFile>()
@@ -105,7 +102,7 @@ Widget _renderNewIndexServer(
 Widget _renderIndexServerName(
     NodeName nodeName,
     IndexServerFile indexServerFile,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    NodeState nodeState,
     Function(IndexServersSettingsAction) queueAction) {
   // Saves current indexServer name:
   String _indexServerName = '';

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:built_collection/built_collection.dart';
 
 import '../../protocol/protocol.dart';
 // import '../../protocol/file.dart';
@@ -14,27 +13,27 @@ import 'index_servers.dart';
 
 Widget renderCardSettings(
     CardSettingsView cardSettingsView,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    NodeState nodeState,
     Function(CardSettingsAction) queueAction) {
   final nodeName = cardSettingsView.nodeName;
   return cardSettingsView.inner.match(
-      home: () => _renderCardSettingsHome(nodeName, nodesStates, queueAction),
+      home: () => _renderCardSettingsHome(nodeName, nodeState, queueAction),
       friends: (friendsSettingsView) => renderFriendsSettings(
           nodeName,
           friendsSettingsView,
-          nodesStates,
+          nodeState,
           (FriendsSettingsAction friendsSettingsAction) => queueAction(
               CardSettingsAction.friendsSettings(friendsSettingsAction))),
       relays: (relaysSettingsView) => renderRelaysSettings(
           nodeName,
           relaysSettingsView,
-          nodesStates,
+          nodeState,
           (RelaysSettingsAction relaysSettingsAction) => queueAction(
               CardSettingsAction.relaysSettings(relaysSettingsAction))),
       indexServers: (indexServersSettingsView) => renderIndexServersSettings(
           nodeName,
           indexServersSettingsView,
-          nodesStates,
+          nodeState,
           (IndexServersSettingsAction indexServersSettingsAction) =>
               queueAction(CardSettingsAction.indexServersSettings(
                   indexServersSettingsAction))));
@@ -42,15 +41,11 @@ Widget renderCardSettings(
 
 Widget _renderCardSettingsHome(
     NodeName nodeName,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    NodeState nodeState,
     Function(CardSettingsAction) queueAction) {
   final children = <Widget>[];
   // Node name:
   children.add(ListTile(title: Text(nodeName.inner)));
-
-  final nodeState = nodesStates[nodeName];
-  // Must be non null:
-  assert(nodeState != null);
 
   // Node type:
   final cardType = nodeState.info.isLocal ? 'local' : 'remote';

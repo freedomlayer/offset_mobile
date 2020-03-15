@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:built_collection/built_collection.dart';
 
 import '../../protocol/protocol.dart';
 import '../../protocol/file.dart';
@@ -18,20 +17,17 @@ final logger = createLogger('render::settings::relays');
 Widget renderRelaysSettings(
     NodeName nodeName,
     RelaysSettingsView relaysSettingsView,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    NodeState nodeState,
     Function(RelaysSettingsAction) queueAction) {
   return relaysSettingsView.match(
-      home: () => _renderHome(nodeName, nodesStates, queueAction),
-      newRelaySelect: () => _renderNewRelay(nodeName, nodesStates, queueAction),
+      home: () => _renderHome(nodeName, nodeState, queueAction),
+      newRelaySelect: () => _renderNewRelay(nodeName, nodeState, queueAction),
       newRelayName: (relayAddress) =>
-          _renderRelayName(nodeName, relayAddress, nodesStates, queueAction));
+          _renderRelayName(nodeName, relayAddress, nodeState, queueAction));
 }
 
-Widget _renderHome(NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates,
+Widget _renderHome(NodeName nodeName, NodeState nodeState,
     Function(RelaysSettingsAction) queueAction) {
-  final nodeState = nodesStates[nodeName];
-  assert(nodeState != null);
-
   final nodeOpen =
       nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
 
@@ -66,7 +62,7 @@ Widget _renderHome(NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates,
 
 Widget _renderNewRelay(
     NodeName nodeName,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    NodeState nodeState,
     Function(RelaysSettingsAction) queueAction) {
   final Future<void> Function() scanQrCode = () async {
     final relayAddress = await qrScan<RelayAddress>()
@@ -105,7 +101,7 @@ Widget _renderNewRelay(
 Widget _renderRelayName(
     NodeName nodeName,
     RelayAddress relayAddress,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    NodeState nodeState,
     Function(RelaysSettingsAction) queueAction) {
   // Saves current relay name:
   String _relayName = '';
