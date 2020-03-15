@@ -54,7 +54,7 @@ Widget _renderHome(NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates,
 
   final newIndexServerButton = FloatingActionButton.extended(
       onPressed: () => queueAction(IndexServersSettingsAction.selectNewIndex()),
-      label: Text('New IndexServer'),
+      label: Text('New index server'),
       icon: Icon(Icons.add));
 
   return frame(
