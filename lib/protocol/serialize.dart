@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'dart:convert';
 
 import 'package:built_value/serializer.dart';
@@ -6,6 +5,10 @@ import 'package:offst_mobile/utils/json_plugin.dart';
 
 import '../protocol/protocol.dart';
 import '../error.dart';
+
+import '../logger.dart';
+
+final logger = createLogger('protocol::serialize');
 
 final _serializersWithPlugin =
       (serializers.toBuilder()..addPlugin(CommJsonPlugin())).build();
@@ -27,7 +30,7 @@ T deserializeMsg<T>(String data) {
 
     return serializersWithPlugin.deserialize(serialized, specifiedType: FullType(T));
   } catch (e) {
-    developer.log('deserializeData() error: $e');
+    logger.w('deserializeData() error: $e');
     throw SerializeError('$e');
   }
 }

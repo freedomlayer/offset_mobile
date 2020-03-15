@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:developer' as developer;
 
 import 'package:path/path.dart' as path;
 
@@ -9,6 +8,9 @@ import '../protocol/serialize.dart';
 
 import '../state/state.dart';
 
+import '../logger.dart';
+
+final logger = createLogger('logic::handle_shared_file');
 
 /// May we interrupt a certain AppView?
 bool _isInterruptible(AppView appView) {
@@ -52,7 +54,7 @@ AppState handleSharedFile(AppState appState, String filePath) {
   try {
     data = File(filePath).readAsStringSync();
   } on FileSystemException catch (e) {
-    developer.log('handleSharedFile: Could not read file as string: $e');
+    logger.w('handleSharedFile: Could not read file as string: $e');
     return appState;
   }
 
@@ -99,7 +101,7 @@ AppState handleSharedFile(AppState appState, String filePath) {
     break;
 
     default: {
-      developer.log('Unrecognized shared file extension: $extension');
+      logger.w('Unrecognized shared file extension: $extension');
       newAppView = oldAppView;
     }
     break;
@@ -111,7 +113,8 @@ AppView _handleSharedInvoice(AppView oldAppView, String data) {
   try {
     final invoiceFile = deserializeMsg<InvoiceFile>(data);
     return AppView.buy(BuyView.invoiceInfo(invoiceFile));
-  } on SerializeError {
+  } on SerializeError catch (e) {
+    logger.w('Deserialize error: $e');
     return oldAppView;
   }
 }
@@ -120,7 +123,8 @@ AppView _handleSharedCommit(AppView oldAppView, String data) {
   try {
     final commit = deserializeMsg<Commit>(data);
     return AppView.inTransactions(InTransactionsView.selectCardApplyCommit(commit));
-  } on SerializeError {
+  } on SerializeError catch (e) {
+    logger.w('Deserialize error: $e');
     return oldAppView;
   }
 }
@@ -129,7 +133,8 @@ AppView _handleSharedFriend(AppView oldAppView, String data) {
   try {
     final friendFile = deserializeMsg<FriendFile>(data);
     return AppView.settings(SettingsView.selectCardAddFriend(friendFile));
-  } on SerializeError {
+  } on SerializeError catch (e) {
+    logger.w('Deserialize error: $e');
     return oldAppView;
   }
 }
@@ -138,7 +143,8 @@ AppView _handleSharedRelay(AppView oldAppView, String data) {
   try {
     final relayAddress = deserializeMsg<RelayAddress>(data);
     return AppView.settings(SettingsView.selectCardAddRelay(relayAddress));
-  } on SerializeError {
+  } on SerializeError catch (e) {
+    logger.w('Deserialize error: $e');
     return oldAppView;
   }
 }
@@ -147,7 +153,8 @@ AppView _handleSharedIndex(AppView oldAppView, String data) {
   try {
     final indexServerFile = deserializeMsg<IndexServerFile>(data);
     return AppView.settings(SettingsView.selectCardAddIndex(indexServerFile));
-  } on SerializeError {
+  } on SerializeError catch (e) {
+    logger.w('Deserialize error: $e');
     return oldAppView;
   }
 }
@@ -156,7 +163,8 @@ AppView _handleSharedRemoteCard(AppView oldAppView, String data) {
   try {
     final remoteCardFile = deserializeMsg<RemoteCardFile>(data);
     return AppView.settings(SettingsView.newCard(NewCardView.newRemoteName(remoteCardFile)));
-  } on SerializeError {
+  } on SerializeError catch (e) {
+    logger.w('Deserialize error: $e');
     return oldAppView;
   }
 }

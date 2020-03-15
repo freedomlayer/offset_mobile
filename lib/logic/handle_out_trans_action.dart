@@ -1,11 +1,14 @@
 import 'dart:math';
-import 'dart:developer' as developer;
 import 'package:built_collection/built_collection.dart';
 
 import '../actions/actions.dart';
 import '../protocol/protocol.dart';
 import '../state/state.dart';
 import '../rand.dart';
+
+import '../logger.dart';
+
+final logger = createLogger('logic::handle_out_trans_action');
 
 AppState handleOutTransactionsAction(
     OutTransactionsView outTransactionsView,
@@ -61,7 +64,7 @@ AppState _handleDiscardPayment(
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    developer.log(
+    logger.w(
         '_handleDiscardPayment(): node $nodeName does not exist!');
     return createState(AppView.outTransactions(OutTransactionsView.home()));
   }
@@ -70,14 +73,14 @@ AppState _handleDiscardPayment(
       .match(open: (nodeOpen) => nodeOpen, closed: () => null);
 
   if (nodeOpen == null) {
-    developer.log(
+    logger.w(
         '_handleDiscardPayment(): node $nodeName is not open!');
     return createState(AppView.outTransactions(OutTransactionsView.home()));
   }
 
   final openPayment = nodeOpen.compactReport.openPayments[paymentId];
   if (openPayment == null) {
-    developer.log(
+    logger.w(
         '_handleDiscardPayment(): payment $paymentId is not open!');
     return createState(AppView.outTransactions(OutTransactionsView.home()));
   }
@@ -129,7 +132,7 @@ AppState _handleResendCommit(OutTransactionsView outTransactionsView,
       sendCommit: (_a, _b) => null);
 
   if (nodeName == null) {
-    developer.log(
+    logger.w(
         '_handleResendCommit(): Incorrect view!');
     return createState(AppView.outTransactions(outTransactionsView));
   }

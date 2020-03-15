@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:developer' as developer;
 
 import 'package:built_collection/built_collection.dart';
 
@@ -8,6 +7,9 @@ import '../protocol/protocol.dart';
 import '../state/state.dart';
 
 import '../rand.dart';
+import '../logger.dart';
+
+final logger = createLogger('logic::handle_sell_action');
 
 AppState handleSellAction(
     SellView sellView,
@@ -22,9 +24,8 @@ AppState handleSellAction(
       back: () => createState(AppView.home()),
       selectCard: (nodeName) =>
           createState(AppView.sell(SellView.invoiceDetails(nodeName))),
-      createInvoice: (currency, amount, description) =>
-          _handleCreateInvoice(
-              currency, amount, description, sellView, nodesStates, rand),
+      createInvoice: (currency, amount, description) => _handleCreateInvoice(
+          currency, amount, description, sellView, nodesStates, rand),
       viewTransaction: () {
         // Find nodeName:
         NodeName nodeName;
@@ -38,15 +39,13 @@ AppState handleSellAction(
             });
 
         if (nodeName == null) {
-          developer
-              .log('handleSellAction(): Received action during incorrect view');
+          logger.w('handleSellAction(): Received action during incorrect view');
           return createState(AppView.home());
         }
         return createState(AppView.inTransactions(
             InTransactionsView.transaction(nodeName, invoiceId)));
       },
-      cancelInvoice: () =>
-          _handleCancelInvoice(sellView, nodesStates, rand));
+      cancelInvoice: () => _handleCancelInvoice(sellView, nodesStates, rand));
 }
 
 AppState _handleCreateInvoice(
@@ -66,16 +65,14 @@ AppState _handleCreateInvoice(
       sendInvoice: (_a, _b) => null);
 
   if (nodeName == null) {
-    developer.log(
-        '_handleCreateInvoice(): Received action during incorrect view');
+    logger.w('_handleCreateInvoice(): Received action during incorrect view');
     return createState(AppView.sell(sellView));
   }
 
   // Find nodeId (Make sure that the node is open):
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    developer
-        .log('_handleCreateInvoice(): node $nodeName does not exist!');
+    logger.w('_handleCreateInvoice(): node $nodeName does not exist!');
     return createState(AppView.home());
   }
 
@@ -83,7 +80,7 @@ AppState _handleCreateInvoice(
       nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
 
   if (nodeOpen == null) {
-    developer.log(
+    logger.w(
         '_handleCreateInvoice(): createInvoice: node $nodeName is not open!');
     return createState(AppView.home());
   }
@@ -116,8 +113,8 @@ AppState _handleCreateInvoice(
         oldView, newView, nextRequests, optPendingRequest));
 }
 
-AppState _handleCancelInvoice(SellView sellView,
-    BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
+AppState _handleCancelInvoice(
+    SellView sellView, BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
     ..viewState = ViewState.view(appView));
@@ -135,18 +132,15 @@ AppState _handleCancelInvoice(SellView sellView,
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    developer
-        .log('_handleCancelInvoice(): node $nodeName does not exist!');
+    logger.w('_handleCancelInvoice(): node $nodeName does not exist!');
     return createState(AppView.home());
   }
 
-  final nodeId = nodeState.inner.match(
-      open: (nodeOpen) => nodeOpen.nodeId,
-      closed: () => null);
+  final nodeId = nodeState.inner
+      .match(open: (nodeOpen) => nodeOpen.nodeId, closed: () => null);
 
   if (nodeId == null) {
-    developer
-        .log('_handleCancelInvoice(): node $nodeName is closed!');
+    logger.w('_handleCancelInvoice(): node $nodeName is closed!');
     return createState(AppView.home());
   }
 

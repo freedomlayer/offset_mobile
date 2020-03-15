@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:developer' as developer;
 
 import 'package:built_collection/built_collection.dart';
 
@@ -8,6 +7,9 @@ import '../protocol/protocol.dart';
 import '../state/state.dart';
 
 import '../rand.dart';
+import '../logger.dart';
+
+final logger = createLogger('logic::handle_in_trans_action');
 
 AppState handleInTransactionsAction(
     InTransactionsView inTransactionsView,
@@ -47,7 +49,7 @@ AppState handleInTransactionsAction(
             selectCardApplyCommit: (_) => null);
 
         if (newAppState == null) {
-          developer.log(
+          logger.w(
               'handleInTransactionsAction(): Received action resendInvoice during wrong view');
           return createState(AppView.inTransactions(inTransactionsView));
         } else {
@@ -72,7 +74,7 @@ AppState _handleApplyCommit(
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    developer.log(
+    logger.w(
         '_handleApplyCommit(): node $nodeName does not exist!');
     return createState(AppView.inTransactions(inTransactionsView));
   }
@@ -81,7 +83,7 @@ AppState _handleApplyCommit(
       .match(open: (nodeOpen) => nodeOpen.nodeId, closed: () => null);
 
   if (nodeId == null) {
-    developer.log(
+    logger.w(
         '_handleApplyCommit(): node $nodeName is not open!');
     return createState(AppView.inTransactions(inTransactionsView));
   }
@@ -136,13 +138,13 @@ AppState _handleCollectInvoice(InTransactionsView inTransactionsView,
       selectCardApplyCommit: (_) => null);
 
   if (nodeName == null) {
-    developer.log('_handleCollectInvoice(): node $nodeName does not exist!');
+    logger.w('_handleCollectInvoice(): node $nodeName does not exist!');
     return createState(AppView.inTransactions(InTransactionsView.home()));
   }
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    developer.log('_handleCollectInvoice(): node $nodeName does not exist!');
+    logger.w('_handleCollectInvoice(): node $nodeName does not exist!');
     return createState(AppView.inTransactions(inTransactionsView));
   }
 
@@ -151,7 +153,7 @@ AppState _handleCollectInvoice(InTransactionsView inTransactionsView,
 
   final nodeId = nodeOpen.nodeId;
   if (nodeId == null) {
-    developer.log('_handleCollectInvoice(): node $nodeName is not open!');
+    logger.w('_handleCollectInvoice(): node $nodeName is not open!');
     return createState(AppView.inTransactions(inTransactionsView));
   }
 
@@ -201,13 +203,13 @@ AppState _handleCancelInvoice(InTransactionsView inTransactionsView,
       selectCardApplyCommit: (_) => null);
 
   if (nodeName == null) {
-    developer.log('_handleCancelInvoice(): Incorrect view!');
+    logger.w('_handleCancelInvoice(): Incorrect view!');
     return createState(AppView.inTransactions(inTransactionsView));
   }
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    developer.log(
+    logger.w(
         '_handleCancelInvoice(): node $nodeName does not exist!');
     return createState(AppView.inTransactions(inTransactionsView));
   }
@@ -216,7 +218,7 @@ AppState _handleCancelInvoice(InTransactionsView inTransactionsView,
       .match(open: (nodeOpen) => nodeOpen.nodeId, closed: () => null);
 
   if (nodeId == null) {
-    developer.log(
+    logger.w(
         '_handleCancelInvoice(): node $nodeName is not open!');
     return createState(AppView.inTransactions(inTransactionsView));
   }

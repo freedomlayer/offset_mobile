@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:developer' as developer;
 import 'package:built_collection/built_collection.dart';
 
 import '../../actions/actions.dart';
@@ -10,8 +9,11 @@ import '../../state/state.dart';
 import 'friends.dart';
 import 'index_servers.dart';
 import 'relays.dart';
+import '../../logger.dart';
 
 import '../../rand.dart';
+
+final logger = createLogger('logic::settings::card');
 
 AppState handleCardSettingsAction(
     CardSettingsView cardSettingsView,
@@ -44,8 +46,7 @@ AppState handleCardSettingsAction(
             indexServers: (_) => null);
 
         if (friendsSettingsView == null) {
-          developer
-              .log('handleCardSettingsAction: friendsSettings: Incorrect view');
+          logger.w('handleCardSettingsAction: friendsSettings: Incorrect view');
           return createState(
               AppView.settings(SettingsView.cardSettings(cardSettingsView)));
         }
@@ -61,8 +62,7 @@ AppState handleCardSettingsAction(
             indexServers: (_) => null);
 
         if (relaysSettingsView == null) {
-          developer
-              .log('handleCardSettingsAction: relaysSettings: Incorrect view');
+          logger.w('handleCardSettingsAction: relaysSettings: Incorrect view');
           return createState(
               AppView.settings(SettingsView.cardSettings(cardSettingsView)));
         }
@@ -79,7 +79,7 @@ AppState handleCardSettingsAction(
                 indexServersSettingsView);
 
         if (indexServersSettingsView == null) {
-          developer.log(
+          logger.w(
               'handleCardSettingsAction: indexServersSettings: Incorrect view');
           return createState(
               AppView.settings(SettingsView.cardSettings(cardSettingsView)));
@@ -102,7 +102,7 @@ AppState _handleEnable(NodeName nodeName, CardSettingsView cardSettingsView,
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    developer.log('_handleEnable(): node $nodeName does not exist!');
+    logger.w('_handleEnable(): node $nodeName does not exist!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -133,7 +133,7 @@ AppState _handleDisable(NodeName nodeName, CardSettingsView cardSettingsView,
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    developer.log('_handleDisable(): node $nodeName does not exist!');
+    logger.w('_handleDisable(): node $nodeName does not exist!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -164,7 +164,7 @@ AppState _handleRemove(NodeName nodeName, CardSettingsView cardSettingsView,
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    developer.log('_handleRemove(): node $nodeName does not exist!');
+    logger.w('_handleRemove(): node $nodeName does not exist!');
     return createState(AppView.settings(SettingsView.home()));
   }
 

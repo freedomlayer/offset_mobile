@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'dart:math';
 
 import 'package:built_collection/built_collection.dart';
@@ -7,6 +6,10 @@ import '../actions/actions.dart';
 import '../protocol/protocol.dart';
 import '../state/state.dart';
 import '../rand.dart';
+
+import '../logger.dart';
+
+final logger = createLogger('logic::handle_buy_action');
 
 NodeId nodeIdByNodeName(
     NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates) {
@@ -41,7 +44,7 @@ AppState handleBuyAction(
         if (invoiceFile != null) {
           return createState(AppView.buy(BuyView.selectCard(invoiceFile)));
         } else {
-          developer.log(
+          logger.w(
               'handleBuyAction(): Received confirmInvoice action during incorrect view');
           return createState(AppView.buy(buyView));
         }
@@ -66,7 +69,7 @@ AppState _handleSelectCard(
 
   final nodeId = nodeIdByNodeName(nodeName, nodesStates);
   if (nodeId == null) {
-    developer.log('handleBuyAction(): selectCard: node $nodeName is not open');
+    logger.w('handleBuyAction(): selectCard: node $nodeName is not open');
     return createState(AppView.home());
   }
 
@@ -77,7 +80,7 @@ AppState _handleSelectCard(
       paymentProgress: (_a, _b) => null);
 
   if (invoiceFile == null) {
-    developer.log(
+    logger.w(
         'handleBuyAction(): Received selectCard action during incorrect view');
     return createState(AppView.buy(buyView));
   }
@@ -133,7 +136,7 @@ AppState _handleConfirmFees(
       });
 
   if (nodeName == null) {
-    developer.log(
+    logger.w(
         '_handleConfirmFees(): Received confirmFees action during incorrect view');
     return createState(AppView.buy(buyView));
   }
@@ -148,18 +151,17 @@ AppState _handleConfirmFees(
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    developer
-        .log('_handleConfirmFees(): confirmFees: node $nodeName does not exist!');
+    logger.w('_handleConfirmFees(): confirmFees: node $nodeName does not exist!');
     return createState(AppView.home());
   }
 
   final newState = nodeState.inner.match(closed: () {
-    developer.log('_handleConfirmFees(): confirmFees: node $nodeName is closed!');
+    logger.w('_handleConfirmFees(): confirmFees: node $nodeName is closed!');
     return createState(AppView.home());
   }, open: (nodeOpen) {
     final openPayment = nodeOpen.compactReport.openPayments[paymentId];
     if (openPayment == null) {
-      developer.log(
+      logger.w(
           '_handleConfirmFees(): confirmFees: payment $paymentId does not exist!');
       return createState(AppView.home());
     }
@@ -176,7 +178,7 @@ AppState _handleConfirmFees(
         failure: (_) => null);
 
     if (confirmId == null) {
-      developer.log(
+      logger.w(
           '_handleConfirmFees(): confirmFees: payment $paymentId is not waiting for confirmation!');
       return createState(AppView.buy(buyView));
     }
@@ -233,15 +235,14 @@ AppState _handleCancelPayment(
       });
 
   if (nodeName == null) {
-    developer.log(
+    logger.w(
         '_handleCancelPayment(): Received cancelPayment action during incorrect view');
     return createState(AppView.buy(buyView));
   }
 
   final nodeId = nodeIdByNodeName(nodeName, nodesStates);
   if (nodeId == null) {
-    developer
-        .log('_handleCancelPayment(): cancelPayment: node $nodeName is not open');
+    logger.w('_handleCancelPayment(): cancelPayment: node $nodeName is not open');
     return createState(AppView.home());
   }
 

@@ -1,5 +1,3 @@
-import 'dart:developer' as developer;
-
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 
@@ -12,6 +10,10 @@ import '../utils/file_picker.dart';
 import '../utils/qr_scan.dart';
 
 import '../frame.dart';
+
+import '../../logger.dart';
+
+final logger = createLogger('render::settings::relays');
 
 Widget renderRelaysSettings(
     NodeName nodeName,
@@ -68,7 +70,7 @@ Widget _renderNewRelay(
     Function(RelaysSettingsAction) queueAction) {
   final Future<void> Function() scanQrCode = () async {
     final relayAddress = await qrScan<RelayAddress>()
-        .catchError((e) => developer.log('qrScan error: $e'));
+        .catchError((e) => logger.w('qrScan error: $e'));
     if (relayAddress != null) {
       queueAction(RelaysSettingsAction.loadRelay(relayAddress));
     }
@@ -76,7 +78,7 @@ Widget _renderNewRelay(
 
   final Future<void> Function() openFileExplorer = () async {
     final relayAddress = await pickFromFile<RelayAddress>(RELAY_EXT)
-        .catchError((e) => developer.log('pickFromFile error: $e'));
+        .catchError((e) => logger.w('pickFromFile error: $e'));
     if (relayAddress != null) {
       queueAction(RelaysSettingsAction.loadRelay(relayAddress));
     }

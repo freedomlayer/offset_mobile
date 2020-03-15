@@ -1,13 +1,14 @@
 import 'dart:math';
-import 'dart:developer' as developer;
 import 'package:built_collection/built_collection.dart';
 
 import '../../actions/actions.dart';
 import '../../protocol/protocol.dart';
-// import '../../protocol/file.dart';
 import '../../state/state.dart';
 
+import '../../logger.dart';
 import '../../rand.dart';
+
+final logger = createLogger('logic::settings::index_servers');
 
 AppState handleRelaysSettings(
     NodeName nodeName,
@@ -49,7 +50,7 @@ AppState _handleRemoveRelay(NodeName nodeName, PublicKey relayPublicKey,
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    developer.log('_handleRemoveRelay(): node $nodeName does not exist!');
+    logger.w('_handleRemoveRelay(): node $nodeName does not exist!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -58,7 +59,7 @@ AppState _handleRemoveRelay(NodeName nodeName, PublicKey relayPublicKey,
 
   final nodeId = nodeOpen.nodeId;
   if (nodeId == null) {
-    developer.log('_handleRemoveRelay(): node $nodeName is not open!');
+    logger.w('_handleRemoveRelay(): node $nodeName is not open!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -91,7 +92,7 @@ AppState _handleNewRelay(NodeName nodeName, NamedRelayAddress namedRelayAddress,
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    developer.log('_handleNewRelay(): node $nodeName does not exist!');
+    logger.w('_handleNewRelay(): node $nodeName does not exist!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -100,7 +101,7 @@ AppState _handleNewRelay(NodeName nodeName, NamedRelayAddress namedRelayAddress,
 
   final nodeId = nodeOpen.nodeId;
   if (nodeId == null) {
-    developer.log('_handleNewRelay(): node $nodeName is not open!');
+    logger.w('_handleNewRelay(): node $nodeName is not open!');
     return createState(AppView.settings(SettingsView.home()));
   }
 

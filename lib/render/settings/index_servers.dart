@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 
@@ -11,6 +10,10 @@ import '../utils/file_picker.dart';
 import '../utils/qr_scan.dart';
 
 import '../frame.dart';
+
+import '../../logger.dart';
+
+final logger = createLogger('render::settings::index_servers');
 
 Widget renderIndexServersSettings(
     NodeName nodeName,
@@ -67,7 +70,7 @@ Widget _renderNewIndexServer(
     Function(IndexServersSettingsAction) queueAction) {
   final Future<void> Function() scanQrCode = () async {
     final indexServerFile = await qrScan<IndexServerFile>()
-        .catchError((e) => developer.log('qrScan error: $e'));
+        .catchError((e) => logger.w('qrScan error: $e'));
     if (indexServerFile != null) {
       queueAction(IndexServersSettingsAction.loadIndexServer(indexServerFile));
     }
@@ -75,7 +78,7 @@ Widget _renderNewIndexServer(
 
   final Future<void> Function() openFileExplorer = () async {
     final indexServerAddress = await pickFromFile<IndexServerFile>(INDEX_EXT)
-        .catchError((e) => developer.log('pickFromFile error: $e'));
+        .catchError((e) => logger.w('pickFromFile error: $e'));
     if (indexServerAddress != null) {
       queueAction(IndexServersSettingsAction.loadIndexServer(indexServerAddress));
     }

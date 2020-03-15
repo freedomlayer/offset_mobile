@@ -1,5 +1,3 @@
-// import 'dart:developer' as developer;
-
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 

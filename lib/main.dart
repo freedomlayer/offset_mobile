@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'dart:developer' as developer;
 
 import 'package:logger/logger.dart';
 

@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
@@ -14,6 +13,11 @@ import '../actions/actions.dart';
 import 'settings/card.dart';
 
 import 'frame.dart';
+
+import '../logger.dart';
+
+final logger = createLogger('render::settings');
+
 
 Widget renderSettings(
     SettingsView settingsView,
@@ -148,7 +152,7 @@ Widget _renderNewCardRemote(BuiltMap<NodeName, NodeState> nodesStates,
     Function(NewCardAction) queueAction) {
   final Future<void> Function() scanQrCode = () async {
     final remoteCardFile = await qrScan<RemoteCardFile>()
-        .catchError((e) => developer.log('qrScan error: $e'));
+        .catchError((e) => logger.w('qrScan error: $e'));
     if (remoteCardFile != null) {
       // Load the remote card file:
       queueAction(NewCardAction.loadCardRemote(remoteCardFile));
@@ -157,7 +161,7 @@ Widget _renderNewCardRemote(BuiltMap<NodeName, NodeState> nodesStates,
 
   final Future<void> Function() openFileExplorer = () async {
     final remoteCardFile = await pickFromFile<RemoteCardFile>(REMOTE_CARD_EXT)
-        .catchError((e) => developer.log('pickFromFile error: $e'));
+        .catchError((e) => logger.w('pickFromFile error: $e'));
     if (remoteCardFile != null) {
       // Load the remote card file:
       queueAction(NewCardAction.loadCardRemote(remoteCardFile));

@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:developer' as developer;
 import 'package:built_collection/built_collection.dart';
 
 import '../actions/actions.dart';
@@ -8,8 +7,10 @@ import '../protocol/file.dart';
 import '../state/state.dart';
 
 import '../rand.dart';
-
+import '../logger.dart';
 import 'settings/card.dart';
+
+final logger = createLogger('logic::handle_settings_action');
 
 AppState handleSettingsAction(
     SettingsView settingsView,
@@ -34,7 +35,7 @@ AppState handleSettingsAction(
             selectCardAddFriend: (_) => null);
 
         if (newCardView == null) {
-          developer.log('handleSettingsAction: newCard: Incorrect view');
+          logger.w('handleSettingsAction: newCard: Incorrect view');
           return createState(AppView.settings(settingsView));
         }
 
@@ -50,7 +51,7 @@ AppState handleSettingsAction(
             selectCardAddFriend: (_) => null);
 
         if (cardSettingsView == null) {
-          developer.log('handleSettingsAction: cardSettings: Incorrect view');
+          logger.w('handleSettingsAction: cardSettings: Incorrect view');
           return createState(AppView.settings(settingsView));
         }
 

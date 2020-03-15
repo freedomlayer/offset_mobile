@@ -1,11 +1,12 @@
-import 'dart:developer' as developer;
-
 import 'package:built_collection/built_collection.dart';
 
 import '../protocol/protocol.dart';
 import '../state/state.dart';
 
 import 'adjust_view.dart';
+import '../logger.dart';
+
+final logger = createLogger('logic::handle_server_to_user_ack');
 
 AppState handleServerToUserAck(
     AppState appState, ServerToUserAck serverToUserAck) {
@@ -67,7 +68,7 @@ AppState handleAck(AppState appState, Uid requestId) {
 AppState handleNodeOpened(AppState appState, NodeOpened nodeOpened) {
   final nodeState = appState.nodesStates[nodeOpened.nodeName];
   if (nodeState == null) {
-    developer.log('Node ${nodeOpened.nodeName} does not exist!');
+    logger.w('Node ${nodeOpened.nodeName} does not exist!');
     return appState;
   }
 
@@ -93,7 +94,7 @@ AppState handleNodesStatus(
       // Node did not exist before:
       final newInner = nodeStatus.mode.match(
         open: (nodeId) {
-          developer.log(
+          logger.w(
               "Node $nodeName is online but we never received a NodeOpened message!");
           return NodeStateInner.closed();
         },
@@ -113,7 +114,7 @@ AppState handleNodesStatus(
         open: (nodeId) => oldNodeState.inner.match(
             open: (nodeOpen) => NodeStateInner.open(nodeOpen),
             closed: () {
-              developer.log(
+              logger.w(
                   "Node $nodeName is online but we never received a NodeOpened message!");
               return NodeStateInner.closed();
             }),
@@ -194,9 +195,9 @@ AppState handleReport(
   });
 
   if (numFound == 0) {
-    developer.log('Node with nodeId = $nodeId was not found!');
+    logger.w('Node with nodeId = $nodeId was not found!');
   } else if (numFound > 1) {
-    developer.log('Node with nodeId = $nodeId was found $numFound times!');
+    logger.w('Node with nodeId = $nodeId was found $numFound times!');
   }
 
   return newAppState;

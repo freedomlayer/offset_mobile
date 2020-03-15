@@ -1,5 +1,4 @@
 import 'package:built_collection/built_collection.dart';
-import 'dart:developer' as developer;
 import 'dart:math';
 
 import '../actions/actions.dart';
@@ -13,11 +12,15 @@ import 'handle_in_trans_action.dart';
 import 'handle_balances_action.dart';
 import 'handle_settings_action.dart';
 
+import '../logger.dart';
+
+final logger = createLogger('logic::handle_action');
+
 AppState handleAction(AppState appState, AppAction appAction, Random rand) {
   final appView = appState.viewState.match(
       view: (appView) => appView,
       transition: (_a, _b, _c, _d) {
-        developer.log(
+        logger.w(
             'handleAction(): Received action $appAction during transition');
         return null;
       });
@@ -49,24 +52,21 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
     if (appView.isHome) {
       return handleHomeAction(appState.nodesStates, homeAction);
     } else {
-      developer
-          .log('handleAction(): Received home action during incorrect view');
+      logger.w('handleAction(): Received home action during incorrect view');
       return appState;
     }
   }, buy: (buyAction) {
     if (buyView != null) {
       return handleBuyAction(buyView, appState.nodesStates, buyAction, rand);
     } else {
-      developer
-          .log('handleAction(): Received buy action during incorrect view');
+      logger.w('handleAction(): Received buy action during incorrect view');
       return appState;
     }
   }, sell: (sellAction) {
     if (sellView != null) {
       return handleSellAction(sellView, appState.nodesStates, sellAction, rand);
     } else {
-      developer
-          .log('handleAction(): Received sell action during incorrect view');
+      logger.w('handleAction(): Received sell action during incorrect view');
       return appState;
     }
   }, inTransactions: (inTransactionsAction) {
@@ -74,7 +74,7 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
       return handleInTransactionsAction(
           inTransactionsView, appState.nodesStates, inTransactionsAction, rand);
     } else {
-      developer.log(
+      logger.w(
           'handleAction(): Received inTransactions action during incorrect view');
       return appState;
     }
@@ -83,7 +83,7 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
       return handleOutTransactionsAction(outTransactionsView,
           appState.nodesStates, outTransactionsAction, rand);
     } else {
-      developer.log(
+      logger.w(
           'handleAction(): Received outTransactions action during incorrect view');
       return appState;
     }
@@ -91,7 +91,7 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
     if (balancesView != null) {
       return handleBalancesAction(balancesView, appState.nodesStates, balancesAction);
     } else {
-      developer.log(
+      logger.w(
           'handleAction(): Received balances action during incorrect view');
       return appState;
     }
@@ -100,7 +100,7 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
       return handleSettingsAction(
           settingsView, appState.nodesStates, settingsAction, rand);
     } else {
-      developer.log(
+      logger.w(
           'handleAction(): Received settings action during incorrect view');
       return appState;
     }

@@ -1,13 +1,15 @@
 import 'dart:math';
-import 'dart:developer' as developer;
 import 'package:built_collection/built_collection.dart';
 
 import '../../actions/actions.dart';
 import '../../protocol/protocol.dart';
 import '../../protocol/file.dart';
 import '../../state/state.dart';
+import '../../logger.dart';
 
 import '../../rand.dart';
+
+final logger = createLogger('logic::settings::friends');
 
 AppState handleFriendsSettings(
     NodeName nodeName,
@@ -49,8 +51,7 @@ AppState handleFriendsSettings(
             shareInfo: () => null);
 
         if (friendSettingsView == null) {
-          developer
-              .log('_handleFriendsSettings(): friendSettings: Incorrect view!');
+          logger.w('_handleFriendsSettings(): friendSettings: Incorrect view!');
           return createStateInner(
               CardSettingsInnerView.friends(friendsSettingsView));
         }
@@ -97,7 +98,7 @@ AppState _handleAddFriend(
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    developer.log('_handleAddFriend(): node $nodeName does not exist!');
+    logger.w('_handleAddFriend(): node $nodeName does not exist!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -106,7 +107,7 @@ AppState _handleAddFriend(
 
   final nodeId = nodeOpen.nodeId;
   if (nodeId == null) {
-    developer.log('_handleAddFriend(): node $nodeName is not open!');
+    logger.w('_handleAddFriend(): node $nodeName is not open!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -216,7 +217,7 @@ AppState _handleEnableFriend(NodeName nodeName, PublicKey friendPublicKey,
   final nodeState = nodesStates[nodeName];
 
   if (nodeState == null) {
-    developer.log('_handleEnable(): node $nodeName does not exist!');
+    logger.w('_handleEnable(): node $nodeName does not exist!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -225,7 +226,7 @@ AppState _handleEnableFriend(NodeName nodeName, PublicKey friendPublicKey,
 
   final nodeId = nodeOpen.nodeId;
   if (nodeId == null) {
-    developer.log('_handleEnable(): node $nodeName is not open!');
+    logger.w('_handleEnable(): node $nodeName is not open!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -255,7 +256,7 @@ AppState _handleDisableFriend(NodeName nodeName, PublicKey friendPublicKey,
   final nodeState = nodesStates[nodeName];
 
   if (nodeState == null) {
-    developer.log('_handleDisable(): node $nodeName does not exist!');
+    logger.w('_handleDisable(): node $nodeName does not exist!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -264,7 +265,7 @@ AppState _handleDisableFriend(NodeName nodeName, PublicKey friendPublicKey,
 
   final nodeId = nodeOpen.nodeId;
   if (nodeId == null) {
-    developer.log('_handleDisable(): node $nodeName is not open!');
+    logger.w('_handleDisable(): node $nodeName is not open!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -294,7 +295,7 @@ AppState _handleRemoveFriend(NodeName nodeName, PublicKey friendPublicKey,
   final nodeState = nodesStates[nodeName];
 
   if (nodeState == null) {
-    developer.log('_handleUnfriend(): node $nodeName does not exist!');
+    logger.w('_handleUnfriend(): node $nodeName does not exist!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -303,7 +304,7 @@ AppState _handleRemoveFriend(NodeName nodeName, PublicKey friendPublicKey,
 
   final nodeId = nodeOpen.nodeId;
   if (nodeId == null) {
-    developer.log('_handleUnfriend(): node $nodeName is not open!');
+    logger.w('_handleUnfriend(): node $nodeName is not open!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -338,7 +339,7 @@ AppState _handleRemoveCurrency(NodeName nodeName, PublicKey friendPublicKey,
   final nodeState = nodesStates[nodeName];
 
   if (nodeState == null) {
-    developer.log('_handleRemoveCurrency(): node $nodeName does not exist!');
+    logger.w('_handleRemoveCurrency(): node $nodeName does not exist!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -347,7 +348,7 @@ AppState _handleRemoveCurrency(NodeName nodeName, PublicKey friendPublicKey,
 
   final nodeId = nodeOpen.nodeId;
   if (nodeId == null) {
-    developer.log('_handleRemoveCurrency(): node $nodeName is not open!');
+    logger.w('_handleRemoveCurrency(): node $nodeName is not open!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -387,7 +388,7 @@ AppState _handleNewCurrency(
   final nodeState = nodesStates[nodeName];
 
   if (nodeState == null) {
-    developer.log('_handleNewCurrency(): node $nodeName does not exist!');
+    logger.w('_handleNewCurrency(): node $nodeName does not exist!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -396,7 +397,7 @@ AppState _handleNewCurrency(
 
   final nodeId = nodeOpen.nodeId;
   if (nodeId == null) {
-    developer.log('_handleNewCurrency(): node $nodeName is not open!');
+    logger.w('_handleNewCurrency(): node $nodeName is not open!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -467,7 +468,7 @@ AppState _handleUpdateCurrency(
   final nodeState = nodesStates[nodeName];
 
   if (nodeState == null) {
-    developer.log('_handleUpdateCurrency(): node $nodeName does not exist!');
+    logger.w('_handleUpdateCurrency(): node $nodeName does not exist!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -476,7 +477,7 @@ AppState _handleUpdateCurrency(
 
   final nodeId = nodeOpen.nodeId;
   if (nodeId == null) {
-    developer.log('_handleUpdateCurrency(): node $nodeName is not open!');
+    logger.w('_handleUpdateCurrency(): node $nodeName is not open!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -542,7 +543,7 @@ AppState _handleOpenCurrency(
   final nodeState = nodesStates[nodeName];
 
   if (nodeState == null) {
-    developer.log('_handleOpenCurrency(): node $nodeName does not exist!');
+    logger.w('_handleOpenCurrency(): node $nodeName does not exist!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -551,7 +552,7 @@ AppState _handleOpenCurrency(
 
   final nodeId = nodeOpen.nodeId;
   if (nodeId == null) {
-    developer.log('_handleOpenCurrency(): node $nodeName is not open!');
+    logger.w('_handleOpenCurrency(): node $nodeName is not open!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -588,7 +589,7 @@ AppState _handleCloseCurrency(
   final nodeState = nodesStates[nodeName];
 
   if (nodeState == null) {
-    developer.log('_handleCloseCurrency(): node $nodeName does not exist!');
+    logger.w('_handleCloseCurrency(): node $nodeName does not exist!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -597,7 +598,7 @@ AppState _handleCloseCurrency(
 
   final nodeId = nodeOpen.nodeId;
   if (nodeId == null) {
-    developer.log('_handleCloseCurrency(): node $nodeName is not open!');
+    logger.w('_handleCloseCurrency(): node $nodeName is not open!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -630,7 +631,7 @@ AppState _handleResolve(NodeName nodeName, PublicKey friendPublicKey,
   final nodeState = nodesStates[nodeName];
 
   if (nodeState == null) {
-    developer.log('_handleResolve(): node $nodeName does not exist!');
+    logger.w('_handleResolve(): node $nodeName does not exist!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
@@ -639,13 +640,13 @@ AppState _handleResolve(NodeName nodeName, PublicKey friendPublicKey,
 
   final nodeId = nodeOpen.nodeId;
   if (nodeId == null) {
-    developer.log('_handleResolve(): node $nodeName is not open!');
+    logger.w('_handleResolve(): node $nodeName is not open!');
     return createState(AppView.settings(SettingsView.home()));
   }
 
   final friendReport = nodeOpen.compactReport.friends[friendPublicKey];
   if (friendReport == null) {
-    developer.log(
+    logger.w(
         '_handleResolve(): node $nodeName: friend $friendPublicKey does not exist!');
     return createState(
         AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b
@@ -658,7 +659,7 @@ AppState _handleResolve(NodeName nodeName, PublicKey friendPublicKey,
       inconsistent: (channelInconsistentReport) => channelInconsistentReport);
 
   if (channelInconsistentReport == null) {
-    developer.log(
+    logger.w(
         '_handleResolve(): node $nodeName: friend $friendPublicKey channel is consistent!');
     return createState(
         AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b
@@ -668,7 +669,7 @@ AppState _handleResolve(NodeName nodeName, PublicKey friendPublicKey,
 
   ResetTermsReport remoteResetTerms;
   if (channelInconsistentReport.optRemoteResetTerms == null) {
-    developer.log(
+    logger.w(
         '_handleResolve(): node $nodeName: friend $friendPublicKey: no remote terms received!');
     final friendSettings = FriendSettingsView((b) => b
       ..friendPublicKey = friendPublicKey

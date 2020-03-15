@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:developer' as developer;
 
 import 'package:built_collection/built_collection.dart';
 
@@ -18,6 +17,10 @@ import 'balances.dart';
 import 'settings.dart';
 import 'frame.dart';
 // import '../error.dart';
+
+import '../logger.dart';
+
+final logger = createLogger('render::render');
 
 /// This is what we show to the user before we open the process
 Widget renderNotReady() {
@@ -68,7 +71,7 @@ Widget renderAppView(AppView appView, BuiltMap<NodeName, NodeState> nodesStates,
 Widget renderTransition(
     AppView oldView, BuiltMap<NodeName, NodeState> nodesStates) {
   final noQueueAction = (AppAction appAction) {
-    developer.log('Received action $appAction during transition.');
+    logger.w('Received action $appAction during transition.');
   };
   // TODO: Possibly add some kind of shading over the old view, to let the user know
   // something is in progress.

@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:built_value/serializer.dart';
 import 'package:test/test.dart';
 
+import 'package:logger/logger.dart';
+
 import 'package:offst_mobile/protocol/common.dart';
 import 'package:offst_mobile/protocol/protocol.dart';
 import 'package:offst_mobile/protocol/serialize.dart';
@@ -11,6 +13,7 @@ import 'package:offst_mobile/utils/json_plugin.dart';
 import 'protocol_samples.dart' as samples;
 
 void main() {
+  Logger.level = Level.error;
   group('common serialize', () {
 
     final serializersWithPlugin =
