@@ -19,38 +19,45 @@ bool isAnyCardActive(BuiltMap<NodeName, NodeState> nodesStates) {
 
 Widget renderHome(BuiltMap<NodeName, NodeState> nodesStates,
     Function(HomeAction) queueAction) {
-  Widget body;
-  if (!isAnyCardActive(nodesStates)) {
-    // No active cards:
-    body = Center(child: Column(children: [
-      Text('No active cards!'),
-      RaisedButton(
-          onPressed: () => queueAction(HomeAction.selectSettings()),
-          child: Text('Settings')),
-    ]));
-  } else {
-    body = Center(child: Column(children: [
-      RaisedButton(
-          onPressed: () => queueAction(HomeAction.selectBuy()),
-          child: Text('Buy')),
-      RaisedButton(
-          onPressed: () => queueAction(HomeAction.selectSell()),
-          child: Text('Sell')),
-      RaisedButton(
-          onPressed: () => queueAction(HomeAction.selectOutTransactions()),
-          child: Text('Outgoing')),
-      RaisedButton(
-          onPressed: () => queueAction(HomeAction.selectInTransactions()),
-          child: Text('Incoming')),
-      RaisedButton(
-          onPressed: () => queueAction(HomeAction.selectBalances()),
-          child: Text('Balances')),
-      RaisedButton(
-          onPressed: () => queueAction(HomeAction.selectSettings()),
-          child: Text('Settings')),
-    ]));
-  }
-  return frame(title: Text(APP_TITLE), body: body);
+  final someCardActive = isAnyCardActive(nodesStates);
+
+  final listView = ListView(children: [
+    ListTile(
+        leading: Icon(Icons.burst_mode),
+        title: Text('Buy'),
+        subtitle: Text('Pay an invoice'),
+        enabled: someCardActive,
+        onTap: () => queueAction(HomeAction.selectBuy())),
+    ListTile(
+        leading: Icon(Icons.signal_cellular_4_bar),
+        title: Text('Sell'),
+        subtitle: Text('Create a new invoice'),
+        enabled: someCardActive,
+        onTap: () => queueAction(HomeAction.selectSell())),
+    ListTile(
+        leading: Icon(Icons.zoom_out),
+        title: Text('Outgoing'),
+        subtitle: Text('View outgoing transactions'),
+        enabled: someCardActive,
+        onTap: () => queueAction(HomeAction.selectOutTransactions())),
+    ListTile(
+        leading: Icon(Icons.zoom_in),
+        title: Text('Incoming'),
+        subtitle: Text('View incoming transactions'),
+        enabled: someCardActive,
+        onTap: () => queueAction(HomeAction.selectInTransactions())),
+    ListTile(
+        leading: Icon(Icons.account_balance),
+        title: Text('Balances'),
+        subtitle: Text('View current card balances'),
+        enabled: someCardActive,
+        onTap: () => queueAction(HomeAction.selectBalances())),
+    ListTile(
+        leading: Icon(Icons.settings),
+        title: Text('Settings'),
+        onTap: () => queueAction(HomeAction.selectSettings()))
+  ]);
+  return frame(title: Text(APP_TITLE), body: listView);
 }
 
 /*
