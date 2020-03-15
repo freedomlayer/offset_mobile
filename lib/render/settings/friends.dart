@@ -92,6 +92,25 @@ Widget _renderNewFriend(
     NewFriendView newFriendView,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(NewFriendAction) queueAction) {
+
+  return newFriendView.match(
+      select: () => _renderSelectNewFriend(nodeName, nodesStates, queueAction),
+      name: (friendPublicKey, relays) => _renderNewFriendName(nodeName, friendPublicKey, relays, nodesStates, queueAction));
+}
+
+Widget _renderSelectNewFriend(
+    NodeName nodeName,
+    BuiltMap<NodeName, NodeState> nodesStates,
+    Function(NewFriendAction) queueAction) {
+  throw UnimplementedError();
+}
+
+Widget _renderNewFriendName(
+    NodeName nodeName,
+    PublicKey friendPublicKey,
+    BuiltList<RelayAddress> relays,
+    BuiltMap<NodeName, NodeState> nodesStates,
+    Function(NewFriendAction) queueAction) {
   throw UnimplementedError();
 }
 
