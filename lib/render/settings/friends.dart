@@ -8,7 +8,15 @@ import '../../actions/actions.dart';
 import '../utils/qr_show.dart';
 import '../utils/share_file.dart';
 
+import '../utils/file_picker.dart';
+import '../utils/qr_scan.dart';
+
+
+import '../../logger.dart';
+
 import '../frame.dart';
+
+final logger = createLogger('render::settings::friends');
 
 Widget renderFriendsSettings(
     NodeName nodeName,
@@ -106,7 +114,39 @@ Widget _renderSelectNewFriend(
     NodeName nodeName,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(NewFriendAction) queueAction) {
-  throw UnimplementedError();
+
+  final Future<void> Function() scanQrCode = () async {
+    final friendFile = await qrScan<FriendFile>()
+        .catchError((e) => logger.w('qrScan error: $e'));
+    if (friendFile != null) {
+      queueAction(NewFriendAction.loadFriend(friendFile));
+    }
+  };
+
+  final Future<void> Function() openFileExplorer = () async {
+    final friendFile = await pickFromFile<FriendFile>(FRIEND_EXT)
+        .catchError((e) => logger.w('pickFromFile error: $e'));
+    if (friendFile != null) {
+      queueAction(NewFriendAction.loadFriend(friendFile));
+    }
+  };
+
+  final body = Center(
+      child: Column(children: [
+    Spacer(flex: 1),
+    Expanded(flex: 1, child: Text('How to add new Friend?')),
+    Expanded(
+        flex: 2,
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          RaisedButton(onPressed: scanQrCode, child: Text('QR code')),
+          RaisedButton(onPressed: openFileExplorer, child: Text('File')),
+        ])),
+  ]));
+
+  return frame(
+      title: Text('${nodeName.inner}: New Friend'),
+      body: body,
+      backAction: () => queueAction(NewFriendAction.back()));
 }
 
 Widget _renderNewFriendName(
@@ -115,7 +155,54 @@ Widget _renderNewFriendName(
     BuiltList<RelayAddress> relays,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(NewFriendAction) queueAction) {
-  throw UnimplementedError();
+
+  // Saves current relay name:
+  String _friendName = '';
+
+  final friendFile = FriendFile((b) => b
+    ..publicKey = friendPublicKey
+    ..relays = relays.toBuilder());
+
+  final body = Center(
+      child: Row(children: [
+    Spacer(flex: 1),
+    Expanded(
+        flex: 4,
+        child: Column(children: [
+          Expanded(
+              flex: 1,
+              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Text('Name:'),
+                Expanded(
+                    child: TextField(
+                        onChanged: (newNodeName) => _friendName = newNodeName)),
+              ])),
+          Spacer(flex: 2),
+          Expanded(
+              flex: 1,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    RaisedButton(
+                        // TODO: Add some kind of validation, so that we won't have empty named relay.
+                        onPressed: () => queueAction(
+                            NewFriendAction.addFriend(
+                                _friendName, 
+                                friendFile)),
+                        child: Text('Ok')),
+                    RaisedButton(
+                        onPressed: () =>
+                            queueAction(NewFriendAction.back()),
+                        child: Text('Cancel')),
+                  ])),
+        ])),
+    Spacer(flex: 1),
+  ]));
+
+  return frame(
+      title: Text('${nodeName.inner}: New friend name'),
+      body: body,
+      backAction: () => queueAction(NewFriendAction.back()));
 }
 
 Widget _renderShareInfo(
