@@ -58,6 +58,15 @@ Widget _renderHome(NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates,
 
   final listView = ListView(children: children);
 
+  final body = Column(children: [
+    Spacer(flex: 1),
+    Expanded(flex: 2, child: RaisedButton(
+        child: Text('Share info'),
+        onPressed: () => queueAction(FriendsSettingsAction.shareInfo()))),
+    Spacer(flex: 1),
+    Expanded(flex: 18, child: listView),
+  ]);
+
   final newFriendButton = FloatingActionButton.extended(
       onPressed: () => queueAction(FriendsSettingsAction.selectNewFriend()),
       label: Text('New Friend'),
@@ -65,7 +74,7 @@ Widget _renderHome(NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates,
 
   return frame(
       title: Text('${nodeName.inner}: Friends'),
-      body: listView,
+      body: body,
       backAction: () => queueAction(FriendsSettingsAction.back()),
       floatingActionButton: newFriendButton);
 }
