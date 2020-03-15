@@ -35,6 +35,7 @@ dependencies:
   barcode_scan: ^2.0.1
   qr_flutter: ^3.2.0
   logger: ^0.8.3
+  share_extend: ^1.1.1
 
 
 dev_dependencies:
