@@ -6,7 +6,7 @@ import '../../protocol/protocol.dart';
 import '../../state/state.dart';
 import '../../actions/actions.dart';
 
-// import '../frame.dart';
+import '../frame.dart';
 
 Widget renderFriendsSettings(
     NodeName nodeName,
@@ -32,7 +32,42 @@ Widget renderFriendsSettings(
 
 Widget _renderHome(NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates,
     Function(FriendsSettingsAction) queueAction) {
-  throw UnimplementedError();
+  final nodeState = nodesStates[nodeName];
+  assert(nodeState != null);
+
+  final nodeOpen =
+      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
+
+  assert(nodeOpen != null);
+
+  final children = <Widget>[];
+
+  for (final entry in nodeOpen.compactReport.friends.entries) {
+    final publicKey = entry.key;
+    final friendReport = entry.value;
+
+    children.add(ListTile(
+      key: Key(publicKey.inner),
+      title: Text(friendReport.name),
+      trailing: Icon(friendReport.liveness.isOnline
+          ? Icons.bluetooth_connected
+          : Icons.bluetooth_disabled),
+      onTap: () => queueAction(FriendsSettingsAction.selectFriend(publicKey)),
+    ));
+  }
+
+  final listView = ListView(children: children);
+
+  final newFriendButton = FloatingActionButton.extended(
+      onPressed: () => queueAction(FriendsSettingsAction.selectNewFriend()),
+      label: Text('New Friend'),
+      icon: Icon(Icons.add));
+
+  return frame(
+      title: Text('${nodeName.inner}: Friends'),
+      body: listView,
+      backAction: () => queueAction(FriendsSettingsAction.back()),
+      floatingActionButton: newFriendButton);
 }
 
 Widget _renderFriendSettings(
