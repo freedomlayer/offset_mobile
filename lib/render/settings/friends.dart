@@ -6,6 +6,7 @@ import '../../protocol/file.dart';
 import '../../state/state.dart';
 import '../../actions/actions.dart';
 import '../utils/qr_show.dart';
+import '../utils/share_file.dart';
 
 import '../frame.dart';
 
@@ -61,9 +62,11 @@ Widget _renderHome(NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates,
 
   final body = Column(children: [
     Spacer(flex: 1),
-    Expanded(flex: 2, child: RaisedButton(
-        child: Text('Share info'),
-        onPressed: () => queueAction(FriendsSettingsAction.shareInfo()))),
+    Expanded(
+        flex: 2,
+        child: RaisedButton(
+            child: Text('Share info'),
+            onPressed: () => queueAction(FriendsSettingsAction.shareInfo()))),
     Spacer(flex: 1),
     Expanded(flex: 18, child: listView),
   ]);
@@ -93,10 +96,10 @@ Widget _renderNewFriend(
     NewFriendView newFriendView,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(NewFriendAction) queueAction) {
-
   return newFriendView.match(
       select: () => _renderSelectNewFriend(nodeName, nodesStates, queueAction),
-      name: (friendPublicKey, relays) => _renderNewFriendName(nodeName, friendPublicKey, relays, nodesStates, queueAction));
+      name: (friendPublicKey, relays) => _renderNewFriendName(
+          nodeName, friendPublicKey, relays, nodesStates, queueAction));
 }
 
 Widget _renderSelectNewFriend(
@@ -119,31 +122,36 @@ Widget _renderShareInfo(
     NodeName nodeName,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(FriendsSettingsAction) queueAction) {
-
   final nodeState = nodesStates[nodeName];
   assert(nodeState != null);
 
-  final nodeOpen = nodeState.inner.match(
-      open: (nodeOpen) => nodeOpen,
-      closed: () => null);
+  final nodeOpen =
+      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
 
   assert(nodeOpen != null);
 
-  final relaysList = nodeOpen.compactReport.relays.map((namedRelayAddress) => RelayAddress((b) => b
-          ..publicKey = namedRelayAddress.publicKey
-          ..address = namedRelayAddress.address)).toList();
+  final relaysList = nodeOpen.compactReport.relays
+      .map((namedRelayAddress) => RelayAddress((b) => b
+        ..publicKey = namedRelayAddress.publicKey
+        ..address = namedRelayAddress.address))
+      .toList();
   final relays = BuiltList<RelayAddress>(relaysList);
-          
 
   final friendFile = FriendFile((b) => b
-      ..publicKey = nodeOpen.compactReport.localPublicKey
-      ..relays = relays.toBuilder());
+    ..publicKey = nodeOpen.compactReport.localPublicKey
+    ..relays = relays.toBuilder());
 
-  final body = Center(child: Column(children: [
+  final body = Center(
+      child: Column(children: [
     Spacer(flex: 1),
     Expanded(flex: 10, child: qrShow<FriendFile>(friendFile)),
     Spacer(flex: 1),
-    Expanded(flex: 1, child: RaisedButton(child: Text('Share file'), onPressed: () => throw UnimplementedError())),
+    Expanded(
+        flex: 1,
+        child: RaisedButton(
+            child: Text('Share file'),
+            onPressed: () async =>
+                await shareFile<FriendFile>(friendFile, 'local.friend'))),
     Spacer(flex: 2),
   ]));
 
