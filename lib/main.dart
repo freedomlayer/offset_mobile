@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'dart:developer' as developer;
 
+import 'package:logger/logger.dart';
+
 import 'package:built_collection/built_collection.dart';
 import 'package:receive_file_intent/receive_file_intent.dart';
 
@@ -17,15 +19,20 @@ import 'protocol/protocol.dart';
 import 'protocol/serialize.dart';
 import 'actions/actions.dart';
 import 'render/render.dart';
+import 'logger.dart';
 import 'error.dart';
+
+final logger = createLogger('main');
 
 class MainAppError extends AppError {
   MainAppError(cause) : super(cause);
 }
 
-// import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-
-void main() => runApp(MainApp());
+void main() {
+  // Set log level for the whole application:
+  Logger.level = Level.warning;
+  return runApp(MainApp());
+}
 
 /// Attempt to send pending outgoing messages, if any.
 AppState attemptSend(
@@ -39,7 +46,7 @@ AppState attemptSend(
           return appState;
         }
         if (nextRequests.isEmpty) {
-          developer.log('attemptSend(): Invalid state');
+          logger.e('attemptSend(): Invalid state');
           return appState;
         }
 
@@ -90,6 +97,7 @@ class MainAppState extends State<MainApp> {
         .transform(utf8.decoder)
         .transform(const LineSplitter())
         .map((String data) {
+      logger.d('Message from process:\n$data');
       // TODO: deserializeMsg might raise an exception. How to handle?
       return deserializeMsg<ServerToUserAck>(data);
     }).asBroadcastStream();
@@ -120,7 +128,7 @@ class MainAppState extends State<MainApp> {
     }));
 
     _process.exitCode.then((exitCode) {
-      developer.log('Process exited with code: $exitCode');
+      logger.e('Process exited with code: $exitCode');
       // TODO: Is this a reasonable place to close the eventController?
       _eventController.close();
       throw MainAppError('Remote process closed!');
@@ -131,7 +139,7 @@ class MainAppState extends State<MainApp> {
     });
 
     _streamSubs.add(_process.stderr.transform(utf8.decoder).listen((data) {
-      developer.log("stderr: $data");
+      logger.e('stderr:\n$data');
     }, onError: (err) {
       throw MainAppError('stderr listen error: $err');
     }));
@@ -139,15 +147,15 @@ class MainAppState extends State<MainApp> {
     // Handle shared files:
     final handleSharedFiles = (List<String> filePaths) {
       if (filePaths == null) {
-        developer.log('handleSharedFiles(): Received null filePaths. Aborting');
+        logger.w('handleSharedFiles(): Received null filePaths. Aborting');
         return;
       }
       if (filePaths.isEmpty) {
-        developer.log('handleSharedFiles(): Received empty shared filePaths!');
+        logger.w('handleSharedFiles(): Received empty shared filePaths!');
         return;
       }
       if (filePaths.length > 1) {
-        developer.log(
+        logger.w(
             'handleSharedFiles(): Received more than one file path! Aborting.');
         return;
       }
@@ -173,6 +181,7 @@ class MainAppState extends State<MainApp> {
 
     final sendUserToServerAck = (UserToServerAck userToServerAck) {
       final data = serializeMsg<UserToServerAck>(userToServerAck);
+      logger.d('Sending to process:\n$data');
       _process.stdin.writeln(data);
     };
 
@@ -199,6 +208,7 @@ class MainAppState extends State<MainApp> {
 
   @override
   void initState() {
+    logger.d('initState() was called');
     super.initState();
 
     // Calling an async function. Should set `_isReady = true` when ready.
