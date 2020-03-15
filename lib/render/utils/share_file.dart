@@ -20,7 +20,6 @@ Future<void> shareFile<T>(T msg, String shareFilename) async {
 
   // Make sure SHARE_DIR directory exists:
   final shareDirPath = path.join(tempDir.path, SHARE_DIR);
-  print('shareDirPath = $shareDirPath');
   await Directory(shareDirPath).create();
 
   // Serialize message into a string:
