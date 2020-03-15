@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 
 import '../../protocol/protocol.dart';
-// import '../../protocol/file.dart';
+import '../../protocol/file.dart';
 import '../../state/state.dart';
 import '../../actions/actions.dart';
+import '../utils/qr_show.dart';
 
 import '../frame.dart';
 
@@ -118,5 +119,36 @@ Widget _renderShareInfo(
     NodeName nodeName,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(FriendsSettingsAction) queueAction) {
-  throw UnimplementedError();
+
+  final nodeState = nodesStates[nodeName];
+  assert(nodeState != null);
+
+  final nodeOpen = nodeState.inner.match(
+      open: (nodeOpen) => nodeOpen,
+      closed: () => null);
+
+  assert(nodeOpen != null);
+
+  final relaysList = nodeOpen.compactReport.relays.map((namedRelayAddress) => RelayAddress((b) => b
+          ..publicKey = namedRelayAddress.publicKey
+          ..address = namedRelayAddress.address)).toList();
+  final relays = BuiltList<RelayAddress>(relaysList);
+          
+
+  final friendFile = FriendFile((b) => b
+      ..publicKey = nodeOpen.compactReport.localPublicKey
+      ..relays = relays.toBuilder());
+
+  final body = Center(child: Column(children: [
+    Spacer(flex: 1),
+    Expanded(flex: 10, child: qrShow<FriendFile>(friendFile)),
+    Spacer(flex: 1),
+    Expanded(flex: 1, child: RaisedButton(child: Text('Share file'), onPressed: () => throw UnimplementedError())),
+    Spacer(flex: 2),
+  ]));
+
+  return frame(
+      title: Text('${nodeName.inner}: Share'),
+      body: body,
+      backAction: () => queueAction(FriendsSettingsAction.back()));
 }
