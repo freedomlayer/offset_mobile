@@ -76,7 +76,7 @@ AppState handleSettingsAction(
             ..inner = CardSettingsInnerView.relays(RelaysSettingsView.newRelayName(relayAddress)))))),
       selectCardSharedFriend: (nodeName, friendFile) => createState(AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b
         ..nodeName = nodeName
-        ..inner = CardSettingsInnerView.friends(FriendsSettingsView.newFriend(NewFriendView.name(friendFile.publicKey, friendFile.relays))))))));
+        ..inner = CardSettingsInnerView.friends(FriendsSettingsView.newFriend(NewFriendView.name(friendFile))))))));
 }
 
 AppState _handleNewCard(

@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:built_union/built_union.dart';
@@ -78,7 +77,7 @@ class NewFriendView extends _$NewFriendView {
   // Select how to add a friend
   NewFriendView.select() : super.select();
   // Add a name to the newly loaded friend
-  NewFriendView.name(PublicKey friendPublicKey, BuiltList<RelayAddress> relays) : super.name(friendPublicKey, relays);
+  NewFriendView.name(FriendFile friendFile) : super.name(friendFile);
 }
 
 

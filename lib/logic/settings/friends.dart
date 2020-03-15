@@ -81,7 +81,7 @@ AppState _handleNewFriend(
           CardSettingsInnerView.friends(FriendsSettingsView.home())),
       loadFriend: (friendFile) => createStateInner(
           CardSettingsInnerView.friends(FriendsSettingsView.newFriend(
-              NewFriendView.name(friendFile.publicKey, friendFile.relays)))),
+              NewFriendView.name(friendFile)))),
       addFriend: (friendName, friendFile) => _handleAddFriend(
           nodeName, nodesStates, friendName, friendFile, rand));
 }
@@ -124,7 +124,7 @@ AppState _handleAddFriend(
     ..inner = userToServer);
 
   final newFriendView =
-      NewFriendView.name(friendFile.publicKey, friendFile.relays);
+      NewFriendView.name(friendFile);
   final oldView = AppView.settings(SettingsView.cardSettings(CardSettingsView(
       (b) => b
         ..nodeName = nodeName

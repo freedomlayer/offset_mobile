@@ -106,8 +106,8 @@ Widget _renderNewFriend(
     Function(NewFriendAction) queueAction) {
   return newFriendView.match(
       select: () => _renderSelectNewFriend(nodeName, nodesStates, queueAction),
-      name: (friendPublicKey, relays) => _renderNewFriendName(
-          nodeName, friendPublicKey, relays, nodesStates, queueAction));
+      name: (friendFile) => _renderNewFriendName(
+          nodeName, friendFile, nodesStates, queueAction));
 }
 
 Widget _renderSelectNewFriend(
@@ -151,17 +151,12 @@ Widget _renderSelectNewFriend(
 
 Widget _renderNewFriendName(
     NodeName nodeName,
-    PublicKey friendPublicKey,
-    BuiltList<RelayAddress> relays,
+    FriendFile friendFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(NewFriendAction) queueAction) {
 
   // Saves current relay name:
   String _friendName = '';
-
-  final friendFile = FriendFile((b) => b
-    ..publicKey = friendPublicKey
-    ..relays = relays.toBuilder());
 
   final body = Center(
       child: Row(children: [
