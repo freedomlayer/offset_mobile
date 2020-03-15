@@ -26,12 +26,24 @@ Widget renderFriendsSettings(
     Function(FriendsSettingsAction) queueAction) {
   return friendsSettingsView.match(
       home: () => _renderHome(nodeName, nodeState, queueAction),
-      friendSettings: (friendSettingsView) => renderFriendSettings(
+      friendSettings: (friendSettingsView) {
+
+        final nodeOpen = nodeState.inner.match(
+            open: (nodeOpen) => nodeOpen,
+            closed: () => null);
+
+        assert(nodeOpen != null);
+
+        final friendReport = nodeOpen.compactReport.friends[friendSettingsView.friendPublicKey];
+
+        friendSettingsView.friendPublicKey;
+        return renderFriendSettings(
           nodeName,
           friendSettingsView,
-          nodeState,
+          friendReport,
           (FriendSettingsAction friendSettingsAction) => queueAction(
-              FriendsSettingsAction.friendSettings(friendSettingsAction))),
+              FriendsSettingsAction.friendSettings(friendSettingsAction)));
+      },
       newFriend: (newFriendView) => _renderNewFriend(
           nodeName,
           newFriendView,

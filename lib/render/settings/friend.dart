@@ -17,24 +17,24 @@ import '../../actions/actions.dart';
 Widget renderFriendSettings(
     NodeName nodeName,
     FriendSettingsView friendSettingsView,
-    NodeState nodeState,
+    FriendReport friendReport,
     Function(FriendSettingsAction) queueAction) {
   final friendPublicKey = friendSettingsView.friendPublicKey;
   return friendSettingsView.inner.match(
       home: () => _renderFriendHome(
-          nodeName, friendPublicKey, nodeState, queueAction),
+          nodeName, friendPublicKey, friendReport, queueAction),
       resolve: () =>
-          _renderResolve(nodeName, friendPublicKey, nodeState, queueAction),
+          _renderResolve(nodeName, friendPublicKey, friendReport, queueAction),
       currencySettings: (currency) => _renderCurrencySettings(
-          nodeName, friendPublicKey, currency, nodeState, queueAction),
+          nodeName, friendPublicKey, currency, friendReport, queueAction),
       newCurrency: () => _renderNewCurrency(
-          nodeName, friendPublicKey, nodeState, queueAction));
+          nodeName, friendPublicKey, friendReport, queueAction));
 }
 
 Widget _renderFriendHome(
     NodeName nodeName,
     PublicKey friendPublicKey,
-    NodeState nodeState,
+    FriendReport friendReport,
     Function(FriendSettingsAction) queueAction) {
 
   throw UnimplementedError();
@@ -55,7 +55,7 @@ Widget _renderFriendHome(
 Widget _renderResolve(
     NodeName nodeName,
     PublicKey friendPublicKey,
-    NodeState nodeState,
+    FriendReport friendReport,
     Function(FriendSettingsAction) queueAction) {
   throw UnimplementedError();
 }
@@ -64,7 +64,7 @@ Widget _renderCurrencySettings(
     NodeName nodeName,
     PublicKey friendPublicKey,
     Currency currency,
-    NodeState nodeState,
+    FriendReport friendReport,
     Function(FriendSettingsAction) queueAction) {
   throw UnimplementedError();
 }
@@ -72,7 +72,7 @@ Widget _renderCurrencySettings(
 Widget _renderNewCurrency(
     NodeName nodeName,
     PublicKey friendPublicKey,
-    NodeState nodeState,
+    FriendReport friendReport,
     Function(FriendSettingsAction) queueAction) {
   throw UnimplementedError();
 }
