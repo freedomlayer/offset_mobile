@@ -40,7 +40,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
       key: Key(namedRelayAddress.publicKey.inner),
       title: Text(namedRelayAddress.name),
       trailing: FlatButton(
-          child: Icon(Icons.remove),
+          child: Icon(Icons.delete),
           onPressed: () => queueAction(
               RelaysSettingsAction.removeRelay(namedRelayAddress.publicKey))),
     ));
