@@ -55,6 +55,7 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
     final currencyReports = channelConsistentReport.currencyReports;
 
     final List<Widget> children = [];
+    // TODO: Sort list here before iteration begins:
     for (final entry in currencyConfigs.entries) {
       final currency = entry.key;
       final ConfigReport configReport = entry.value;
