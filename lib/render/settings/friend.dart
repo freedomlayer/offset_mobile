@@ -31,12 +31,54 @@ Widget renderFriendSettings(
           nodeName, friendPublicKey, friendReport, queueAction));
 }
 
+/// Possible options for friend popup menu:
 enum FriendPopup { unfriend }
 
 Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
     FriendReport friendReport, Function(FriendSettingsAction) queueAction) {
-  // TODO:
-  final listView = ListView(children: []);
+  final currencyConfigs = friendReport.currencyConfigs;
+  final Widget channelInfo = friendReport.channelStatus.match(
+      inconsistent: (_channelInconsistentReport) {
+    return Center(
+        child: Row(children: [
+      Expanded(flex: 1, child: Text('Inconsistency')),
+      Spacer(flex: 1),
+      Expanded(
+          flex: 1,
+          child: RaisedButton(
+              child: Text('Resolve inconsistency'),
+              onPressed: () =>
+                  queueAction(FriendSettingsAction.selectResolve()))),
+    ]));
+  }, consistent: (channelConsistentReport) {
+    final currencyReports = channelConsistentReport.currencyReports;
+
+    final List<Widget> children = [];
+    for (final entry in currencyConfigs.entries) {
+      final currency = entry.key;
+      final ConfigReport configReport = entry.value;
+
+      final currencyReport = currencyReports[currency];
+      Widget title;
+      if (currencyReport != null) {
+        title = Text('${currency.inner}: ${currencyReport.balance.inner}');
+      } else {
+        title = Text('${currency.inner} (Pending)');
+      }
+
+      final double ratePercent = (configReport.rate.mul / (1 << 32)) * 100;
+      final subtitle = Text('limit: ${configReport.remoteMaxDebt}, ' +
+          'rate: ${ratePercent.toStringAsFixed(2)}% + configReport.rate.add');
+
+      children.add(ListTile(
+        key: Key(currency.inner),
+        title: title,
+        subtitle: subtitle,
+        enabled: friendReport.status.isEnabled,
+      ));
+    }
+    return ListView(children: children);
+  });
 
   final body = Center(
       child: Column(children: [
@@ -57,7 +99,7 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
     // TODO: Possibly move "unfriend" to a place where it is less likely to be clicked
     // on accidentally? Maybe some drawer that opens when three dots are clicked?
     Expanded(flex: 1, child: ListTile(title: Text('Currencies'))),
-    Expanded(flex: 10, child: listView),
+    Expanded(flex: 10, child: channelInfo),
   ]));
 
   // TODO: Possibly move "New Currency" to a place where it is less likely to be clicked
