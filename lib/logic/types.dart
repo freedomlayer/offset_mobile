@@ -7,7 +7,6 @@ import '../actions/actions.dart';
 import '../protocol/protocol.dart';
 // import '../state/state.dart';
 
-
 part 'types.g.dart';
 
 @BuiltUnion()
@@ -22,4 +21,3 @@ class AppEvent extends _$AppEvent {
   AppEvent.serverToUserAck(ServerToUserAck serverToUserAck)
       : super.serverToUserAck(serverToUserAck);
 }
-

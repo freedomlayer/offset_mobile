@@ -5,7 +5,9 @@ import '../protocol/protocol.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
 
-Widget renderInTransactions(InTransactionsView inTransactionsView,
-    BuiltMap<NodeName, NodeState> nodesStates, Function(InTransactionsAction) queueAction) {
+Widget renderInTransactions(
+    InTransactionsView inTransactionsView,
+    BuiltMap<NodeName, NodeState> nodesStates,
+    Function(InTransactionsAction) queueAction) {
   throw UnimplementedError();
 }

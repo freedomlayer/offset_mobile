@@ -5,15 +5,13 @@ import 'package:meta/meta.dart';
 
 import '../protocol/protocol.dart';
 
-
 part 'balances.g.dart';
 
 @BuiltUnion()
 class BalancesAction extends _$BalancesAction {
-  static Serializer<BalancesAction> get serializer => _$balancesActionSerializer;
+  static Serializer<BalancesAction> get serializer =>
+      _$balancesActionSerializer;
 
   BalancesAction.back() : super.back();
   BalancesAction.selectCard(NodeName nodeName) : super.selectCard(nodeName);
 }
-
-

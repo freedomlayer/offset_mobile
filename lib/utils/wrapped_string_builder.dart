@@ -7,15 +7,12 @@ import 'wrapped_string.dart';
 Builder wrappedStringBuilder(BuilderOptions options) =>
     SharedPartBuilder([WrappedStringGenerator()], 'wrapped_string');
 
-class WrappedStringGenerator
-    extends GeneratorForAnnotation<WrappedString> {
+class WrappedStringGenerator extends GeneratorForAnnotation<WrappedString> {
   @override
   Object generateForAnnotatedElement(
           Element element, ConstantReader annotation, BuildStep buildStep) =>
       generateWrappedString(element, annotation);
 }
-
-
 
 /*
 /// class name should be of the form: "__ClassName".

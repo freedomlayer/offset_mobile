@@ -15,6 +15,6 @@ class BuyView extends _$BuyView {
   BuyView.invoiceSelect() : super.invoiceSelect();
   BuyView.invoiceInfo(InvoiceFile invoiceFile) : super.invoiceInfo(invoiceFile);
   BuyView.selectCard(InvoiceFile invoiceFile) : super.selectCard(invoiceFile);
-  BuyView.paymentProgress(NodeName nodeName, PaymentId paymentId) : super.paymentProgress(nodeName, paymentId);
+  BuyView.paymentProgress(NodeName nodeName, PaymentId paymentId)
+      : super.paymentProgress(nodeName, paymentId);
 }
-

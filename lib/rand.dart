@@ -13,9 +13,8 @@ String _randBytesB64(Random rand, int length) {
   final values = List<int>.generate(length, (i) => rand.nextInt(0x100));
   final encoded = base64Url.encode(values);
   // We remove trailing '=' because stcompact does the same.
-  return encoded.replaceAll('=','');
+  return encoded.replaceAll('=', '');
 }
-
 
 /// Generate a random Uid
 Uid genUid(Random rand) {
@@ -31,5 +30,3 @@ PaymentId genPaymentId(Random rand) {
 InvoiceId genInvoiceId(Random rand) {
   return InvoiceId(_randBytesB64(rand, INVOICE_ID_LEN));
 }
-
-

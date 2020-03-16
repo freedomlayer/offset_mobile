@@ -21,7 +21,6 @@ export 'settings.dart';
 
 part 'actions.g.dart';
 
-
 @BuiltUnion()
 class AppAction extends _$AppAction {
   static Serializer<AppAction> get serializer => _$appActionSerializer;
@@ -29,11 +28,10 @@ class AppAction extends _$AppAction {
   AppAction.home(HomeAction home) : super.home(home);
   AppAction.buy(BuyAction buy) : super.buy(buy);
   AppAction.sell(SellAction sell) : super.sell(sell);
-  AppAction.inTransactions(InTransactionsAction inTransactions) : super.inTransactions(inTransactions);
-  AppAction.outTransactions(OutTransactionsAction outTransactions) : super.outTransactions(outTransactions);
+  AppAction.inTransactions(InTransactionsAction inTransactions)
+      : super.inTransactions(inTransactions);
+  AppAction.outTransactions(OutTransactionsAction outTransactions)
+      : super.outTransactions(outTransactions);
   AppAction.balances(BalancesAction balances) : super.balances(balances);
   AppAction.settings(SettingsAction settings) : super.settings(settings);
 }
-
-
-

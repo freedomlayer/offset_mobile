@@ -27,22 +27,25 @@ abstract class InvoiceFile implements Built<InvoiceFile, InvoiceFileBuilder> {
   String get description;
 
   InvoiceFile._();
-  factory InvoiceFile([void Function(InvoiceFileBuilder) updates]) = _$InvoiceFile;
+  factory InvoiceFile([void Function(InvoiceFileBuilder) updates]) =
+      _$InvoiceFile;
 }
 
 // CommitFile is Commit
 // RelayFile is RelayAddress
 
-abstract class IndexServerFile implements Built<IndexServerFile, IndexServerFileBuilder> {
-  static Serializer<IndexServerFile> get serializer => _$indexServerFileSerializer;
+abstract class IndexServerFile
+    implements Built<IndexServerFile, IndexServerFileBuilder> {
+  static Serializer<IndexServerFile> get serializer =>
+      _$indexServerFileSerializer;
 
   PublicKey get publicKey;
   NetAddress get address;
 
   IndexServerFile._();
-  factory IndexServerFile([void Function(IndexServerFileBuilder) updates]) = _$IndexServerFile;
+  factory IndexServerFile([void Function(IndexServerFileBuilder) updates]) =
+      _$IndexServerFile;
 }
-
 
 abstract class FriendFile implements Built<FriendFile, FriendFileBuilder> {
   static Serializer<FriendFile> get serializer => _$friendFileSerializer;
@@ -54,18 +57,19 @@ abstract class FriendFile implements Built<FriendFile, FriendFileBuilder> {
   factory FriendFile([void Function(FriendFileBuilder) updates]) = _$FriendFile;
 }
 
-
-abstract class RemoteCardFile implements Built<RemoteCardFile, RemoteCardFileBuilder> {
-  static Serializer<RemoteCardFile> get serializer => _$remoteCardFileSerializer;
+abstract class RemoteCardFile
+    implements Built<RemoteCardFile, RemoteCardFileBuilder> {
+  static Serializer<RemoteCardFile> get serializer =>
+      _$remoteCardFileSerializer;
 
   PublicKey get nodePublicKey;
   NetAddress get nodeAddress;
   PrivateKey get appPrivateKey;
 
   RemoteCardFile._();
-  factory RemoteCardFile([void Function(RemoteCardFileBuilder) updates]) = _$RemoteCardFile;
+  factory RemoteCardFile([void Function(RemoteCardFileBuilder) updates]) =
+      _$RemoteCardFile;
 }
-
 
 final fileSerializers = <Serializer>[
   InvoiceFile.serializer,

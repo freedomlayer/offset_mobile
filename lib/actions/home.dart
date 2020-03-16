@@ -16,4 +16,3 @@ class HomeAction extends _$HomeAction {
   HomeAction.selectBalances() : super.selectBalances();
   HomeAction.selectSettings() : super.selectSettings();
 }
-

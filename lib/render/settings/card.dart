@@ -11,10 +11,8 @@ import 'relays.dart';
 import 'friends.dart';
 import 'index_servers.dart';
 
-Widget renderCardSettings(
-    CardSettingsView cardSettingsView,
-    NodeState nodeState,
-    Function(CardSettingsAction) queueAction) {
+Widget renderCardSettings(CardSettingsView cardSettingsView,
+    NodeState nodeState, Function(CardSettingsAction) queueAction) {
   final nodeName = cardSettingsView.nodeName;
   return cardSettingsView.inner.match(
       home: () => _renderCardSettingsHome(nodeName, nodeState, queueAction),
@@ -39,9 +37,7 @@ Widget renderCardSettings(
                   indexServersSettingsAction))));
 }
 
-Widget _renderCardSettingsHome(
-    NodeName nodeName,
-    NodeState nodeState,
+Widget _renderCardSettingsHome(NodeName nodeName, NodeState nodeState,
     Function(CardSettingsAction) queueAction) {
   final children = <Widget>[];
   // Node name:

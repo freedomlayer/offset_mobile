@@ -13,6 +13,6 @@ class SellView extends _$SellView {
 
   SellView.selectCard() : super.selectCard();
   SellView.invoiceDetails(NodeName nodeName) : super.invoiceDetails(nodeName);
-  SellView.sendInvoice(NodeName nodeName, InvoiceId invoiceId) : super.sendInvoice(nodeName, invoiceId);
+  SellView.sendInvoice(NodeName nodeName, InvoiceId invoiceId)
+      : super.sendInvoice(nodeName, invoiceId);
 }
-

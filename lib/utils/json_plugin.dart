@@ -50,8 +50,7 @@ class CommJsonPlugin extends CustomJsonPlugin {
   // instead of ""myKey"").
   @override
   Object afterSerialize(Object object, FullType specifiedType) {
-    if (object is List &&
-        specifiedType.root == BuiltMap) {
+    if (object is List && specifiedType.root == BuiltMap) {
       if (specifiedType.isUnspecified) {
         return super.afterSerialize(object, specifiedType);
       } else {

@@ -97,13 +97,13 @@ Serializers collectSerializers() {
 final serializers = collectSerializers();
 
 final _serializersWithPlugin =
-      (serializers.toBuilder()..addPlugin(CommJsonPlugin())).build();
+    (serializers.toBuilder()..addPlugin(CommJsonPlugin())).build();
 
 JsonEncoder _encoder = JsonEncoder();
 final _decoder = JsonDecoder();
 
 class SerializeError extends AppError {
-  SerializeError(cause): super(cause);
+  SerializeError(cause) : super(cause);
 }
 
 /// Deserialize a protocol message
@@ -112,9 +112,10 @@ T deserializeMsg<T>(String data) {
   try {
     final serialized = _decoder.convert(data);
     final serializersWithPlugin =
-          (serializers.toBuilder()..addPlugin(CommJsonPlugin())).build();
+        (serializers.toBuilder()..addPlugin(CommJsonPlugin())).build();
 
-    return serializersWithPlugin.deserialize(serialized, specifiedType: FullType(T));
+    return serializersWithPlugin.deserialize(serialized,
+        specifiedType: FullType(T));
   } catch (e) {
     logger.w('deserializeData() error: $e');
     throw SerializeError('$e');
@@ -124,8 +125,7 @@ T deserializeMsg<T>(String data) {
 /// Serialize a protocol message
 /// Throws `SerializeError` on error
 String serializeMsg<T>(T msg) {
-    final serialized2 = _serializersWithPlugin.serialize(msg,
-        specifiedType: FullType(T));
-    return _encoder.convert(serialized2);
-
+  final serialized2 =
+      _serializersWithPlugin.serialize(msg, specifiedType: FullType(T));
+  return _encoder.convert(serialized2);
 }

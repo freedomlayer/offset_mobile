@@ -22,7 +22,8 @@ AppState handleServerToUserAck(
       transition: (oldView, newView, nextRequests, optPendingRequest) {
         final adjustOldView = adjustAppView(oldView, appState1.nodesStates);
         if (adjustOldView != oldView) {
-          return ViewState.transition(adjustOldView, adjustOldView, nextRequests, optPendingRequest);
+          return ViewState.transition(
+              adjustOldView, adjustOldView, nextRequests, optPendingRequest);
         } else {
           return appState1.viewState;
         }

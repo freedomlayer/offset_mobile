@@ -3,7 +3,6 @@ import 'package:built_value/serializer.dart';
 import 'package:offst_mobile/utils/wrapped_string.dart';
 import 'package:offst_mobile/utils/wrapped_bigint.dart';
 
-
 part 'common.g.dart';
 
 @WrappedString()
@@ -95,8 +94,6 @@ class U64 extends _$U64 {
 class Generation extends _$Generation {
   Generation(BigInt inner) : super(inner);
 }
-
-
 
 final commonSerializers = <Serializer>[
   PublicKeySerializer(),

@@ -5,8 +5,9 @@ import '../protocol/protocol.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
 
-Widget renderBalances(BalancesView balancesView,
-    BuiltMap<NodeName, NodeState> nodesStates, Function(BalancesAction) queueAction) {
+Widget renderBalances(
+    BalancesView balancesView,
+    BuiltMap<NodeName, NodeState> nodesStates,
+    Function(BalancesAction) queueAction) {
   throw UnimplementedError();
 }
-

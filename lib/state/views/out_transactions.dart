@@ -9,10 +9,12 @@ part 'out_transactions.g.dart';
 
 @BuiltUnion()
 class OutTransactionsView extends _$OutTransactionsView {
-  static Serializer<OutTransactionsView> get serializer => _$outTransactionsViewSerializer;
+  static Serializer<OutTransactionsView> get serializer =>
+      _$outTransactionsViewSerializer;
 
   OutTransactionsView.home() : super.home();
-  OutTransactionsView.transaction(NodeName nodeName, PaymentId paymentId) : super.transaction(nodeName, paymentId);
-  OutTransactionsView.sendCommit(NodeName nodeName, PaymentId paymentId) : super.sendCommit(nodeName, paymentId);
+  OutTransactionsView.transaction(NodeName nodeName, PaymentId paymentId)
+      : super.transaction(nodeName, paymentId);
+  OutTransactionsView.sendCommit(NodeName nodeName, PaymentId paymentId)
+      : super.sendCommit(nodeName, paymentId);
 }
-

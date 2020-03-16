@@ -36,14 +36,14 @@ AppState handleRelaysSettings(
       selectNewRelay: () => createStateInner(
           CardSettingsInnerView.relays(RelaysSettingsView.newRelaySelect())),
       loadRelay: (relayAddress) => createStateInner(
-          CardSettingsInnerView.relays(RelaysSettingsView.newRelayName(relayAddress))),
+          CardSettingsInnerView.relays(
+              RelaysSettingsView.newRelayName(relayAddress))),
       newRelay: (namedRelayAddress) =>
           _handleNewRelay(nodeName, namedRelayAddress, nodesStates, rand));
 }
 
 AppState _handleRemoveRelay(NodeName nodeName, PublicKey relayPublicKey,
     BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
-
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
     ..viewState = ViewState.view(appView));
@@ -70,8 +70,10 @@ AppState _handleRemoveRelay(NodeName nodeName, PublicKey relayPublicKey,
     ..requestId = requestId
     ..inner = userToServer);
 
-  final oldView = AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b..nodeName = nodeName
-                ..inner = CardSettingsInnerView.relays(RelaysSettingsView.home()))));
+  final oldView =
+      AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b
+        ..nodeName = nodeName
+        ..inner = CardSettingsInnerView.relays(RelaysSettingsView.home()))));
   final newView = oldView;
 
   final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
@@ -85,7 +87,6 @@ AppState _handleRemoveRelay(NodeName nodeName, PublicKey relayPublicKey,
 
 AppState _handleNewRelay(NodeName nodeName, NamedRelayAddress namedRelayAddress,
     BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
-
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
     ..viewState = ViewState.view(appView));
@@ -111,15 +112,19 @@ AppState _handleNewRelay(NodeName nodeName, NamedRelayAddress namedRelayAddress,
   final userToServerAck = UserToServerAck((b) => b
     ..requestId = requestId
     ..inner = userToServer);
-  
-  final relayAddress = RelayAddress((b) => b..publicKey = namedRelayAddress.publicKey
-                                            ..address = namedRelayAddress.address);
-  final relaysSettingsView = RelaysSettingsView.newRelayName(relayAddress);
-  final oldView = AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b..nodeName = nodeName
-                ..inner = CardSettingsInnerView.relays(relaysSettingsView))));
-  final newView = AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b..nodeName = nodeName
-                ..inner = CardSettingsInnerView.relays(RelaysSettingsView.home()))));
 
+  final relayAddress = RelayAddress((b) => b
+    ..publicKey = namedRelayAddress.publicKey
+    ..address = namedRelayAddress.address);
+  final relaysSettingsView = RelaysSettingsView.newRelayName(relayAddress);
+  final oldView =
+      AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b
+        ..nodeName = nodeName
+        ..inner = CardSettingsInnerView.relays(relaysSettingsView))));
+  final newView =
+      AppView.settings(SettingsView.cardSettings(CardSettingsView((b) => b
+        ..nodeName = nodeName
+        ..inner = CardSettingsInnerView.relays(RelaysSettingsView.home()))));
 
   final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
   final optPendingRequest = OptPendingRequest.none();

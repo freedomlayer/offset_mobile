@@ -43,12 +43,12 @@ AppState _handleSelectPayment(
     PaymentId paymentId,
     OutTransactionsView outTransactionsView,
     BuiltMap<NodeName, NodeState> nodesStates) {
-
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
     ..viewState = ViewState.view(appView));
 
-  return createState(AppView.outTransactions(OutTransactionsView.transaction(nodeName, paymentId)));
+  return createState(AppView.outTransactions(
+      OutTransactionsView.transaction(nodeName, paymentId)));
 }
 
 AppState _handleDiscardPayment(
@@ -57,31 +57,27 @@ AppState _handleDiscardPayment(
     OutTransactionsView outTransactionsView,
     BuiltMap<NodeName, NodeState> nodesStates,
     Random rand) {
-
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
     ..viewState = ViewState.view(appView));
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    logger.w(
-        '_handleDiscardPayment(): node $nodeName does not exist!');
+    logger.w('_handleDiscardPayment(): node $nodeName does not exist!');
     return createState(AppView.outTransactions(OutTransactionsView.home()));
   }
 
-  final nodeOpen = nodeState.inner
-      .match(open: (nodeOpen) => nodeOpen, closed: () => null);
+  final nodeOpen =
+      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
 
   if (nodeOpen == null) {
-    logger.w(
-        '_handleDiscardPayment(): node $nodeName is not open!');
+    logger.w('_handleDiscardPayment(): node $nodeName is not open!');
     return createState(AppView.outTransactions(OutTransactionsView.home()));
   }
 
   final openPayment = nodeOpen.compactReport.openPayments[paymentId];
   if (openPayment == null) {
-    logger.w(
-        '_handleDiscardPayment(): payment $paymentId is not open!');
+    logger.w('_handleDiscardPayment(): payment $paymentId is not open!');
     return createState(AppView.outTransactions(OutTransactionsView.home()));
   }
 
@@ -101,8 +97,7 @@ AppState _handleDiscardPayment(
     ..inner = userToServer);
 
   final oldView = AppView.outTransactions(outTransactionsView);
-  final newView =
-      AppView.outTransactions(OutTransactionsView.home());
+  final newView = AppView.outTransactions(OutTransactionsView.home());
 
   final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
   final optPendingRequest = OptPendingRequest.none();
@@ -132,10 +127,10 @@ AppState _handleResendCommit(OutTransactionsView outTransactionsView,
       sendCommit: (_a, _b) => null);
 
   if (nodeName == null) {
-    logger.w(
-        '_handleResendCommit(): Incorrect view!');
+    logger.w('_handleResendCommit(): Incorrect view!');
     return createState(AppView.outTransactions(outTransactionsView));
   }
 
-  return createState(AppView.outTransactions(OutTransactionsView.sendCommit(nodeName, paymentId)));
+  return createState(AppView.outTransactions(
+      OutTransactionsView.sendCommit(nodeName, paymentId)));
 }

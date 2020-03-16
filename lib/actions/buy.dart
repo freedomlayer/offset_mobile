@@ -13,7 +13,8 @@ class BuyAction extends _$BuyAction {
   static Serializer<BuyAction> get serializer => _$buyActionSerializer;
 
   BuyAction.back() : super.back();
-  BuyAction.loadInvoice(InvoiceFile invoiceFile) : super.loadInvoice(invoiceFile);
+  BuyAction.loadInvoice(InvoiceFile invoiceFile)
+      : super.loadInvoice(invoiceFile);
   BuyAction.confirmInfo() : super.confirmInfo();
   BuyAction.selectCard(NodeName nodeName) : super.selectCard(nodeName);
   BuyAction.confirmFees() : super.confirmFees();

@@ -32,12 +32,14 @@ AppState handleCardSettingsAction(
           cardSettingsView.nodeName, cardSettingsView, nodesStates, rand),
       remove: () => _handleRemove(
           cardSettingsView.nodeName, cardSettingsView, nodesStates, rand),
-      selectFriends: () => createState(AppView.settings(SettingsView.cardSettings(cardSettingsView.rebuild((b) =>
-                      b..inner = CardSettingsInnerView.friends(FriendsSettingsView.home()))))),
-      selectRelays: () => createState(AppView.settings(SettingsView.cardSettings(cardSettingsView.rebuild((b) =>
-                      b..inner = CardSettingsInnerView.relays(RelaysSettingsView.home()))))),
-      selectIndexServers: () => createState(AppView.settings(SettingsView.cardSettings(cardSettingsView.rebuild((b) =>
-                      b..inner = CardSettingsInnerView.indexServers(IndexServersSettingsView.home()))))),
+      selectFriends: () => createState(AppView.settings(
+          SettingsView.cardSettings(cardSettingsView.rebuild((b) => b
+            ..inner =
+                CardSettingsInnerView.friends(FriendsSettingsView.home()))))),
+      selectRelays: () => createState(AppView.settings(
+          SettingsView.cardSettings(cardSettingsView.rebuild(
+              (b) => b..inner = CardSettingsInnerView.relays(RelaysSettingsView.home()))))),
+      selectIndexServers: () => createState(AppView.settings(SettingsView.cardSettings(cardSettingsView.rebuild((b) => b..inner = CardSettingsInnerView.indexServers(IndexServersSettingsView.home()))))),
       friendsSettings: (friendsSettingsAction) {
         final friendsSettingsView = cardSettingsView.inner.match(
             home: () => null,
@@ -126,7 +128,6 @@ AppState _handleEnable(NodeName nodeName, CardSettingsView cardSettingsView,
 
 AppState _handleDisable(NodeName nodeName, CardSettingsView cardSettingsView,
     BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
-
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
     ..viewState = ViewState.view(appView));
@@ -157,7 +158,6 @@ AppState _handleDisable(NodeName nodeName, CardSettingsView cardSettingsView,
 
 AppState _handleRemove(NodeName nodeName, CardSettingsView cardSettingsView,
     BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
-
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
     ..viewState = ViewState.view(appView));

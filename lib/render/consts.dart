@@ -1,1 +1,1 @@
-const APP_TITLE = 'Offset'; 
+const APP_TITLE = 'Offset';

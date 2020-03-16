@@ -20,7 +20,6 @@ export 'settings.dart';
 
 part 'views.g.dart';
 
-
 @BuiltUnion()
 class AppView extends _$AppView {
   static Serializer<AppView> get serializer => _$appViewSerializer;
@@ -28,9 +27,10 @@ class AppView extends _$AppView {
   AppView.home() : super.home();
   AppView.buy(BuyView buy) : super.buy(buy);
   AppView.sell(SellView sell) : super.sell(sell);
-  AppView.inTransactions(InTransactionsView inTransactions) : super.inTransactions(inTransactions);
-  AppView.outTransactions(OutTransactionsView outTransactions) : super.outTransactions(outTransactions);
+  AppView.inTransactions(InTransactionsView inTransactions)
+      : super.inTransactions(inTransactions);
+  AppView.outTransactions(OutTransactionsView outTransactions)
+      : super.outTransactions(outTransactions);
   AppView.balances(BalancesView balances) : super.balances(balances);
   AppView.settings(SettingsView settings) : super.settings(settings);
 }
-

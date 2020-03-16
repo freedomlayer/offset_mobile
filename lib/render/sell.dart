@@ -5,6 +5,7 @@ import '../protocol/protocol.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
 
-Widget renderSell(SellView sellView, BuiltMap<NodeName, NodeState> nodesStates, Function(SellAction) queueAction) {
+Widget renderSell(SellView sellView, BuiltMap<NodeName, NodeState> nodesStates,
+    Function(SellAction) queueAction) {
   throw UnimplementedError();
 }

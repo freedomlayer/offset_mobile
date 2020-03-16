@@ -1,4 +1,3 @@
-
 /// Base error class for this application
 abstract class AppError implements Exception {
   String cause;
@@ -6,6 +5,6 @@ abstract class AppError implements Exception {
 
   @override
   String toString() {
-      return 'Exception($cause)';
+    return 'Exception($cause)';
   }
 }

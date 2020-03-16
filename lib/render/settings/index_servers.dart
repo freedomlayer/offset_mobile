@@ -21,14 +21,14 @@ Widget renderIndexServersSettings(
     Function(IndexServersSettingsAction) queueAction) {
   return indexServersSettingsView.match(
       home: () => _renderHome(nodeName, nodeState, queueAction),
-      newIndexSelect: () => _renderNewIndexServer(nodeName, nodeState, queueAction),
-      newIndexName: (indexServerAddress) =>
-          _renderIndexServerName(nodeName, indexServerAddress, nodeState, queueAction));
+      newIndexSelect: () =>
+          _renderNewIndexServer(nodeName, nodeState, queueAction),
+      newIndexName: (indexServerAddress) => _renderIndexServerName(
+          nodeName, indexServerAddress, nodeState, queueAction));
 }
 
 Widget _renderHome(NodeName nodeName, NodeState nodeState,
     Function(IndexServersSettingsAction) queueAction) {
-
   final nodeOpen =
       nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
 
@@ -42,8 +42,8 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
       title: Text(namedIndexServerAddress.name),
       trailing: FlatButton(
           child: Icon(Icons.remove),
-          onPressed: () => queueAction(
-              IndexServersSettingsAction.removeIndex(namedIndexServerAddress.publicKey))),
+          onPressed: () => queueAction(IndexServersSettingsAction.removeIndex(
+              namedIndexServerAddress.publicKey))),
     ));
   }
 
@@ -61,9 +61,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
       floatingActionButton: newIndexServerButton);
 }
 
-Widget _renderNewIndexServer(
-    NodeName nodeName,
-    NodeState nodeState,
+Widget _renderNewIndexServer(NodeName nodeName, NodeState nodeState,
     Function(IndexServersSettingsAction) queueAction) {
   final Future<void> Function() scanQrCode = () async {
     final indexServerFile = await qrScan<IndexServerFile>()
@@ -77,7 +75,8 @@ Widget _renderNewIndexServer(
     final indexServerAddress = await pickFromFile<IndexServerFile>(INDEX_EXT)
         .catchError((e) => logger.w('pickFromFile error: $e'));
     if (indexServerAddress != null) {
-      queueAction(IndexServersSettingsAction.loadIndexServer(indexServerAddress));
+      queueAction(
+          IndexServersSettingsAction.loadIndexServer(indexServerAddress));
     }
   };
 
@@ -119,7 +118,8 @@ Widget _renderIndexServerName(
                 Text('Name:'),
                 Expanded(
                     child: TextField(
-                        onChanged: (newNodeName) => _indexServerName = newNodeName)),
+                        onChanged: (newNodeName) =>
+                            _indexServerName = newNodeName)),
               ])),
           Spacer(flex: 2),
           Expanded(

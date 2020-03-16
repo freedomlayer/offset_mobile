@@ -68,18 +68,21 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
       icon: Icon(Icons.add));
 
   final popupMenuButton = PopupMenuButton<FriendPopup>(
-   onSelected: (FriendPopup _result) => queueAction(FriendSettingsAction.removeFriend()),
-    itemBuilder: (BuildContext context) => <PopupMenuEntry<FriendPopup>>[
-      const PopupMenuItem<FriendPopup>(
-        value: FriendPopup.unfriend,
-        child: Text('Unfriend'),
-      )]);
+      onSelected: (FriendPopup _result) =>
+          queueAction(FriendSettingsAction.removeFriend()),
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<FriendPopup>>[
+            const PopupMenuItem<FriendPopup>(
+              value: FriendPopup.unfriend,
+              child: Text('Unfriend'),
+            )
+          ]);
 
   return frame(
       title: Text('${nodeName.inner}: Friend Settings'),
       body: body,
       backAction: () => queueAction(FriendSettingsAction.back()),
-      floatingActionButton: friendReport.status.isEnabled ? newCurrencyButton : null,
+      floatingActionButton:
+          friendReport.status.isEnabled ? newCurrencyButton : null,
       actions: <Widget>[popupMenuButton]);
 }
 

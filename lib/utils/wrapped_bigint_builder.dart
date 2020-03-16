@@ -4,18 +4,15 @@ import 'package:source_gen/source_gen.dart';
 
 import 'wrapped_bigint.dart';
 
-
 Builder wrappedBigIntBuilder(BuilderOptions options) =>
     SharedPartBuilder([WrappedBigIntGenerator()], 'wrapped_bigint');
 
-class WrappedBigIntGenerator
-    extends GeneratorForAnnotation<WrappedBigInt> {
+class WrappedBigIntGenerator extends GeneratorForAnnotation<WrappedBigInt> {
   @override
   Object generateForAnnotatedElement(
           Element element, ConstantReader annotation, BuildStep buildStep) =>
       generateWrappedBigInt(element, annotation);
 }
-
 
 /// Generate code for a new-type class that wraps a BigInt.
 /// When serialized, a simple json string will be created.

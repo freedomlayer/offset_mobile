@@ -8,4 +8,3 @@ qrShow<T>(T msg) {
     version: QrVersions.auto,
   );
 }
-

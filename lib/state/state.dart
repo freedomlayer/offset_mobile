@@ -13,7 +13,6 @@ export 'views/views.dart';
 
 part 'state.g.dart';
 
-
 abstract class NodeOpen implements Built<NodeOpen, NodeOpenBuilder> {
   static Serializer<NodeOpen> get serializer => _$nodeOpenSerializer;
 
@@ -25,14 +24,13 @@ abstract class NodeOpen implements Built<NodeOpen, NodeOpenBuilder> {
   factory NodeOpen([void Function(NodeOpenBuilder) updates]) = _$NodeOpen;
 }
 
-
 @BuiltUnion()
 class NodeStateInner extends _$NodeStateInner {
   static Serializer<NodeStateInner> get serializer =>
       _$nodeStateInnerSerializer;
 
   NodeStateInner.closed() : super.closed();
-  NodeStateInner.open(NodeOpen nodeOpen): super.open(nodeOpen);
+  NodeStateInner.open(NodeOpen nodeOpen) : super.open(nodeOpen);
 }
 
 abstract class NodeState implements Built<NodeState, NodeStateBuilder> {

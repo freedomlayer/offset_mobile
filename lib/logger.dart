@@ -14,4 +14,3 @@ class SimpleLogPrinter extends LogPrinter {
 Logger createLogger(String moduleName) {
   return Logger(printer: SimpleLogPrinter(moduleName));
 }
-

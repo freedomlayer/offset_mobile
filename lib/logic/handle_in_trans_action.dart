@@ -74,8 +74,7 @@ AppState _handleApplyCommit(
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    logger.w(
-        '_handleApplyCommit(): node $nodeName does not exist!');
+    logger.w('_handleApplyCommit(): node $nodeName does not exist!');
     return createState(AppView.inTransactions(inTransactionsView));
   }
 
@@ -83,8 +82,7 @@ AppState _handleApplyCommit(
       .match(open: (nodeOpen) => nodeOpen.nodeId, closed: () => null);
 
   if (nodeId == null) {
-    logger.w(
-        '_handleApplyCommit(): node $nodeName is not open!');
+    logger.w('_handleApplyCommit(): node $nodeName is not open!');
     return createState(AppView.inTransactions(inTransactionsView));
   }
 
@@ -209,8 +207,7 @@ AppState _handleCancelInvoice(InTransactionsView inTransactionsView,
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    logger.w(
-        '_handleCancelInvoice(): node $nodeName does not exist!');
+    logger.w('_handleCancelInvoice(): node $nodeName does not exist!');
     return createState(AppView.inTransactions(inTransactionsView));
   }
 
@@ -218,8 +215,7 @@ AppState _handleCancelInvoice(InTransactionsView inTransactionsView,
       .match(open: (nodeOpen) => nodeOpen.nodeId, closed: () => null);
 
   if (nodeId == null) {
-    logger.w(
-        '_handleCancelInvoice(): node $nodeName is not open!');
+    logger.w('_handleCancelInvoice(): node $nodeName is not open!');
     return createState(AppView.inTransactions(inTransactionsView));
   }
 
@@ -231,8 +227,7 @@ AppState _handleCancelInvoice(InTransactionsView inTransactionsView,
     ..inner = userToServer);
 
   final oldView = AppView.inTransactions(inTransactionsView);
-  final newView =
-      AppView.inTransactions(InTransactionsView.home());
+  final newView = AppView.inTransactions(InTransactionsView.home());
 
   final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
   final optPendingRequest = OptPendingRequest.none();

@@ -45,7 +45,6 @@ class NodeInfo extends _$NodeInfo {
   NodeInfo.remote(NodeInfoRemote nodeInfoRemote) : super.remote(nodeInfoRemote);
 }
 
-
 @BuiltUnion()
 class NodeMode extends _$NodeMode {
   static Serializer<NodeMode> get serializer => _$nodeModeSerializer;
@@ -171,4 +170,3 @@ abstract class UserToServerAck
   factory UserToServerAck([void Function(UserToServerAckBuilder) updates]) =
       _$UserToServerAck;
 }
-

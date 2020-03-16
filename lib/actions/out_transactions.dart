@@ -7,13 +7,15 @@ import '../protocol/common.dart';
 
 part 'out_transactions.g.dart';
 
-
 @BuiltUnion()
 class OutTransactionsAction extends _$OutTransactionsAction {
-  static Serializer<OutTransactionsAction> get serializer => _$outTransactionsActionSerializer;
+  static Serializer<OutTransactionsAction> get serializer =>
+      _$outTransactionsActionSerializer;
 
   OutTransactionsAction.back() : super.back();
-  OutTransactionsAction.selectPayment(NodeName nodeName, PaymentId paymentId) : super.selectPayment(nodeName, paymentId);
-  OutTransactionsAction.discardPayment(NodeName nodeName, PaymentId paymentId) : super.discardPayment(nodeName, paymentId);
+  OutTransactionsAction.selectPayment(NodeName nodeName, PaymentId paymentId)
+      : super.selectPayment(nodeName, paymentId);
+  OutTransactionsAction.discardPayment(NodeName nodeName, PaymentId paymentId)
+      : super.discardPayment(nodeName, paymentId);
   OutTransactionsAction.resendCommit() : super.resendCommit();
 }

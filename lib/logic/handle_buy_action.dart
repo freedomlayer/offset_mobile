@@ -49,8 +49,8 @@ AppState handleBuyAction(
           return createState(AppView.buy(buyView));
         }
       },
-      selectCard: (nodeName) => _handleSelectCard(
-          nodeName, buyView, nodesStates, buyAction, rand),
+      selectCard: (nodeName) =>
+          _handleSelectCard(nodeName, buyView, nodesStates, buyAction, rand),
       confirmFees: () =>
           _handleConfirmFees(buyView, nodesStates, buyAction, rand),
       cancelPayment: () =>
@@ -151,7 +151,8 @@ AppState _handleConfirmFees(
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
-    logger.w('_handleConfirmFees(): confirmFees: node $nodeName does not exist!');
+    logger
+        .w('_handleConfirmFees(): confirmFees: node $nodeName does not exist!');
     return createState(AppView.home());
   }
 
@@ -242,7 +243,8 @@ AppState _handleCancelPayment(
 
   final nodeId = nodeIdByNodeName(nodeName, nodesStates);
   if (nodeId == null) {
-    logger.w('_handleCancelPayment(): cancelPayment: node $nodeName is not open');
+    logger
+        .w('_handleCancelPayment(): cancelPayment: node $nodeName is not open');
     return createState(AppView.home());
   }
 

@@ -7,5 +7,5 @@ class WrappedString {
 }
 
 class WrappedStringError extends AppError {
-  WrappedStringError(cause): super(cause);
+  WrappedStringError(cause) : super(cause);
 }

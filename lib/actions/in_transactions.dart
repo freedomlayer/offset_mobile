@@ -8,14 +8,16 @@ import '../protocol/compact.dart';
 
 part 'in_transactions.g.dart';
 
-
 @BuiltUnion()
 class InTransactionsAction extends _$InTransactionsAction {
-  static Serializer<InTransactionsAction> get serializer => _$inTransactionsActionSerializer;
+  static Serializer<InTransactionsAction> get serializer =>
+      _$inTransactionsActionSerializer;
 
   InTransactionsAction.back() : super.back();
-  InTransactionsAction.selectInvoice(NodeName nodeName, InvoiceId invoiceId) : super.selectInvoice(nodeName, invoiceId);
-  InTransactionsAction.applyCommit(NodeName nodeName, Commit commit) : super.applyCommit(nodeName, commit);
+  InTransactionsAction.selectInvoice(NodeName nodeName, InvoiceId invoiceId)
+      : super.selectInvoice(nodeName, invoiceId);
+  InTransactionsAction.applyCommit(NodeName nodeName, Commit commit)
+      : super.applyCommit(nodeName, commit);
   InTransactionsAction.resendInvoice() : super.resendInvoice();
   InTransactionsAction.collectInvoice() : super.collectInvoice();
   InTransactionsAction.cancelInvoice() : super.cancelInvoice();

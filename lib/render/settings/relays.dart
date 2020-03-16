@@ -60,9 +60,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
       floatingActionButton: newRelayButton);
 }
 
-Widget _renderNewRelay(
-    NodeName nodeName,
-    NodeState nodeState,
+Widget _renderNewRelay(NodeName nodeName, NodeState nodeState,
     Function(RelaysSettingsAction) queueAction) {
   final Future<void> Function() scanQrCode = () async {
     final relayAddress = await qrScan<RelayAddress>()
@@ -98,11 +96,8 @@ Widget _renderNewRelay(
       backAction: () => queueAction(RelaysSettingsAction.back()));
 }
 
-Widget _renderRelayName(
-    NodeName nodeName,
-    RelayAddress relayAddress,
-    NodeState nodeState,
-    Function(RelaysSettingsAction) queueAction) {
+Widget _renderRelayName(NodeName nodeName, RelayAddress relayAddress,
+    NodeState nodeState, Function(RelaysSettingsAction) queueAction) {
   // Saves current relay name:
   String _relayName = '';
 

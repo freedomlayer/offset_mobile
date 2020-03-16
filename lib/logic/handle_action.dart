@@ -20,8 +20,8 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
   final appView = appState.viewState.match(
       view: (appView) => appView,
       transition: (_a, _b, _c, _d) {
-        logger.w(
-            'handleAction(): Received action $appAction during transition');
+        logger
+            .w('handleAction(): Received action $appAction during transition');
         return null;
       });
 
@@ -89,10 +89,11 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
     }
   }, balances: (balancesAction) {
     if (balancesView != null) {
-      return handleBalancesAction(balancesView, appState.nodesStates, balancesAction);
+      return handleBalancesAction(
+          balancesView, appState.nodesStates, balancesAction);
     } else {
-      logger.w(
-          'handleAction(): Received balances action during incorrect view');
+      logger
+          .w('handleAction(): Received balances action during incorrect view');
       return appState;
     }
   }, settings: (settingsAction) {
@@ -100,8 +101,8 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
       return handleSettingsAction(
           settingsView, appState.nodesStates, settingsAction, rand);
     } else {
-      logger.w(
-          'handleAction(): Received settings action during incorrect view');
+      logger
+          .w('handleAction(): Received settings action during incorrect view');
       return appState;
     }
   });
@@ -124,4 +125,3 @@ AppState handleHomeAction(
           createState(AppView.balances(BalancesView.selectCard())),
       selectSettings: () => createState(AppView.settings(SettingsView.home())));
 }
-
