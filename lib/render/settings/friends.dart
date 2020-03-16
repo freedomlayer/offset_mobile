@@ -27,22 +27,22 @@ Widget renderFriendsSettings(
   return friendsSettingsView.match(
       home: () => _renderHome(nodeName, nodeState, queueAction),
       friendSettings: (friendSettingsView) {
-
-        final nodeOpen = nodeState.inner.match(
-            open: (nodeOpen) => nodeOpen,
-            closed: () => null);
+        final nodeOpen = nodeState.inner
+            .match(open: (nodeOpen) => nodeOpen, closed: () => null);
 
         assert(nodeOpen != null);
 
-        final friendReport = nodeOpen.compactReport.friends[friendSettingsView.friendPublicKey];
+        final friendReport =
+            nodeOpen.compactReport.friends[friendSettingsView.friendPublicKey];
+        assert(friendReport != null);
 
         friendSettingsView.friendPublicKey;
         return renderFriendSettings(
-          nodeName,
-          friendSettingsView,
-          friendReport,
-          (FriendSettingsAction friendSettingsAction) => queueAction(
-              FriendsSettingsAction.friendSettings(friendSettingsAction)));
+            nodeName,
+            friendSettingsView,
+            friendReport,
+            (FriendSettingsAction friendSettingsAction) => queueAction(
+                FriendsSettingsAction.friendSettings(friendSettingsAction)));
       },
       newFriend: (newFriendView) => _renderNewFriend(
           nodeName,
@@ -55,7 +55,6 @@ Widget renderFriendsSettings(
 
 Widget _renderHome(NodeName nodeName, NodeState nodeState,
     Function(FriendsSettingsAction) queueAction) {
-
   final nodeOpen =
       nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
 
@@ -102,23 +101,16 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
       floatingActionButton: newFriendButton);
 }
 
-
-Widget _renderNewFriend(
-    NodeName nodeName,
-    NewFriendView newFriendView,
-    NodeState nodeState,
-    Function(NewFriendAction) queueAction) {
+Widget _renderNewFriend(NodeName nodeName, NewFriendView newFriendView,
+    NodeState nodeState, Function(NewFriendAction) queueAction) {
   return newFriendView.match(
       select: () => _renderSelectNewFriend(nodeName, nodeState, queueAction),
-      name: (friendFile) => _renderNewFriendName(
-          nodeName, friendFile, nodeState, queueAction));
+      name: (friendFile) =>
+          _renderNewFriendName(nodeName, friendFile, nodeState, queueAction));
 }
 
-Widget _renderSelectNewFriend(
-    NodeName nodeName,
-    NodeState nodeState,
+Widget _renderSelectNewFriend(NodeName nodeName, NodeState nodeState,
     Function(NewFriendAction) queueAction) {
-
   final Future<void> Function() scanQrCode = () async {
     final friendFile = await qrScan<FriendFile>()
         .catchError((e) => logger.w('qrScan error: $e'));
@@ -153,12 +145,8 @@ Widget _renderSelectNewFriend(
       backAction: () => queueAction(NewFriendAction.back()));
 }
 
-Widget _renderNewFriendName(
-    NodeName nodeName,
-    FriendFile friendFile,
-    NodeState nodeState,
-    Function(NewFriendAction) queueAction) {
-
+Widget _renderNewFriendName(NodeName nodeName, FriendFile friendFile,
+    NodeState nodeState, Function(NewFriendAction) queueAction) {
   // Saves current relay name:
   String _friendName = '';
 
@@ -185,13 +173,10 @@ Widget _renderNewFriendName(
                     RaisedButton(
                         // TODO: Add some kind of validation, so that we won't have empty named relay.
                         onPressed: () => queueAction(
-                            NewFriendAction.addFriend(
-                                _friendName, 
-                                friendFile)),
+                            NewFriendAction.addFriend(_friendName, friendFile)),
                         child: Text('Ok')),
                     RaisedButton(
-                        onPressed: () =>
-                            queueAction(NewFriendAction.back()),
+                        onPressed: () => queueAction(NewFriendAction.back()),
                         child: Text('Cancel')),
                   ])),
         ])),
@@ -204,11 +189,8 @@ Widget _renderNewFriendName(
       backAction: () => queueAction(NewFriendAction.back()));
 }
 
-Widget _renderShareInfo(
-    NodeName nodeName,
-    NodeState nodeState,
+Widget _renderShareInfo(NodeName nodeName, NodeState nodeState,
     Function(FriendsSettingsAction) queueAction) {
-
   final nodeOpen =
       nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
 
