@@ -65,10 +65,12 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
       Widget trailing;
       if (currencyReport != null) {
         title = Text('${currency.inner}: ${currencyReport.balance.inner}');
-        trailing = FlatButton(child: Icon(Icons.edit),
-            onPressed: friendReport.status.isEnabled 
-            ? () => queueAction(FriendSettingsAction.selectCurrency(currency))
-            : null);
+        trailing = FlatButton(
+            child: Icon(Icons.edit),
+            onPressed: friendReport.status.isEnabled
+                ? () =>
+                    queueAction(FriendSettingsAction.selectCurrency(currency))
+                : null);
       } else {
         title = Text('${currency.inner} (Pending)');
         trailing = FlatButton(
@@ -146,7 +148,122 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
 
 Widget _renderResolve(NodeName nodeName, PublicKey friendPublicKey,
     FriendReport friendReport, Function(FriendSettingsAction) queueAction) {
-  throw UnimplementedError();
+  final channelInconsistentReport = friendReport.channelStatus.match(
+      inconsistent: (channelInconsistentReport) => channelInconsistentReport,
+      consistent: (_) => null);
+
+  final localResetTerms = channelInconsistentReport.localResetTerms;
+  final optRemoteResetTerms = channelInconsistentReport.optRemoteResetTerms;
+
+  final List<DataRow> rows = [];
+  for (final entry in friendReport.currencyConfigs.entries) {
+    final currency = entry.key;
+    final configReport = entry.value;
+
+    Widget localData;
+
+    final localBalance = localResetTerms[currency];
+    if (localBalance != null) {
+      localData = Column(children: [
+        Expanded(child: Text('${currency.inner}: ${localBalance.inner}')),
+        Expanded(child: Text('limit: ${configReport.remoteMaxDebt.inner}')),
+      ]);
+    } else {
+      localData = Column(children: [
+        Expanded(child: Text('${currency.inner} (Pending)')),
+        Expanded(child: Text('limit: ${configReport.remoteMaxDebt.inner}')),
+      ]);
+    }
+
+    Widget remoteData;
+    if (optRemoteResetTerms == null) {
+      remoteData = Text('?');
+    } else {
+      final remoteResetTerms = optRemoteResetTerms;
+      assert(remoteResetTerms != null);
+
+      final remoteBalance = remoteResetTerms.balanceForReset[currency];
+      if (remoteBalance == null) {
+        remoteData = Text('Empty');
+      } else {
+        remoteData = Text('${remoteBalance.inner}');
+      }
+    }
+
+    rows.add(DataRow(cells: [DataCell(localData), DataCell(remoteData)]));
+  }
+
+  final dataTable = DataTable(columns: [
+    DataColumn(label: Text('Local')),
+    DataColumn(label: Text('Remote'))
+  ], rows: rows);
+
+  final body = SafeArea(
+      top: false,
+      bottom: false,
+      child: Center(
+          child: Column(children: [
+        Spacer(flex: 1),
+        Expanded(
+            flex: 1, child: Text('${nodeName.inner} / ${friendReport.name}')),
+        Expanded(flex: 16, child: dataTable),
+        Expanded(
+            child: Container(
+                padding: EdgeInsets.only(top: 20.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Spacer(flex: 1),
+                      Expanded(
+                          flex: 2,
+                          child: RaisedButton(
+                            child: const Text('Accept'),
+                            onPressed: optRemoteResetTerms != null
+                                ? () =>
+                                    queueAction(FriendSettingsAction.resolve())
+                                : null,
+                          )),
+                      Spacer(flex: 1),
+                    ]))),
+      ])));
+
+  return frame(
+      title: Text('Resolve inconsistency'),
+      body: body,
+      backAction: () => queueAction(FriendSettingsAction.back()));
+}
+
+String _percentValidator(String percentString) {
+  if (percentString.isEmpty) {
+    return 'Can not be empty!';
+  }
+
+  final percent = double.parse(percentString);
+  if (percent == null) {
+    return 'Invalid percent value!';
+  }
+
+  if (percent < 0.0 || percent > 100.0) {
+    return 'Value out of bounds';
+  }
+  return null;
+}
+
+String _addValidator(String addString) {
+  if (addString.isEmpty) {
+    return 'Can not be empty!';
+  }
+
+  final add = int.parse(addString);
+  if (add == null) {
+    return 'Invalid percent value!';
+  }
+
+  if (add < 0) {
+    return 'Value must be non negative!';
+  }
+
+  return null;
 }
 
 Widget _renderCurrencySettings(
@@ -155,7 +272,150 @@ Widget _renderCurrencySettings(
     Currency currency,
     FriendReport friendReport,
     Function(FriendSettingsAction) queueAction) {
-  throw UnimplementedError();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  int _mul;
+  int _add;
+  U128 _creditLimit;
+
+  final _submitForm = () {
+    final FormState form = _formKey.currentState;
+
+    if (!form.validate()) {
+      // Form is not valid
+    } else {
+      // Save form fields:
+      form.save();
+      final rate = Rate((b) => b
+        ..mul = _mul
+        ..add = _add);
+
+      queueAction(
+          FriendSettingsAction.updateCurrency(currency, _creditLimit, rate));
+    }
+  };
+
+  final formBody =
+      StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+    return Form(
+        key: _formKey,
+        autovalidate: true,
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          children: <Widget>[
+            TextFormField(
+              decoration: const InputDecoration(
+                icon: const Icon(Icons.cake),
+                hintText: 'Maximum amount friend can owe me',
+                labelText: 'Credit limit',
+              ),
+              validator: _creditLimitValidator,
+              keyboardType: TextInputType.number,
+              onSaved: (creditLimitString) =>
+                  _creditLimit = U128(BigInt.tryParse(creditLimitString)),
+            ),
+            Row(children: [
+              Expanded(
+                  flex: 8,
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.cake),
+                      hintText: 'Percent commission',
+                      labelText: 'Percent',
+                    ),
+                    validator: _percentValidator,
+                    keyboardType: TextInputType.number,
+                    onSaved: (percentString) => _mul =
+                        ((double.parse(percentString) / 100.0) * (1 << 32))
+                            .ceil(),
+                  )),
+              Expanded(flex: 1, child: Text('% + ')),
+              Expanded(
+                  flex: 8,
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.cake),
+                      hintText: 'Constant commission',
+                      labelText: 'Constant',
+                    ),
+                    validator: _addValidator,
+                    keyboardType: TextInputType.number,
+                    onSaved: (addString) => _add = int.parse(addString),
+                  )),
+            ]),
+            Container(
+                padding: EdgeInsets.only(top: 20.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Spacer(flex: 1),
+                      Expanded(
+                          flex: 2,
+                          child: RaisedButton(
+                            child: const Text('Ok'),
+                            onPressed: _submitForm,
+                          )),
+                      Spacer(flex: 1),
+                      Expanded(
+                          flex: 2,
+                          child: RaisedButton(
+                            child: const Text('Cancel'),
+                            onPressed: () =>
+                                queueAction(FriendSettingsAction.back()),
+                          )),
+                      Spacer(flex: 1),
+                    ])),
+          ],
+        ));
+  });
+
+  // TODO: Possibly take more specific arguments for this function,
+  // so that the following logic will be done on the outside?
+  final currencyConfig = friendReport.currencyConfigs[currency];
+  assert(currencyConfig != null);
+
+  final channelConsistentReport = friendReport.channelStatus.match(
+      consistent: (channelConsistentReport) => channelConsistentReport,
+      inconsistent: (_) => null);
+
+  assert(channelConsistentReport != null);
+
+  final currencyReport = channelConsistentReport.currencyReports[currency];
+  assert(currencyReport != null);
+
+  final body = SafeArea(
+      top: false,
+      bottom: false,
+      child: Center(
+          child: Column(children: [
+        Spacer(flex: 1),
+        Expanded(
+            flex: 1,
+            child: Text(
+                '${nodeName.inner} / ${friendReport.name} / ${currency.inner}')),
+        Expanded(
+            flex: 1,
+            child: SwitchListTile(
+                title: Text('Open'),
+                value: currencyConfig.isOpen,
+                onChanged: (bool newValue) {
+                  if (newValue == true) {
+                    queueAction(FriendSettingsAction.openCurrency(currency));
+                  } else {
+                    queueAction(FriendSettingsAction.closeCurrency(currency));
+                  }
+                })),
+        Expanded(
+            flex: 1,
+            child: ListTile(
+                title: Text('Balance: ${currencyReport.balance.inner}'))),
+        Expanded(flex: 16, child: formBody),
+      ])));
+
+  return frame(
+      title: Text('Currency Settings'),
+      body: body,
+      backAction: () => queueAction(FriendSettingsAction.back()));
 }
 
 String _currencyNameValidator(String currencyName) {
