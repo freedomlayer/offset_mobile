@@ -62,10 +62,21 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
 
       final currencyReport = currencyReports[currency];
       Widget title;
+      Widget trailing;
       if (currencyReport != null) {
         title = Text('${currency.inner}: ${currencyReport.balance.inner}');
+        trailing = FlatButton(child: Icon(Icons.edit),
+            onPressed: friendReport.status.isEnabled 
+            ? () => queueAction(FriendSettingsAction.selectCurrency(currency))
+            : null);
       } else {
         title = Text('${currency.inner} (Pending)');
+        trailing = FlatButton(
+            child: Icon(Icons.delete),
+            onPressed: friendReport.status.isEnabled
+                ? () =>
+                    queueAction(FriendSettingsAction.removeCurrency(currency))
+                : null);
       }
 
       final double ratePercent = (configReport.rate.mul / (1 << 32)) * 100;
@@ -77,6 +88,7 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
         title: title,
         subtitle: subtitle,
         enabled: friendReport.status.isEnabled,
+        trailing: trailing,
       ));
     }
     return ListView(children: children);
@@ -84,7 +96,11 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
 
   final body = Center(
       child: Column(children: [
-    Expanded(flex: 1, child: ListTile(title: Text('${nodeName.inner} / ${friendReport.name}'))),
+    Expanded(
+        flex: 1,
+        child: ListTile(
+            title: Center(
+                child: Text('${nodeName.inner} / ${friendReport.name}')))),
     Expanded(
         flex: 1,
         child: SwitchListTile(
@@ -97,10 +113,8 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
                 queueAction(FriendSettingsAction.disableFriend());
               }
             })),
-
-    // TODO: Possibly move "unfriend" to a place where it is less likely to be clicked
-    // on accidentally? Maybe some drawer that opens when three dots are clicked?
-    Expanded(flex: 1, child: ListTile(title: Text('Currencies'))),
+    Expanded(
+        flex: 1, child: ListTile(title: Center(child: Text('Currencies')))),
     Expanded(flex: 10, child: channelInfo),
   ]));
 
