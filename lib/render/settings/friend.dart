@@ -31,6 +31,8 @@ Widget renderFriendSettings(
           nodeName, friendPublicKey, friendReport, queueAction));
 }
 
+enum FriendPopup { unfriend }
+
 Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
     FriendReport friendReport, Function(FriendSettingsAction) queueAction) {
   // TODO:
@@ -54,11 +56,6 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
 
     // TODO: Possibly move "unfriend" to a place where it is less likely to be clicked
     // on accidentally? Maybe some drawer that opens when three dots are clicked?
-    Expanded(
-        flex: 1,
-        child: ListTile(
-            title: Text('Unfriend'),
-            onTap: () => queueAction(FriendSettingsAction.removeFriend()))),
     Expanded(flex: 1, child: ListTile(title: Text('Currencies'))),
     Expanded(flex: 10, child: listView),
   ]));
@@ -70,11 +67,20 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
       label: Text('New Currency'),
       icon: Icon(Icons.add));
 
+  final popupMenuButton = PopupMenuButton<FriendPopup>(
+   onSelected: (FriendPopup _result) => queueAction(FriendSettingsAction.removeFriend()),
+    itemBuilder: (BuildContext context) => <PopupMenuEntry<FriendPopup>>[
+      const PopupMenuItem<FriendPopup>(
+        value: FriendPopup.unfriend,
+        child: Text('Unfriend'),
+      )]);
+
   return frame(
       title: Text('${nodeName.inner}: Friend Settings'),
       body: body,
       backAction: () => queueAction(FriendSettingsAction.back()),
-      floatingActionButton: friendReport.status.isEnabled ? newCurrencyButton : null);
+      floatingActionButton: friendReport.status.isEnabled ? newCurrencyButton : null,
+      actions: <Widget>[popupMenuButton]);
 }
 
 Widget _renderResolve(NodeName nodeName, PublicKey friendPublicKey,
