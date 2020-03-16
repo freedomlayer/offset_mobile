@@ -27,16 +27,19 @@ class Frame extends StatelessWidget {
   final Widget _body;
   final Function() _backAction;
   final Widget _floatingActionButton;
+  final List<Widget> _actions;
 
   Frame(
       {Widget title,
       Widget body,
       Function() backAction,
-      Widget floatingActionButton})
+      Widget floatingActionButton,
+      List<Widget> actions})
       : _title = title,
         _body = body,
         _backAction = backAction,
-        _floatingActionButton = floatingActionButton;
+        _floatingActionButton = floatingActionButton,
+        _actions = actions;
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +60,7 @@ class Frame extends StatelessWidget {
           appBar: AppBar(
             title: _title,
             leading: leading,
+            actions: _actions,
           ),
           body: _body,
           floatingActionButton: _floatingActionButton,
@@ -68,10 +72,12 @@ Widget frame(
     {@required Widget title,
     @required Widget body,
     Function() backAction,
-    Widget floatingActionButton}) {
+    Widget floatingActionButton,
+    List<Widget> actions}) {
   return Frame(
       title: title,
       body: body,
       backAction: backAction,
-      floatingActionButton: floatingActionButton);
+      floatingActionButton: floatingActionButton,
+      actions: actions);
 }
