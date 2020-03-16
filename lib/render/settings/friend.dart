@@ -194,7 +194,7 @@ Widget _renderNewCurrency(NodeName nodeName, PublicKey friendPublicKey,
       // Form is not valid
     } else {
       // Save form fields:
-      form.save(); 
+      form.save();
       final rate = Rate((b) => b
         ..mul = 0
         ..add = 0);
@@ -203,7 +203,6 @@ Widget _renderNewCurrency(NodeName nodeName, PublicKey friendPublicKey,
           FriendSettingsAction.newCurrency(_currency, _creditLimit, rate));
     }
   };
-
 
   final body =
       StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
