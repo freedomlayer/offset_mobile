@@ -84,7 +84,7 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
 
   final body = Center(
       child: Column(children: [
-    Expanded(flex: 1, child: ListTile(title: Text(friendReport.name))),
+    Expanded(flex: 1, child: ListTile(title: Text('${nodeName.inner} / ${friendReport.name}'))),
     Expanded(
         flex: 1,
         child: SwitchListTile(
@@ -122,7 +122,7 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
           ]);
 
   return frame(
-      title: Text('${nodeName.inner}: Friend Settings'),
+      title: Text('Friend Settings'),
       body: body,
       backAction: () => queueAction(FriendSettingsAction.back()),
       floatingActionButton:
