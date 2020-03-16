@@ -18,9 +18,9 @@ AppState handleServerToUserAck(
   // We only adjust view if the view is not currently during transition:
   final viewState = appState1.viewState.match(
       view: (appView) =>
-          ViewState.view(adjustAppView(appView, appState.nodesStates)),
+          ViewState.view(adjustAppView(appView, appState1.nodesStates)),
       transition: (oldView, newView, nextRequests, optPendingRequest) {
-        final adjustOldView = adjustAppView(oldView, appState.nodesStates);
+        final adjustOldView = adjustAppView(oldView, appState1.nodesStates);
         if (adjustOldView != oldView) {
           return ViewState.transition(adjustOldView, adjustOldView, nextRequests, optPendingRequest);
         } else {
