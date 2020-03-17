@@ -274,9 +274,23 @@ Widget _renderCurrencySettings(
     Function(FriendSettingsAction) queueAction) {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  int _mul;
-  int _add;
-  U128 _creditLimit;
+  // TODO: Possibly take more specific arguments for this function,
+  // so that the following logic will be done on the outside?
+  final currencyConfig = friendReport.currencyConfigs[currency];
+  assert(currencyConfig != null);
+
+  final channelConsistentReport = friendReport.channelStatus.match(
+      consistent: (channelConsistentReport) => channelConsistentReport,
+      inconsistent: (_) => null);
+
+  assert(channelConsistentReport != null);
+
+  final currencyReport = channelConsistentReport.currencyReports[currency];
+  assert(currencyReport != null);
+
+  int _mul = currencyConfig.rate.mul;
+  int _add = currencyConfig.rate.add;
+  U128 _creditLimit = currencyConfig.remoteMaxDebt;
 
   final _submitForm = () {
     final FormState form = _formKey.currentState;
@@ -309,6 +323,7 @@ Widget _renderCurrencySettings(
                 hintText: 'Maximum amount friend can owe me',
                 labelText: 'Credit limit',
               ),
+              initialValue: '${_creditLimit.inner}',
               validator: _creditLimitValidator,
               keyboardType: TextInputType.number,
               onSaved: (creditLimitString) =>
@@ -323,6 +338,7 @@ Widget _renderCurrencySettings(
                       hintText: 'Percent commission',
                       labelText: 'Percent',
                     ),
+                    initialValue: ((_mul / (1 << 32)) * 100.0).toStringAsFixed(2),
                     validator: _percentValidator,
                     keyboardType: TextInputType.number,
                     onSaved: (percentString) => _mul =
@@ -338,6 +354,7 @@ Widget _renderCurrencySettings(
                       hintText: 'Constant commission',
                       labelText: 'Constant',
                     ),
+                    initialValue: '$_add',
                     validator: _addValidator,
                     keyboardType: TextInputType.number,
                     onSaved: (addString) => _add = int.parse(addString),
@@ -369,19 +386,6 @@ Widget _renderCurrencySettings(
         ));
   });
 
-  // TODO: Possibly take more specific arguments for this function,
-  // so that the following logic will be done on the outside?
-  final currencyConfig = friendReport.currencyConfigs[currency];
-  assert(currencyConfig != null);
-
-  final channelConsistentReport = friendReport.channelStatus.match(
-      consistent: (channelConsistentReport) => channelConsistentReport,
-      inconsistent: (_) => null);
-
-  assert(channelConsistentReport != null);
-
-  final currencyReport = channelConsistentReport.currencyReports[currency];
-  assert(currencyReport != null);
 
   final body = SafeArea(
       top: false,
@@ -394,7 +398,7 @@ Widget _renderCurrencySettings(
             child: Text(
                 '${nodeName.inner} / ${friendReport.name} / ${currency.inner}')),
         Expanded(
-            flex: 1,
+            flex: 2,
             child: SwitchListTile(
                 title: Text('Open'),
                 value: currencyConfig.isOpen,
@@ -406,7 +410,7 @@ Widget _renderCurrencySettings(
                   }
                 })),
         Expanded(
-            flex: 1,
+            flex: 2,
             child: ListTile(
                 title: Text('Balance: ${currencyReport.balance.inner}'))),
         Expanded(flex: 16, child: formBody),
