@@ -92,7 +92,7 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
       ));
     }
     return Column(children: [
-      Expanded(child: ListTile(title: Center(child: Text('Currencies')))),
+      Text('Currencies'),
       Expanded(child: ListView(children: children)),
     ]);
   });
