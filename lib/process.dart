@@ -65,6 +65,7 @@ Future<bool> _canBinaryRun(String filePath) async {
   }
 }
 
+// TODO: Change logic to be both fast enough, but also allowing updates.
 Future<String> _selectBinary(String appDir, List<String> filenames) async {
   // Create the bin directory (In case it does not already exist):
   await Directory(path.join(appDir, BIN_DIR)).create();
@@ -72,7 +73,8 @@ Future<String> _selectBinary(String appDir, List<String> filenames) async {
   // Check if we have already chosen a binary path:
   final binaryPath = path.join(appDir, BIN_DIR, STCOMPACT);
   if (File(binaryPath).existsSync()) {
-    return binaryPath;
+    await File(binaryPath).delete();
+    // return binaryPath;
   }
 
   // Check if each of the binaries is runnable.
