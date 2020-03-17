@@ -44,9 +44,39 @@ Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
       backAction: () => queueAction(BalancesAction.back()));
 }
 
-Map<Currency, I128> calcBalances(BuiltMap<PublicKey, FriendReport> friends) {
-  // TODO:
-  return Map<Currency, I128>();
+/// Obtain balances for a single friend
+Map<Currency, BigInt> calcFriendBalances(FriendReport friendReport) {
+  return friendReport.channelStatus.match(
+      consistent: (channelConsistentReport) {
+    return channelConsistentReport.currencyReports.asMap().map(
+        (currency, currencyReport) =>
+            MapEntry<Currency, BigInt>(currency, currencyReport.balance.inner));
+  }, inconsistent: (channelInconsistentReport) {
+    return channelInconsistentReport.localResetTerms.asMap().map(
+        (currency, i128) => MapEntry<Currency, BigInt>(currency, i128.inner));
+  });
+}
+
+/// Calc balances total for a card
+Map<Currency, BigInt> calcBalances(BuiltMap<PublicKey, FriendReport> friends) {
+  final balances = Map<Currency, BigInt>();
+
+  for (final entry in friends.entries) {
+    final friendReport = entry.value;
+    final friendBalances = calcFriendBalances(friendReport);
+    for (final balanceEntry in friendBalances.entries) {
+      final currency = balanceEntry.key;
+      final balance = balanceEntry.value;
+
+      if (balances.containsKey(currency)) {
+        balances[currency] += balance;
+      } else {
+        balances[currency] = balance;
+      }
+    }
+  }
+
+  return balances;
 }
 
 Widget _renderCardBalances(
@@ -61,13 +91,14 @@ Widget _renderCardBalances(
   assert(nodeOpen != null);
 
   final balances = calcBalances(nodeOpen.compactReport.friends);
-  final sortedCurrencies = balances.keys.toList()..sort();
+  final sortedCurrencies = balances.keys.toList()
+    ..sort((c1, c2) => c1.inner.compareTo(c2.inner));
   final rows = <DataRow>[];
   for (final currency in sortedCurrencies) {
     final balance = balances[currency];
     rows.add(DataRow(cells: [
       DataCell(Text('${currency.inner}')),
-      DataCell(Text('${balance.inner}'))
+      DataCell(Text('$balance'))
     ]));
   }
 
