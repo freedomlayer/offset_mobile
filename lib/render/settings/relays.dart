@@ -39,6 +39,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
     children.add(ListTile(
       key: Key(namedRelayAddress.publicKey.inner),
       title: Text(namedRelayAddress.name),
+      leading: Icon(Icons.network_cell),
       trailing: FlatButton(
           child: Icon(Icons.delete),
           onPressed: () => queueAction(

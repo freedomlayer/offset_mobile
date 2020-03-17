@@ -69,6 +69,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
     children.add(ListTile(
       key: Key(publicKey.inner),
       title: Text(friendReport.name),
+      leading: Icon(Icons.person),
       trailing: Icon(friendReport.liveness.isOnline
           ? Icons.bluetooth_connected
           : Icons.bluetooth_disabled),

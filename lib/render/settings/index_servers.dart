@@ -40,6 +40,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
     children.add(ListTile(
       key: Key(namedIndexServerAddress.publicKey.inner),
       title: Text(namedIndexServerAddress.name),
+      leading: Icon(Icons.computer),
       trailing: FlatButton(
           child: Icon(Icons.remove),
           onPressed: () => queueAction(IndexServersSettingsAction.removeIndex(
