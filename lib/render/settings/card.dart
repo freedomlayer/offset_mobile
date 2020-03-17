@@ -37,6 +37,8 @@ Widget renderCardSettings(CardSettingsView cardSettingsView,
                   indexServersSettingsAction))));
 }
 
+enum CardPopup { remove }
+
 Widget _renderCardSettingsHome(NodeName nodeName, NodeState nodeState,
     Function(CardSettingsAction) queueAction) {
   final children = <Widget>[];
@@ -76,19 +78,23 @@ Widget _renderCardSettingsHome(NodeName nodeName, NodeState nodeState,
       enabled: nodeState.inner.isOpen,
       onTap: () => queueAction(CardSettingsAction.selectIndexServers())));
 
-  final onPressed = nodeState.isEnabled
-      ? null
-      : () {
-          queueAction(CardSettingsAction.remove());
-        };
-  children.add(Center(
-      child: RaisedButton(onPressed: onPressed, child: Text('Remove card'))));
-
   final listView =
       ListView(padding: const EdgeInsets.all(8), children: children);
+
+  final popupMenuButton = PopupMenuButton<CardPopup>(
+      onSelected: (CardPopup _result) => 
+          queueAction(CardSettingsAction.remove()),
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<CardPopup>>[
+            PopupMenuItem<CardPopup>(
+              value: CardPopup.remove,
+              child: Text('Remove'),
+              enabled: !nodeState.isEnabled,
+            )
+          ]);
 
   return frame(
       title: Text('Card settings'),
       body: listView,
-      backAction: () => queueAction(CardSettingsAction.back()));
+      backAction: () => queueAction(CardSettingsAction.back()),
+      actions: <Widget>[popupMenuButton]);
 }
