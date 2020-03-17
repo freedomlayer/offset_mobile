@@ -155,7 +155,12 @@ Widget _renderResolve(NodeName nodeName, PublicKey friendPublicKey,
       consistent: (_) => null);
 
   final localResetTerms = channelInconsistentReport.localResetTerms;
-  final optRemoteResetTerms = channelInconsistentReport.optRemoteResetTerms;
+  final optRemoteProposal =
+      channelInconsistentReport.optRemoteResetTerms?.balanceForReset?.toMap();
+  Map<Currency, I128> optRemoteProposalMap;
+  if (optRemoteProposal != null) {
+    optRemoteProposalMap = Map<Currency, I128>.from(optRemoteProposal);
+  }
 
   final List<DataRow> rows = [];
   for (final entry in friendReport.currencyConfigs.entries) {
@@ -166,25 +171,21 @@ Widget _renderResolve(NodeName nodeName, PublicKey friendPublicKey,
 
     final localBalance = localResetTerms[currency];
     if (localBalance != null) {
-      localData = Column(children: [
-        Expanded(child: Text('${currency.inner}: ${localBalance.inner}')),
-        Expanded(child: Text('limit: ${configReport.remoteMaxDebt.inner}')),
-      ]);
+      localData = Text('${currency.inner}: ${localBalance.inner}\n' +
+          'limit: ${configReport.remoteMaxDebt.inner}');
     } else {
-      localData = Column(children: [
-        Expanded(child: Text('${currency.inner} (Pending)')),
-        Expanded(child: Text('limit: ${configReport.remoteMaxDebt.inner}')),
-      ]);
+      localData = Text('${currency.inner} (Pending)\n' +
+          'limit: ${configReport.remoteMaxDebt.inner}');
     }
 
     Widget remoteData;
-    if (optRemoteResetTerms == null) {
+    if (optRemoteProposalMap == null) {
       remoteData = Text('?');
     } else {
-      final remoteResetTerms = optRemoteResetTerms;
-      assert(remoteResetTerms != null);
+      final remoteProposalMap = optRemoteProposalMap;
+      assert(remoteProposalMap != null);
 
-      final remoteBalance = remoteResetTerms.balanceForReset[currency];
+      final remoteBalance = remoteProposalMap.remove(currency);
       if (remoteBalance == null) {
         remoteData = Text('Empty');
       } else {
@@ -193,6 +194,19 @@ Widget _renderResolve(NodeName nodeName, PublicKey friendPublicKey,
     }
 
     rows.add(DataRow(cells: [DataCell(localData), DataCell(remoteData)]));
+  }
+
+  if (optRemoteProposalMap != null) {
+    final remoteProposalMap = optRemoteProposal;
+    for (final entry in remoteProposalMap.entries) {
+      final currency = entry.key;
+      final remoteBalance = entry.value;
+
+      Widget remoteData;
+
+      remoteData = Text('${currency.inner}: ${remoteBalance.inner}');
+      rows.add(DataRow(cells: [DataCell(Text('Empty')), DataCell(remoteData)]));
+    }
   }
 
   final dataTable = DataTable(columns: [
@@ -205,28 +219,27 @@ Widget _renderResolve(NodeName nodeName, PublicKey friendPublicKey,
       bottom: false,
       child: Center(
           child: Column(children: [
-        Spacer(flex: 1),
-        Expanded(
-            flex: 1, child: Text('${nodeName.inner} / ${friendReport.name}')),
-        Expanded(flex: 16, child: dataTable),
-        Expanded(
-            child: Container(
-                padding: EdgeInsets.only(top: 20.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Spacer(flex: 1),
-                      Expanded(
-                          flex: 2,
-                          child: RaisedButton(
-                            child: const Text('Accept'),
-                            onPressed: optRemoteResetTerms != null
-                                ? () =>
-                                    queueAction(FriendSettingsAction.resolve())
-                                : null,
-                          )),
-                      Spacer(flex: 1),
-                    ]))),
+        SizedBox(height: 10),
+        Text('${nodeName.inner} / ${friendReport.name}'),
+        SizedBox(height: 20),
+        dataTable,
+        SizedBox(height: 20),
+        Container(
+            padding: EdgeInsets.only(top: 20.0),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Spacer(flex: 1),
+                  Expanded(
+                      flex: 2,
+                      child: RaisedButton(
+                        child: const Text('Accept'),
+                        onPressed: optRemoteProposal != null
+                            ? () => queueAction(FriendSettingsAction.resolve())
+                            : null,
+                      )),
+                  Spacer(flex: 1),
+                ])),
       ])));
 
   return frame(
