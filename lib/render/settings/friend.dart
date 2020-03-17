@@ -41,15 +41,13 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
   final Widget channelInfo = friendReport.channelStatus.match(
       inconsistent: (_channelInconsistentReport) {
     return Center(
-        child: Row(children: [
-      Expanded(flex: 1, child: Text('Inconsistency')),
-      Spacer(flex: 1),
-      Expanded(
-          flex: 1,
-          child: RaisedButton(
-              child: Text('Resolve inconsistency'),
-              onPressed: () =>
-                  queueAction(FriendSettingsAction.selectResolve()))),
+        child: Column(children: [
+      SizedBox(height: 20),
+      Text('Inconsistency'),
+      SizedBox(height: 20),
+      RaisedButton(
+          child: Text('Resolve inconsistency'),
+          onPressed: () => queueAction(FriendSettingsAction.selectResolve())),
     ]));
   }, consistent: (channelConsistentReport) {
     final currencyReports = channelConsistentReport.currencyReports;
@@ -93,7 +91,10 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
         trailing: trailing,
       ));
     }
-    return ListView(children: children);
+    return Column(children: [
+      Expanded(child: ListTile(title: Center(child: Text('Currencies')))),
+      Expanded(child: ListView(children: children)),
+    ]);
   });
 
   final body = Center(
@@ -115,17 +116,18 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
                 queueAction(FriendSettingsAction.disableFriend());
               }
             })),
-    Expanded(
-        flex: 1, child: ListTile(title: Center(child: Text('Currencies')))),
     Expanded(flex: 10, child: channelInfo),
   ]));
 
   // TODO: Possibly move "New Currency" to a place where it is less likely to be clicked
   // on accidentally? Maybe some drawer that opens when three dots are clicked?
-  final newCurrencyButton = FloatingActionButton.extended(
-      onPressed: () => queueAction(FriendSettingsAction.selectNewCurrency()),
-      label: Text('New Currency'),
-      icon: Icon(Icons.add));
+  final newCurrencyButton = friendReport.channelStatus.isConsistent
+      ? FloatingActionButton.extended(
+          onPressed: () =>
+              queueAction(FriendSettingsAction.selectNewCurrency()),
+          label: Text('New Currency'),
+          icon: Icon(Icons.add))
+      : null;
 
   final popupMenuButton = PopupMenuButton<FriendPopup>(
       onSelected: (FriendPopup _result) =>
@@ -338,7 +340,8 @@ Widget _renderCurrencySettings(
                       hintText: 'Percent commission',
                       labelText: 'Percent',
                     ),
-                    initialValue: ((_mul / (1 << 32)) * 100.0).toStringAsFixed(2),
+                    initialValue:
+                        ((_mul / (1 << 32)) * 100.0).toStringAsFixed(2),
                     validator: _percentValidator,
                     keyboardType: TextInputType.number,
                     onSaved: (percentString) => _mul =
@@ -385,7 +388,6 @@ Widget _renderCurrencySettings(
           ],
         ));
   });
-
 
   final body = SafeArea(
       top: false,
