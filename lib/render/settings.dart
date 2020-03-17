@@ -54,6 +54,7 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
     final cardEntry = ListTile(
       key: Key(nodeName.inner),
       title: Text('${nodeName.inner}'),
+      leading: Icon(Icons.credit_card),
       trailing: nodeState.inner.isOpen
           ? Icon(Icons.control_point)
           : Icon(Icons.error),
