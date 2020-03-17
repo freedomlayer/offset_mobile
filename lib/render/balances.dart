@@ -44,9 +44,46 @@ Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
       backAction: () => queueAction(BalancesAction.back()));
 }
 
+Map<Currency, I128> calcBalances(BuiltMap<PublicKey, FriendReport> friends) {
+  // TODO:
+  return Map<Currency, I128>();
+}
+
 Widget _renderCardBalances(
     NodeName nodeName,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(BalancesAction) queueAction) {
-  throw UnimplementedError();
+  final nodeState = nodesStates[nodeName];
+  assert(nodeState != null);
+
+  final nodeOpen =
+      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
+  assert(nodeOpen != null);
+
+  final balances = calcBalances(nodeOpen.compactReport.friends);
+  final sortedCurrencies = balances.keys.toList()..sort();
+  final rows = <DataRow>[];
+  for (final currency in sortedCurrencies) {
+    final balance = balances[currency];
+    rows.add(DataRow(cells: [
+      DataCell(Text('${currency.inner}')),
+      DataCell(Text('${balance.inner}'))
+    ]));
+  }
+
+  final body = Center(
+      child: Column(children: [
+    SizedBox(height: 10),
+    Text('${nodeName.inner}'),
+    SizedBox(height: 10),
+    DataTable(columns: [
+      DataColumn(label: Text('Currency')),
+      DataColumn(label: Text('Balance')),
+    ], rows: rows)
+  ]));
+
+  return frame(
+      title: Text('Card Balances'),
+      body: body,
+      backAction: () => queueAction(BalancesAction.back()));
 }
