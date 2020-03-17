@@ -42,7 +42,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
       title: Text(namedIndexServerAddress.name),
       leading: Icon(Icons.computer),
       trailing: FlatButton(
-          child: Icon(Icons.remove),
+          child: Icon(Icons.delete),
           onPressed: () => queueAction(IndexServersSettingsAction.removeIndex(
               namedIndexServerAddress.publicKey))),
     ));
