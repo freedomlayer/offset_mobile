@@ -140,8 +140,24 @@ InTransactionsView adjustInTransactionsView(
 
 BalancesView adjustBalancesView(
     BalancesView balancesView, BuiltMap<NodeName, NodeState> nodesStates) {
-  // TODO:
-  throw UnimplementedError();
+
+  return balancesView.match(
+      selectCard: () => balancesView,
+      cardBalances: (nodeName) {
+        final nodeState = nodesStates[nodeName];
+        if (nodeState == null) {
+          return BalancesView.selectCard();
+        }
+
+        final nodeOpen = nodeState.inner.match(
+            open: (nodeOpen) => nodeOpen,
+            closed: () => null);
+
+        if (nodeOpen == null) {
+          return BalancesView.selectCard();
+        }
+        return balancesView;
+      });
 }
 
 SettingsView adjustSettingsView(
