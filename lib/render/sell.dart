@@ -96,6 +96,7 @@ Widget _renderInvoiceDetails(
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           children: <Widget>[
+            // TODO: Choice for currency
             /*
             TextFormField(
               decoration: const InputDecoration(
