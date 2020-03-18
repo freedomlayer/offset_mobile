@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 
 import '../protocol/protocol.dart';
+import '../protocol/file.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
+
+import 'utils/share_file.dart';
+import 'utils/qr_show.dart';
 
 import 'frame.dart';
 
@@ -201,7 +205,44 @@ Widget _renderSendInvoice(
     InvoiceId invoiceId,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(InTransactionsAction) queueAction) {
-  throw UnimplementedError();
+
+  final nodeState = nodesStates[nodeName];
+  assert(nodeState != null);
+
+  final nodeOpen =
+      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
+  assert(nodeOpen != null);
+
+  final openInvoice = nodeOpen.compactReport.openInvoices[invoiceId];
+  assert(openInvoice != null);
+
+  final invoiceFile = InvoiceFile((b) => b
+      ..invoiceId = invoiceId
+      ..currency = openInvoice.currency
+      ..destPublicKey = nodeOpen.compactReport.localPublicKey
+      ..destPayment = openInvoice.totalDestPayment
+      ..description = openInvoice.description);
+
+  final body = Center(
+      child: Column(children: [
+    SizedBox(height: 20),
+    Center(
+        child: Text(
+            'Send invoice to buyer')),
+    Center(child: qrShow<InvoiceFile>(invoiceFile)),
+    SizedBox(height: 20),
+    Center(
+        child: RaisedButton(
+            // TODO: Create a better name for the invoice file:
+            onPressed: () async =>
+                await shareFile<InvoiceFile>(invoiceFile, 'invoice.$INVOICE_EXT'),
+            child: Text('Send File'))),
+  ]));
+
+  return frame(
+      title: Text('Send invoice'),
+      body: body,
+      backAction: () => queueAction(InTransactionsAction.back()));
 }
 
 Widget _renderCollected(
