@@ -24,8 +24,23 @@ Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
   final children = <Widget>[];
 
   nodesStates.forEach((nodeName, nodeState) {
-    // We only show open nodes. (We can not configure closed nodes):
-    final cardEntry = nodeState.inner.isOpen
+    // We only card that can be used for payment.
+    final canCardPay = nodeState.inner.match(
+        closed: () => false,
+        open: (openNode) {
+          for (final entry in openNode.compactReport.friends.entries) {
+            final res = entry.value.channelStatus.match(
+                inconsistent: (_) => false,
+                consistent: (channelConsistentReport) =>
+                    channelConsistentReport.currencyReports.isNotEmpty);
+            if (res == true) {
+              return true;
+            }
+          }
+          return false;
+        });
+
+    final cardEntry = canCardPay
         ? ListTile(
             key: Key(nodeName.inner),
             title: Text('${nodeName.inner}'),
