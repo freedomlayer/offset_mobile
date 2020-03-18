@@ -15,6 +15,7 @@ class SellAction extends _$SellAction {
   SellAction.selectCard(NodeName nodeName) : super.selectCard(nodeName);
   SellAction.createInvoice(Currency currency, U128 amount, String description)
       : super.createInvoice(currency, amount, description);
+  // TODO: Add invoiceId argument to variants below:
   SellAction.viewTransaction() : super.viewTransaction();
   SellAction.cancelInvoice() : super.cancelInvoice();
 }
