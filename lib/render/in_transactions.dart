@@ -119,7 +119,81 @@ Widget _renderTransaction(
     InvoiceId invoiceId,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(InTransactionsAction) queueAction) {
-  throw UnimplementedError();
+  final nodeState = nodesStates[nodeName];
+  assert(nodeState != null);
+
+  final nodeOpen =
+      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
+  assert(nodeOpen != null);
+
+  final openInvoice = nodeOpen.compactReport.openInvoices[invoiceId];
+  assert(openInvoice != null);
+
+  final statusString = openInvoice.isCommited ? 'Received' : 'Pending';
+
+  final buttons = openInvoice.isCommited
+      ? (() => Center(
+              child: Column(children: [
+            Center(
+                child: RaisedButton(
+                    onPressed: () =>
+                        queueAction(InTransactionsAction.collectInvoice()),
+                    child: Text('Collect'))),
+            SizedBox(height: 15),
+            Center(
+                child: RaisedButton(
+                    onPressed: () =>
+                        queueAction(InTransactionsAction.cancelInvoice()),
+                    child: Text('Cancel Invoice'))),
+          ])))()
+      : (() => Center(
+              child: Column(children: [
+            Center(child: Text('How to receive commitment?')),
+            SizedBox(height: 10),
+            Center(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                  RaisedButton(
+                      child: Text('QR code'),
+                      onPressed: () => throw UnimplementedError()),
+                  SizedBox(height: 15),
+                  RaisedButton(
+                      child: Text('File'),
+                      onPressed: () => throw UnimplementedError()),
+                ])),
+            RaisedButton(
+                child: Text('Resend invoice'),
+                onPressed: () => throw UnimplementedError()),
+            SizedBox(height: 15),
+            RaisedButton(
+                child: Text('Cancel invoice'),
+                onPressed: () => throw UnimplementedError()),
+          ])))();
+
+  // RaisedButton(onPressed: null, child: Text('Discard'))))();
+
+  final List<Widget> buttonsChild = buttons != null ? [buttons] : [];
+
+  final body = Center(
+      child: Column(
+          children: <Widget>[
+                SizedBox(height: 10),
+                Text('Card: ${nodeName.inner}'),
+                SizedBox(height: 10),
+                Text('Amount: ${openInvoice.totalDestPayment.inner}'),
+                SizedBox(height: 10),
+                Text('Description: ${openInvoice.description}'),
+                SizedBox(height: 10),
+                Text('Status: $statusString'),
+                SizedBox(height: 20),
+              ] +
+              buttonsChild));
+
+  return frame(
+      title: Text('Outgoing transaction'),
+      body: body,
+      backAction: () => queueAction(InTransactionsAction.back()));
 }
 
 Widget _renderSendInvoice(
