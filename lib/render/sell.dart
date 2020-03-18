@@ -79,10 +79,32 @@ String _amountValidator(String amountString) {
   return null;
 }
 
+/// Get all useable currencies for a given card
+List<Currency> _loadCurrencies(NodeState nodeState) {
+  final currencies = Set<Currency>();
+
+  nodeState.inner.match(
+      closed: () => null,
+      open: (openNode) {
+        for (final entry in openNode.compactReport.friends.entries) {
+          entry.value.channelStatus.match(
+              inconsistent: (_) => null,
+              consistent: (channelConsistentReport) =>
+                  channelConsistentReport.currencyReports.forEach(
+                      (currency, _currencyReport) => currencies.add(currency)));
+        }
+      });
+  return List.from(currencies)..sort();
+}
+
 Widget _renderInvoiceDetails(
     NodeName nodeName,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SellAction) queueAction) {
+  final nodeState = nodesStates[nodeName];
+  assert(nodeState != null);
+  final currencies = _loadCurrencies(nodeState);
+  assert(currencies.isNotEmpty);
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -98,8 +120,7 @@ Widget _renderInvoiceDetails(
     } else {
       // Save form fields:
       form.save();
-      queueAction(
-          SellAction.createInvoice(_currency, _amount, _description));
+      queueAction(SellAction.createInvoice(_currency, _amount, _description));
     }
   };
 
@@ -112,19 +133,16 @@ Widget _renderInvoiceDetails(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           children: <Widget>[
             // TODO: Choice for currency
-            /*
-            TextFormField(
-              decoration: const InputDecoration(
-                icon: const Icon(Icons.attach_money),
-                hintText: 'Currency name',
-                labelText: 'Name',
-              ),
-              inputFormatters: [LengthLimitingTextInputFormatter(16)],
-              validator: _currencyNameValidator,
-              keyboardType: TextInputType.text,
-              onSaved: (currencyName) => _currency = Currency(currencyName),
-            ),
-            */
+            DropdownButton<Currency>(
+                hint: Text('Select Currency'),
+                items: currencies.map((currency) => DropdownMenuItem<Currency>(
+                    key: Key(currency.inner),
+                    child: Text('${currency.inner}'),
+                    value: currency)),
+                value: _currency,
+                onChanged: (newCurrency) =>
+                    setState(() => _currency = newCurrency),
+                isExpanded: true),
             TextFormField(
               decoration: const InputDecoration(
                 icon: const Icon(Icons.payment),
@@ -164,8 +182,7 @@ Widget _renderInvoiceDetails(
                           flex: 2,
                           child: RaisedButton(
                             child: const Text('Cancel'),
-                            onPressed: () =>
-                                queueAction(SellAction.back()),
+                            onPressed: () => queueAction(SellAction.back()),
                           )),
                       Spacer(flex: 1),
                     ])),
@@ -178,8 +195,7 @@ Widget _renderInvoiceDetails(
         child: Center(
             child: Column(children: [
           Spacer(flex: 1),
-          Expanded(
-              flex: 1, child: Text('Card: ${nodeName.inner}')),
+          Expanded(flex: 1, child: Text('Card: ${nodeName.inner}')),
           Expanded(flex: 16, child: form),
         ])));
   });
@@ -188,7 +204,6 @@ Widget _renderInvoiceDetails(
       title: Text('New invoice'),
       body: body,
       backAction: () => queueAction(SellAction.back()));
-
 }
 
 Widget _renderSendInvoice(
