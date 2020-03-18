@@ -280,5 +280,27 @@ Widget _renderSelectCardApplyCommit(
     Commit commit,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(InTransactionsAction) queueAction) {
-  throw UnimplementedError();
+  final children = <Widget>[];
+
+  nodesStates.forEach((nodeName, nodeState) {
+    // We only show open nodes. (We can not configure closed nodes):
+    if (!nodeState.inner.isOpen) {
+      return; // continue
+    }
+
+    final cardEntry = ListTile(
+        key: Key(nodeName.inner),
+        title: Text('${nodeName.inner}'),
+        onTap: () =>
+            queueAction(InTransactionsAction.applyCommit(nodeName, commit)));
+    children.add(cardEntry);
+  });
+
+  final listView =
+      ListView(padding: const EdgeInsets.all(8), children: children);
+
+  return frame(
+      title: Text('Apply Commit'),
+      body: listView,
+      backAction: () => queueAction(InTransactionsAction.back()));
 }
