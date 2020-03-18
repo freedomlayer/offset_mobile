@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 
 import '../../protocol/common.dart';
 import '../../protocol/protocol.dart';
+import '../../protocol/file.dart';
 
 part 'in_transactions.g.dart';
 
@@ -18,8 +19,8 @@ class InTransactionsView extends _$InTransactionsView {
       : super.transaction(nodeName, invoiceId);
   InTransactionsView.sendInvoice(NodeName nodeName, InvoiceId invoiceId)
       : super.sendInvoice(nodeName, invoiceId);
-  InTransactionsView.collected(NodeName nodeName, InvoiceId invoiceId)
-      : super.collected(nodeName, invoiceId);
+  InTransactionsView.collected(NodeName nodeName, InvoiceFile invoiceFile)
+      : super.collected(nodeName, invoiceFile);
   InTransactionsView.selectCardApplyCommit(Commit commit)
       : super.selectCardApplyCommit(commit);
 }

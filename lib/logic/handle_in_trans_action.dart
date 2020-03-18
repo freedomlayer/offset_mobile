@@ -4,6 +4,7 @@ import 'package:built_collection/built_collection.dart';
 
 import '../actions/actions.dart';
 import '../protocol/protocol.dart';
+import '../protocol/file.dart';
 import '../state/state.dart';
 
 import '../rand.dart';
@@ -29,7 +30,7 @@ AppState handleInTransactionsAction(
             sendInvoice: (nodeName, invoiceId) => createState(
                 AppView.inTransactions(
                     InTransactionsView.transaction(nodeName, invoiceId))),
-            collected: (nodeName, invoiceId) =>
+            collected: (_a, _b) =>
                 createState(AppView.inTransactions(InTransactionsView.home())),
             selectCardApplyCommit: (_) => createState(AppView.home()));
       },
@@ -162,12 +163,22 @@ AppState _handleCollectInvoice(InTransactionsView inTransactionsView,
     ..requestId = requestId
     ..inner = userToServer);
 
+
   final oldView = AppView.inTransactions(inTransactionsView);
   // TODO: In the future we might want to be able to know the full `commit`
   // value at this point, so that we can later save an `invoice + commit` file.
   // This requires a change at the protocol level
+  final openInvoice = nodeOpen.compactReport.openInvoices[invoiceId];
+  assert(openInvoice != null);
+  final invoiceFile = InvoiceFile((b) => b
+      ..invoiceId = invoiceId
+      ..currency = openInvoice.currency
+      ..destPublicKey = nodeOpen.compactReport.localPublicKey
+      ..destPayment = openInvoice.totalDestPayment
+      ..description = openInvoice.description);
+
   final newView =
-      AppView.inTransactions(InTransactionsView.collected(nodeName, invoiceId));
+      AppView.inTransactions(InTransactionsView.collected(nodeName, invoiceFile));
 
   final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
   final optPendingRequest = OptPendingRequest.none();
