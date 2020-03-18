@@ -19,6 +19,7 @@ Widget renderOutTransactions(
           _renderSendCommit(nodeName, paymentId, nodesStates, queueAction));
 }
 
+/// A single outgoing transaction's information
 class OutTransaction {
   final NodeName nodeName;
   Currency currency;
@@ -26,6 +27,7 @@ class OutTransaction {
   U128 destPayment;
   final String description;
   Generation generation;
+  String status;
 
   OutTransaction(
       {this.nodeName,
@@ -33,10 +35,21 @@ class OutTransaction {
       this.paymentId,
       this.destPayment,
       this.description,
-      this.generation});
+      this.generation,
+      this.status});
 }
 
-List<OutTransaction> loadTransactions(
+String _statusAsString(OpenPaymentStatus openPaymentStatus) {
+  return openPaymentStatus.match(
+      searchingRoute: (_) => 'searching route',
+      foundRoute: (_a, _b) => 'found route',
+      sending: (_) => 'sending',
+      commit: (_a, _b) => 'commit',
+      success: (_a, _b, _c) => 'success',
+      failure: (_) => 'failure');
+}
+
+List<OutTransaction> _loadTransactions(
     BuiltMap<NodeName, NodeState> nodesStates) {
   final outTransactions = <OutTransaction>[];
 
@@ -56,36 +69,45 @@ List<OutTransaction> loadTransactions(
           paymentId: paymentId,
           destPayment: openPayment.destPayment,
           description: openPayment.description,
-          generation: openPayment.generation);
+          generation: openPayment.generation,
+          status: _statusAsString(openPayment.status));
       outTransactions.add(outTransaction);
     });
   });
 
-  throw UnimplementedError();
+  outTransactions.sort((a, b) {
+    final cmpList = [
+      // Sort chronologically
+      a.generation.compareTo(b.generation),
+      // Use PaymentId as tie breaker:
+      a.paymentId.compareTo(b.paymentId)
+    ];
+    for (final val in cmpList) {
+      if (val != 0) {
+        return val;
+      }
+    }
+    return 0;
+  });
+
+  return outTransactions;
 }
 
 Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
     Function(OutTransactionsAction) queueAction) {
-  /*
+  final outTransactions = _loadTransactions(nodesStates);
   final children = <Widget>[];
-  final sortedNodeNames = balances.keys.toList()
-    ..sort((c1, c2) => c1.inner.compareTo(c2.inner));
 
-  for (final nodeEntry in nodesStates.entries) {
-    final nodeName = nodeEntry.key;
-    final nodeState = nodeEntry.value;
-
-    final nodeOpen = nodeState.inner.match(
-        closed: () => null,
-        open: (nodeOpen) => nodeOpen);
-
-    if (nodeOpen == null) {
-      continue;
-    }
-
-    final openPayments = nodeOpen.compactReport.openPayments;
-
-    final outEntry = Card();
+  for (final outTransaction in outTransactions) {
+    final outEntry = Card(
+        key: Key(outTransaction.paymentId.inner),
+        child: InkWell(
+            onTap: () => queueAction(OutTransactionsAction.selectPayment(
+                outTransaction.nodeName, outTransaction.paymentId)),
+            child: Text(
+                '${outTransaction.nodeName.inner}: ${outTransaction.destPayment.inner}\n' +
+                    '${outTransaction.description}\n' +
+                    'status: ${outTransaction.status}')));
     children.add(outEntry);
   }
 
@@ -94,9 +116,7 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
   return frame(
       title: Text('Outgoing transactions'),
       body: listView,
-      backAction: () => queueAction(BalancesAction.back()));
-    */
-  throw UnimplementedError();
+      backAction: () => queueAction(OutTransactionsAction.back()));
 }
 
 Widget _renderTransaction(
@@ -105,6 +125,12 @@ Widget _renderTransaction(
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(OutTransactionsAction) queueAction) {
   throw UnimplementedError();
+  /*
+  return frame(
+      title: Text('Outgoing transaction'),
+      body: body,
+      backAction: () => queueAction(OutTransactionsAction.back()));
+  */
 }
 
 Widget _renderSendCommit(
