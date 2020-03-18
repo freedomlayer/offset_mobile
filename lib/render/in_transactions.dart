@@ -288,7 +288,8 @@ Widget _renderSelectCardApplyCommit(
         ? ListTile(
             key: Key(nodeName.inner),
             title: Text('${nodeName.inner}'),
-            onTap: () => queueAction(InTransactionsAction.applyCommit(nodeName, commit)))
+            onTap: () =>
+                queueAction(InTransactionsAction.applyCommit(nodeName, commit)))
         : ListTile(
             key: Key(nodeName.inner),
             title: Text('${nodeName.inner}'),

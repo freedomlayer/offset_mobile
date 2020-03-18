@@ -163,7 +163,6 @@ AppState _handleCollectInvoice(InTransactionsView inTransactionsView,
     ..requestId = requestId
     ..inner = userToServer);
 
-
   final oldView = AppView.inTransactions(inTransactionsView);
   // TODO: In the future we might want to be able to know the full `commit`
   // value at this point, so that we can later save an `invoice + commit` file.
@@ -171,14 +170,14 @@ AppState _handleCollectInvoice(InTransactionsView inTransactionsView,
   final openInvoice = nodeOpen.compactReport.openInvoices[invoiceId];
   assert(openInvoice != null);
   final invoiceFile = InvoiceFile((b) => b
-      ..invoiceId = invoiceId
-      ..currency = openInvoice.currency
-      ..destPublicKey = nodeOpen.compactReport.localPublicKey
-      ..destPayment = openInvoice.totalDestPayment
-      ..description = openInvoice.description);
+    ..invoiceId = invoiceId
+    ..currency = openInvoice.currency
+    ..destPublicKey = nodeOpen.compactReport.localPublicKey
+    ..destPayment = openInvoice.totalDestPayment
+    ..description = openInvoice.description);
 
-  final newView =
-      AppView.inTransactions(InTransactionsView.collected(nodeName, invoiceFile));
+  final newView = AppView.inTransactions(
+      InTransactionsView.collected(nodeName, invoiceFile));
 
   final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
   final optPendingRequest = OptPendingRequest.none();

@@ -140,7 +140,6 @@ InTransactionsView adjustInTransactionsView(
 
 BalancesView adjustBalancesView(
     BalancesView balancesView, BuiltMap<NodeName, NodeState> nodesStates) {
-
   return balancesView.match(
       selectCard: () => balancesView,
       cardBalances: (nodeName) {
@@ -149,9 +148,8 @@ BalancesView adjustBalancesView(
           return BalancesView.selectCard();
         }
 
-        final nodeOpen = nodeState.inner.match(
-            open: (nodeOpen) => nodeOpen,
-            closed: () => null);
+        final nodeOpen = nodeState.inner
+            .match(open: (nodeOpen) => nodeOpen, closed: () => null);
 
         if (nodeOpen == null) {
           return BalancesView.selectCard();

@@ -82,7 +82,7 @@ Widget _renderCardSettingsHome(NodeName nodeName, NodeState nodeState,
       ListView(padding: const EdgeInsets.all(8), children: children);
 
   final popupMenuButton = PopupMenuButton<CardPopup>(
-      onSelected: (CardPopup _result) => 
+      onSelected: (CardPopup _result) =>
           queueAction(CardSettingsAction.remove()),
       itemBuilder: (BuildContext context) => <PopupMenuEntry<CardPopup>>[
             PopupMenuItem<CardPopup>(

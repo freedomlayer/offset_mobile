@@ -215,7 +215,6 @@ Widget _renderSendInvoice(
     InvoiceId invoiceId,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SellAction) queueAction) {
-
   final nodeState = nodesStates[nodeName];
   assert(nodeState != null);
 
@@ -236,16 +235,14 @@ Widget _renderSendInvoice(
   final body = Center(
       child: Column(children: [
     SizedBox(height: 20),
-    Center(
-        child: Text(
-            'Send invoice to buyer')),
+    Center(child: Text('Send invoice to buyer')),
     Center(child: qrShow<InvoiceFile>(invoiceFile)),
     SizedBox(height: 20),
     Center(
         child: RaisedButton(
             // TODO: Create a better name for the invoice file:
-            onPressed: () async =>
-                await shareFile<InvoiceFile>(invoiceFile, 'invoice.$INVOICE_EXT'),
+            onPressed: () async => await shareFile<InvoiceFile>(
+                invoiceFile, 'invoice.$INVOICE_EXT'),
             child: Text('Send File'))),
     SizedBox(height: 20),
     Center(
