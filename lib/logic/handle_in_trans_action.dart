@@ -39,28 +39,13 @@ AppState handleInTransactionsAction(
               InTransactionsView.transaction(nodeName, invoiceId))),
       applyCommit: (nodeName, commit) => _handleApplyCommit(
           nodeName, commit, inTransactionsView, nodesStates, rand),
-      resendInvoice: () {
-        final newAppState = inTransactionsView.match(
-            home: () => null,
-            transaction: (nodeName, invoiceId) => createState(
-                AppView.inTransactions(
-                    InTransactionsView.sendInvoice(nodeName, invoiceId))),
-            sendInvoice: (_nodeName, _invoiceId) => null,
-            collected: (_nodeName, _invoiceId) => null,
-            selectCardApplyCommit: (_) => null);
-
-        if (newAppState == null) {
-          logger.w(
-              'handleInTransactionsAction(): Received action resendInvoice during wrong view');
-          return createState(AppView.inTransactions(inTransactionsView));
-        } else {
-          return newAppState;
-        }
-      },
-      collectInvoice: () =>
-          _handleCollectInvoice(inTransactionsView, nodesStates, rand),
-      cancelInvoice: () =>
-          _handleCancelInvoice(inTransactionsView, nodesStates, rand));
+      resendInvoice: (nodeName, invoiceId) => createState(
+          AppView.inTransactions(
+              InTransactionsView.sendInvoice(nodeName, invoiceId))),
+      collectInvoice: (nodeName, invoiceId) => _handleCollectInvoice(
+          nodeName, invoiceId, inTransactionsView, nodesStates, rand),
+      cancelInvoice: (nodeName, invoiceId) => _handleCancelInvoice(
+          nodeName, invoiceId, inTransactionsView, nodesStates, rand));
 }
 
 AppState _handleApplyCommit(
@@ -116,30 +101,15 @@ AppState _handleApplyCommit(
         oldView, newView, nextRequests, optPendingRequest));
 }
 
-AppState _handleCollectInvoice(InTransactionsView inTransactionsView,
-    BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
+AppState _handleCollectInvoice(
+    NodeName nodeName,
+    InvoiceId invoiceId,
+    InTransactionsView inTransactionsView,
+    BuiltMap<NodeName, NodeState> nodesStates,
+    Random rand) {
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
     ..viewState = ViewState.view(appView));
-
-  // Find nodeName and invoiceId:
-  NodeName nodeName;
-  InvoiceId invoiceId;
-
-  inTransactionsView.match(
-      home: () => null,
-      transaction: (nodeName0, invoiceId0) {
-        nodeName = nodeName0;
-        invoiceId = invoiceId0;
-      },
-      sendInvoice: (_a, _b) => null,
-      collected: (_a, _b) => null,
-      selectCardApplyCommit: (_) => null);
-
-  if (nodeName == null) {
-    logger.w('_handleCollectInvoice(): node $nodeName does not exist!');
-    return createState(AppView.inTransactions(InTransactionsView.home()));
-  }
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {
@@ -188,32 +158,15 @@ AppState _handleCollectInvoice(InTransactionsView inTransactionsView,
         oldView, newView, nextRequests, optPendingRequest));
 }
 
-AppState _handleCancelInvoice(InTransactionsView inTransactionsView,
-    BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
+AppState _handleCancelInvoice(
+    NodeName nodeName,
+    InvoiceId invoiceId,
+    InTransactionsView inTransactionsView,
+    BuiltMap<NodeName, NodeState> nodesStates,
+    Random rand) {
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
     ..viewState = ViewState.view(appView));
-
-  NodeName nodeName;
-  InvoiceId invoiceId;
-
-  inTransactionsView.match(
-      home: () => null,
-      transaction: (nodeName0, invoiceId0) {
-        nodeName = nodeName0;
-        invoiceId = invoiceId0;
-        return null;
-      },
-      sendInvoice: (nodeName0, invoiceId0) {
-        return null;
-      },
-      collected: (_a, _b) => null,
-      selectCardApplyCommit: (_) => null);
-
-  if (nodeName == null) {
-    logger.w('_handleCancelInvoice(): Incorrect view!');
-    return createState(AppView.inTransactions(inTransactionsView));
-  }
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {

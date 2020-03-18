@@ -140,14 +140,16 @@ Widget _renderTransaction(
               child: Column(children: [
             Center(
                 child: RaisedButton(
-                    onPressed: () =>
-                        queueAction(InTransactionsAction.collectInvoice()),
+                    onPressed: () => queueAction(
+                        InTransactionsAction.collectInvoice(
+                            nodeName, invoiceId)),
                     child: Text('Collect'))),
             SizedBox(height: 15),
             Center(
                 child: RaisedButton(
-                    onPressed: () =>
-                        queueAction(InTransactionsAction.cancelInvoice()),
+                    onPressed: () => queueAction(
+                        InTransactionsAction.cancelInvoice(
+                            nodeName, invoiceId)),
                     child: Text('Cancel Invoice'))),
           ])))()
       : (() => Center(
