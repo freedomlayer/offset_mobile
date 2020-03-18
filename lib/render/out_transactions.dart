@@ -124,13 +124,75 @@ Widget _renderTransaction(
     PaymentId paymentId,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(OutTransactionsAction) queueAction) {
-  throw UnimplementedError();
-  /*
+  final nodeState = nodesStates[nodeName];
+  assert(nodeState != null);
+
+  final nodeOpen =
+      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
+  assert(nodeOpen != null);
+
+  final openPayment = nodeOpen.compactReport.openPayments[paymentId];
+  assert(openPayment != null);
+
+  final feesWrap = openPayment.status.match(
+      searchingRoute: (_) => null,
+      foundRoute: (_, fees) => fees,
+      sending: (fees) => fees,
+      commit: (_, fees) => fees,
+      success: (_a, fees, _b) => fees,
+      failure: (_) => null);
+
+  final fees = feesWrap?.inner;
+  final List<Widget> feesChild = fees != null ? [Text('$fees')] : [];
+
+  final buttons = openPayment.status.match(
+      searchingRoute: (_) => null,
+      foundRoute: (_a, _b) => null,
+      sending: (_) => null,
+      commit: (_, fees) => Center(
+          child: RaisedButton(
+              onPressed: () =>
+                  queueAction(OutTransactionsAction.resendCommit()),
+              child: Text('Resend commit'))),
+      success: (_a, _b, _c) => Center(
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                RaisedButton(
+                    onPressed: () => throw UnimplementedError(),
+                    child: Text('Save Receipt')),
+                RaisedButton(
+                    onPressed: queueAction(OutTransactionsAction.discardPayment(
+                        nodeName, paymentId)),
+                    child: Text('Discard')),
+              ])),
+      failure: (_) =>
+          Center(child: RaisedButton(onPressed: null, child: Text('Discard'))));
+
+  final List<Widget> buttonsChild = buttons != null ? [buttons] : [];
+
+  final body = Center(
+      child: Column(
+          children: <Widget>[
+                SizedBox(height: 10),
+                Text('Card: ${nodeName.inner}'),
+                SizedBox(height: 10),
+                Text('Amount: ${openPayment.destPayment.inner}'),
+                SizedBox(height: 10),
+                Text('Description: ${openPayment.description}'),
+                SizedBox(height: 10),
+              ] +
+              feesChild +
+              [
+                Text('Status: ${_statusAsString(openPayment.status)}'),
+                SizedBox(height: 20),
+              ] +
+              buttonsChild));
+
   return frame(
       title: Text('Outgoing transaction'),
       body: body,
       backAction: () => queueAction(OutTransactionsAction.back()));
-  */
 }
 
 Widget _renderSendCommit(
