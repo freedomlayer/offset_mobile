@@ -21,7 +21,7 @@ String generateWrappedBigInt(Element element, ConstantReader annotation) {
 
   return '''
 @immutable
-class _\$$className {
+class _\$$className implements Comparable<_\$$className>{
   final BigInt inner;
 
   _\$$className(this.inner);
@@ -50,6 +50,11 @@ class _\$$className {
     hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
     hash = hash ^ (hash >> 11);
     return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
+  }
+
+  @override
+  int compareTo(_\$$className other) {
+    return inner.compareTo(other.inner);
   }
 }
 
