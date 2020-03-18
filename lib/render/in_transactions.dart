@@ -21,8 +21,8 @@ Widget renderInTransactions(
           _renderTransaction(nodeName, invoiceId, nodesStates, queueAction),
       sendInvoice: (nodeName, invoiceId) =>
           _renderSendInvoice(nodeName, invoiceId, nodesStates, queueAction),
-      collected: (nodeName, invoiceId) =>
-          _renderCollected(nodeName, invoiceId, nodesStates, queueAction),
+      collected: (nodeName, invoiceFile) =>
+          _renderCollected(nodeName, invoiceFile, nodesStates, queueAction),
       selectCardApplyCommit: (commit) =>
           _renderSelectCardApplyCommit(commit, nodesStates, queueAction));
 }
@@ -205,7 +205,6 @@ Widget _renderSendInvoice(
     InvoiceId invoiceId,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(InTransactionsAction) queueAction) {
-
   final nodeState = nodesStates[nodeName];
   assert(nodeState != null);
 
@@ -217,25 +216,23 @@ Widget _renderSendInvoice(
   assert(openInvoice != null);
 
   final invoiceFile = InvoiceFile((b) => b
-      ..invoiceId = invoiceId
-      ..currency = openInvoice.currency
-      ..destPublicKey = nodeOpen.compactReport.localPublicKey
-      ..destPayment = openInvoice.totalDestPayment
-      ..description = openInvoice.description);
+    ..invoiceId = invoiceId
+    ..currency = openInvoice.currency
+    ..destPublicKey = nodeOpen.compactReport.localPublicKey
+    ..destPayment = openInvoice.totalDestPayment
+    ..description = openInvoice.description);
 
   final body = Center(
       child: Column(children: [
     SizedBox(height: 20),
-    Center(
-        child: Text(
-            'Send invoice to buyer')),
+    Center(child: Text('Send invoice to buyer')),
     Center(child: qrShow<InvoiceFile>(invoiceFile)),
     SizedBox(height: 20),
     Center(
         child: RaisedButton(
             // TODO: Create a better name for the invoice file:
-            onPressed: () async =>
-                await shareFile<InvoiceFile>(invoiceFile, 'invoice.$INVOICE_EXT'),
+            onPressed: () async => await shareFile<InvoiceFile>(
+                invoiceFile, 'invoice.$INVOICE_EXT'),
             child: Text('Send File'))),
   ]));
 
@@ -247,10 +244,36 @@ Widget _renderSendInvoice(
 
 Widget _renderCollected(
     NodeName nodeName,
-    InvoiceId invoiceId,
+    InvoiceFile invoiceFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(InTransactionsAction) queueAction) {
-  throw UnimplementedError();
+  final nodeState = nodesStates[nodeName];
+  assert(nodeState != null);
+
+  final nodeOpen =
+      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
+  assert(nodeOpen != null);
+
+  final body = Center(
+      child: Column(children: <Widget>[
+    SizedBox(height: 10),
+    Text('Card: ${nodeName.inner}'),
+    SizedBox(height: 10),
+    Text('Amount: ${invoiceFile.destPayment.inner}'),
+    SizedBox(height: 10),
+    Text('Description: ${invoiceFile.description}'),
+    SizedBox(height: 20),
+    Center(
+        child: RaisedButton(
+            onPressed: () async => await shareFile<InvoiceFile>(
+                invoiceFile, 'invoice.$INVOICE_EXT'),
+            child: Text('Save invoice'))),
+  ]));
+
+  return frame(
+      title: Text('Payment collected'),
+      body: body,
+      backAction: () => queueAction(InTransactionsAction.back()));
 }
 
 Widget _renderSelectCardApplyCommit(
