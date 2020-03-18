@@ -5,6 +5,8 @@ import '../protocol/protocol.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
 
+import 'utils/share_file.dart';
+
 import 'frame.dart';
 
 Widget renderOutTransactions(
@@ -154,12 +156,13 @@ Widget _renderTransaction(
               onPressed: () =>
                   queueAction(OutTransactionsAction.resendCommit()),
               child: Text('Resend commit'))),
-      success: (_a, _b, _c) => Center(
+      success: (receipt, _b, _c) => Center(
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                 RaisedButton(
-                    onPressed: () => throw UnimplementedError(),
+                    // TODO: Create a better name for the produced receipt file:
+                    onPressed: () async => await shareFile<Receipt>(receipt, 'receipt.receipt'),
                     child: Text('Save Receipt')),
                 RaisedButton(
                     onPressed: queueAction(OutTransactionsAction.discardPayment(
