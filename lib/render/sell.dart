@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:built_collection/built_collection.dart';
 
 import '../protocol/protocol.dart';
@@ -45,11 +47,132 @@ Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
       backAction: () => queueAction(SellAction.back()));
 }
 
+String _amountValidator(String amountString) {
+  if (amountString.isEmpty) {
+    return 'Can not be empty!';
+  }
+
+  final BigInt amount = BigInt.tryParse(amountString);
+  if (amount == null) {
+    return 'Invalid value';
+  }
+
+  if (amount < BigInt.from(0)) {
+    return 'Must be non negative!';
+  }
+
+  return null;
+}
+
 Widget _renderInvoiceDetails(
     NodeName nodeName,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SellAction) queueAction) {
-  throw UnimplementedError();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  Currency _currency;
+  U128 _amount;
+  String _description;
+
+  final _submitForm = () {
+    final FormState form = _formKey.currentState;
+
+    if (!form.validate()) {
+      // Form is not valid
+    } else {
+      // Save form fields:
+      form.save();
+      queueAction(
+          SellAction.createInvoice(_currency, _amount, _description));
+    }
+  };
+
+  final body =
+      StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+    final form = Form(
+        key: _formKey,
+        autovalidate: true,
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          children: <Widget>[
+            /*
+            TextFormField(
+              decoration: const InputDecoration(
+                icon: const Icon(Icons.attach_money),
+                hintText: 'Currency name',
+                labelText: 'Name',
+              ),
+              inputFormatters: [LengthLimitingTextInputFormatter(16)],
+              validator: _currencyNameValidator,
+              keyboardType: TextInputType.text,
+              onSaved: (currencyName) => _currency = Currency(currencyName),
+            ),
+            */
+            TextFormField(
+              decoration: const InputDecoration(
+                icon: const Icon(Icons.payment),
+                hintText: 'Amount of currency units',
+                labelText: 'Amount',
+              ),
+              validator: _amountValidator,
+              keyboardType: TextInputType.number,
+              onSaved: (amountString) =>
+                  _amount = U128(BigInt.tryParse(amountString)),
+            ),
+            TextFormField(
+              decoration: const InputDecoration(
+                icon: const Icon(Icons.description),
+                hintText: 'What is this invoice for?',
+                labelText: 'Description',
+              ),
+              validator: _amountValidator,
+              keyboardType: TextInputType.text,
+              inputFormatters: [LengthLimitingTextInputFormatter(32)],
+              onSaved: (description) => _description = description,
+            ),
+            Container(
+                padding: EdgeInsets.only(top: 20.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Spacer(flex: 1),
+                      Expanded(
+                          flex: 2,
+                          child: RaisedButton(
+                            child: const Text('Ok'),
+                            onPressed: _submitForm,
+                          )),
+                      Spacer(flex: 1),
+                      Expanded(
+                          flex: 2,
+                          child: RaisedButton(
+                            child: const Text('Cancel'),
+                            onPressed: () =>
+                                queueAction(SellAction.back()),
+                          )),
+                      Spacer(flex: 1),
+                    ])),
+          ],
+        ));
+
+    return SafeArea(
+        top: false,
+        bottom: false,
+        child: Center(
+            child: Column(children: [
+          Spacer(flex: 1),
+          Expanded(
+              flex: 1, child: Text('Card: ${nodeName.inner}')),
+          Expanded(flex: 16, child: form),
+        ])));
+  });
+
+  return frame(
+      title: Text('New invoice'),
+      body: body,
+      backAction: () => queueAction(SellAction.back()));
+
 }
 
 Widget _renderSendInvoice(
