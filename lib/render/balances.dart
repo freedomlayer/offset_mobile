@@ -91,8 +91,7 @@ Widget _renderCardBalances(
   assert(nodeOpen != null);
 
   final balances = calcBalances(nodeOpen.compactReport.friends);
-  final sortedCurrencies = balances.keys.toList()
-    ..sort((c1, c2) => c1.inner.compareTo(c2.inner));
+  final sortedCurrencies = balances.keys.toList()..sort();
   final rows = <DataRow>[];
   for (final currency in sortedCurrencies) {
     final balance = balances[currency];
