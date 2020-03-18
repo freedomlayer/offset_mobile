@@ -14,11 +14,11 @@ Widget renderInTransactions(
   return inTransactionsView.match(
       home: () => _renderHome(nodesStates, queueAction),
       transaction: (nodeName, invoiceId) =>
-          _renderTransaction(nodesStates, queueAction),
+          _renderTransaction(nodeName, invoiceId, nodesStates, queueAction),
       sendInvoice: (nodeName, invoiceId) =>
-          _renderSendInvoice(nodesStates, queueAction),
+          _renderSendInvoice(nodeName, invoiceId, nodesStates, queueAction),
       collected: (nodeName, invoiceId) =>
-          _renderCollected(nodesStates, queueAction),
+          _renderCollected(nodeName, invoiceId, nodesStates, queueAction),
       selectCardApplyCommit: (commit) =>
           _renderSelectCardApplyCommit(commit, nodesStates, queueAction));
 }
@@ -42,7 +42,6 @@ class InTransaction {
       this.isCommited,
       this.generation});
 }
-
 
 List<InTransaction> _loadTransactions(
     BuiltMap<NodeName, NodeState> nodesStates) {
@@ -90,7 +89,6 @@ List<InTransaction> _loadTransactions(
 
 Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
     Function(InTransactionsAction) queueAction) {
-
   final inTransactions = _loadTransactions(nodesStates);
   final children = <Widget>[];
 
@@ -116,17 +114,26 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
       backAction: () => queueAction(InTransactionsAction.back()));
 }
 
-Widget _renderTransaction(BuiltMap<NodeName, NodeState> nodesStates,
+Widget _renderTransaction(
+    NodeName nodeName,
+    InvoiceId invoiceId,
+    BuiltMap<NodeName, NodeState> nodesStates,
     Function(InTransactionsAction) queueAction) {
   throw UnimplementedError();
 }
 
-Widget _renderSendInvoice(BuiltMap<NodeName, NodeState> nodesStates,
+Widget _renderSendInvoice(
+    NodeName nodeName,
+    InvoiceId invoiceId,
+    BuiltMap<NodeName, NodeState> nodesStates,
     Function(InTransactionsAction) queueAction) {
   throw UnimplementedError();
 }
 
-Widget _renderCollected(BuiltMap<NodeName, NodeState> nodesStates,
+Widget _renderCollected(
+    NodeName nodeName,
+    InvoiceId invoiceId,
+    BuiltMap<NodeName, NodeState> nodesStates,
     Function(InTransactionsAction) queueAction) {
   throw UnimplementedError();
 }
