@@ -17,6 +17,7 @@ class SettingsAction extends _$SettingsAction {
   SettingsAction.back() : super.back();
   SettingsAction.selectNewCard() : super.selectNewCard();
   SettingsAction.newCard(NewCardAction newCard) : super.newCard(newCard);
+  // TODO; Possibly add nodeName as argument here:
   SettingsAction.cardSettings(CardSettingsAction cardSettings)
       : super.cardSettings(cardSettings);
   // Pick a card to view card settings
@@ -82,6 +83,7 @@ class FriendsSettingsAction extends _$FriendsSettingsAction {
       : super.newFriend(newFriend);
   FriendsSettingsAction.selectFriend(PublicKey friendPublicKey)
       : super.selectFriend(friendPublicKey);
+  // TODO: Possibly add friendPublicKey as argument here:
   FriendsSettingsAction.friendSettings(FriendSettingsAction friendSettings)
       : super.friendSettings(friendSettings);
   FriendsSettingsAction.shareInfo() : super.shareInfo();
