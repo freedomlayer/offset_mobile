@@ -129,4 +129,26 @@ void main() {
           throwsA(TypeMatcher<SerializeError>()));
     });
   });
+
+  group('Comparable', () {
+    test('Compare wrapped int', () {
+      final num1 = I128(BigInt.parse('123456789012345678901234567890'));
+      final num2 = I128(BigInt.parse('123456789012345678901234567891'));
+
+      expect(num1.compareTo(num2) < 0, true);
+      expect(num2.compareTo(num1) > 0, true);
+      expect(num1.compareTo(num1), 0);
+      expect(num2.compareTo(num2), 0);
+    });
+
+    test('Compare wrapped string', () {
+      final publicKey1 = PublicKey('MyPublicKey1');
+      final publicKey2 = PublicKey('MyPublicKey2');
+
+      expect(publicKey1.compareTo(publicKey2) < 0, true);
+      expect(publicKey2.compareTo(publicKey1) > 0, true);
+      expect(publicKey1.compareTo(publicKey1), 0);
+      expect(publicKey2.compareTo(publicKey2), 0);
+    });
+  });
 }
