@@ -284,15 +284,16 @@ Widget _renderSelectCardApplyCommit(
 
   nodesStates.forEach((nodeName, nodeState) {
     // We only show open nodes. (We can not configure closed nodes):
-    if (!nodeState.inner.isOpen) {
-      return; // continue
-    }
+    final cardEntry = nodeState.inner.isOpen
+        ? ListTile(
+            key: Key(nodeName.inner),
+            title: Text('${nodeName.inner}'),
+            onTap: () => queueAction(InTransactionsAction.applyCommit(nodeName, commit)))
+        : ListTile(
+            key: Key(nodeName.inner),
+            title: Text('${nodeName.inner}'),
+            enabled: false);
 
-    final cardEntry = ListTile(
-        key: Key(nodeName.inner),
-        title: Text('${nodeName.inner}'),
-        onTap: () =>
-            queueAction(InTransactionsAction.applyCommit(nodeName, commit)));
     children.add(cardEntry);
   });
 

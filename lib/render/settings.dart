@@ -242,22 +242,22 @@ Widget _renderSelectCardAddRelay(
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
   final children = <Widget>[];
-  for (final entry in nodesStates.entries) {
-    final nodeName = entry.key;
-    final nodeState = entry.value;
 
+  nodesStates.forEach((nodeName, nodeState) {
     // We only show open nodes. (We can not configure closed nodes):
-    if (!nodeState.inner.isOpen) {
-      continue;
-    }
+    final cardEntry = nodeState.inner.isOpen
+        ? ListTile(
+            key: Key(nodeName.inner),
+            title: Text('${nodeName.inner}'),
+            onTap: () => queueAction(
+                SettingsAction.selectCardSharedRelay(nodeName, relayAddress)))
+        : ListTile(
+            key: Key(nodeName.inner),
+            title: Text('${nodeName.inner}'),
+            enabled: false);
 
-    final cardEntry = ListTile(
-        key: Key(nodeName.inner),
-        title: Text('${nodeName.inner}'),
-        onTap: () => queueAction(
-            SettingsAction.selectCardSharedRelay(nodeName, relayAddress)));
     children.add(cardEntry);
-  }
+  });
 
   final listView =
       ListView(padding: const EdgeInsets.all(8), children: children);
@@ -273,22 +273,22 @@ Widget _renderSelectCardAddIndex(
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
   final children = <Widget>[];
-  for (final entry in nodesStates.entries) {
-    final nodeName = entry.key;
-    final nodeState = entry.value;
 
+  nodesStates.forEach((nodeName, nodeState) {
     // We only show open nodes. (We can not configure closed nodes):
-    if (!nodeState.inner.isOpen) {
-      continue;
-    }
+    final cardEntry = nodeState.inner.isOpen
+        ? ListTile(
+            key: Key(nodeName.inner),
+            title: Text('${nodeName.inner}'),
+            onTap: () => queueAction(SettingsAction.selectCardSharedIndex(
+                nodeName, indexServerFile)))
+        : ListTile(
+            key: Key(nodeName.inner),
+            title: Text('${nodeName.inner}'),
+            enabled: false);
 
-    final cardEntry = ListTile(
-        key: Key(nodeName.inner),
-        title: Text('${nodeName.inner}'),
-        onTap: () => queueAction(
-            SettingsAction.selectCardSharedIndex(nodeName, indexServerFile)));
     children.add(cardEntry);
-  }
+  });
 
   final listView =
       ListView(padding: const EdgeInsets.all(8), children: children);
@@ -304,22 +304,21 @@ Widget _renderSelectCardAddFriend(
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
   final children = <Widget>[];
-  for (final entry in nodesStates.entries) {
-    final nodeName = entry.key;
-    final nodeState = entry.value;
-
+  nodesStates.forEach((nodeName, nodeState) {
     // We only show open nodes. (We can not configure closed nodes):
-    if (!nodeState.inner.isOpen) {
-      continue;
-    }
+    final cardEntry = nodeState.inner.isOpen
+        ? ListTile(
+            key: Key(nodeName.inner),
+            title: Text('${nodeName.inner}'),
+            onTap: () => queueAction(
+                SettingsAction.selectCardSharedFriend(nodeName, friendFile)))
+        : ListTile(
+            key: Key(nodeName.inner),
+            title: Text('${nodeName.inner}'),
+            enabled: false);
 
-    final cardEntry = ListTile(
-        key: Key(nodeName.inner),
-        title: Text('${nodeName.inner}'),
-        onTap: () => queueAction(
-            SettingsAction.selectCardSharedFriend(nodeName, friendFile)));
     children.add(cardEntry);
-  }
+  });
 
   final listView =
       ListView(padding: const EdgeInsets.all(8), children: children);
