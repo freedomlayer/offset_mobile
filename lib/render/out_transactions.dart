@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 
 import '../protocol/protocol.dart';
+import '../protocol/file.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
 
 import 'utils/share_file.dart';
+import 'utils/qr_show.dart';
 
 import 'frame.dart';
 
@@ -162,8 +164,9 @@ Widget _renderTransaction(
                   children: [
                 RaisedButton(
                     // TODO: Create a better name for the produced receipt file:
-                    onPressed: () async => await shareFile<Receipt>(receipt, 'receipt.receipt'),
-                    child: Text('Save Receipt')),
+                    onPressed: () async =>
+                        await shareFile<Receipt>(receipt, 'receipt.receipt'),
+                    child: Text('Send Receipt')),
                 RaisedButton(
                     onPressed: queueAction(OutTransactionsAction.discardPayment(
                         nodeName, paymentId)),
@@ -203,5 +206,44 @@ Widget _renderSendCommit(
     PaymentId paymentId,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(OutTransactionsAction) queueAction) {
-  throw UnimplementedError();
+  final nodeState = nodesStates[nodeName];
+  assert(nodeState != null);
+
+  final nodeOpen =
+      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
+  assert(nodeOpen != null);
+
+  final openPayment = nodeOpen.compactReport.openPayments[paymentId];
+  assert(openPayment != null);
+
+  final commit = openPayment.status.match(
+      searchingRoute: (_) => null,
+      foundRoute: (_a, _b) => null,
+      sending: (_) => null,
+      commit: (commit, _) => null,
+      success: (_a, _b, _c) => null,
+      failure: (_) => null);
+
+  assert(commit != null);
+
+  final body = Center(
+      child: Column(children: [
+    SizedBox(height: 20),
+    Center(
+        child: Text(
+            'Payment is only complete when the seller receives the commitment')),
+    Center(child: qrShow<Commit>(commit)),
+    SizedBox(height: 20),
+    Center(
+        child: RaisedButton(
+            // TODO: Create a better name for the commitment file:
+            onPressed: () async =>
+                await shareFile<Commit>(commit, 'commit.$COMMIT_EXT'),
+            child: Text('Send File'))),
+  ]));
+
+  return frame(
+      title: Text('Payment Commit'),
+      body: body,
+      backAction: () => queueAction(OutTransactionsAction.back()));
 }
