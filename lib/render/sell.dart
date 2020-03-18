@@ -5,6 +5,8 @@ import '../protocol/protocol.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
 
+import 'frame.dart';
+
 Widget renderSell(SellView sellView, BuiltMap<NodeName, NodeState> nodesStates,
     Function(SellAction) queueAction) {
   return sellView.match(
@@ -17,7 +19,30 @@ Widget renderSell(SellView sellView, BuiltMap<NodeName, NodeState> nodesStates,
 
 Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
     Function(SellAction) queueAction) {
-  throw UnimplementedError();
+  final children = <Widget>[];
+
+  nodesStates.forEach((nodeName, nodeState) {
+    // We only show open nodes. (We can not configure closed nodes):
+    final cardEntry = nodeState.inner.isOpen
+        ? ListTile(
+            key: Key(nodeName.inner),
+            title: Text('${nodeName.inner}'),
+            onTap: () => queueAction(SellAction.selectCard(nodeName)))
+        : ListTile(
+            key: Key(nodeName.inner),
+            title: Text('${nodeName.inner}'),
+            enabled: false);
+
+    children.add(cardEntry);
+  });
+
+  final listView =
+      ListView(padding: const EdgeInsets.all(8), children: children);
+
+  return frame(
+      title: Text('New Invoice: Select card'),
+      body: listView,
+      backAction: () => queueAction(SellAction.back()));
 }
 
 Widget _renderInvoiceDetails(
