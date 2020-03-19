@@ -86,12 +86,7 @@ AppView adjustBuyView(
   return buyView.match(
       invoiceSelect: () => AppView.buy(buyView),
       invoiceInfo: (_invoiceFile) => AppView.buy(buyView),
-      selectCard: (_invoiceFile) => AppView.buy(buyView),
-      paymentProgress: (nodeName, _invoiceFile) {
-        return nodeActive(nodesStates, nodeName)
-            ? AppView.buy(buyView)
-            : AppView.home();
-      });
+      selectCard: (_invoiceFile) => AppView.buy(buyView));
 }
 
 AppView adjustSellView(

@@ -20,6 +20,7 @@ class BuyAction extends _$BuyAction {
   // TODO: Maybe add invoiceFile to selectCard()?
   BuyAction.selectCard(NodeName nodeName) : super.selectCard(nodeName);
   // TODO: Maybe add paymentId to variants below?
-  BuyAction.confirmFees() : super.confirmFees();
-  BuyAction.cancelPayment() : super.cancelPayment();
+  // BuyAction.confirmFees() : super.confirmFees();
+
+  // BuyAction.cancelPayment() : super.cancelPayment();
 }

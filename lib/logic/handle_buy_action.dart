@@ -38,8 +38,7 @@ AppState handleBuyAction(
         final invoiceFile = buyView.match(
             invoiceSelect: () => null,
             invoiceInfo: (invoiceFile) => invoiceFile,
-            selectCard: (_) => null,
-            paymentProgress: (_a, _b) => null);
+            selectCard: (_) => null);
 
         if (invoiceFile != null) {
           return createState(AppView.buy(BuyView.selectCard(invoiceFile)));
@@ -50,11 +49,7 @@ AppState handleBuyAction(
         }
       },
       selectCard: (nodeName) =>
-          _handleSelectCard(nodeName, buyView, nodesStates, buyAction, rand),
-      confirmFees: () =>
-          _handleConfirmFees(buyView, nodesStates, buyAction, rand),
-      cancelPayment: () =>
-          _handleCancelPayment(buyView, nodesStates, buyAction, rand));
+          _handleSelectCard(nodeName, buyView, nodesStates, buyAction, rand));
 }
 
 AppState _handleSelectCard(
@@ -76,8 +71,7 @@ AppState _handleSelectCard(
   final invoiceFile = buyView.match(
       invoiceSelect: () => null,
       invoiceInfo: (_) => null,
-      selectCard: (invoiceFile) => invoiceFile,
-      paymentProgress: (_a, _b) => null);
+      selectCard: (invoiceFile) => invoiceFile);
 
   if (invoiceFile == null) {
     logger.w(
@@ -102,7 +96,7 @@ AppState _handleSelectCard(
     ..inner = userToServer);
 
   final oldView = AppView.buy(BuyView.selectCard(invoiceFile));
-  final newView = AppView.buy(BuyView.paymentProgress(nodeName, paymentId));
+  final newView = AppView.outTransactions(OutTransactionsView.transaction(nodeName, paymentId));
 
   final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
   final optPendingRequest = OptPendingRequest.none();
@@ -113,6 +107,7 @@ AppState _handleSelectCard(
         oldView, newView, nextRequests, optPendingRequest));
 }
 
+/*
 AppState _handleConfirmFees(
     BuyView buyView,
     BuiltMap<NodeName, NodeState> nodesStates,
@@ -212,7 +207,9 @@ AppState _handleConfirmFees(
     ..viewState = ViewState.transition(
         oldView, newView, nextRequests, optPendingRequest));
 }
+*/
 
+/*
 AppState _handleCancelPayment(
     BuyView buyView,
     BuiltMap<NodeName, NodeState> nodesStates,
@@ -269,3 +266,4 @@ AppState _handleCancelPayment(
     ..viewState = ViewState.transition(
         oldView, newView, nextRequests, optPendingRequest));
 }
+*/

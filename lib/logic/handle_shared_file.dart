@@ -12,24 +12,6 @@ import '../logger.dart';
 
 final logger = createLogger('logic::handle_shared_file');
 
-/// May we interrupt a certain AppView?
-bool _isInterruptible(AppView appView) {
-  return appView.match(
-    home: () => true,
-    buy: (buyView) => buyView.match(
-      invoiceSelect: () => true,
-      invoiceInfo: (_) => true,
-      selectCard: (_) => true,
-      paymentProgress: (_a, _b) => false,
-    ),
-    sell: (sellView) => true,
-    outTransactions: (_) => true,
-    inTransactions: (_) => true,
-    balances: (_) => true,
-    settings: (_) => true,
-  );
-}
-
 /// Handle a shared file event
 /// This event happens when another application shares a file with this
 /// application
@@ -37,10 +19,7 @@ AppState handleSharedFile(AppState appState, String filePath) {
   // Are we in a state that may be interrupted? If not, return early.
   AppView oldAppView;
   final interruptible = appState.viewState.match(
-      view: (appView) {
-        oldAppView = appView;
-        return _isInterruptible(appView);
-      },
+      view: (appView) => true,
       transition: (_a, _b, _c, _d) => false);
 
   if (!interruptible) {
