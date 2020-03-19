@@ -163,7 +163,30 @@ Widget _renderFoundRoute(U128 fees, NodeName nodeName, PaymentId paymentId,
 
 Widget _renderSending(U128 fees, NodeName nodeName, PaymentId paymentId,
     OpenPayment openPayment, Function(OutTransactionsAction) queueAction) {
-  throw UnimplementedError();
+  final body = Center(
+      child: Column(children: <Widget>[
+    Center(child: Text('Payment in progress')),
+    SizedBox(height: 10),
+    Text('Card: ${nodeName.inner}'),
+    SizedBox(height: 10),
+    Text('Amount: ${openPayment.destPayment.inner}'),
+    SizedBox(height: 10),
+    Text('Description: ${openPayment.description}'),
+    SizedBox(height: 10),
+    Text('Fees: ${fees.inner}'),
+    Center(child: CircularProgressIndicator(value: null)),
+    SizedBox(height: 20),
+    Center(
+        child: RaisedButton(
+            // TODO: Create a better name for the commitment file:
+            onPressed: () => queueAction(OutTransactionsAction.cancelPayment(nodeName, paymentId)),
+            child: Text('Cancel'))),
+  ]));
+
+  return frame(
+      title: Text('Outgoing transaction'),
+      body: body,
+      backAction: () => queueAction(OutTransactionsAction.back()));
 }
 
 Widget _renderCommit(
@@ -176,6 +199,8 @@ Widget _renderCommit(
   final body = Center(
       child: Column(children: <Widget>[
     SizedBox(height: 10),
+    Center(child: Text('Send commitment')),
+    SizedBox(height: 10),
     Text('Card: ${nodeName.inner}'),
     SizedBox(height: 10),
     Text('Amount: ${openPayment.destPayment.inner}'),
@@ -183,8 +208,6 @@ Widget _renderCommit(
     Text('Description: ${openPayment.description}'),
     SizedBox(height: 10),
     Text('Fees: ${fees.inner}'),
-    SizedBox(height: 10),
-    Text('Status: Pending'),
     SizedBox(height: 20),
     Center(
         child: Text(
@@ -215,6 +238,8 @@ Widget _renderSuccess(
   final body = Center(
       child: Column(children: <Widget>[
     SizedBox(height: 10),
+    Center(child: Text('Success')),
+    SizedBox(height: 10),
     Text('Card: ${nodeName.inner}'),
     SizedBox(height: 10),
     Text('Amount: ${openPayment.destPayment.inner}'),
@@ -222,8 +247,6 @@ Widget _renderSuccess(
     Text('Description: ${openPayment.description}'),
     SizedBox(height: 10),
     Text('Fees: ${fees.inner}'),
-    SizedBox(height: 10),
-    Text('Status: Success'),
     SizedBox(height: 20),
     Center(
         child:
@@ -251,13 +274,13 @@ Widget _renderFailure(NodeName nodeName, PaymentId paymentId,
   final body = Center(
       child: Column(children: <Widget>[
     SizedBox(height: 10),
+    Center(child: Text('Failure')),
+    SizedBox(height: 10),
     Text('Card: ${nodeName.inner}'),
     SizedBox(height: 10),
     Text('Amount: ${openPayment.destPayment.inner}'),
     SizedBox(height: 10),
     Text('Description: ${openPayment.description}'),
-    SizedBox(height: 10),
-    Text('Status: Failure'),
     SizedBox(height: 20),
     Center(
         child: RaisedButton(
