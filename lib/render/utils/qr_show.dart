@@ -6,5 +6,6 @@ qrShow<T>(T msg) {
   return QrImage(
     data: data,
     version: QrVersions.auto,
+    size: 200.0,
   );
 }
