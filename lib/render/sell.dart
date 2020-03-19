@@ -163,7 +163,8 @@ Widget _renderInvoiceDetails(
                 hintText: 'What is this invoice for?',
                 labelText: 'Description',
               ),
-              validator: _amountValidator,
+              // TODO: Possibly add a validator?
+              // validator: _amountValidator,
               keyboardType: TextInputType.text,
               inputFormatters: [LengthLimitingTextInputFormatter(32)],
               onSaved: (description) => _description = description,
