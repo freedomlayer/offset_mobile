@@ -29,7 +29,6 @@ Widget renderBuy(BuyView buyView, BuiltMap<NodeName, NodeState> nodesStates,
 
 Widget _renderInvoiceSelect(BuiltMap<NodeName, NodeState> nodesStates,
     Function(BuyAction) queueAction) {
-
   final Future<void> Function() scanQrCode = () async {
     final invoiceFile = await qrScan<InvoiceFile>()
         .catchError((e) => logger.w('qrScan error: $e'));
@@ -68,7 +67,28 @@ Widget _renderInvoiceInfo(
     InvoiceFile invoiceFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(BuyAction) queueAction) {
-  throw UnimplementedError();
+  final body = Center(
+      child: Column(children: <Widget>[
+    SizedBox(height: 10),
+    Text('Amount: ${invoiceFile.destPayment.inner}'),
+    SizedBox(height: 10),
+    Text('Description: ${invoiceFile.description}'),
+    SizedBox(height: 10),
+    Center(
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      RaisedButton(
+          child: Text('Pay'),
+          onPressed: () => queueAction(BuyAction.confirmInfo())),
+      RaisedButton(
+          child: Text('Cancel'),
+          onPressed: () => queueAction(BuyAction.back())),
+    ]))
+  ]));
+
+  return frame(
+      title: Text('Invoice info'),
+      body: body,
+      backAction: () => queueAction(BuyAction.back()));
 }
 
 Widget _renderSelectCard(
