@@ -24,31 +24,18 @@ AppState handleSellAction(
       back: () => createState(AppView.home()),
       selectCard: (nodeName) =>
           createState(AppView.sell(SellView.invoiceDetails(nodeName))),
-      createInvoice: (currency, amount, description) => _handleCreateInvoice(
-          currency, amount, description, sellView, nodesStates, rand),
-      viewTransaction: () {
-        // Find nodeName:
-        NodeName nodeName;
-        InvoiceId invoiceId;
-        sellView.match(
-            selectCard: () => null,
-            invoiceDetails: (_) => null,
-            sendInvoice: (nodeName0, invoiceId0) {
-              nodeName = nodeName0;
-              invoiceId = invoiceId0;
-            });
-
-        if (nodeName == null) {
-          logger.w('handleSellAction(): Received action during incorrect view');
-          return createState(AppView.home());
-        }
-        return createState(AppView.inTransactions(
-            InTransactionsView.transaction(nodeName, invoiceId)));
-      },
-      cancelInvoice: () => _handleCancelInvoice(sellView, nodesStates, rand));
+      createInvoice: (nodeName, currency, amount, description) =>
+          _handleCreateInvoice(nodeName, currency, amount, description,
+              sellView, nodesStates, rand),
+      viewTransaction: (nodeName, invoiceId) => createState(
+          AppView.inTransactions(
+              InTransactionsView.transaction(nodeName, invoiceId))),
+      cancelInvoice: (nodeName, invoiceId) => _handleCancelInvoice(
+          sellView, nodeName, invoiceId, nodesStates, rand));
 }
 
 AppState _handleCreateInvoice(
+    NodeName nodeName,
     Currency currency,
     U128 amount,
     String description,
@@ -58,16 +45,6 @@ AppState _handleCreateInvoice(
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
     ..viewState = ViewState.view(appView));
-  // Find nodeName:
-  final nodeName = sellView.match(
-      selectCard: () => null,
-      invoiceDetails: (nodeName) => nodeName,
-      sendInvoice: (_a, _b) => null);
-
-  if (nodeName == null) {
-    logger.w('_handleCreateInvoice(): Received action during incorrect view');
-    return createState(AppView.sell(sellView));
-  }
 
   // Find nodeId (Make sure that the node is open):
   final nodeState = nodesStates[nodeName];
@@ -114,21 +91,14 @@ AppState _handleCreateInvoice(
 }
 
 AppState _handleCancelInvoice(
-    SellView sellView, BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
+    SellView sellView,
+    NodeName nodeName,
+    InvoiceId invoiceId,
+    BuiltMap<NodeName, NodeState> nodesStates,
+    Random rand) {
   final createState = (AppView appView) => AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
     ..viewState = ViewState.view(appView));
-
-  // Find nodeName:
-  NodeName nodeName;
-  InvoiceId invoiceId;
-  sellView.match(
-      selectCard: () => null,
-      invoiceDetails: (_) => null,
-      sendInvoice: (nodeName0, invoiceId0) {
-        nodeName = nodeName0;
-        invoiceId = invoiceId0;
-      });
 
   final nodeState = nodesStates[nodeName];
   if (nodeState == null) {

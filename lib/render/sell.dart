@@ -124,7 +124,8 @@ Widget _renderInvoiceDetails(
     } else {
       // Save form fields:
       form.save();
-      queueAction(SellAction.createInvoice(_currency, _amount, _description));
+      queueAction(
+          SellAction.createInvoice(nodeName, _currency, _amount, _description));
     }
   };
 
@@ -247,12 +248,14 @@ Widget _renderSendInvoice(
     SizedBox(height: 20),
     Center(
         child: RaisedButton(
-            onPressed: () => queueAction(SellAction.viewTransaction()),
+            onPressed: () =>
+                queueAction(SellAction.viewTransaction(nodeName, invoiceId)),
             child: Text('Ok'))),
     SizedBox(height: 20),
     Center(
         child: RaisedButton(
-            onPressed: () => queueAction(SellAction.cancelInvoice()),
+            onPressed: () =>
+                queueAction(SellAction.cancelInvoice(nodeName, invoiceId)),
             child: Text('Cancel Invoice'))),
   ]));
 
