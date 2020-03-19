@@ -141,7 +141,7 @@ Widget _renderInvoiceDetails(
                 items: currencies.map((currency) => DropdownMenuItem<Currency>(
                     key: Key(currency.inner),
                     child: Text('${currency.inner}'),
-                    value: currency)),
+                    value: currency)).toList(),
                 value: _currency,
                 onChanged: (newCurrency) =>
                     setState(() => _currency = newCurrency),
