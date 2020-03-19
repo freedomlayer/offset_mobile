@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 
 import '../protocol/protocol.dart';
-// import '../protocol/file.dart';
+import '../protocol/file.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
 
 import 'utils/share_file.dart';
-// import 'utils/qr_show.dart';
+import 'utils/qr_show.dart';
 
 import 'frame.dart';
 
@@ -136,93 +136,55 @@ Widget _renderTransaction(
   final openPayment = nodeOpen.compactReport.openPayments[paymentId];
   assert(openPayment != null);
 
-  final feesWrap = openPayment.status.match(
-      searchingRoute: (_) => null,
-      foundRoute: (_, fees) => fees,
-      sending: (fees) => fees,
-      commit: (_, fees) => fees,
-      success: (_a, fees, _b) => fees,
-      failure: (_) => null);
-
-  final fees = feesWrap?.inner;
-  final List<Widget> feesChild = fees != null ? [Text('$fees')] : [];
-
-  final buttons = openPayment.status.match(
-      searchingRoute: (_) => null,
-      foundRoute: (_a, _b) => null,
-      sending: (_) => null,
-      commit: (_, fees) => null,
-      success: (receipt, _b, _c) => Center(
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                RaisedButton(
-                    // TODO: Create a better name for the produced receipt file:
-                    onPressed: () async =>
-                        await shareFile<Receipt>(receipt, 'receipt.receipt'),
-                    child: Text('Send Receipt')),
-                RaisedButton(
-                    onPressed: queueAction(OutTransactionsAction.discardPayment(
-                        nodeName, paymentId)),
-                    child: Text('Discard')),
-              ])),
+  return openPayment.status.match(
+      searchingRoute: (_) =>
+          _renderSearchingRoute(nodeName, paymentId, openPayment, queueAction),
+      foundRoute: (_, fees) => _renderFoundRoute(
+          fees, nodeName, paymentId, openPayment, queueAction),
+      sending: (fees) =>
+          _renderSending(fees, nodeName, paymentId, openPayment, queueAction),
+      commit: (commit, fees) => _renderCommit(
+          commit, fees, nodeName, paymentId, openPayment, queueAction),
+      success: (receipt, fees, _) => _renderSuccess(
+          receipt, fees, nodeName, paymentId, openPayment, queueAction),
       failure: (_) =>
-          Center(child: RaisedButton(onPressed: null, child: Text('Discard'))));
-
-  final List<Widget> buttonsChild = buttons != null ? [buttons] : [];
-
-  final body = Center(
-      child: Column(
-          children: <Widget>[
-                SizedBox(height: 10),
-                Text('Card: ${nodeName.inner}'),
-                SizedBox(height: 10),
-                Text('Amount: ${openPayment.destPayment.inner}'),
-                SizedBox(height: 10),
-                Text('Description: ${openPayment.description}'),
-                SizedBox(height: 10),
-              ] +
-              feesChild +
-              [
-                Text('Status: ${_statusAsString(openPayment.status)}'),
-                SizedBox(height: 20),
-              ] +
-              buttonsChild));
-
-  return frame(
-      title: Text('Outgoing transaction'),
-      body: body,
-      backAction: () => queueAction(OutTransactionsAction.back()));
+          _renderFailure(nodeName, paymentId, openPayment, queueAction));
 }
 
-/*
-Widget _renderSendCommit(
+Widget _renderSearchingRoute(NodeName nodeName, PaymentId paymentId,
+    OpenPayment openPayment, Function(OutTransactionsAction) queueAction) {
+  throw UnimplementedError();
+}
+
+Widget _renderFoundRoute(U128 fees, NodeName nodeName, PaymentId paymentId,
+    OpenPayment openPayment, Function(OutTransactionsAction) queueAction) {
+  throw UnimplementedError();
+}
+
+Widget _renderSending(U128 fees, NodeName nodeName, PaymentId paymentId,
+    OpenPayment openPayment, Function(OutTransactionsAction) queueAction) {
+  throw UnimplementedError();
+}
+
+Widget _renderCommit(
+    Commit commit,
+    U128 fees,
     NodeName nodeName,
     PaymentId paymentId,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    OpenPayment openPayment,
     Function(OutTransactionsAction) queueAction) {
-  final nodeState = nodesStates[nodeName];
-  assert(nodeState != null);
-
-  final nodeOpen =
-      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
-  assert(nodeOpen != null);
-
-  final openPayment = nodeOpen.compactReport.openPayments[paymentId];
-  assert(openPayment != null);
-
-  final commit = openPayment.status.match(
-      searchingRoute: (_) => null,
-      foundRoute: (_a, _b) => null,
-      sending: (_) => null,
-      commit: (commit, _) => null,
-      success: (_a, _b, _c) => null,
-      failure: (_) => null);
-
-  assert(commit != null);
-
   final body = Center(
-      child: Column(children: [
+      child: Column(children: <Widget>[
+    SizedBox(height: 10),
+    Text('Card: ${nodeName.inner}'),
+    SizedBox(height: 10),
+    Text('Amount: ${openPayment.destPayment.inner}'),
+    SizedBox(height: 10),
+    Text('Description: ${openPayment.description}'),
+    SizedBox(height: 10),
+    Text('Fees: ${fees.inner}'),
+    SizedBox(height: 10),
+    Text('Status: Pending'),
     SizedBox(height: 20),
     Center(
         child: Text(
@@ -238,8 +200,75 @@ Widget _renderSendCommit(
   ]));
 
   return frame(
-      title: Text('Payment Commit'),
+      title: Text('Outgoing transaction'),
       body: body,
       backAction: () => queueAction(OutTransactionsAction.back()));
 }
-*/
+
+Widget _renderSuccess(
+    Receipt receipt,
+    U128 fees,
+    NodeName nodeName,
+    PaymentId paymentId,
+    OpenPayment openPayment,
+    Function(OutTransactionsAction) queueAction) {
+  final body = Center(
+      child: Column(children: <Widget>[
+    SizedBox(height: 10),
+    Text('Card: ${nodeName.inner}'),
+    SizedBox(height: 10),
+    Text('Amount: ${openPayment.destPayment.inner}'),
+    SizedBox(height: 10),
+    Text('Description: ${openPayment.description}'),
+    SizedBox(height: 10),
+    Text('Fees: ${fees.inner}'),
+    SizedBox(height: 10),
+    Text('Status: Success'),
+    SizedBox(height: 20),
+    Center(
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      RaisedButton(
+          // TODO: Create a better name for the produced receipt file:
+          onPressed: () async =>
+              await shareFile<Receipt>(receipt, 'receipt.receipt'),
+          child: Text('Send Receipt')),
+      RaisedButton(
+          onPressed: queueAction(
+              OutTransactionsAction.discardPayment(nodeName, paymentId)),
+          child: Text('Discard')),
+    ]))
+  ]));
+
+  return frame(
+      title: Text('Outgoing transaction'),
+      body: body,
+      backAction: () => queueAction(OutTransactionsAction.back()));
+}
+
+Widget _renderFailure(NodeName nodeName, PaymentId paymentId,
+    OpenPayment openPayment, Function(OutTransactionsAction) queueAction) {
+  final body = Center(
+      child: Column(children: <Widget>[
+    SizedBox(height: 10),
+    Text('Card: ${nodeName.inner}'),
+    SizedBox(height: 10),
+    Text('Amount: ${openPayment.destPayment.inner}'),
+    SizedBox(height: 10),
+    Text('Description: ${openPayment.description}'),
+    SizedBox(height: 10),
+    Text('Status: Failure'),
+    SizedBox(height: 20),
+    Center(
+        child: RaisedButton(
+            onPressed: queueAction(
+                OutTransactionsAction.discardPayment(nodeName, paymentId)),
+            child: Text('Discard')))
+  ]));
+
+  return frame(
+      title: Text('Outgoing transaction'),
+      body: body,
+      backAction: () => queueAction(OutTransactionsAction.back()));
+}
+
