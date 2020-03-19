@@ -166,7 +166,8 @@ Widget _renderSearchingRoute(NodeName nodeName, PaymentId paymentId,
     SizedBox(height: 20),
     Center(
         child: RaisedButton(
-            onPressed: () => queueAction(OutTransactionsAction.cancelPayment(nodeName, paymentId)),
+            onPressed: () => queueAction(
+                OutTransactionsAction.cancelPayment(nodeName, paymentId)),
             child: Text('Cancel'))),
   ]));
 
@@ -228,7 +229,8 @@ Widget _renderSending(U128 fees, NodeName nodeName, PaymentId paymentId,
     SizedBox(height: 20),
     Center(
         child: RaisedButton(
-            onPressed: () => queueAction(OutTransactionsAction.cancelPayment(nodeName, paymentId)),
+            onPressed: () => queueAction(
+                OutTransactionsAction.cancelPayment(nodeName, paymentId)),
             child: Text('Cancel'))),
   ]));
 
@@ -261,7 +263,9 @@ Widget _renderCommit(
     Center(
         child: Text(
             'Payment is only complete when the seller receives the commitment')),
-    Center(child: qrShow<Commit>(commit)),
+    Center(
+        child:
+            SizedBox(height: 100, width: 100, child: qrShow<Commit>(commit))),
     SizedBox(height: 20),
     Center(
         child: RaisedButton(
@@ -343,4 +347,3 @@ Widget _renderFailure(NodeName nodeName, PaymentId paymentId,
       body: body,
       backAction: () => queueAction(OutTransactionsAction.back()));
 }
-
