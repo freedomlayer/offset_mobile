@@ -37,14 +37,14 @@ bool invoiceExists(BuiltMap<NodeName, NodeState> nodesStates, NodeName nodeName,
   return openInvoice != null;
 }
 
-bool paymentExists(BuiltMap<NodeName, NodeState> nodesStates, NodeName nodeName,
-    PaymentId paymentId) {
+OpenPayment getOpenPayment(BuiltMap<NodeName, NodeState> nodesStates,
+    NodeName nodeName, PaymentId paymentId) {
   final compactReport = getCompactReport(nodesStates, nodeName);
   if (compactReport == null) {
-    return false;
+    return null;
   }
   final openPayment = compactReport.openPayments[paymentId];
-  return openPayment != null;
+  return openPayment;
 }
 
 /*
@@ -113,13 +113,20 @@ OutTransactionsView adjustOutTransactionsView(
   return outTransactionsView.match(
       home: () => outTransactionsView,
       transaction: (nodeName, paymentId) =>
-          paymentExists(nodesStates, nodeName, paymentId)
+          getOpenPayment(nodesStates, nodeName, paymentId) != null
               ? outTransactionsView
               : OutTransactionsView.home(),
-      sendCommit: (nodeName, paymentId) =>
-          paymentExists(nodesStates, nodeName, paymentId)
-              ? outTransactionsView
-              : OutTransactionsView.home());
+      sendCommit: (nodeName, paymentId) {
+        final openPayment = getOpenPayment(nodesStates, nodeName, paymentId);
+        if (openPayment == null) {
+          return OutTransactionsView.home();
+        }
+        if (!openPayment.status.isCommit) {
+          // We are not in the commit stage:
+          return OutTransactionsView.transaction(nodeName, paymentId);
+        }
+        return outTransactionsView;
+      });
 }
 
 InTransactionsView adjustInTransactionsView(
