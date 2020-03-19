@@ -7,9 +7,16 @@ import '../state/state.dart';
 import '../actions/actions.dart';
 
 import 'utils/share_file.dart';
-// import 'utils/qr_show.dart';
+import 'utils/qr_show.dart';
+
+import 'utils/file_picker.dart';
+import 'utils/qr_scan.dart';
 
 import 'frame.dart';
+
+import '../logger.dart';
+
+final logger = createLogger('render::in_transactions');
 
 Widget renderInTransactions(
     InTransactionsView inTransactionsView,
@@ -131,68 +138,38 @@ Widget _renderTransaction(
   final openInvoice = nodeOpen.compactReport.openInvoices[invoiceId];
   assert(openInvoice != null);
 
-  final statusString = openInvoice.isCommited ? 'Received' : 'Pending';
+  return openInvoice.isCommited
+      ? _renderCommitedTransaction(
+          nodeName, invoiceId, openInvoice, queueAction)
+      : _renderUncommitedTransaction(nodeOpen.compactReport.localPublicKey,
+          nodeName, invoiceId, openInvoice, queueAction);
+}
 
-  final buttons = openInvoice.isCommited
-      ? (() => Center(
-              child: Column(children: [
-            Center(
-                child: RaisedButton(
-                    onPressed: () => queueAction(
-                        InTransactionsAction.collectInvoice(
-                            nodeName, invoiceId)),
-                    child: Text('Collect'))),
-            SizedBox(height: 15),
-            Center(
-                child: RaisedButton(
-                    onPressed: () => queueAction(
-                        InTransactionsAction.cancelInvoice(
-                            nodeName, invoiceId)),
-                    child: Text('Cancel Invoice'))),
-          ])))()
-      : (() => Center(
-              child: Column(children: [
-            Center(child: Text('How to receive commitment?')),
-            SizedBox(height: 10),
-            Center(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                  RaisedButton(
-                      child: Text('QR code'),
-                      onPressed: () => throw UnimplementedError()),
-                  SizedBox(height: 15),
-                  RaisedButton(
-                      child: Text('File'),
-                      onPressed: () => throw UnimplementedError()),
-                ])),
-            RaisedButton(
-                child: Text('Resend invoice'),
-                onPressed: () => throw UnimplementedError()),
-            SizedBox(height: 15),
-            RaisedButton(
-                child: Text('Cancel invoice'),
-                onPressed: () => throw UnimplementedError()),
-          ])))();
-
-  // RaisedButton(onPressed: null, child: Text('Discard'))))();
-
-  final List<Widget> buttonsChild = buttons != null ? [buttons] : [];
-
+Widget _renderCommitedTransaction(NodeName nodeName, InvoiceId invoiceId,
+    OpenInvoice openInvoice, Function(InTransactionsAction) queueAction) {
   final body = Center(
-      child: Column(
-          children: <Widget>[
-                SizedBox(height: 10),
-                Text('Card: ${nodeName.inner}'),
-                SizedBox(height: 10),
-                Text('Amount: ${openInvoice.totalDestPayment.inner}'),
-                SizedBox(height: 10),
-                Text('Description: ${openInvoice.description}'),
-                SizedBox(height: 10),
-                Text('Status: $statusString'),
-                SizedBox(height: 20),
-              ] +
-              buttonsChild));
+      child: Column(children: <Widget>[
+    SizedBox(height: 10),
+    Text('Card: ${nodeName.inner}'),
+    SizedBox(height: 10),
+    Text('Amount: ${openInvoice.totalDestPayment.inner}'),
+    SizedBox(height: 10),
+    Text('Description: ${openInvoice.description}'),
+    SizedBox(height: 10),
+    Text('Status: received'),
+    SizedBox(height: 20),
+    Center(
+        child: RaisedButton(
+            onPressed: () => queueAction(
+                InTransactionsAction.collectInvoice(nodeName, invoiceId)),
+            child: Text('Collect'))),
+    SizedBox(height: 15),
+    Center(
+        child: RaisedButton(
+            onPressed: () => queueAction(
+                InTransactionsAction.cancelInvoice(nodeName, invoiceId)),
+            child: Text('Cancel Invoice'))),
+  ]));
 
   return frame(
       title: Text('Outgoing transaction'),
@@ -200,31 +177,45 @@ Widget _renderTransaction(
       backAction: () => queueAction(InTransactionsAction.back()));
 }
 
-/*
-Widget _renderSendInvoice(
+Widget _renderUncommitedTransaction(
+    PublicKey localPublicKey,
     NodeName nodeName,
     InvoiceId invoiceId,
-    BuiltMap<NodeName, NodeState> nodesStates,
+    OpenInvoice openInvoice,
     Function(InTransactionsAction) queueAction) {
-  final nodeState = nodesStates[nodeName];
-  assert(nodeState != null);
+  final Future<void> Function() scanQrCode = () async {
+    final commitFile =
+        await qrScan<Commit>().catchError((e) => logger.w('qrScan error: $e'));
+    if (commitFile != null) {
+      queueAction(InTransactionsAction.applyCommit(nodeName, commitFile));
+    }
+  };
 
-  final nodeOpen =
-      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
-  assert(nodeOpen != null);
-
-  final openInvoice = nodeOpen.compactReport.openInvoices[invoiceId];
-  assert(openInvoice != null);
+  final Future<void> Function() openFileExplorer = () async {
+    final commitFile = await pickFromFile<Commit>(COMMIT_EXT)
+        .catchError((e) => logger.w('pickFromFile error: $e'));
+    if (commitFile != null) {
+      queueAction(InTransactionsAction.applyCommit(nodeName, commitFile));
+    }
+  };
 
   final invoiceFile = InvoiceFile((b) => b
     ..invoiceId = invoiceId
     ..currency = openInvoice.currency
-    ..destPublicKey = nodeOpen.compactReport.localPublicKey
+    ..destPublicKey = localPublicKey
     ..destPayment = openInvoice.totalDestPayment
     ..description = openInvoice.description);
 
   final body = Center(
-      child: Column(children: [
+      child: Column(children: <Widget>[
+    SizedBox(height: 10),
+    Text('Card: ${nodeName.inner}'),
+    SizedBox(height: 10),
+    Text('Amount: ${openInvoice.totalDestPayment.inner}'),
+    SizedBox(height: 10),
+    Text('Description: ${openInvoice.description}'),
+    SizedBox(height: 10),
+    Text('Status: Pending'),
     SizedBox(height: 20),
     Center(child: Text('Send invoice to buyer')),
     Center(child: qrShow<InvoiceFile>(invoiceFile)),
@@ -235,14 +226,28 @@ Widget _renderSendInvoice(
             onPressed: () async => await shareFile<InvoiceFile>(
                 invoiceFile, 'invoice.$INVOICE_EXT'),
             child: Text('Send File'))),
+    SizedBox(height: 20),
+    Center(
+        child: RaisedButton(
+            onPressed: () => queueAction(
+                InTransactionsAction.cancelInvoice(nodeName, invoiceId)),
+            child: Text('Cancel Invoice'))),
+    SizedBox(height: 10),
+    Center(child: Text('How to receive commitment?')),
+    SizedBox(height: 10),
+    Center(
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      RaisedButton(child: Text('QR code'), onPressed: scanQrCode),
+      SizedBox(height: 15),
+      RaisedButton(child: Text('File'), onPressed: openFileExplorer),
+    ])),
   ]));
 
   return frame(
-      title: Text('Send invoice'),
+      title: Text('Outgoing transaction'),
       body: body,
       backAction: () => queueAction(InTransactionsAction.back()));
 }
-*/
 
 Widget _renderCollected(
     NodeName nodeName,
