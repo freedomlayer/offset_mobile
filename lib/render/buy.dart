@@ -6,6 +6,15 @@ import '../protocol/file.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
 
+import 'utils/file_picker.dart';
+import 'utils/qr_scan.dart';
+
+import 'frame.dart';
+
+import '../logger.dart';
+
+final logger = createLogger('render::buy');
+
 Widget renderBuy(BuyView buyView, BuiltMap<NodeName, NodeState> nodesStates,
     Function(BuyAction) queueAction) {
   return buyView.match(
@@ -20,7 +29,39 @@ Widget renderBuy(BuyView buyView, BuiltMap<NodeName, NodeState> nodesStates,
 
 Widget _renderInvoiceSelect(BuiltMap<NodeName, NodeState> nodesStates,
     Function(BuyAction) queueAction) {
-  throw UnimplementedError();
+
+  final Future<void> Function() scanQrCode = () async {
+    final invoiceFile = await qrScan<InvoiceFile>()
+        .catchError((e) => logger.w('qrScan error: $e'));
+    if (invoiceFile != null) {
+      queueAction(BuyAction.loadInvoice(invoiceFile));
+    }
+  };
+
+  final Future<void> Function() openFileExplorer = () async {
+    final invoiceFile = await pickFromFile<InvoiceFile>(INVOICE_EXT)
+        .catchError((e) => logger.w('pickFromFile error: $e'));
+    if (invoiceFile != null) {
+      queueAction(BuyAction.loadInvoice(invoiceFile));
+    }
+  };
+
+  final body = Center(
+      child: Column(children: [
+    Spacer(flex: 1),
+    Expanded(flex: 1, child: Text('How to load invoice')),
+    Expanded(
+        flex: 2,
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          RaisedButton(onPressed: scanQrCode, child: Text('QR code')),
+          RaisedButton(onPressed: openFileExplorer, child: Text('File')),
+        ])),
+  ]));
+
+  return frame(
+      title: Text('Select Invoice'),
+      body: body,
+      backAction: () => queueAction(BuyAction.back()));
 }
 
 Widget _renderInvoiceInfo(
