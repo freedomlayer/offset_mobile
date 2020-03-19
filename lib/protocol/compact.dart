@@ -559,7 +559,7 @@ abstract class OpenInvoice implements Built<OpenInvoice, OpenInvoiceBuilder> {
   Currency get currency;
   U128 get totalDestPayment;
   String get description;
-  bool get isCommited;
+  bool get isCommitted;
   Generation get generation;
 
   OpenInvoice._();

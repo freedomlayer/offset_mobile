@@ -39,7 +39,7 @@ class InTransaction {
   U128 totalDestPayment;
   final InvoiceId invoiceId;
   final String description;
-  bool isCommited;
+  bool isCommitted;
   Generation generation;
 
   InTransaction(
@@ -48,7 +48,7 @@ class InTransaction {
       this.totalDestPayment,
       this.invoiceId,
       this.description,
-      this.isCommited,
+      this.isCommitted,
       this.generation});
 }
 
@@ -73,7 +73,7 @@ List<InTransaction> _loadTransactions(
           totalDestPayment: openInvoice.totalDestPayment,
           description: openInvoice.description,
           generation: openInvoice.generation,
-          isCommited: openInvoice.isCommited);
+          isCommitted: openInvoice.isCommitted);
       inTransactions.add(outTransaction);
     });
   });
@@ -102,7 +102,7 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
   final children = <Widget>[];
 
   for (final inTransaction in inTransactions) {
-    final statusString = inTransaction.isCommited ? 'Received' : 'Pending';
+    final statusString = inTransaction.isCommitted ? 'Received' : 'Pending';
     final outEntry = Card(
         key: Key(inTransaction.invoiceId.inner),
         child: InkWell(
@@ -138,14 +138,14 @@ Widget _renderTransaction(
   final openInvoice = nodeOpen.compactReport.openInvoices[invoiceId];
   assert(openInvoice != null);
 
-  return openInvoice.isCommited
-      ? _renderCommitedTransaction(
+  return openInvoice.isCommitted
+      ? _renderCommittedTransaction(
           nodeName, invoiceId, openInvoice, queueAction)
-      : _renderUncommitedTransaction(nodeOpen.compactReport.localPublicKey,
+      : _renderUncommittedTransaction(nodeOpen.compactReport.localPublicKey,
           nodeName, invoiceId, openInvoice, queueAction);
 }
 
-Widget _renderCommitedTransaction(NodeName nodeName, InvoiceId invoiceId,
+Widget _renderCommittedTransaction(NodeName nodeName, InvoiceId invoiceId,
     OpenInvoice openInvoice, Function(InTransactionsAction) queueAction) {
   final body = Center(
       child: Column(children: <Widget>[
@@ -177,7 +177,7 @@ Widget _renderCommitedTransaction(NodeName nodeName, InvoiceId invoiceId,
       backAction: () => queueAction(InTransactionsAction.back()));
 }
 
-Widget _renderUncommitedTransaction(
+Widget _renderUncommittedTransaction(
     PublicKey localPublicKey,
     NodeName nodeName,
     InvoiceId invoiceId,
