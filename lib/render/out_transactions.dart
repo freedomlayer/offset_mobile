@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 
 import '../protocol/protocol.dart';
-import '../protocol/file.dart';
+// import '../protocol/file.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
 
 import 'utils/share_file.dart';
-import 'utils/qr_show.dart';
+// import 'utils/qr_show.dart';
 
 import 'frame.dart';
 
@@ -18,9 +18,7 @@ Widget renderOutTransactions(
   return outTransactionsView.match(
       home: () => _renderHome(nodesStates, queueAction),
       transaction: (nodeName, paymentId) =>
-          _renderTransaction(nodeName, paymentId, nodesStates, queueAction),
-      sendCommit: (nodeName, paymentId) =>
-          _renderSendCommit(nodeName, paymentId, nodesStates, queueAction));
+          _renderTransaction(nodeName, paymentId, nodesStates, queueAction));
 }
 
 /// A single outgoing transaction's information
@@ -153,11 +151,7 @@ Widget _renderTransaction(
       searchingRoute: (_) => null,
       foundRoute: (_a, _b) => null,
       sending: (_) => null,
-      commit: (_, fees) => Center(
-          child: RaisedButton(
-              onPressed: () =>
-                  queueAction(OutTransactionsAction.resendCommit()),
-              child: Text('Resend commit'))),
+      commit: (_, fees) => null,
       success: (receipt, _b, _c) => Center(
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -201,6 +195,7 @@ Widget _renderTransaction(
       backAction: () => queueAction(OutTransactionsAction.back()));
 }
 
+/*
 Widget _renderSendCommit(
     NodeName nodeName,
     PaymentId paymentId,
@@ -247,3 +242,4 @@ Widget _renderSendCommit(
       body: body,
       backAction: () => queueAction(OutTransactionsAction.back()));
 }
+*/

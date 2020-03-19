@@ -23,5 +23,5 @@ class OutTransactionsAction extends _$OutTransactionsAction {
 
   OutTransactionsAction.discardPayment(NodeName nodeName, PaymentId paymentId)
       : super.discardPayment(nodeName, paymentId);
-  OutTransactionsAction.resendCommit() : super.resendCommit();
+  // OutTransactionsAction.resendCommit() : super.resendCommit();
 }

@@ -34,9 +34,7 @@ AppState handleOutTransactionsAction(
       cancelPayment: (nodeName, paymentId) => _handleCancelPayment(
           nodeName, paymentId, outTransactionsView, nodesStates, rand),
       discardPayment: (nodeName, paymentId) => _handleDiscardPayment(
-          nodeName, paymentId, outTransactionsView, nodesStates, rand),
-      resendCommit: () =>
-          _handleResendCommit(outTransactionsView, nodesStates));
+          nodeName, paymentId, outTransactionsView, nodesStates, rand));
 }
 
 AppState _handleBack(OutTransactionsView outTransactionsView, nodesStates) {
@@ -47,9 +45,7 @@ AppState _handleBack(OutTransactionsView outTransactionsView, nodesStates) {
   return outTransactionsView.match(
       home: () => createState(AppView.home()),
       transaction: (nodeName, paymentId) =>
-          createState(AppView.outTransactions(OutTransactionsView.home())),
-      sendCommit: (nodeName, paymentId) => createState(AppView.outTransactions(
-          OutTransactionsView.transaction(nodeName, paymentId))));
+          createState(AppView.outTransactions(OutTransactionsView.home())));
 }
 
 AppState _handleSelectPayment(
@@ -242,6 +238,7 @@ AppState _handleDiscardPayment(
         oldView, newView, nextRequests, optPendingRequest));
 }
 
+/*
 AppState _handleResendCommit(OutTransactionsView outTransactionsView,
     BuiltMap<NodeName, NodeState> nodesStates) {
   final createState = (AppView appView) => AppState((b) => b
@@ -257,8 +254,7 @@ AppState _handleResendCommit(OutTransactionsView outTransactionsView,
         nodeName = nodeName0;
         paymentId = paymentId0;
         return null;
-      },
-      sendCommit: (_a, _b) => null);
+      });
 
   if (nodeName == null) {
     logger.w('_handleResendCommit(): Incorrect view!');
@@ -268,3 +264,4 @@ AppState _handleResendCommit(OutTransactionsView outTransactionsView,
   return createState(AppView.outTransactions(
       OutTransactionsView.sendCommit(nodeName, paymentId)));
 }
+*/

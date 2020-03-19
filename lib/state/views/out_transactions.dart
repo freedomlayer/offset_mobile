@@ -15,6 +15,8 @@ class OutTransactionsView extends _$OutTransactionsView {
   OutTransactionsView.home() : super.home();
   OutTransactionsView.transaction(NodeName nodeName, PaymentId paymentId)
       : super.transaction(nodeName, paymentId);
+  /*
   OutTransactionsView.sendCommit(NodeName nodeName, PaymentId paymentId)
       : super.sendCommit(nodeName, paymentId);
+  */
 }

@@ -110,7 +110,8 @@ OutTransactionsView adjustOutTransactionsView(
       transaction: (nodeName, paymentId) =>
           getOpenPayment(nodesStates, nodeName, paymentId) != null
               ? outTransactionsView
-              : OutTransactionsView.home(),
+              : OutTransactionsView.home());
+      /*
       sendCommit: (nodeName, paymentId) {
         final openPayment = getOpenPayment(nodesStates, nodeName, paymentId);
         if (openPayment == null) {
@@ -122,6 +123,7 @@ OutTransactionsView adjustOutTransactionsView(
         }
         return outTransactionsView;
       });
+      */
 }
 
 InTransactionsView adjustInTransactionsView(
