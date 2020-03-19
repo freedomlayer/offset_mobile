@@ -56,8 +56,8 @@ AppState handleFriendsSettings(
               CardSettingsInnerView.friends(friendsSettingsView));
         }
 
-        return _handleFriendSettings(friendSettingsView, nodeName, friendPublicKey, nodesStates,
-            friendSettingsAction, rand);
+        return _handleFriendSettings(friendSettingsView, nodeName,
+            friendPublicKey, nodesStates, friendSettingsAction, rand);
       },
       shareInfo: () =>
           createStateInner(CardSettingsInnerView.friends(FriendsSettingsView.shareInfo())));

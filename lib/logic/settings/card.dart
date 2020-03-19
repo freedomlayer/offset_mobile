@@ -27,19 +27,19 @@ AppState handleCardSettingsAction(
 
   return cardSettingsAction.match(
       back: () => createState(AppView.settings(SettingsView.home())),
-      enable: () => _handleEnable(
-          nodeName, cardSettingsView, nodesStates, rand),
-      disable: () => _handleDisable(
-          nodeName, cardSettingsView, nodesStates, rand),
-      remove: () => _handleRemove(
-          nodeName, cardSettingsView, nodesStates, rand),
+      enable: () =>
+          _handleEnable(nodeName, cardSettingsView, nodesStates, rand),
+      disable: () =>
+          _handleDisable(nodeName, cardSettingsView, nodesStates, rand),
+      remove: () =>
+          _handleRemove(nodeName, cardSettingsView, nodesStates, rand),
       selectFriends: () => createState(AppView.settings(
           SettingsView.cardSettings(cardSettingsView.rebuild((b) => b
             ..inner =
                 CardSettingsInnerView.friends(FriendsSettingsView.home()))))),
       selectRelays: () => createState(AppView.settings(
-          SettingsView.cardSettings(cardSettingsView.rebuild(
-              (b) => b..inner = CardSettingsInnerView.relays(RelaysSettingsView.home()))))),
+          SettingsView.cardSettings(cardSettingsView.rebuild((b) =>
+              b..inner = CardSettingsInnerView.relays(RelaysSettingsView.home()))))),
       selectIndexServers: () => createState(AppView.settings(SettingsView.cardSettings(cardSettingsView.rebuild((b) => b..inner = CardSettingsInnerView.indexServers(IndexServersSettingsView.home()))))),
       friendsSettings: (friendsSettingsAction) {
         final friendsSettingsView = cardSettingsView.inner.match(
@@ -54,8 +54,8 @@ AppState handleCardSettingsAction(
               AppView.settings(SettingsView.cardSettings(cardSettingsView)));
         }
 
-        return handleFriendsSettings(nodeName,
-            friendsSettingsView, nodesStates, friendsSettingsAction, rand);
+        return handleFriendsSettings(nodeName, friendsSettingsView, nodesStates,
+            friendsSettingsAction, rand);
       },
       relaysSettings: (relaysSettingsAction) {
         final relaysSettingsView = cardSettingsView.inner.match(
@@ -70,8 +70,8 @@ AppState handleCardSettingsAction(
               AppView.settings(SettingsView.cardSettings(cardSettingsView)));
         }
 
-        return handleRelaysSettings(nodeName,
-            relaysSettingsView, nodesStates, relaysSettingsAction, rand);
+        return handleRelaysSettings(nodeName, relaysSettingsView, nodesStates,
+            relaysSettingsAction, rand);
       },
       indexServersSettings: (indexServersSettingsAction) {
         final indexServersSettingsView = cardSettingsView.inner.match(
@@ -88,12 +88,8 @@ AppState handleCardSettingsAction(
               AppView.settings(SettingsView.cardSettings(cardSettingsView)));
         }
 
-        return handleIndexServersSettings(
-            nodeName,
-            indexServersSettingsView,
-            nodesStates,
-            indexServersSettingsAction,
-            rand);
+        return handleIndexServersSettings(nodeName, indexServersSettingsView,
+            nodesStates, indexServersSettingsAction, rand);
       });
 }
 
