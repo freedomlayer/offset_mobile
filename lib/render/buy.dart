@@ -23,10 +23,6 @@ Widget renderBuy(BuyView buyView, BuiltMap<NodeName, NodeState> nodesStates,
           _renderInvoiceInfo(invoiceFile, nodesStates, queueAction),
       selectCard: (invoiceFile) =>
           _renderSelectCard(invoiceFile, nodesStates, queueAction));
-          /*
-      paymentProgress: (nodeName, paymentId) => _renderPaymentProgress(
-          nodeName, paymentId, nodesStates, queueAction));
-          */
 }
 
 Widget _renderInvoiceSelect(BuiltMap<NodeName, NodeState> nodesStates,
@@ -122,29 +118,3 @@ Widget _renderSelectCard(
       body: listView,
       backAction: () => queueAction(BuyAction.back()));
 }
-
-/*
-Widget _renderPaymentProgress(
-    NodeName nodeName,
-    PaymentId paymentId,
-    BuiltMap<NodeName, NodeState> nodesStates,
-    Function(BuyAction) queueAction) {
-
-  final nodeState = nodesStates[nodeName];
-  assert(nodeState != null);
-
-  final nodeOpen = nodeState.inner.match(
-      closed: () => null,
-      open: (nodeOpen) => nodeOpen);
-  assert(nodeOpen != null);
-
-  final openPayment = nodeOpen.compactReport.openPayments[paymentId];
-  return openPayment.status.match(
-      searchingRoute: (_requestRoutesId) => throw UnimplementedError(),
-      foundRoute: (confirmId, fees) => throw UnimplementedError(),
-      sending: (fees) => throw UnimplementedError(),
-      commit: (commit, fees) => throw UnimplementedError(),
-      success: (receipt, fees, ackUid) => throw UnimplementedError(),
-      failure: (ackUid) => throw UnimplementedError());
-}
-*/

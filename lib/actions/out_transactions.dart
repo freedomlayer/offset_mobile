@@ -15,6 +15,12 @@ class OutTransactionsAction extends _$OutTransactionsAction {
   OutTransactionsAction.back() : super.back();
   OutTransactionsAction.selectPayment(NodeName nodeName, PaymentId paymentId)
       : super.selectPayment(nodeName, paymentId);
+
+  OutTransactionsAction.confirmFees(NodeName nodeName, PaymentId paymentId)
+      : super.confirmFees(nodeName, paymentId);
+  OutTransactionsAction.cancelPayment(NodeName nodeName, PaymentId paymentId)
+      : super.cancelPayment(nodeName, paymentId);
+
   OutTransactionsAction.discardPayment(NodeName nodeName, PaymentId paymentId)
       : super.discardPayment(nodeName, paymentId);
   OutTransactionsAction.resendCommit() : super.resendCommit();
