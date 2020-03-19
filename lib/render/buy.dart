@@ -95,7 +95,30 @@ Widget _renderSelectCard(
     InvoiceFile invoiceFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(BuyAction) queueAction) {
-  throw UnimplementedError();
+  final children = <Widget>[];
+
+  nodesStates.forEach((nodeName, nodeState) {
+    // We only show open nodes. (We can not configure closed nodes):
+    final cardEntry = nodeState.inner.isOpen
+        ? ListTile(
+            key: Key(nodeName.inner),
+            title: Text('${nodeName.inner}'),
+            onTap: () => queueAction(BuyAction.selectCard(nodeName)))
+        : ListTile(
+            key: Key(nodeName.inner),
+            title: Text('${nodeName.inner}'),
+            enabled: false);
+
+    children.add(cardEntry);
+  });
+
+  final listView =
+      ListView(padding: const EdgeInsets.all(8), children: children);
+
+  return frame(
+      title: Text('Apply Commit'),
+      body: listView,
+      backAction: () => queueAction(BuyAction.back()));
 }
 
 Widget _renderPaymentProgress(BuiltMap<NodeName, NodeState> nodesStates,
