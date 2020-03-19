@@ -29,8 +29,9 @@ Widget renderSettings(
         return renderCardSettings(
             cardSettingsView,
             nodeState,
-            (CardSettingsAction cardSettingsAction) =>
-                queueAction(SettingsAction.cardSettings(cardSettingsAction)));
+            (CardSettingsAction cardSettingsAction) => queueAction(
+                SettingsAction.cardSettings(
+                    cardSettingsView.nodeName, cardSettingsAction)));
       },
       newCard: (newCardView) => _renderNewCard(
           newCardView,

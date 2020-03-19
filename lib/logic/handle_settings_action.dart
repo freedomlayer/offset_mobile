@@ -41,7 +41,7 @@ AppState handleSettingsAction(
 
         return _handleNewCard(newCardView, nodesStates, newCardAction, rand);
       },
-      cardSettings: (cardSettingsAction) {
+      cardSettings: (nodeName, cardSettingsAction) {
         final cardSettingsView = settingsView.match(
             home: () => null,
             cardSettings: (cardSettingsView) => cardSettingsView,
@@ -56,7 +56,7 @@ AppState handleSettingsAction(
         }
 
         return handleCardSettingsAction(
-            cardSettingsView, nodesStates, cardSettingsAction, rand);
+            cardSettingsView, nodeName, nodesStates, cardSettingsAction, rand);
       },
       selectCard: (nodeName) {
         final cardSettingsView = CardSettingsView((b) => b

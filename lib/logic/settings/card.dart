@@ -17,6 +17,7 @@ final logger = createLogger('logic::settings::card');
 
 AppState handleCardSettingsAction(
     CardSettingsView cardSettingsView,
+    NodeName nodeName,
     BuiltMap<NodeName, NodeState> nodesStates,
     CardSettingsAction cardSettingsAction,
     Random rand) {
@@ -27,11 +28,11 @@ AppState handleCardSettingsAction(
   return cardSettingsAction.match(
       back: () => createState(AppView.settings(SettingsView.home())),
       enable: () => _handleEnable(
-          cardSettingsView.nodeName, cardSettingsView, nodesStates, rand),
+          nodeName, cardSettingsView, nodesStates, rand),
       disable: () => _handleDisable(
-          cardSettingsView.nodeName, cardSettingsView, nodesStates, rand),
+          nodeName, cardSettingsView, nodesStates, rand),
       remove: () => _handleRemove(
-          cardSettingsView.nodeName, cardSettingsView, nodesStates, rand),
+          nodeName, cardSettingsView, nodesStates, rand),
       selectFriends: () => createState(AppView.settings(
           SettingsView.cardSettings(cardSettingsView.rebuild((b) => b
             ..inner =
@@ -53,7 +54,7 @@ AppState handleCardSettingsAction(
               AppView.settings(SettingsView.cardSettings(cardSettingsView)));
         }
 
-        return handleFriendsSettings(cardSettingsView.nodeName,
+        return handleFriendsSettings(nodeName,
             friendsSettingsView, nodesStates, friendsSettingsAction, rand);
       },
       relaysSettings: (relaysSettingsAction) {
@@ -69,7 +70,7 @@ AppState handleCardSettingsAction(
               AppView.settings(SettingsView.cardSettings(cardSettingsView)));
         }
 
-        return handleRelaysSettings(cardSettingsView.nodeName,
+        return handleRelaysSettings(nodeName,
             relaysSettingsView, nodesStates, relaysSettingsAction, rand);
       },
       indexServersSettings: (indexServersSettingsAction) {
@@ -88,7 +89,7 @@ AppState handleCardSettingsAction(
         }
 
         return handleIndexServersSettings(
-            cardSettingsView.nodeName,
+            nodeName,
             indexServersSettingsView,
             nodesStates,
             indexServersSettingsAction,

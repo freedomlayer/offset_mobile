@@ -17,9 +17,9 @@ class SettingsAction extends _$SettingsAction {
   SettingsAction.back() : super.back();
   SettingsAction.selectNewCard() : super.selectNewCard();
   SettingsAction.newCard(NewCardAction newCard) : super.newCard(newCard);
-  // TODO; Possibly add nodeName as argument here:
-  SettingsAction.cardSettings(CardSettingsAction cardSettings)
-      : super.cardSettings(cardSettings);
+  SettingsAction.cardSettings(
+      NodeName nodeName, CardSettingsAction cardSettings)
+      : super.cardSettings(nodeName, cardSettings);
   // Pick a card to view card settings
   SettingsAction.selectCard(NodeName nodeName) : super.selectCard(nodeName);
   // Select a card (Used for handling an imported file)
