@@ -82,9 +82,9 @@ class FriendsSettingsAction extends _$FriendsSettingsAction {
       : super.newFriend(newFriend);
   FriendsSettingsAction.selectFriend(PublicKey friendPublicKey)
       : super.selectFriend(friendPublicKey);
-  // TODO: Possibly add friendPublicKey as argument here:
-  FriendsSettingsAction.friendSettings(FriendSettingsAction friendSettings)
-      : super.friendSettings(friendSettings);
+  FriendsSettingsAction.friendSettings(
+      PublicKey friendPublicKey, FriendSettingsAction friendSettings)
+      : super.friendSettings(friendPublicKey, friendSettings);
   FriendsSettingsAction.shareInfo() : super.shareInfo();
 }
 

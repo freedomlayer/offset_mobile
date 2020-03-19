@@ -43,7 +43,7 @@ AppState handleFriendsSettings(
               FriendsSettingsView.friendSettings(FriendSettingsView((b) => b
                 ..friendPublicKey = friendPublicKey
                 ..inner = FriendSettingsInnerView.home())))),
-      friendSettings: (friendSettingsAction) {
+      friendSettings: (friendPublicKey, friendSettingsAction) {
         final friendSettingsView = friendsSettingsView.match(
             home: () => null,
             friendSettings: (friendSettingsView) => friendSettingsView,
@@ -56,7 +56,7 @@ AppState handleFriendsSettings(
               CardSettingsInnerView.friends(friendsSettingsView));
         }
 
-        return _handleFriendSettings(nodeName, friendSettingsView, nodesStates,
+        return _handleFriendSettings(friendSettingsView, nodeName, friendPublicKey, nodesStates,
             friendSettingsAction, rand);
       },
       shareInfo: () =>
@@ -144,8 +144,9 @@ AppState _handleAddFriend(
 }
 
 AppState _handleFriendSettings(
-    NodeName nodeName,
     FriendSettingsView friendSettingsView,
+    NodeName nodeName,
+    PublicKey friendPublicKey,
     BuiltMap<NodeName, NodeState> nodesStates,
     FriendSettingsAction friendSettingsAction,
     Random rand) {
@@ -168,18 +169,18 @@ AppState _handleFriendSettings(
                   .rebuild((b) => b..inner = FriendSettingsInnerView.home()))),
           newCurrency: () =>
               createStateFriends(FriendsSettingsView.friendSettings(friendSettingsView.rebuild((b) => b..inner = FriendSettingsInnerView.home())))),
-      enableFriend: () => _handleEnableFriend(nodeName, friendSettingsView.friendPublicKey, nodesStates, rand),
-      disableFriend: () => _handleDisableFriend(nodeName, friendSettingsView.friendPublicKey, nodesStates, rand),
-      removeFriend: () => _handleRemoveFriend(nodeName, friendSettingsView.friendPublicKey, nodesStates, rand),
-      removeCurrency: (currency) => _handleRemoveCurrency(nodeName, friendSettingsView.friendPublicKey, currency, nodesStates, rand),
+      enableFriend: () => _handleEnableFriend(nodeName, friendPublicKey, nodesStates, rand),
+      disableFriend: () => _handleDisableFriend(nodeName, friendPublicKey, nodesStates, rand),
+      removeFriend: () => _handleRemoveFriend(nodeName, friendPublicKey, nodesStates, rand),
+      removeCurrency: (currency) => _handleRemoveCurrency(nodeName, friendPublicKey, currency, nodesStates, rand),
       selectNewCurrency: () => createStateFriends(FriendsSettingsView.friendSettings(friendSettingsView.rebuild((b) => b..inner = FriendSettingsInnerView.newCurrency()))),
-      newCurrency: (currency, remoteMaxDebt, rate) => _handleNewCurrency(currency, remoteMaxDebt, rate, nodeName, friendSettingsView.friendPublicKey, nodesStates, rand),
+      newCurrency: (currency, remoteMaxDebt, rate) => _handleNewCurrency(currency, remoteMaxDebt, rate, nodeName, friendPublicKey, nodesStates, rand),
       selectCurrency: (currency) => createStateFriends(FriendsSettingsView.friendSettings(friendSettingsView.rebuild((b) => b..inner = FriendSettingsInnerView.currencySettings(currency)))),
-      openCurrency: (currency) => _handleOpenCurrency(currency, nodeName, friendSettingsView.friendPublicKey, nodesStates, rand),
-      closeCurrency: (currency) => _handleCloseCurrency(currency, nodeName, friendSettingsView.friendPublicKey, nodesStates, rand),
-      updateCurrency: (currency, remoteMaxDebt, rate) => _handleUpdateCurrency(currency, remoteMaxDebt, rate, nodeName, friendSettingsView.friendPublicKey, nodesStates, rand),
+      openCurrency: (currency) => _handleOpenCurrency(currency, nodeName, friendPublicKey, nodesStates, rand),
+      closeCurrency: (currency) => _handleCloseCurrency(currency, nodeName, friendPublicKey, nodesStates, rand),
+      updateCurrency: (currency, remoteMaxDebt, rate) => _handleUpdateCurrency(currency, remoteMaxDebt, rate, nodeName, friendPublicKey, nodesStates, rand),
       selectResolve: () => createStateFriends(FriendsSettingsView.friendSettings(friendSettingsView.rebuild((b) => b..inner = FriendSettingsInnerView.resolve()))),
-      resolve: () => _handleResolve(nodeName, friendSettingsView.friendPublicKey, nodesStates, rand));
+      resolve: () => _handleResolve(nodeName, friendPublicKey, nodesStates, rand));
 }
 
 /// Queue outgoing UserToServer messages

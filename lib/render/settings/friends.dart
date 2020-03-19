@@ -42,7 +42,8 @@ Widget renderFriendsSettings(
             friendSettingsView,
             friendReport,
             (FriendSettingsAction friendSettingsAction) => queueAction(
-                FriendsSettingsAction.friendSettings(friendSettingsAction)));
+                FriendsSettingsAction.friendSettings(
+                    friendSettingsView.friendPublicKey, friendSettingsAction)));
       },
       newFriend: (newFriendView) => _renderNewFriend(
           nodeName,
