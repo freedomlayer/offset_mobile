@@ -86,8 +86,8 @@ AppState _handleDiscardPayment(
       foundRoute: (_a, _b) => null,
       sending: (_) => null,
       commit: (_a, _b) => null,
-      success: (receipt, fees, ackUid) => ackUid,
-      failure: (_) => null);
+      success: (_receipt, _fees, ackUid) => ackUid,
+      failure: (ackUid) => ackUid);
 
   final userToCompact = UserToCompact.ackPaymentDone(paymentId, ackUid);
   final userToServer = UserToServer.node(nodeOpen.nodeId, userToCompact);
