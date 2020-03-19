@@ -39,7 +39,6 @@ class NewCardAction extends _$NewCardAction {
   static Serializer<NewCardAction> get serializer => _$newCardActionSerializer;
 
   NewCardAction.back() : super.back();
-  // NewCardAction.selectNewCard() : super.selectNewCard();
   NewCardAction.selectLocal() : super.selectLocal();
   NewCardAction.selectRemote() : super.selectRemote();
   NewCardAction.newCardLocal(NodeName nodeName) : super.newCardLocal(nodeName);
