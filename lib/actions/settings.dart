@@ -106,8 +106,6 @@ class FriendSettingsAction extends _$FriendSettingsAction {
       _$friendSettingsActionSerializer;
 
   FriendSettingsAction.back() : super.back();
-  // TODO: Possibly add arguments to actions, to allow logic handler handle the action
-  // without looking at the current view?
   FriendSettingsAction.enableFriend() : super.enableFriend();
   FriendSettingsAction.disableFriend() : super.disableFriend();
   FriendSettingsAction.removeFriend() : super.removeFriend();
