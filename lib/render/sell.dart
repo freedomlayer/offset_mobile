@@ -4,12 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:built_collection/built_collection.dart';
 
 import '../protocol/protocol.dart';
-import '../protocol/file.dart';
+// import '../protocol/file.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
 
-import 'utils/share_file.dart';
-import 'utils/qr_show.dart';
+// import 'utils/share_file.dart';
+// import 'utils/qr_show.dart';
 
 import 'frame.dart';
 
@@ -18,9 +18,7 @@ Widget renderSell(SellView sellView, BuiltMap<NodeName, NodeState> nodesStates,
   return sellView.match(
       selectCard: () => _renderSelectCard(nodesStates, queueAction),
       invoiceDetails: (nodeName) =>
-          _renderInvoiceDetails(nodeName, nodesStates, queueAction),
-      sendInvoice: (nodeName, invoiceId) =>
-          _renderSendInvoice(nodeName, invoiceId, nodesStates, queueAction));
+          _renderInvoiceDetails(nodeName, nodesStates, queueAction));
 }
 
 Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
@@ -211,6 +209,7 @@ Widget _renderInvoiceDetails(
       backAction: () => queueAction(SellAction.back()));
 }
 
+/*
 Widget _renderSendInvoice(
     NodeName nodeName,
     InvoiceId invoiceId,
@@ -264,3 +263,4 @@ Widget _renderSendInvoice(
       body: body,
       backAction: () => queueAction(SellAction.back()));
 }
+*/

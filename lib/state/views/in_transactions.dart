@@ -17,8 +17,10 @@ class InTransactionsView extends _$InTransactionsView {
   InTransactionsView.home() : super.home();
   InTransactionsView.transaction(NodeName nodeName, InvoiceId invoiceId)
       : super.transaction(nodeName, invoiceId);
+  /*
   InTransactionsView.sendInvoice(NodeName nodeName, InvoiceId invoiceId)
       : super.sendInvoice(nodeName, invoiceId);
+  */
   InTransactionsView.collected(NodeName nodeName, InvoiceFile invoiceFile)
       : super.collected(nodeName, invoiceFile);
   InTransactionsView.selectCardApplyCommit(Commit commit)

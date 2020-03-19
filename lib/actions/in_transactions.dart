@@ -18,8 +18,10 @@ class InTransactionsAction extends _$InTransactionsAction {
       : super.selectInvoice(nodeName, invoiceId);
   InTransactionsAction.applyCommit(NodeName nodeName, Commit commit)
       : super.applyCommit(nodeName, commit);
+  /*
   InTransactionsAction.resendInvoice(NodeName nodeName, InvoiceId invoiceId)
       : super.resendInvoice(nodeName, invoiceId);
+  */
   InTransactionsAction.collectInvoice(NodeName nodeName, InvoiceId invoiceId)
       : super.collectInvoice(nodeName, invoiceId);
   InTransactionsAction.cancelInvoice(NodeName nodeName, InvoiceId invoiceId)

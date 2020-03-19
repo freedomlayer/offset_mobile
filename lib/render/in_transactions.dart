@@ -7,7 +7,7 @@ import '../state/state.dart';
 import '../actions/actions.dart';
 
 import 'utils/share_file.dart';
-import 'utils/qr_show.dart';
+// import 'utils/qr_show.dart';
 
 import 'frame.dart';
 
@@ -19,8 +19,6 @@ Widget renderInTransactions(
       home: () => _renderHome(nodesStates, queueAction),
       transaction: (nodeName, invoiceId) =>
           _renderTransaction(nodeName, invoiceId, nodesStates, queueAction),
-      sendInvoice: (nodeName, invoiceId) =>
-          _renderSendInvoice(nodeName, invoiceId, nodesStates, queueAction),
       collected: (nodeName, invoiceFile) =>
           _renderCollected(nodeName, invoiceFile, nodesStates, queueAction),
       selectCardApplyCommit: (commit) =>
@@ -202,6 +200,7 @@ Widget _renderTransaction(
       backAction: () => queueAction(InTransactionsAction.back()));
 }
 
+/*
 Widget _renderSendInvoice(
     NodeName nodeName,
     InvoiceId invoiceId,
@@ -243,6 +242,7 @@ Widget _renderSendInvoice(
       body: body,
       backAction: () => queueAction(InTransactionsAction.back()));
 }
+*/
 
 Widget _renderCollected(
     NodeName nodeName,

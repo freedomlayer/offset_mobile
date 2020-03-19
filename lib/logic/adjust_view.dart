@@ -95,11 +95,7 @@ AppView adjustSellView(
       selectCard: () => AppView.sell(sellView),
       invoiceDetails: (nodeName) => nodeActive(nodesStates, nodeName)
           ? AppView.sell(sellView)
-          : AppView.home(),
-      sendInvoice: (nodeName, invoiceId) =>
-          invoiceExists(nodesStates, nodeName, invoiceId)
-              ? AppView.sell(sellView)
-              : AppView.home());
+          : AppView.home());
 }
 
 OutTransactionsView adjustOutTransactionsView(
@@ -137,7 +133,6 @@ InTransactionsView adjustInTransactionsView(
   return inTransactionsView.match(
       home: () => inTransactionsView,
       transaction: (nodeName, invoiceId) => calcView(nodeName, invoiceId),
-      sendInvoice: (nodeName, invoiceId) => calcView(nodeName, invoiceId),
       collected: (nodeName, invoiceId) => calcView(nodeName, invoiceId),
       selectCardApplyCommit: (commit) => inTransactionsView);
 }

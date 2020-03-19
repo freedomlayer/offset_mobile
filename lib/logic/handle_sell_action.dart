@@ -26,12 +26,7 @@ AppState handleSellAction(
           createState(AppView.sell(SellView.invoiceDetails(nodeName))),
       createInvoice: (nodeName, currency, amount, description) =>
           _handleCreateInvoice(nodeName, currency, amount, description,
-              sellView, nodesStates, rand),
-      viewTransaction: (nodeName, invoiceId) => createState(
-          AppView.inTransactions(
-              InTransactionsView.transaction(nodeName, invoiceId))),
-      cancelInvoice: (nodeName, invoiceId) => _handleCancelInvoice(
-          sellView, nodeName, invoiceId, nodesStates, rand));
+              sellView, nodesStates, rand));
 }
 
 AppState _handleCreateInvoice(
@@ -79,7 +74,7 @@ AppState _handleCreateInvoice(
     ..inner = userToServer);
 
   final oldView = AppView.sell(sellView);
-  final newView = AppView.sell(SellView.sendInvoice(nodeName, invoiceId));
+  final newView = AppView.inTransactions(InTransactionsView.transaction(nodeName, invoiceId));
 
   final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
   final optPendingRequest = OptPendingRequest.none();
@@ -90,6 +85,7 @@ AppState _handleCreateInvoice(
         oldView, newView, nextRequests, optPendingRequest));
 }
 
+/*
 AppState _handleCancelInvoice(
     SellView sellView,
     NodeName nodeName,
@@ -132,3 +128,4 @@ AppState _handleCancelInvoice(
     ..viewState = ViewState.transition(
         oldView, newView, nextRequests, optPendingRequest));
 }
+*/

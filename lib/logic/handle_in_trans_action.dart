@@ -27,9 +27,6 @@ AppState handleInTransactionsAction(
             home: () => createState(AppView.home()),
             transaction: (_a, _b) =>
                 createState(AppView.inTransactions(InTransactionsView.home())),
-            sendInvoice: (nodeName, invoiceId) => createState(
-                AppView.inTransactions(
-                    InTransactionsView.transaction(nodeName, invoiceId))),
             collected: (_a, _b) =>
                 createState(AppView.inTransactions(InTransactionsView.home())),
             selectCardApplyCommit: (_) => createState(AppView.home()));
@@ -39,9 +36,6 @@ AppState handleInTransactionsAction(
               InTransactionsView.transaction(nodeName, invoiceId))),
       applyCommit: (nodeName, commit) => _handleApplyCommit(
           nodeName, commit, inTransactionsView, nodesStates, rand),
-      resendInvoice: (nodeName, invoiceId) => createState(
-          AppView.inTransactions(
-              InTransactionsView.sendInvoice(nodeName, invoiceId))),
       collectInvoice: (nodeName, invoiceId) => _handleCollectInvoice(
           nodeName, invoiceId, inTransactionsView, nodesStates, rand),
       cancelInvoice: (nodeName, invoiceId) => _handleCancelInvoice(
