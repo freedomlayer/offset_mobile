@@ -153,12 +153,62 @@ Widget _renderTransaction(
 
 Widget _renderSearchingRoute(NodeName nodeName, PaymentId paymentId,
     OpenPayment openPayment, Function(OutTransactionsAction) queueAction) {
-  throw UnimplementedError();
+  final body = Center(
+      child: Column(children: <Widget>[
+    Center(child: Text('Searching route')),
+    SizedBox(height: 10),
+    Text('Card: ${nodeName.inner}'),
+    SizedBox(height: 10),
+    Text('Amount: ${openPayment.destPayment.inner}'),
+    SizedBox(height: 10),
+    Text('Description: ${openPayment.description}'),
+    Center(child: CircularProgressIndicator(value: null)),
+    SizedBox(height: 20),
+    Center(
+        child: RaisedButton(
+            onPressed: () => queueAction(OutTransactionsAction.cancelPayment(nodeName, paymentId)),
+            child: Text('Cancel'))),
+  ]));
+
+  return frame(
+      title: Text('Outgoing transaction'),
+      body: body,
+      backAction: () => queueAction(OutTransactionsAction.back()));
 }
 
 Widget _renderFoundRoute(U128 fees, NodeName nodeName, PaymentId paymentId,
     OpenPayment openPayment, Function(OutTransactionsAction) queueAction) {
-  throw UnimplementedError();
+  final body = Center(
+      child: Column(children: <Widget>[
+    SizedBox(height: 10),
+    Center(child: Text('Confirm payment')),
+    SizedBox(height: 10),
+    Text('Card: ${nodeName.inner}'),
+    SizedBox(height: 10),
+    Text('Amount: ${openPayment.destPayment.inner}'),
+    SizedBox(height: 10),
+    Text('Description: ${openPayment.description}'),
+    SizedBox(height: 10),
+    Text('Fees: ${fees.inner}'),
+    SizedBox(height: 20),
+    Center(
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      RaisedButton(
+          onPressed: queueAction(
+              OutTransactionsAction.confirmFees(nodeName, paymentId)),
+          child: Text('Confirm')),
+      RaisedButton(
+          onPressed: queueAction(
+              OutTransactionsAction.cancelPayment(nodeName, paymentId)),
+          child: Text('Cancel')),
+    ]))
+  ]));
+
+  return frame(
+      title: Text('Outgoing transaction'),
+      body: body,
+      backAction: () => queueAction(OutTransactionsAction.back()));
 }
 
 Widget _renderSending(U128 fees, NodeName nodeName, PaymentId paymentId,
@@ -178,7 +228,6 @@ Widget _renderSending(U128 fees, NodeName nodeName, PaymentId paymentId,
     SizedBox(height: 20),
     Center(
         child: RaisedButton(
-            // TODO: Create a better name for the commitment file:
             onPressed: () => queueAction(OutTransactionsAction.cancelPayment(nodeName, paymentId)),
             child: Text('Cancel'))),
   ]));
