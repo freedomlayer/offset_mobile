@@ -64,6 +64,16 @@ AppState attemptSend(
       });
 }
 
+/// Debug util, allowing to print long strings
+/// (It seems like it is impossible to print a string larger than ~1000
+/// characters using debugPrint)
+void myPrint(inputStr) {
+  debugPrint('------[start]------');
+  final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
+  pattern.allMatches(inputStr).forEach((match) => debugPrint(match.group(0)));
+  debugPrint('------[end]------\n');
+}
+
 class MainApp extends StatefulWidget {
   MainApp();
 
@@ -96,6 +106,7 @@ class MainAppState extends State<MainApp> {
         .transform(utf8.decoder)
         .transform(const LineSplitter())
         .map((String data) {
+
       logger.d('Message from process:\n$data');
       // TODO: deserializeMsg might raise an exception. How to handle?
       return deserializeMsg<ServerToUserAck>(data);
