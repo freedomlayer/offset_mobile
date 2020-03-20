@@ -89,11 +89,13 @@ AppState _handleConfirmFees(
     return createState(AppView.home());
   }, open: (nodeOpen) {
     final openPayment = nodeOpen.compactReport.openPayments[paymentId];
+    nodeId = nodeOpen.nodeId;
     if (openPayment == null) {
       logger.w(
           '_handleConfirmFees(): confirmFees: payment $paymentId does not exist!');
       return createState(AppView.home());
     }
+
 
     openPayment.status.match(
         searchingRoute: (_) => null,
