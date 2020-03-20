@@ -196,11 +196,11 @@ Widget _renderFoundRoute(U128 fees, NodeName nodeName, PaymentId paymentId,
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       RaisedButton(
-          onPressed: queueAction(
+          onPressed: () => queueAction(
               OutTransactionsAction.confirmFees(nodeName, paymentId)),
           child: Text('Confirm')),
       RaisedButton(
-          onPressed: queueAction(
+          onPressed: () => queueAction(
               OutTransactionsAction.cancelPayment(nodeName, paymentId)),
           child: Text('Cancel')),
     ]))
@@ -310,7 +310,7 @@ Widget _renderSuccess(
               await shareFile<Receipt>(receipt, 'receipt.receipt'),
           child: Text('Send Receipt')),
       RaisedButton(
-          onPressed: queueAction(
+          onPressed: () => queueAction(
               OutTransactionsAction.discardPayment(nodeName, paymentId)),
           child: Text('Discard')),
     ]))
@@ -337,7 +337,7 @@ Widget _renderFailure(NodeName nodeName, PaymentId paymentId,
     SizedBox(height: 20),
     Center(
         child: RaisedButton(
-            onPressed: queueAction(
+            onPressed: () => queueAction(
                 OutTransactionsAction.discardPayment(nodeName, paymentId)),
             child: Text('Discard')))
   ]));
