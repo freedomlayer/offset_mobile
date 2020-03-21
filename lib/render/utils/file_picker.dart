@@ -16,7 +16,7 @@ Future<T> pickFromFile<T>(String fileExtension) async {
   String filePath;
   try {
     filePath = await FilePicker.getFilePath(
-        type: FileType.ANY, fileExtension: fileExtension);
+        type: FileType.any, fileExtension: fileExtension);
   } on PlatformException catch (e) {
     throw FilePickerError('Platform exception: $e');
   }
