@@ -1,5 +1,5 @@
-# Offst mobile app
+# Offset mobile app
 
-Offst is a credit card powered by trust between people.
+Offset is a credit card powered by trust between people.
 
-https://www.offst.org
+https://www.offset.org

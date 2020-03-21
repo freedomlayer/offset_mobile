@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:built_value/serializer.dart';
-import 'package:offst_mobile/utils/wrapped_string.dart';
-import 'package:offst_mobile/utils/wrapped_bigint.dart';
+import 'package:offset/utils/wrapped_string.dart';
+import 'package:offset/utils/wrapped_bigint.dart';
 
 part 'common.g.dart';
 

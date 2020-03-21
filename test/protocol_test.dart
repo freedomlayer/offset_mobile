@@ -4,10 +4,10 @@ import 'package:test/test.dart';
 
 import 'package:logger/logger.dart';
 
-import 'package:offst_mobile/protocol/common.dart';
-import 'package:offst_mobile/protocol/protocol.dart';
-import 'package:offst_mobile/protocol/serialize.dart';
-import 'package:offst_mobile/utils/json_plugin.dart';
+import 'package:offset/protocol/common.dart';
+import 'package:offset/protocol/protocol.dart';
+import 'package:offset/protocol/serialize.dart';
+import 'package:offset/utils/json_plugin.dart';
 
 import 'protocol_samples.dart' as samples;
 

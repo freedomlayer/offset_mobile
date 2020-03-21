@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
-import 'package:offst_mobile/utils/json_plugin.dart';
+import 'package:offset/utils/json_plugin.dart';
 
 import 'protocol.dart';
 import 'file.dart';

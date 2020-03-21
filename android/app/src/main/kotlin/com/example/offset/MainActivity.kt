@@ -1,4 +1,4 @@
-package com.example.offst_mobile
+package com.example.offset
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
