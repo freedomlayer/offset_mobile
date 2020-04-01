@@ -8,6 +8,9 @@ set -eux -o pipefail
 echo "*** Formatting ..."
 dartfmt -w $(find bin lib test -name \*.dart 2>/dev/null)
 
+echo "*** Get dependencies ..."
+flutter pub get
+
 # Compile time code generation
 echo "*** Building ..."
 flutter pub run build_runner build \
