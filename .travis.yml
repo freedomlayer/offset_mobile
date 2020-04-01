@@ -10,8 +10,8 @@ addons:
 install:
   - mkdir -p "$HOME/install"
   - git clone https://github.com/flutter/flutter.git -b stable "$HOME/install/flutter"
-  - ./flutter/bin/flutter doctor
   - export PATH="$PATH:$HOME/install/flutter/bin"
+  - flutter doctor
 script:
   - tool/check_format
   - tool/presubmit
