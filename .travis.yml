@@ -2,6 +2,7 @@
 # https://itnext.io/configuring-travis-ci-and-coveralls-with-flutter-4c65edfc42d3
 
 language: dart
+os: linux
 dist: bionic
 addons:
   apt:
