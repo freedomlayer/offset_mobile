@@ -35,8 +35,8 @@ rm -rf $TEMP_DIR/*
 
 # i686
 FILENAME="offset-v${VERSION}-i686-linux-android"
-curl -L "${DOWNLOAD_URL}/v${VERSION}/${FILENAME}.tar.gz" \ 
-        tar -zxf - -C $TEMP_DIR
+curl -L "${DOWNLOAD_URL}/v${VERSION}/${FILENAME}.tar.gz" \
+        | tar -zxf - -C $TEMP_DIR
 cp $TEMP_DIR/$FILENAME/bin/stcompact ./external/stcompact_i686
 rm -rf $TEMP_DIR/*
 
