@@ -1,0 +1,20 @@
+# Based on 
+# https://itnext.io/configuring-travis-ci-and-coveralls-with-flutter-4c65edfc42d3
+
+language: dart
+dist: bionic
+addons:
+  apt:
+    packages:
+      - lib32stdc++6
+install:
+  - mkdir -p "$HOME/install"
+  - git clone https://github.com/flutter/flutter.git -b stable "$HOME/install/flutter"
+  - ./flutter/bin/flutter doctor
+  - export PATH="$PATH:$HOME/install/flutter/bin"
+script:
+  - tool/check_format
+  - tool/presubmit
+cache:
+  directories:
+    - $HOME/.pub-cache
