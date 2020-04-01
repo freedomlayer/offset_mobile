@@ -106,7 +106,6 @@ class MainAppState extends State<MainApp> {
         .transform(utf8.decoder)
         .transform(const LineSplitter())
         .map((String data) {
-
       logger.d('Message from process:\n$data');
       // TODO: deserializeMsg might raise an exception. How to handle?
       return deserializeMsg<ServerToUserAck>(data);

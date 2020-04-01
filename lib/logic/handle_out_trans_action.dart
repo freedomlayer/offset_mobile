@@ -96,7 +96,6 @@ AppState _handleConfirmFees(
       return createState(AppView.home());
     }
 
-
     openPayment.status.match(
         searchingRoute: (_) => null,
         foundRoute: (confirmId0, _fees) {
@@ -142,7 +141,6 @@ AppState _handleConfirmFees(
     ..viewState = ViewState.transition(
         oldView, newView, nextRequests, optPendingRequest));
 }
-
 
 AppState _handleCancelPayment(
     NodeName nodeName,

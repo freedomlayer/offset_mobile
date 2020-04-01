@@ -74,7 +74,8 @@ AppState _handleCreateInvoice(
     ..inner = userToServer);
 
   final oldView = AppView.sell(sellView);
-  final newView = AppView.inTransactions(InTransactionsView.transaction(nodeName, invoiceId));
+  final newView = AppView.inTransactions(
+      InTransactionsView.transaction(nodeName, invoiceId));
 
   final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
   final optPendingRequest = OptPendingRequest.none();

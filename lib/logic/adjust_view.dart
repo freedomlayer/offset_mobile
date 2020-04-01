@@ -107,7 +107,7 @@ OutTransactionsView adjustOutTransactionsView(
           getOpenPayment(nodesStates, nodeName, paymentId) != null
               ? outTransactionsView
               : OutTransactionsView.home());
-      /*
+  /*
       sendCommit: (nodeName, paymentId) {
         final openPayment = getOpenPayment(nodesStates, nodeName, paymentId);
         if (openPayment == null) {

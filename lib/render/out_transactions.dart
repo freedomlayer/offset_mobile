@@ -263,8 +263,7 @@ Widget _renderCommit(
     Center(
         child: Text(
             'Payment is only complete when the seller receives the commitment')),
-    Center(
-        child: qrShow<Commit>(commit)),
+    Center(child: qrShow<Commit>(commit)),
     SizedBox(height: 20),
     Center(
         child: RaisedButton(

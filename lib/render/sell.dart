@@ -138,10 +138,12 @@ Widget _renderInvoiceDetails(
             // TODO: Choice for currency
             DropdownButton<Currency>(
                 hint: Text('Select Currency'),
-                items: currencies.map((currency) => DropdownMenuItem<Currency>(
-                    key: Key(currency.inner),
-                    child: Text('${currency.inner}'),
-                    value: currency)).toList(),
+                items: currencies
+                    .map((currency) => DropdownMenuItem<Currency>(
+                        key: Key(currency.inner),
+                        child: Text('${currency.inner}'),
+                        value: currency))
+                    .toList(),
                 value: _currency,
                 onChanged: (newCurrency) =>
                     setState(() => _currency = newCurrency),

@@ -96,7 +96,8 @@ AppState _handleSelectCard(
     ..inner = userToServer);
 
   final oldView = AppView.buy(BuyView.selectCard(invoiceFile));
-  final newView = AppView.outTransactions(OutTransactionsView.transaction(nodeName, paymentId));
+  final newView = AppView.outTransactions(
+      OutTransactionsView.transaction(nodeName, paymentId));
 
   final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
   final optPendingRequest = OptPendingRequest.none();
