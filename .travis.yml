@@ -18,6 +18,7 @@ install:
 script:
   - tool/check_format
   - tool/presubmit
+  - tool/download_core
 cache:
   directories:
     - $HOME/.pub-cache
