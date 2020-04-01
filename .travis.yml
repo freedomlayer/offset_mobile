@@ -19,8 +19,6 @@ script:
   - tool/check_format
   - tool/presubmit
   - tool/download_core
-    # Debug:
-  - ls ./external
 cache:
   directories:
     - $HOME/.pub-cache
