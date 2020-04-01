@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Script to be run before submitting to remote repository.
+
 # See: https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
 set -eux -o pipefail
 
