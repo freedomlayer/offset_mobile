@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Check formatting of dart files in the project
+
+# See: https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
+set -eux -o pipefail
+
+echo "*** Checking formatting ..."
+dartfmt -n --set-exit-if-changed $(find bin lib test -name \*.dart 2>/dev/null)
+
