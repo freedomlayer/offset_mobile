@@ -70,7 +70,7 @@ AppState attemptSend(
 void myPrint(inputStr) {
   debugPrint('------[start]------');
   final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
-  pattern.allMatches(inputStr).forEach((match) => debugPrint(match.group(0)));
+  pattern.allMatches(inputStr).forEach((match) => logger.d(match.group(0)));
   debugPrint('------[end]------\n');
 }
 
@@ -106,7 +106,7 @@ class MainAppState extends State<MainApp> {
         .transform(utf8.decoder)
         .transform(const LineSplitter())
         .map((String data) {
-      logger.d('Message from process:\n$data');
+      myPrint('Message from process:\n$data');
       // TODO: deserializeMsg might raise an exception. How to handle?
       return deserializeMsg<ServerToUserAck>(data);
     }).asBroadcastStream();
@@ -190,7 +190,7 @@ class MainAppState extends State<MainApp> {
 
     final sendUserToServerAck = (UserToServerAck userToServerAck) {
       final data = serializeMsg<UserToServerAck>(userToServerAck);
-      logger.d('Sending to process:\n$data');
+      myPrint('Sending to process:\n$data');
       _process.stdin.writeln(data);
     };
 
