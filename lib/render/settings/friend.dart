@@ -57,7 +57,8 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
       Widget title;
       Widget trailing;
       if (currencyReport != null) {
-        title = Text('${currency.inner}: ${balanceToString(currencyReport.balance)}');
+        title = Text(
+            '${currency.inner}: ${balanceToString(currencyReport.balance)}');
         trailing = FlatButton(
             child: Icon(Icons.edit),
             onPressed: friendReport.status.isEnabled
@@ -76,8 +77,9 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
 
       final double ratePercent = (configReport.rate.mul / (1 << 32)) * 100;
       final addStr = amountToString(U128(BigInt.from(configReport.rate.add)));
-      final subtitle = Text('limit: ${amountToString(configReport.remoteMaxDebt)}' +
-          '\nrate: ${ratePercent.toStringAsFixed(2)}% + $addStr');
+      final subtitle = Text(
+          'limit: ${amountToString(configReport.remoteMaxDebt)}' +
+              '\nrate: ${ratePercent.toStringAsFixed(2)}% + $addStr');
 
       children.add(ListTile(
         key: Key(currency.inner),
@@ -261,7 +263,6 @@ String _percentValidator(String percentString) {
 }
 
 String _addValidator(String addString) {
-
   if (!verifyAmountString(addString)) {
     return 'Must be a non negative value, up to $ACCURACY digits after decimal dot';
   }
@@ -371,7 +372,8 @@ Widget _renderCurrencySettings(
                     initialValue: '$_add',
                     validator: _addValidator,
                     keyboardType: TextInputType.number,
-                    onSaved: (addString) => _add = stringToAmount(addString).inner.toInt(),
+                    onSaved: (addString) =>
+                        _add = stringToAmount(addString).inner.toInt(),
                   )),
             ]),
             Container(
@@ -425,7 +427,8 @@ Widget _renderCurrencySettings(
         Expanded(
             flex: 2,
             child: ListTile(
-                title: Text('Balance: ${balanceToString(currencyReport.balance)}'))),
+                title: Text(
+                    'Balance: ${balanceToString(currencyReport.balance)}'))),
         Expanded(flex: 16, child: formBody),
       ])));
 

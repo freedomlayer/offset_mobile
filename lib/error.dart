@@ -1,5 +1,5 @@
 // TODO: Possibly rename to AppException?
-// See: https://stackoverflow.com/questions/17315945/error-vs-exception-in-dart 
+// See: https://stackoverflow.com/questions/17315945/error-vs-exception-in-dart
 
 /// Base error class for this application
 abstract class AppError implements Exception {

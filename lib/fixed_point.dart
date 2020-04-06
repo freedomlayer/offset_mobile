@@ -84,9 +84,8 @@ bool verifyFixed(String valueString, int accuracy) {
     return false;
   }
 
-  final absValueString = valueString[0] == '-'
-      ? valueString.substring(1)
-      : valueString;
+  final absValueString =
+      valueString[0] == '-' ? valueString.substring(1) : valueString;
 
   final splitted = absValueString.split('.');
   switch (splitted.length) {

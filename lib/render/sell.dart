@@ -146,8 +146,7 @@ Widget _renderInvoiceDetails(
               ),
               validator: _amountValidator,
               keyboardType: TextInputType.number,
-              onSaved: (amountString) =>
-                  _amount = stringToAmount(amountString),
+              onSaved: (amountString) => _amount = stringToAmount(amountString),
             ),
             TextFormField(
               decoration: const InputDecoration(

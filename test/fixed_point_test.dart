@@ -45,8 +45,7 @@ void main() {
       expect(fixedToBigInt("4321.12345", 5), BigInt.from(432112345));
       expect(fixedToBigInt("54321.12345", 5), BigInt.from(5432112345));
       expect(fixedToBigInt("654321.12345", 5), BigInt.from(65432112345));
-      expect(
-          fixedToBigInt("7654321.12345", 5), BigInt.from(765432112345));
+      expect(fixedToBigInt("7654321.12345", 5), BigInt.from(765432112345));
 
       expect(fixedToBigInt("-0", 5), BigInt.from(0));
       expect(fixedToBigInt("-0.0000", 5), BigInt.from(0));
@@ -62,9 +61,7 @@ void main() {
       expect(fixedToBigInt("-4321.12345", 5), BigInt.from(-432112345));
       expect(fixedToBigInt("-54321.12345", 5), BigInt.from(-5432112345));
       expect(fixedToBigInt("-654321.12345", 5), BigInt.from(-65432112345));
-      expect(
-          fixedToBigInt("-7654321.12345", 5), BigInt.from(-765432112345));
-
+      expect(fixedToBigInt("-7654321.12345", 5), BigInt.from(-765432112345));
 
       expect(fixedToBigInt("0.01", 5), BigInt.from(1000));
       expect(fixedToBigInt("0.001", 5), BigInt.from(100));
@@ -76,22 +73,24 @@ void main() {
 
     test('fixedToBigInt exceptions', () {
       // Empty string
-      expect(() => fixedToBigInt('', 5), throwsA(TypeMatcher<FixedPointError>()));
+      expect(
+          () => fixedToBigInt('', 5), throwsA(TypeMatcher<FixedPointError>()));
 
       // Only a dot:
-      expect(() => fixedToBigInt('.', 5), throwsA(TypeMatcher<FixedPointError>()));
+      expect(
+          () => fixedToBigInt('.', 5), throwsA(TypeMatcher<FixedPointError>()));
 
       // No prefix
-      expect(
-          () => fixedToBigInt('.12', 5), throwsA(TypeMatcher<FixedPointError>()));
+      expect(() => fixedToBigInt('.12', 5),
+          throwsA(TypeMatcher<FixedPointError>()));
 
       // No suffix
-      expect(
-          () => fixedToBigInt('12.', 5), throwsA(TypeMatcher<FixedPointError>()));
+      expect(() => fixedToBigInt('12.', 5),
+          throwsA(TypeMatcher<FixedPointError>()));
 
       // Using non digit symbols:
-      expect(
-          () => fixedToBigInt('asdf', 5), throwsA(TypeMatcher<FixedPointError>()));
+      expect(() => fixedToBigInt('asdf', 5),
+          throwsA(TypeMatcher<FixedPointError>()));
 
       // Too many decimal dots:
       expect(() => fixedToBigInt('1234.1234.1234', 5),
@@ -132,9 +131,9 @@ void main() {
 
       // Some good examples:
       expect(verifyFixed('12345.12345', 5), true);
-      expect(verifyFixed('0.1234',5 ), true);
+      expect(verifyFixed('0.1234', 5), true);
       expect(verifyFixed('12345', 5), true);
-      expect(verifyFixed('123456',5 ), true);
+      expect(verifyFixed('123456', 5), true);
     });
   });
 }
