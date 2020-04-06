@@ -92,13 +92,13 @@ bool verifyAmountString(String amountString) {
       {
         // We have no decimal point.
         // Make sure that we only have digits left:
-        return _isAllDigits(splitted[0]);
+        return (splitted[0].length > 0) && _isAllDigits(splitted[0]);
       }
       break;
     case 2:
       {
-        return _isAllDigits(splitted[0]) &&
-            _isAllDigits(splitted[1]) &&
+        return (splitted[0].length > 0) && _isAllDigits(splitted[0]) &&
+            (splitted[1].length > 0) && _isAllDigits(splitted[1]) &&
             splitted[1].length <= ACCURACY;
       }
       break;

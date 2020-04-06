@@ -49,6 +49,22 @@ void main() {
     });
 
     test('stringToAmount exceptions', () {
+      // Empty string
+      expect(() => stringToAmount(''),
+          throwsA(TypeMatcher<AmountError>()));
+
+      // Only a dot:
+      expect(() => stringToAmount('.'),
+          throwsA(TypeMatcher<AmountError>()));
+
+      // No prefix
+      expect(() => stringToAmount('.12'),
+          throwsA(TypeMatcher<AmountError>()));
+
+      // No suffix
+      expect(() => stringToAmount('12.'),
+          throwsA(TypeMatcher<AmountError>()));
+
       // Using non digit symbols:
       expect(() => stringToAmount('asdf'),
           throwsA(TypeMatcher<AmountError>()));
@@ -60,13 +76,21 @@ void main() {
       // Too many decimal symbols after dot:
       expect(() => stringToAmount('0.123456'),
           throwsA(TypeMatcher<AmountError>()));
-
-      // Missing before decimal dot part:
-      expect(() => stringToAmount('.123456'),
-          throwsA(TypeMatcher<AmountError>()));
     });
 
     test('verifyAmountString', () {
+      // Empty string:
+      expect(verifyAmountString(''), false);
+
+      // Only a dot
+      expect(verifyAmountString('.'), false);
+
+      // No prefix
+      expect(verifyAmountString('.12'), false);
+
+      // No suffix
+      expect(verifyAmountString('12.'), false);
+
       // Using non digit symbols:
       expect(verifyAmountString('asdf'), false);
 
