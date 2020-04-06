@@ -68,10 +68,10 @@ AppState attemptSend(
 /// (It seems like it is impossible to print a string larger than ~1000
 /// characters using debugPrint)
 void myPrint(inputStr) {
-  debugPrint('------[start]------');
+  logger.d('------[start]------');
   final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
   pattern.allMatches(inputStr).forEach((match) => logger.d(match.group(0)));
-  debugPrint('------[end]------\n');
+  logger.d('------[end]------\n');
 }
 
 class MainApp extends StatefulWidget {

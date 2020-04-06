@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:built_collection/built_collection.dart';
 
+import '../../servers/index.dart';
+import '../../servers/relay.dart';
 import '../../actions/actions.dart';
 import '../../protocol/protocol.dart';
 // import '../../protocol/file.dart';
@@ -33,13 +35,14 @@ AppState handleCardSettingsAction(
           _handleDisable(nodeName, cardSettingsView, nodesStates, rand),
       remove: () =>
           _handleRemove(nodeName, cardSettingsView, nodesStates, rand),
+      addRandRelayIndex: () =>
+          _handleRandRelayIndex(nodeName, cardSettingsView, nodesStates, rand),
       selectFriends: () => createState(AppView.settings(
           SettingsView.cardSettings(cardSettingsView.rebuild((b) => b
             ..inner =
                 CardSettingsInnerView.friends(FriendsSettingsView.home()))))),
-      selectRelays: () => createState(AppView.settings(
-          SettingsView.cardSettings(cardSettingsView.rebuild((b) =>
-              b..inner = CardSettingsInnerView.relays(RelaysSettingsView.home()))))),
+      selectRelays: () => createState(AppView.settings(SettingsView.cardSettings(
+          cardSettingsView.rebuild((b) => b..inner = CardSettingsInnerView.relays(RelaysSettingsView.home()))))),
       selectIndexServers: () => createState(AppView.settings(SettingsView.cardSettings(cardSettingsView.rebuild((b) => b..inner = CardSettingsInnerView.indexServers(IndexServersSettingsView.home()))))),
       friendsSettings: (friendsSettingsAction) {
         final friendsSettingsView = cardSettingsView.inner.match(
@@ -176,6 +179,79 @@ AppState _handleRemove(NodeName nodeName, CardSettingsView cardSettingsView,
 
   final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
   final optPendingRequest = OptPendingRequest.none();
+
+  return AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.transition(
+        oldView, newView, nextRequests, optPendingRequest));
+}
+
+AppState _handleRandRelayIndex(
+    NodeName nodeName,
+    CardSettingsView cardSettingsView,
+    BuiltMap<NodeName, NodeState> nodesStates,
+    Random rand) {
+  final createState = (AppView appView) => AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.view(appView));
+
+  final nodeState = nodesStates[nodeName];
+  if (nodeState == null) {
+    logger.w('_handleRandRelayIndex(): node $nodeName does not exist!');
+    return createState(AppView.settings(SettingsView.home()));
+  }
+
+  // Node must be open to handle this action:
+  final nodeId = nodeState.inner
+      .match(closed: () => null, open: (nodeOpen) => nodeOpen.nodeId);
+
+  if (nodeId == null) {
+    return createState(
+        AppView.settings(SettingsView.cardSettings(cardSettingsView)));
+  }
+
+  // List of requests to send:
+  final nextRequestsList = <UserToServerAck>[];
+
+  // We only get here when the node is open.
+
+  // Add a maximum of two random relays:
+  final relays = List<NamedRelayAddress>.from(knownRelays);
+  relays.shuffle(rand);
+
+  for (var i = 0; i < min(2, relays.length); ++i) {
+    // Add relay:
+    nextRequestsList.add((() {
+      final userToCompact = UserToCompact.addRelay(relays[i]);
+      final userToServer = UserToServer.node(nodeId, userToCompact);
+      final requestId = genUid(rand);
+      return UserToServerAck((b) => b
+        ..requestId = requestId
+        ..inner = userToServer);
+    })());
+  }
+
+  // Add a maximum of two index servers:
+  final indexServers = List<NamedIndexServerAddress>.from(knownIndexServers);
+  indexServers.shuffle(rand);
+
+  for (var i = 0; i < min(2, indexServers.length); ++i) {
+    // Add index server:
+    nextRequestsList.add((() {
+      final userToCompact = UserToCompact.addIndexServer(indexServers[i]);
+      final userToServer = UserToServer.node(nodeId, userToCompact);
+      final requestId = genUid(rand);
+      return UserToServerAck((b) => b
+        ..requestId = requestId
+        ..inner = userToServer);
+    })());
+  }
+
+  final nextRequests = BuiltList<UserToServerAck>(nextRequestsList);
+  final optPendingRequest = OptPendingRequest.none();
+
+  final oldView = AppView.settings(SettingsView.cardSettings(cardSettingsView));
+  final newView = oldView;
 
   return AppState((b) => b
     ..nodesStates = nodesStates.toBuilder()
