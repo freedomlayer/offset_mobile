@@ -8,8 +8,7 @@ import '../protocol/protocol.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
 
-// import 'utils/share_file.dart';
-// import 'utils/qr_show.dart';
+import 'utils/amount.dart';
 
 import 'frame.dart';
 
@@ -65,17 +64,8 @@ Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
 }
 
 String _amountValidator(String amountString) {
-  if (amountString.isEmpty) {
-    return 'Can not be empty!';
-  }
-
-  final BigInt amount = BigInt.tryParse(amountString);
-  if (amount == null) {
-    return 'Invalid value';
-  }
-
-  if (amount < BigInt.from(0)) {
-    return 'Must be non negative!';
+  if (!verifyAmountString(amountString)) {
+    return 'Must be a non negative value, up to $ACCURACY digits after decimal dot';
   }
 
   return null;
@@ -157,7 +147,7 @@ Widget _renderInvoiceDetails(
               validator: _amountValidator,
               keyboardType: TextInputType.number,
               onSaved: (amountString) =>
-                  _amount = U128(BigInt.tryParse(amountString)),
+                  _amount = stringToAmount(amountString),
             ),
             TextFormField(
               decoration: const InputDecoration(
@@ -166,7 +156,6 @@ Widget _renderInvoiceDetails(
                 labelText: 'Description',
               ),
               // TODO: Possibly add a validator?
-              // validator: _amountValidator,
               keyboardType: TextInputType.text,
               inputFormatters: [LengthLimitingTextInputFormatter(32)],
               onSaved: (description) => _description = description,

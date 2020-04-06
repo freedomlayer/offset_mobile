@@ -5,13 +5,8 @@ import '../../protocol/protocol.dart';
 // import '../../protocol/file.dart';
 import '../../state/state.dart';
 import '../../actions/actions.dart';
-// import '../utils/qr_show.dart';
-// import '../utils/share_file.dart';
 
-// import '../utils/file_picker.dart';
-// import '../utils/qr_scan.dart';
-
-// import '../../logger.dart';
+import '../utils/amount.dart';
 
 import '../frame.dart';
 
@@ -265,17 +260,19 @@ String _percentValidator(String percentString) {
 }
 
 String _addValidator(String addString) {
-  if (addString.isEmpty) {
-    return 'Can not be empty!';
+
+  if (!verifyAmountString(addString)) {
+    return 'Must be a non negative value, up to $ACCURACY digits after decimal dot';
   }
 
-  final add = int.parse(addString);
-  if (add == null) {
-    return 'Invalid percent value!';
+  final amount = stringToAmount(addString);
+  if (!amount.inner.isValidInt) {
+    return 'Please select a smaller value';
   }
 
-  if (add < 0) {
-    return 'Value must be non negative!';
+  final intAmount = amount.inner.toInt();
+  if (intAmount >= (1 << 32)) {
+    return 'Please select a smaller value';
   }
 
   return null;
@@ -373,7 +370,7 @@ Widget _renderCurrencySettings(
                     initialValue: '$_add',
                     validator: _addValidator,
                     keyboardType: TextInputType.number,
-                    onSaved: (addString) => _add = int.parse(addString),
+                    onSaved: (addString) => _add = stringToAmount(addString).inner.toInt(),
                   )),
             ]),
             Container(
@@ -458,19 +455,9 @@ String _currencyNameValidator(String currencyName) {
 }
 
 String _creditLimitValidator(String creditLimitString) {
-  if (creditLimitString.isEmpty) {
-    return 'credit limit can not be empty!';
+  if (!verifyAmountString(creditLimitString)) {
+    return 'Must be a non negative value, up to $ACCURACY digits after decimal dot';
   }
-
-  final BigInt creditLimit = BigInt.tryParse(creditLimitString);
-  if (creditLimit == null) {
-    return 'Invalid credit limit value';
-  }
-
-  if (creditLimit < BigInt.from(0)) {
-    return 'Credit limit must be non negative!';
-  }
-
   return null;
 }
 
@@ -526,7 +513,7 @@ Widget _renderNewCurrency(NodeName nodeName, PublicKey friendPublicKey,
               validator: _creditLimitValidator,
               keyboardType: TextInputType.number,
               onSaved: (creditLimitString) =>
-                  _creditLimit = U128(BigInt.tryParse(creditLimitString)),
+                  _creditLimit = stringToAmount(creditLimitString),
             ),
             Container(
                 padding: EdgeInsets.only(top: 20.0),

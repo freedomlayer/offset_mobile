@@ -8,6 +8,7 @@ import '../actions/actions.dart';
 
 import 'utils/file_picker.dart';
 import 'utils/qr_scan.dart';
+import 'utils/amount.dart';
 
 import 'frame.dart';
 
@@ -68,7 +69,7 @@ Widget _renderInvoiceInfo(
   final body = Center(
       child: Column(children: <Widget>[
     SizedBox(height: 10),
-    Text('Amount: ${invoiceFile.destPayment.inner}'),
+    Text('Amount: ${amountToString(invoiceFile.destPayment)}'),
     SizedBox(height: 10),
     Text('Description: ${invoiceFile.description}'),
     SizedBox(height: 10),
