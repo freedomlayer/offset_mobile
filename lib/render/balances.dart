@@ -5,6 +5,8 @@ import '../protocol/protocol.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
 
+import 'utils/amount.dart';
+
 import 'frame.dart';
 
 Widget renderBalances(
@@ -94,10 +96,10 @@ Widget _renderCardBalances(
   final sortedCurrencies = balances.keys.toList()..sort();
   final rows = <DataRow>[];
   for (final currency in sortedCurrencies) {
-    final balance = balances[currency];
+    final balanceStr = balanceToString(I128(balances[currency]));
     rows.add(DataRow(cells: [
       DataCell(Text('${currency.inner}')),
-      DataCell(Text('$balance'))
+      DataCell(Text('$balanceStr'))
     ]));
   }
 

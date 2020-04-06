@@ -5,13 +5,8 @@ import '../../protocol/protocol.dart';
 // import '../../protocol/file.dart';
 import '../../state/state.dart';
 import '../../actions/actions.dart';
-// import '../utils/qr_show.dart';
-// import '../utils/share_file.dart';
 
-// import '../utils/file_picker.dart';
-// import '../utils/qr_scan.dart';
-
-// import '../../logger.dart';
+import '../utils/amount.dart';
 
 import '../frame.dart';
 
@@ -62,7 +57,8 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
       Widget title;
       Widget trailing;
       if (currencyReport != null) {
-        title = Text('${currency.inner}: ${currencyReport.balance.inner}');
+        title = Text(
+            '${currency.inner}: ${balanceToString(currencyReport.balance)}');
         trailing = FlatButton(
             child: Icon(Icons.edit),
             onPressed: friendReport.status.isEnabled
@@ -80,8 +76,10 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
       }
 
       final double ratePercent = (configReport.rate.mul / (1 << 32)) * 100;
-      final subtitle = Text('limit: ${configReport.remoteMaxDebt.inner}' +
-          '\nrate: ${ratePercent.toStringAsFixed(2)}% + ${configReport.rate.add}');
+      final addStr = amountToString(U128(BigInt.from(configReport.rate.add)));
+      final subtitle = Text(
+          'limit: ${amountToString(configReport.remoteMaxDebt)}' +
+              '\nrate: ${ratePercent.toStringAsFixed(2)}% + $addStr');
 
       children.add(ListTile(
         key: Key(currency.inner),
@@ -265,17 +263,18 @@ String _percentValidator(String percentString) {
 }
 
 String _addValidator(String addString) {
-  if (addString.isEmpty) {
-    return 'Can not be empty!';
+  if (!verifyAmountString(addString)) {
+    return 'Must be a non negative value, up to $ACCURACY digits after decimal dot';
   }
 
-  final add = int.parse(addString);
-  if (add == null) {
-    return 'Invalid percent value!';
+  final amount = stringToAmount(addString);
+  if (!amount.inner.isValidInt) {
+    return 'Please select a smaller value';
   }
 
-  if (add < 0) {
-    return 'Value must be non negative!';
+  final intAmount = amount.inner.toInt();
+  if (intAmount >= (1 << 32)) {
+    return 'Please select a smaller value';
   }
 
   return null;
@@ -338,11 +337,11 @@ Widget _renderCurrencySettings(
                 hintText: 'Maximum amount friend can owe me',
                 labelText: 'Credit limit',
               ),
-              initialValue: '${_creditLimit.inner}',
+              initialValue: '${amountToString(_creditLimit)}',
               validator: _creditLimitValidator,
               keyboardType: TextInputType.number,
               onSaved: (creditLimitString) =>
-                  _creditLimit = U128(BigInt.tryParse(creditLimitString)),
+                  _creditLimit = stringToAmount(creditLimitString),
             ),
             Row(children: [
               Expanded(
@@ -373,7 +372,8 @@ Widget _renderCurrencySettings(
                     initialValue: '$_add',
                     validator: _addValidator,
                     keyboardType: TextInputType.number,
-                    onSaved: (addString) => _add = int.parse(addString),
+                    onSaved: (addString) =>
+                        _add = stringToAmount(addString).inner.toInt(),
                   )),
             ]),
             Container(
@@ -427,7 +427,8 @@ Widget _renderCurrencySettings(
         Expanded(
             flex: 2,
             child: ListTile(
-                title: Text('Balance: ${currencyReport.balance.inner}'))),
+                title: Text(
+                    'Balance: ${balanceToString(currencyReport.balance)}'))),
         Expanded(flex: 16, child: formBody),
       ])));
 
@@ -458,19 +459,9 @@ String _currencyNameValidator(String currencyName) {
 }
 
 String _creditLimitValidator(String creditLimitString) {
-  if (creditLimitString.isEmpty) {
-    return 'credit limit can not be empty!';
+  if (!verifyAmountString(creditLimitString)) {
+    return 'Must be a non negative value, up to $ACCURACY digits after decimal dot';
   }
-
-  final BigInt creditLimit = BigInt.tryParse(creditLimitString);
-  if (creditLimit == null) {
-    return 'Invalid credit limit value';
-  }
-
-  if (creditLimit < BigInt.from(0)) {
-    return 'Credit limit must be non negative!';
-  }
-
   return null;
 }
 
@@ -526,7 +517,7 @@ Widget _renderNewCurrency(NodeName nodeName, PublicKey friendPublicKey,
               validator: _creditLimitValidator,
               keyboardType: TextInputType.number,
               onSaved: (creditLimitString) =>
-                  _creditLimit = U128(BigInt.tryParse(creditLimitString)),
+                  _creditLimit = stringToAmount(creditLimitString),
             ),
             Container(
                 padding: EdgeInsets.only(top: 20.0),

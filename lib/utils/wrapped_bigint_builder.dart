@@ -39,6 +39,11 @@ class _\$$className implements Comparable<_\$$className>{
   }
 
   @override
+  String toString() {
+      return '$className(\$inner)';
+  }
+
+  @override
   int get hashCode {
     // Based on _combine function (quiver)
     final value = 0x1338;

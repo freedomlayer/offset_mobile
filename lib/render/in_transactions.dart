@@ -11,6 +11,7 @@ import 'utils/qr_show.dart';
 
 import 'utils/file_picker.dart';
 import 'utils/qr_scan.dart';
+import 'utils/amount.dart';
 
 import 'frame.dart';
 
@@ -109,7 +110,7 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
             onTap: () => queueAction(InTransactionsAction.selectInvoice(
                 inTransaction.nodeName, inTransaction.invoiceId)),
             child: Text(
-                '${inTransaction.nodeName.inner}: ${inTransaction.totalDestPayment.inner}\n' +
+                '${inTransaction.nodeName.inner}: ${amountToString(inTransaction.totalDestPayment)}\n' +
                     '${inTransaction.description}\n' +
                     'status: $statusString')));
     children.add(outEntry);
@@ -152,7 +153,7 @@ Widget _renderCommittedTransaction(NodeName nodeName, InvoiceId invoiceId,
     SizedBox(height: 10),
     Text('Card: ${nodeName.inner}'),
     SizedBox(height: 10),
-    Text('Amount: ${openInvoice.totalDestPayment.inner}'),
+    Text('Amount: ${amountToString(openInvoice.totalDestPayment)}'),
     SizedBox(height: 10),
     Text('Description: ${openInvoice.description}'),
     SizedBox(height: 10),
@@ -211,7 +212,7 @@ Widget _renderUncommittedTransaction(
     SizedBox(height: 10),
     Text('Card: ${nodeName.inner}'),
     SizedBox(height: 10),
-    Text('Amount: ${openInvoice.totalDestPayment.inner}'),
+    Text('Amount: ${amountToString(openInvoice.totalDestPayment)}'),
     SizedBox(height: 10),
     Text('Description: ${openInvoice.description}'),
     SizedBox(height: 10),
@@ -266,7 +267,7 @@ Widget _renderCollected(
     SizedBox(height: 10),
     Text('Card: ${nodeName.inner}'),
     SizedBox(height: 10),
-    Text('Amount: ${invoiceFile.destPayment.inner}'),
+    Text('Amount: ${amountToString(invoiceFile.destPayment)}'),
     SizedBox(height: 10),
     Text('Description: ${invoiceFile.description}'),
     SizedBox(height: 20),
