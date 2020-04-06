@@ -57,7 +57,7 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
       Widget title;
       Widget trailing;
       if (currencyReport != null) {
-        title = Text('${currency.inner}: ${currencyReport.balance.inner}');
+        title = Text('${currency.inner}: ${balanceToString(currencyReport.balance)}');
         trailing = FlatButton(
             child: Icon(Icons.edit),
             onPressed: friendReport.status.isEnabled
@@ -75,8 +75,9 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
       }
 
       final double ratePercent = (configReport.rate.mul / (1 << 32)) * 100;
-      final subtitle = Text('limit: ${configReport.remoteMaxDebt.inner}' +
-          '\nrate: ${ratePercent.toStringAsFixed(2)}% + ${configReport.rate.add}');
+      final addStr = amountToString(U128(BigInt.from(configReport.rate.add)));
+      final subtitle = Text('limit: ${amountToString(configReport.remoteMaxDebt)}' +
+          '\nrate: ${ratePercent.toStringAsFixed(2)}% + $addStr');
 
       children.add(ListTile(
         key: Key(currency.inner),
@@ -335,11 +336,11 @@ Widget _renderCurrencySettings(
                 hintText: 'Maximum amount friend can owe me',
                 labelText: 'Credit limit',
               ),
-              initialValue: '${_creditLimit.inner}',
+              initialValue: '${amountToString(_creditLimit)}',
               validator: _creditLimitValidator,
               keyboardType: TextInputType.number,
               onSaved: (creditLimitString) =>
-                  _creditLimit = U128(BigInt.tryParse(creditLimitString)),
+                  _creditLimit = stringToAmount(creditLimitString),
             ),
             Row(children: [
               Expanded(
@@ -424,7 +425,7 @@ Widget _renderCurrencySettings(
         Expanded(
             flex: 2,
             child: ListTile(
-                title: Text('Balance: ${currencyReport.balance.inner}'))),
+                title: Text('Balance: ${balanceToString(currencyReport.balance)}'))),
         Expanded(flex: 16, child: formBody),
       ])));
 

@@ -8,6 +8,7 @@ import '../actions/actions.dart';
 
 import 'utils/share_file.dart';
 import 'utils/qr_show.dart';
+import 'utils/amount.dart';
 
 import 'frame.dart';
 
@@ -159,7 +160,7 @@ Widget _renderSearchingRoute(NodeName nodeName, PaymentId paymentId,
     SizedBox(height: 10),
     Text('Card: ${nodeName.inner}'),
     SizedBox(height: 10),
-    Text('Amount: ${openPayment.destPayment.inner}'),
+    Text('Amount: ${amountToString(openPayment.destPayment)}'),
     SizedBox(height: 10),
     Text('Description: ${openPayment.description}'),
     Center(child: CircularProgressIndicator(value: null)),
@@ -186,11 +187,11 @@ Widget _renderFoundRoute(U128 fees, NodeName nodeName, PaymentId paymentId,
     SizedBox(height: 10),
     Text('Card: ${nodeName.inner}'),
     SizedBox(height: 10),
-    Text('Amount: ${openPayment.destPayment.inner}'),
+    Text('Amount: ${amountToString(openPayment.destPayment)}'),
     SizedBox(height: 10),
     Text('Description: ${openPayment.description}'),
     SizedBox(height: 10),
-    Text('Fees: ${fees.inner}'),
+    Text('Fees: ${amountToString(fees)}'),
     SizedBox(height: 20),
     Center(
         child:
@@ -220,11 +221,11 @@ Widget _renderSending(U128 fees, NodeName nodeName, PaymentId paymentId,
     SizedBox(height: 10),
     Text('Card: ${nodeName.inner}'),
     SizedBox(height: 10),
-    Text('Amount: ${openPayment.destPayment.inner}'),
+    Text('Amount: ${amountToString(openPayment.destPayment)}'),
     SizedBox(height: 10),
     Text('Description: ${openPayment.description}'),
     SizedBox(height: 10),
-    Text('Fees: ${fees.inner}'),
+    Text('Fees: ${amountToString(fees)}'),
     Center(child: CircularProgressIndicator(value: null)),
     SizedBox(height: 20),
     Center(
@@ -254,11 +255,11 @@ Widget _renderCommit(
     SizedBox(height: 10),
     Text('Card: ${nodeName.inner}'),
     SizedBox(height: 10),
-    Text('Amount: ${openPayment.destPayment.inner}'),
+    Text('Amount: ${amountToString(openPayment.destPayment)}'),
     SizedBox(height: 10),
     Text('Description: ${openPayment.description}'),
     SizedBox(height: 10),
-    Text('Fees: ${fees.inner}'),
+    Text('Fees: ${amountToString(fees)}'),
     SizedBox(height: 20),
     Center(
         child: Text(
@@ -293,11 +294,11 @@ Widget _renderSuccess(
     SizedBox(height: 10),
     Text('Card: ${nodeName.inner}'),
     SizedBox(height: 10),
-    Text('Amount: ${openPayment.destPayment.inner}'),
+    Text('Amount: ${amountToString(openPayment.destPayment)}'),
     SizedBox(height: 10),
     Text('Description: ${openPayment.description}'),
     SizedBox(height: 10),
-    Text('Fees: ${fees.inner}'),
+    Text('Fees: ${amountToString(fees)}'),
     SizedBox(height: 20),
     Center(
         child:
@@ -329,7 +330,7 @@ Widget _renderFailure(NodeName nodeName, PaymentId paymentId,
     SizedBox(height: 10),
     Text('Card: ${nodeName.inner}'),
     SizedBox(height: 10),
-    Text('Amount: ${openPayment.destPayment.inner}'),
+    Text('Amount: ${amountToString(openPayment.destPayment)}'),
     SizedBox(height: 10),
     Text('Description: ${openPayment.description}'),
     SizedBox(height: 20),
