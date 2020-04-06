@@ -50,7 +50,9 @@ Widget _renderCardSettingsHome(NodeName nodeName, NodeState nodeState,
   children.add(ListTile(title: Text('Card type: $cardType')));
 
   // Node status (Is node connected?)
-  final nodeStatus = nodeState.inner.isOpen ? 'connected' : 'disconnected';
+  final nodeOpen =
+      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
+  final nodeStatus = nodeOpen != null ? 'connected' : 'disconnected';
   children.add(ListTile(title: Text('Node status: $nodeStatus')));
 
   children.add(SwitchListTile(
@@ -69,6 +71,19 @@ Widget _renderCardSettingsHome(NodeName nodeName, NodeState nodeState,
       title: Text('Friends'),
       enabled: nodeState.inner.isOpen,
       onTap: () => queueAction(CardSettingsAction.selectFriends())));
+
+  if (nodeOpen != null) {
+    // If node is open and there are no relays and index servers, 
+    // add an option to automatically add random relays and index servers
+    if (nodeOpen.compactReport.relays.isEmpty &&
+        nodeOpen.compactReport.indexServers.isEmpty) {
+      children.add(ListTile(title: Text('')));
+      children
+          .add(ListTile(title: Text('Add random relays and index servers'),
+                  onTap: () => queueAction(CardSettingsAction.addRandRelayIndex())));
+    }
+  }
+
   children.add(ListTile(
       title: Text('Relays'),
       enabled: nodeState.inner.isOpen,

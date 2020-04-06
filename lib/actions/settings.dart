@@ -58,6 +58,7 @@ class CardSettingsAction extends _$CardSettingsAction {
   CardSettingsAction.disable() : super.disable();
   CardSettingsAction.remove() : super.remove();
 
+  CardSettingsAction.addRandRelayIndex() : super.addRandRelayIndex();
   CardSettingsAction.selectFriends() : super.selectFriends();
   CardSettingsAction.selectRelays() : super.selectRelays();
   CardSettingsAction.selectIndexServers() : super.selectIndexServers();
