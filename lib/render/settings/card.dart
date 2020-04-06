@@ -73,14 +73,14 @@ Widget _renderCardSettingsHome(NodeName nodeName, NodeState nodeState,
       onTap: () => queueAction(CardSettingsAction.selectFriends())));
 
   if (nodeOpen != null) {
-    // If node is open and there are no relays and index servers, 
+    // If node is open and there are no relays and index servers,
     // add an option to automatically add random relays and index servers
     if (nodeOpen.compactReport.relays.isEmpty &&
         nodeOpen.compactReport.indexServers.isEmpty) {
       children.add(ListTile(title: Text('')));
-      children
-          .add(ListTile(title: Text('Add random relays and index servers'),
-                  onTap: () => queueAction(CardSettingsAction.addRandRelayIndex())));
+      children.add(ListTile(
+          title: Text('Add random relays and index servers'),
+          onTap: () => queueAction(CardSettingsAction.addRandRelayIndex())));
     }
   }
 

@@ -14,4 +14,3 @@ final knownIndexServers = <NamedIndexServerAddress>[
     ..address = NetAddress("index2.offsetcredit.org:11385")
     ..publicKey = PublicKey("EXuvtumXU8gmLM40LQAYcAxnH5aFHeU_CSN_SH8Q4mI")),
 ];
-

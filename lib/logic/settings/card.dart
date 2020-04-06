@@ -238,8 +238,7 @@ AppState _handleRandRelayIndex(
   for (var i = 0; i < min(2, indexServers.length); ++i) {
     // Add index server:
     nextRequestsList.add((() {
-      final userToCompact =
-          UserToCompact.addIndexServer(indexServers[i]);
+      final userToCompact = UserToCompact.addIndexServer(indexServers[i]);
       final userToServer = UserToServer.node(nodeId, userToCompact);
       final requestId = genUid(rand);
       return UserToServerAck((b) => b

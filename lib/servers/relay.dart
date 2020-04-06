@@ -14,4 +14,3 @@ final knownRelays = <NamedRelayAddress>[
     ..address = NetAddress("relay2.offsetcredit.org:11056")
     ..publicKey = PublicKey("_5BaZ-NnRpyCimUc_erW_Tzv9xyUiz-Y2zWglJmFNxA")),
 ];
-
