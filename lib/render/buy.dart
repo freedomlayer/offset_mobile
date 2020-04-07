@@ -76,6 +76,29 @@ Widget _renderInvoiceInfo(
     InvoiceFile invoiceFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(BuyAction) queueAction) {
+  final body = ListView(padding: EdgeInsets.all(16), children: <Widget>[
+    Center(child: ListTile(
+        leading: FaIcon(FontAwesomeIcons.coins),
+        title: Text(
+            '${amountToString(invoiceFile.destPayment)} ${invoiceFile.currency.inner}'))),
+    ListTile(
+        leading: const FaIcon(FontAwesomeIcons.comment),
+        title: Text('${invoiceFile.description}')),
+    SizedBox(height: 24.0),
+    Center(
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      RaisedButton(
+        child: const Text('Select card'),
+        onPressed: () => queueAction(BuyAction.confirmInfo()),
+      ),
+      FlatButton(
+        child: const Text('Cancel'),
+        onPressed: () => queueAction(BuyAction.back()),
+      )
+    ])),
+  ]);
+
+  /*
   final body = Center(
       child: Column(children: <Widget>[
     SizedBox(height: 10),
@@ -93,6 +116,7 @@ Widget _renderInvoiceInfo(
           onPressed: () => queueAction(BuyAction.back())),
     ]))
   ]));
+  */
 
   return frame(
       title: Text('Invoice info'),
@@ -112,10 +136,12 @@ Widget _renderSelectCard(
     final cardEntry = nodeState.inner.isOpen
         ? ListTile(
             key: Key(nodeName.inner),
+            leading: Icon(Icons.credit_card),
             title: Text('${nodeName.inner}'),
             onTap: () => queueAction(BuyAction.selectCard(nodeName)))
         : ListTile(
             key: Key(nodeName.inner),
+            leading: Icon(Icons.credit_card),
             title: Text('${nodeName.inner}'),
             enabled: false);
 
@@ -126,7 +152,7 @@ Widget _renderSelectCard(
       ListView(padding: const EdgeInsets.all(8), children: children);
 
   return frame(
-      title: Text('Apply Commit'),
+      title: Text('Select payment card'),
       body: listView,
       backAction: () => queueAction(BuyAction.back()));
 }

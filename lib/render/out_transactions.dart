@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../protocol/protocol.dart';
 import '../protocol/file.dart';
@@ -108,7 +109,7 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
             onTap: () => queueAction(OutTransactionsAction.selectPayment(
                 outTransaction.nodeName, outTransaction.paymentId)),
             child: Text(
-                '${outTransaction.nodeName.inner}: ${outTransaction.destPayment.inner}\n' +
+                '${outTransaction.nodeName.inner}: ${amountToString(outTransaction.destPayment)}\n' +
                     '${outTransaction.description}\n' +
                     'status: ${outTransaction.status}')));
     children.add(outEntry);
@@ -117,7 +118,7 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
   final listView = ListView(padding: EdgeInsets.all(8), children: children);
 
   return frame(
-      title: Text('Outgoing transactions'),
+      title: Text('Outgoing'),
       body: listView,
       backAction: () => queueAction(OutTransactionsAction.back()));
 }
@@ -180,6 +181,35 @@ Widget _renderSearchingRoute(NodeName nodeName, PaymentId paymentId,
 
 Widget _renderFoundRoute(U128 fees, NodeName nodeName, PaymentId paymentId,
     OpenPayment openPayment, Function(OutTransactionsAction) queueAction) {
+  final body = ListView(padding: EdgeInsets.all(8), children: <Widget>[
+    ListTile(
+        leading: FaIcon(FontAwesomeIcons.creditCard),
+        title: Text('${nodeName.inner}')),
+    ListTile(
+        leading: FaIcon(FontAwesomeIcons.coins),
+        title: Text(
+            '${amountToString(openPayment.destPayment)} ${openPayment.currency.inner}')),
+    ListTile(
+        leading: const FaIcon(FontAwesomeIcons.comment),
+        title: Text('${openPayment.description}')),
+    ListTile(
+        leading: const FaIcon(FontAwesomeIcons.funnelDollar),
+        title: Text('${amountToString(fees)} ${openPayment.currency.inner}')),
+    Center(
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      RaisedButton(
+          onPressed: () => queueAction(
+              OutTransactionsAction.confirmFees(nodeName, paymentId)),
+          child: Text('Confirm')),
+      FlatButton(
+          onPressed: () => queueAction(
+              OutTransactionsAction.cancelPayment(nodeName, paymentId)),
+          child: Text('Cancel')),
+    ]))
+  ]);
+
+  /*
   final body = Center(
       child: Column(children: <Widget>[
     SizedBox(height: 10),
@@ -206,6 +236,7 @@ Widget _renderFoundRoute(U128 fees, NodeName nodeName, PaymentId paymentId,
           child: Text('Cancel')),
     ]))
   ]));
+  */
 
   return frame(
       title: Text('Outgoing transaction'),
@@ -215,6 +246,32 @@ Widget _renderFoundRoute(U128 fees, NodeName nodeName, PaymentId paymentId,
 
 Widget _renderSending(U128 fees, NodeName nodeName, PaymentId paymentId,
     OpenPayment openPayment, Function(OutTransactionsAction) queueAction) {
+  final body = ListView(padding: EdgeInsets.all(8), children: <Widget>[
+    ListTile(
+        leading: FaIcon(FontAwesomeIcons.creditCard),
+        title: Text('${nodeName.inner}')),
+    ListTile(
+        leading: FaIcon(FontAwesomeIcons.coins),
+        title: Text(
+            '${amountToString(openPayment.destPayment)} ${openPayment.currency.inner}')),
+    ListTile(
+        leading: const FaIcon(FontAwesomeIcons.comment),
+        title: Text('${openPayment.description}')),
+    ListTile(
+        leading: const FaIcon(FontAwesomeIcons.funnelDollar),
+        title: Text('${amountToString(fees)} ${openPayment.currency.inner}')),
+    ListTile(
+        leading: const FaIcon(FontAwesomeIcons.thermometerHalf),
+        title: Text('In progress...')),
+    Center(child: CircularProgressIndicator(value: null)),
+    Center(
+        child: FlatButton(
+            onPressed: () => queueAction(
+                OutTransactionsAction.cancelPayment(nodeName, paymentId)),
+            child: Text('Cancel'))),
+  ]);
+
+  /*
   final body = Center(
       child: Column(children: <Widget>[
     Center(child: Text('Payment in progress')),
@@ -235,6 +292,7 @@ Widget _renderSending(U128 fees, NodeName nodeName, PaymentId paymentId,
             child: Text('Cancel'))),
   ]));
 
+  */
   return frame(
       title: Text('Outgoing transaction'),
       body: body,
@@ -248,6 +306,40 @@ Widget _renderCommit(
     PaymentId paymentId,
     OpenPayment openPayment,
     Function(OutTransactionsAction) queueAction) {
+  final body = ListView(padding: EdgeInsets.all(8), children: <Widget>[
+    ListTile(
+        leading: FaIcon(FontAwesomeIcons.creditCard),
+        title: Text('${nodeName.inner}')),
+    ListTile(
+        leading: FaIcon(FontAwesomeIcons.coins),
+        title: Text(
+            '${amountToString(openPayment.destPayment)} ${openPayment.currency.inner}')),
+    ListTile(
+        leading: const FaIcon(FontAwesomeIcons.comment),
+        title: Text('${openPayment.description}')),
+    ListTile(
+        leading: const FaIcon(FontAwesomeIcons.funnelDollar),
+        title: Text('${amountToString(fees)} ${openPayment.currency.inner}')),
+    /*
+    ListTile(
+        leading: const FaIcon(FontAwesomeIcons.thermometerHalf),
+        title: Text('In progress...')),
+    */
+    Center(child: Text('Send commitment')),
+    Center(
+        child: Text(
+            'Payment is only complete when the seller receives the commitment')),
+    Center(child: qrShow<Commit>(commit)),
+    SizedBox(height: 20),
+    Center(
+        child: RaisedButton(
+            // TODO: Create a better name for the commitment file:
+            onPressed: () async =>
+                await shareFile<Commit>(commit, 'commit.$COMMIT_EXT'),
+            child: Text('Send File'))),
+  ]);
+
+  /*
   final body = Center(
       child: Column(children: <Widget>[
     SizedBox(height: 10),
@@ -273,6 +365,7 @@ Widget _renderCommit(
                 await shareFile<Commit>(commit, 'commit.$COMMIT_EXT'),
             child: Text('Send File'))),
   ]));
+  */
 
   return frame(
       title: Text('Outgoing transaction'),
@@ -287,6 +380,38 @@ Widget _renderSuccess(
     PaymentId paymentId,
     OpenPayment openPayment,
     Function(OutTransactionsAction) queueAction) {
+  final body = ListView(padding: EdgeInsets.all(8), children: <Widget>[
+    ListTile(
+        leading: FaIcon(FontAwesomeIcons.creditCard),
+        title: Text('${nodeName.inner}')),
+    ListTile(
+        leading: FaIcon(FontAwesomeIcons.coins),
+        title: Text(
+            '${amountToString(openPayment.destPayment)} ${openPayment.currency.inner}')),
+    ListTile(
+        leading: const FaIcon(FontAwesomeIcons.comment),
+        title: Text('${openPayment.description}')),
+    ListTile(
+        leading: const FaIcon(FontAwesomeIcons.funnelDollar),
+        title: Text('${amountToString(fees)} ${openPayment.currency.inner}')),
+    Center(
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      RaisedButton(
+          // TODO: Create a better name for the produced receipt file:
+          onPressed: () async =>
+              await shareFile<Receipt>(receipt, 'receipt.receipt'),
+          child: Text('Send Receipt')),
+      RaisedButton.icon(
+          icon: const FaIcon(FontAwesomeIcons.trashAlt),
+          onPressed: () => queueAction(
+              OutTransactionsAction.discardPayment(nodeName, paymentId)),
+          label: Text('Discard')),
+    ]))
+  ]);
+
+  /*
+
   final body = Center(
       child: Column(children: <Widget>[
     SizedBox(height: 10),
@@ -314,6 +439,7 @@ Widget _renderSuccess(
           child: Text('Discard')),
     ]))
   ]));
+  */
 
   return frame(
       title: Text('Outgoing transaction'),
@@ -323,6 +449,29 @@ Widget _renderSuccess(
 
 Widget _renderFailure(NodeName nodeName, PaymentId paymentId,
     OpenPayment openPayment, Function(OutTransactionsAction) queueAction) {
+  final body = ListView(padding: EdgeInsets.all(8), children: <Widget>[
+    ListTile(
+        leading: FaIcon(FontAwesomeIcons.creditCard),
+        title: Text('${nodeName.inner}')),
+    ListTile(
+        leading: FaIcon(FontAwesomeIcons.coins),
+        title: Text(
+            '${amountToString(openPayment.destPayment)} ${openPayment.currency.inner}')),
+    ListTile(
+        leading: const FaIcon(FontAwesomeIcons.comment),
+        title: Text('${openPayment.description}')),
+    ListTile(
+        leading: const FaIcon(FontAwesomeIcons.thermometerHalf),
+        title: Text('Payment failed')),
+    Center(
+        child: RaisedButton.icon(
+            icon: const FaIcon(FontAwesomeIcons.trashAlt),
+            onPressed: () => queueAction(
+                OutTransactionsAction.discardPayment(nodeName, paymentId)),
+            label: Text('Discard'))),
+  ]);
+
+  /*
   final body = Center(
       child: Column(children: <Widget>[
     SizedBox(height: 10),
@@ -340,6 +489,7 @@ Widget _renderFailure(NodeName nodeName, PaymentId paymentId,
                 OutTransactionsAction.discardPayment(nodeName, paymentId)),
             child: Text('Discard')))
   ]));
+  */
 
   return frame(
       title: Text('Outgoing transaction'),

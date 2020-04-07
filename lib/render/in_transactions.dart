@@ -105,23 +105,28 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
   final children = <Widget>[];
 
   for (final inTransaction in inTransactions) {
-    final statusString = inTransaction.isCommitted ? 'Received' : 'Pending';
-    final outEntry = Card(
+    // final statusString = inTransaction.isCommitted ? 'Received' : 'Pending';
+    final trailing = FaIcon(inTransaction.isCommitted
+        ? FontAwesomeIcons.checkCircle
+        : FontAwesomeIcons.thermometerHalf);
+    final outEntry = ListTile(
         key: Key(inTransaction.invoiceId.inner),
-        child: InkWell(
+        leading: Icon(Icons.call_received),
+        title: InkWell(
             onTap: () => queueAction(InTransactionsAction.selectInvoice(
                 inTransaction.nodeName, inTransaction.invoiceId)),
             child: Text(
-                '${inTransaction.nodeName.inner}: ${amountToString(inTransaction.totalDestPayment)}\n' +
-                    '${inTransaction.description}\n' +
-                    'status: $statusString')));
+                '${inTransaction.nodeName.inner}\n${amountToString(inTransaction.totalDestPayment)} ${inTransaction.currency.inner}\n' +
+                    '${inTransaction.description}')),
+        trailing: trailing);
+
     children.add(outEntry);
   }
 
   final listView = ListView(padding: EdgeInsets.all(8), children: children);
 
   return frame(
-      title: Text('Incoming transactions'),
+      title: Text('Incoming'),
       body: listView,
       backAction: () => queueAction(InTransactionsAction.back()));
 }
@@ -236,7 +241,8 @@ Widget _renderUncommittedTransaction(
               title: Center(child: qrShow<InvoiceFile>(invoiceFile)),
             ),
             ListTile(
-                title: Align(child: RaisedButton.icon(
+                title: Align(
+                    child: RaisedButton.icon(
               icon: const FaIcon(FontAwesomeIcons.shareAlt),
               label: Text('Send Invoice'),
               // TODO: Create a better name for the invoice file:
@@ -249,9 +255,9 @@ Widget _renderUncommittedTransaction(
       children: baseChildren +
           [
             ListTile(
-                title: Text('How to receive commitment?',
+                title: Center(child: Text('How to receive commitment?',
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 16.0))),
+                        fontWeight: FontWeight.bold, fontSize: 16.0)))),
             ListTile(
                 leading: FaIcon(FontAwesomeIcons.qrcode),
                 onTap: scanQrCode,
