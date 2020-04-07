@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:built_collection/built_collection.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../protocol/protocol.dart';
 // import '../protocol/file.dart';
@@ -44,10 +45,12 @@ Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
 
     final cardEntry = canCardPay
         ? ListTile(
+            leading: Icon(Icons.credit_card),
             key: Key(nodeName.inner),
             title: Text('${nodeName.inner}'),
             onTap: () => queueAction(SellAction.selectCard(nodeName)))
         : ListTile(
+            leading: Icon(Icons.credit_card),
             key: Key(nodeName.inner),
             title: Text('${nodeName.inner}'),
             enabled: false);
@@ -55,12 +58,23 @@ Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
     children.add(cardEntry);
   }
 
-  final listView =
-      ListView(padding: const EdgeInsets.all(8), children: children);
+  final body = Padding(
+      padding: EdgeInsets.all(14.0),
+      child: Column(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'Please select a card',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+            ),
+            Expanded(
+                child: ListView(
+                    padding: const EdgeInsets.all(8), children: children))
+          ]));
 
   return frame(
-      title: Text('New Invoice: Select card'),
-      body: listView,
+      title: Text('New Invoice'),
+      body: body,
       backAction: () => queueAction(SellAction.back()));
 }
 
@@ -126,40 +140,47 @@ Widget _renderInvoiceDetails(
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           children: <Widget>[
-            // TODO: Choice for currency
-            DropdownButton<Currency>(
-                hint: Text('Select Currency'),
-                items: currencies
-                    .map((currency) => DropdownMenuItem<Currency>(
-                        key: Key(currency.inner),
-                        child: Text('${currency.inner}'),
-                        value: currency))
-                    .toList(),
-                value: _currency,
-                onChanged: (newCurrency) =>
-                    setState(() => _currency = newCurrency),
-                isExpanded: true),
-            TextFormField(
-              decoration: const InputDecoration(
-                icon: const Icon(Icons.payment),
-                hintText: 'Amount of currency units',
-                labelText: 'Amount',
-              ),
-              validator: _amountValidator,
-              keyboardType: TextInputType.number,
-              onSaved: (amountString) => _amount = stringToAmount(amountString),
-            ),
-            TextFormField(
-              decoration: const InputDecoration(
-                icon: const Icon(Icons.description),
-                hintText: 'What is this invoice for?',
-                labelText: 'Description',
-              ),
-              // TODO: Possibly add a validator?
-              keyboardType: TextInputType.text,
-              inputFormatters: [LengthLimitingTextInputFormatter(32)],
-              onSaved: (description) => _description = description,
-            ),
+            ListTile(
+                leading: const FaIcon(FontAwesomeIcons.creditCard),
+                title: Text('${nodeName.inner}')),
+            ListTile(
+                leading: const FaIcon(FontAwesomeIcons.yenSign),
+                title: DropdownButton<Currency>(
+                    hint: Text('Select Currency'),
+                    items: currencies
+                        .map((currency) => DropdownMenuItem<Currency>(
+                            key: Key(currency.inner),
+                            child: Text('${currency.inner}'),
+                            value: currency))
+                        .toList(),
+                    value: _currency,
+                    onChanged: (newCurrency) =>
+                        setState(() => _currency = newCurrency),
+                    isExpanded: true)),
+            ListTile(
+                leading: const FaIcon(FontAwesomeIcons.coins),
+                title: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: 'Amount of currency units',
+                    labelText: 'Amount',
+                  ),
+                  validator: _amountValidator,
+                  keyboardType: TextInputType.number,
+                  onSaved: (amountString) =>
+                      _amount = stringToAmount(amountString),
+                )),
+            ListTile(
+                leading: const FaIcon(FontAwesomeIcons.comment),
+                title: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: 'What is this invoice for?',
+                    labelText: 'Description',
+                  ),
+                  // TODO: Possibly add a validator?
+                  keyboardType: TextInputType.text,
+                  inputFormatters: [LengthLimitingTextInputFormatter(64)],
+                  onSaved: (description) => _description = description,
+                )),
             Container(
                 padding: EdgeInsets.only(top: 20.0),
                 child: Row(
@@ -187,12 +208,7 @@ Widget _renderInvoiceDetails(
     return SafeArea(
         top: false,
         bottom: false,
-        child: Center(
-            child: Column(children: [
-          Spacer(flex: 1),
-          Expanded(flex: 1, child: Text('Card: ${nodeName.inner}')),
-          Expanded(flex: 16, child: form),
-        ])));
+        child: Padding(padding: EdgeInsets.all(16.0), child: form));
   });
 
   return frame(
