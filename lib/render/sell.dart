@@ -181,27 +181,19 @@ Widget _renderInvoiceDetails(
                   inputFormatters: [LengthLimitingTextInputFormatter(64)],
                   onSaved: (description) => _description = description,
                 )),
-            Container(
-                padding: EdgeInsets.only(top: 20.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Spacer(flex: 1),
-                      Expanded(
-                          flex: 2,
-                          child: RaisedButton(
-                            child: const Text('Ok'),
-                            onPressed: _submitForm,
-                          )),
-                      Spacer(flex: 1),
-                      Expanded(
-                          flex: 2,
-                          child: RaisedButton(
-                            child: const Text('Cancel'),
-                            onPressed: () => queueAction(SellAction.back()),
-                          )),
-                      Spacer(flex: 1),
-                    ])),
+            SizedBox(height: 24.0),
+            Center(
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              RaisedButton(
+                child: const Text('Ok'),
+                onPressed: _submitForm,
+              ),
+              FlatButton(
+                child: const Text('Cancel'),
+                onPressed: () => queueAction(SellAction.back()),
+              )
+            ])),
           ],
         ));
 
