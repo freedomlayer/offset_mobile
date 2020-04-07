@@ -36,7 +36,11 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
 
   final children = <Widget>[];
 
-  for (final namedIndexServerAddress in nodeOpen.compactReport.indexServers) {
+  // Sort index servers by name:
+  final indexServers = nodeOpen.compactReport.indexServers.toList();
+  indexServers.sort((a, b) => a.name.compareTo(b.name));
+
+  for (final namedIndexServerAddress in indexServers) {
     children.add(ListTile(
       key: Key(namedIndexServerAddress.publicKey.inner),
       title: Text(namedIndexServerAddress.name),
