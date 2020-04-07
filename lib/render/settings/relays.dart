@@ -35,7 +35,11 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
 
   final children = <Widget>[];
 
-  for (final namedRelayAddress in nodeOpen.compactReport.relays) {
+  // Sort relays by name:
+  final relays = nodeOpen.compactReport.relays.toList();
+  relays.sort((a, b) => a.name.compareTo(b.name));
+
+  for (final namedRelayAddress in relays) {
     children.add(ListTile(
       key: Key(namedRelayAddress.publicKey.inner),
       title: Text(namedRelayAddress.name),
