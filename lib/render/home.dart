@@ -23,25 +23,25 @@ Widget renderHome(BuiltMap<NodeName, NodeState> nodesStates,
 
   final listView = ListView(children: [
     ListTile(
-        leading: Icon(Icons.burst_mode),
+        leading: Icon(Icons.payment),
         title: Text('Buy'),
         subtitle: Text('Pay an invoice'),
         enabled: someCardActive,
         onTap: () => queueAction(HomeAction.selectBuy())),
     ListTile(
-        leading: Icon(Icons.signal_cellular_4_bar),
+        leading: Icon(Icons.store),
         title: Text('Sell'),
         subtitle: Text('Create a new invoice'),
         enabled: someCardActive,
         onTap: () => queueAction(HomeAction.selectSell())),
     ListTile(
-        leading: Icon(Icons.zoom_out),
+        leading: Icon(Icons.call_made),
         title: Text('Outgoing'),
         subtitle: Text('View outgoing transactions'),
         enabled: someCardActive,
         onTap: () => queueAction(HomeAction.selectOutTransactions())),
     ListTile(
-        leading: Icon(Icons.zoom_in),
+        leading: Icon(Icons.call_received),
         title: Text('Incoming'),
         subtitle: Text('View incoming transactions'),
         enabled: someCardActive,
@@ -49,7 +49,7 @@ Widget renderHome(BuiltMap<NodeName, NodeState> nodesStates,
     ListTile(
         leading: Icon(Icons.account_balance),
         title: Text('Balances'),
-        subtitle: Text('View current card balances'),
+        subtitle: Text('View card balances'),
         enabled: someCardActive,
         onTap: () => queueAction(HomeAction.selectBalances())),
     ListTile(
