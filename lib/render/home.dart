@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../protocol/protocol.dart';
 import '../state/state.dart';
@@ -23,13 +24,13 @@ Widget renderHome(BuiltMap<NodeName, NodeState> nodesStates,
 
   final listView = ListView(children: [
     ListTile(
-        leading: Icon(Icons.payment),
+        leading: FaIcon(FontAwesomeIcons.shoppingCart) ,
         title: Text('Buy'),
         subtitle: Text('Pay an invoice'),
         enabled: someCardActive,
         onTap: () => queueAction(HomeAction.selectBuy())),
     ListTile(
-        leading: Icon(Icons.store),
+        leading: FaIcon(FontAwesomeIcons.store) ,
         title: Text('Sell'),
         subtitle: Text('Create a new invoice'),
         enabled: someCardActive,
@@ -55,6 +56,7 @@ Widget renderHome(BuiltMap<NodeName, NodeState> nodesStates,
     ListTile(
         leading: Icon(Icons.settings),
         title: Text('Settings'),
+        subtitle: Text('Configure cards'),
         onTap: () => queueAction(HomeAction.selectSettings()))
   ]);
   return frame(title: Text(APP_TITLE), body: listView);
