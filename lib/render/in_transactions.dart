@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../protocol/protocol.dart';
 import '../protocol/file.dart';
@@ -173,7 +174,7 @@ Widget _renderCommittedTransaction(NodeName nodeName, InvoiceId invoiceId,
   ]));
 
   return frame(
-      title: Text('Outgoing transaction'),
+      title: Text('Incoming transaction'),
       body: body,
       backAction: () => queueAction(InTransactionsAction.back()));
 }
@@ -206,6 +207,42 @@ Widget _renderUncommittedTransaction(
     ..destPublicKey = localPublicKey
     ..destPayment = openInvoice.totalDestPayment
     ..description = openInvoice.description);
+
+  final body = Column(children: [
+    Expanded(
+        child: ListView(children: [
+      ListTile(
+          leading: FaIcon(FontAwesomeIcons.creditCard),
+          title: Text('${nodeName.inner}')),
+      ListTile(
+          leading: FaIcon(FontAwesomeIcons.coins),
+          title: Text(
+              '${amountToString(openInvoice.totalDestPayment)} ${openInvoice.currency.inner}')),
+      ListTile(
+          leading: const FaIcon(FontAwesomeIcons.comment),
+          title: Text('${openInvoice.description}')),
+      ListTile(
+          leading: const FaIcon(FontAwesomeIcons.thermometerHalf),
+          title: Text('Pending'),
+          trailing: FlatButton(
+              child: const FaIcon(FontAwesomeIcons.minusCircle),
+              onPressed: () => queueAction(
+                  InTransactionsAction.cancelInvoice(nodeName, invoiceId)))),
+      ListTile(
+        title: Center(child: qrShow<InvoiceFile>(invoiceFile)),
+      ),
+      ListTile(
+          title: RaisedButton.icon(
+        icon: const FaIcon(FontAwesomeIcons.shareAlt),
+        label: Text('Send Invoice'),
+        // TODO: Create a better name for the invoice file:
+        onPressed: () async =>
+            await shareFile<InvoiceFile>(invoiceFile, 'invoice.$INVOICE_EXT'),
+      )),
+    ])),
+  ]);
+
+  /*
 
   final body = Center(
       child: Column(children: <Widget>[
@@ -243,9 +280,10 @@ Widget _renderUncommittedTransaction(
       RaisedButton(child: Text('File'), onPressed: openFileExplorer),
     ])),
   ]));
+  */
 
   return frame(
-      title: Text('Outgoing transaction'),
+      title: Text('Incoming transaction'),
       body: body,
       backAction: () => queueAction(InTransactionsAction.back()));
 }
