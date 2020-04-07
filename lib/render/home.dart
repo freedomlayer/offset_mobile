@@ -24,13 +24,13 @@ Widget renderHome(BuiltMap<NodeName, NodeState> nodesStates,
 
   final listView = ListView(children: [
     ListTile(
-        leading: FaIcon(FontAwesomeIcons.shoppingCart) ,
+        leading: FaIcon(FontAwesomeIcons.shoppingCart),
         title: Text('Buy'),
         subtitle: Text('Pay an invoice'),
         enabled: someCardActive,
         onTap: () => queueAction(HomeAction.selectBuy())),
     ListTile(
-        leading: FaIcon(FontAwesomeIcons.store) ,
+        leading: FaIcon(FontAwesomeIcons.store),
         title: Text('Sell'),
         subtitle: Text('Create a new invoice'),
         enabled: someCardActive,
@@ -48,7 +48,7 @@ Widget renderHome(BuiltMap<NodeName, NodeState> nodesStates,
         enabled: someCardActive,
         onTap: () => queueAction(HomeAction.selectInTransactions())),
     ListTile(
-        leading: FaIcon(FontAwesomeIcons.balanceScale) ,
+        leading: FaIcon(FontAwesomeIcons.balanceScale),
         title: Text('Balances'),
         subtitle: Text('View card balances'),
         enabled: someCardActive,
