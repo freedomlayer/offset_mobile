@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'consts.dart';
 
 Future<bool> exitDialog(BuildContext context) async {
   return await showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
           title: Text('Exit?'),
-          content: Text(
-              'Your local cards will become offline.\n' +
-                  'Are you sure you want to exit?'),
+          content: Text('Your local cards will become offline.\n' +
+              'Are you sure you want to exit?'),
           actions: <Widget>[
             FlatButton(
               onPressed: () => Navigator.of(context).pop(false),
@@ -56,17 +56,19 @@ class Frame extends StatelessWidget {
       };
     }
 
-    return WillPopScope(
-        onWillPop: onWillPop,
-        child: Scaffold(
-          appBar: AppBar(
-            title: _title,
-            leading: leading,
-            actions: _actions,
-          ),
-          body: _body,
-          floatingActionButton: _floatingActionButton,
-        ));
+    return MaterialApp(
+        title: APP_TITLE,
+        home: WillPopScope(
+            onWillPop: onWillPop,
+            child: Scaffold(
+              appBar: AppBar(
+                title: _title,
+                leading: leading,
+                actions: _actions,
+              ),
+              body: _body,
+              floatingActionButton: _floatingActionButton,
+            )));
   }
 }
 

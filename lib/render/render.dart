@@ -4,7 +4,6 @@ import 'package:built_collection/built_collection.dart';
 
 import '../state/state.dart';
 import '../protocol/protocol.dart';
-// import '../protocol/serialize.dart';
 import '../actions/actions.dart';
 
 import 'consts.dart';
@@ -16,7 +15,6 @@ import 'out_transactions.dart';
 import 'balances.dart';
 import 'settings.dart';
 import 'frame.dart';
-// import '../error.dart';
 
 import '../logger.dart';
 
@@ -24,21 +22,18 @@ final logger = createLogger('render::render');
 
 /// This is what we show to the user before we open the process
 Widget renderNotReady() {
-  final body = frame(
+  return frame(
       title: Text(APP_TITLE),
       body: Center(child: CircularProgressIndicator(value: null)));
-  return MaterialApp(title: APP_TITLE, home: body);
 }
 
 /// Rendering when we are connected to the process
 Widget render(AppState appState, Function(AppAction) queueAction) {
-  final body = appState.viewState.match(
+  return appState.viewState.match(
       view: (appView) =>
           renderAppView(appView, appState.nodesStates, queueAction),
       transition: (oldView, newView, nextRequests, optPendingRequest) =>
           renderTransition(oldView, appState.nodesStates));
-
-  return MaterialApp(title: APP_TITLE, home: body);
 }
 
 Widget renderAppView(AppView appView, BuiltMap<NodeName, NodeState> nodesStates,

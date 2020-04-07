@@ -14,6 +14,7 @@ import 'utils/file_picker.dart';
 import 'utils/qr_scan.dart';
 import 'utils/amount.dart';
 
+import 'consts.dart';
 import 'frame.dart';
 
 import '../logger.dart';
@@ -208,84 +209,81 @@ Widget _renderUncommittedTransaction(
     ..destPayment = openInvoice.totalDestPayment
     ..description = openInvoice.description);
 
-  final body = Column(children: [
-    Expanded(
-        child: ListView(children: [
-      ListTile(
-          leading: FaIcon(FontAwesomeIcons.creditCard),
-          title: Text('${nodeName.inner}')),
-      ListTile(
-          leading: FaIcon(FontAwesomeIcons.coins),
-          title: Text(
-              '${amountToString(openInvoice.totalDestPayment)} ${openInvoice.currency.inner}')),
-      ListTile(
-          leading: const FaIcon(FontAwesomeIcons.comment),
-          title: Text('${openInvoice.description}')),
-      ListTile(
-          leading: const FaIcon(FontAwesomeIcons.thermometerHalf),
-          title: Text('Pending'),
-          trailing: FlatButton(
-              child: const FaIcon(FontAwesomeIcons.minusCircle),
-              onPressed: () => queueAction(
-                  InTransactionsAction.cancelInvoice(nodeName, invoiceId)))),
-      ListTile(
-        title: Center(child: qrShow<InvoiceFile>(invoiceFile)),
-      ),
-      ListTile(
-          title: RaisedButton.icon(
-        icon: const FaIcon(FontAwesomeIcons.shareAlt),
-        label: Text('Send Invoice'),
-        // TODO: Create a better name for the invoice file:
-        onPressed: () async =>
-            await shareFile<InvoiceFile>(invoiceFile, 'invoice.$INVOICE_EXT'),
-      )),
-    ])),
-  ]);
-
-  /*
-
-  final body = Center(
-      child: Column(children: <Widget>[
-    SizedBox(height: 10),
-    Text('Card: ${nodeName.inner}'),
-    SizedBox(height: 10),
-    Text('Amount: ${amountToString(openInvoice.totalDestPayment)}'),
-    SizedBox(height: 10),
-    Text('Description: ${openInvoice.description}'),
-    SizedBox(height: 10),
-    Text('Status: Pending'),
-    SizedBox(height: 20),
-    Center(child: Text('Send invoice to buyer')),
-    Center(child: qrShow<InvoiceFile>(invoiceFile)),
-    SizedBox(height: 20),
-    Center(
-        child: RaisedButton(
-            // TODO: Create a better name for the invoice file:
-            onPressed: () async => await shareFile<InvoiceFile>(
-                invoiceFile, 'invoice.$INVOICE_EXT'),
-            child: Text('Send File'))),
-    SizedBox(height: 20),
-    Center(
-        child: RaisedButton(
+  final baseChildren = <Widget>[
+    ListTile(
+        leading: FaIcon(FontAwesomeIcons.creditCard),
+        title: Text('${nodeName.inner}')),
+    ListTile(
+        leading: FaIcon(FontAwesomeIcons.coins),
+        title: Text(
+            '${amountToString(openInvoice.totalDestPayment)} ${openInvoice.currency.inner}')),
+    ListTile(
+        leading: const FaIcon(FontAwesomeIcons.comment),
+        title: Text('${openInvoice.description}')),
+    ListTile(
+        leading: const FaIcon(FontAwesomeIcons.thermometerHalf),
+        title: Text('Pending'),
+        trailing: FlatButton(
+            child: const FaIcon(FontAwesomeIcons.minusCircle),
             onPressed: () => queueAction(
-                InTransactionsAction.cancelInvoice(nodeName, invoiceId)),
-            child: Text('Cancel Invoice'))),
-    SizedBox(height: 10),
-    Center(child: Text('How to receive commitment?')),
-    SizedBox(height: 10),
-    Center(
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      RaisedButton(child: Text('QR code'), onPressed: scanQrCode),
-      SizedBox(height: 15),
-      RaisedButton(child: Text('File'), onPressed: openFileExplorer),
-    ])),
-  ]));
-  */
+                InTransactionsAction.cancelInvoice(nodeName, invoiceId)))),
+  ];
 
-  return frame(
-      title: Text('Incoming transaction'),
-      body: body,
-      backAction: () => queueAction(InTransactionsAction.back()));
+  final invoiceBody = ListView(
+      children: baseChildren +
+          [
+            ListTile(
+              title: Center(child: qrShow<InvoiceFile>(invoiceFile)),
+            ),
+            ListTile(
+                title: Align(child: RaisedButton.icon(
+              icon: const FaIcon(FontAwesomeIcons.shareAlt),
+              label: Text('Send Invoice'),
+              // TODO: Create a better name for the invoice file:
+              onPressed: () async => await shareFile<InvoiceFile>(
+                  invoiceFile, 'invoice.$INVOICE_EXT'),
+            ))),
+          ]);
+
+  final commitBody = ListView(
+      children: baseChildren +
+          [
+            ListTile(
+                title: Text('How to receive commitment?',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16.0))),
+            ListTile(
+                leading: FaIcon(FontAwesomeIcons.qrcode),
+                onTap: scanQrCode,
+                title: Text('QR code')),
+            ListTile(
+                leading: FaIcon(FontAwesomeIcons.file),
+                onTap: openFileExplorer,
+                title: Text('File')),
+          ]);
+
+  return MaterialApp(
+      title: APP_TITLE,
+      home: DefaultTabController(
+          length: 2,
+          child: Scaffold(
+              appBar: AppBar(
+                  title: Text('Incoming transaction'),
+                  leading: BackButton(
+                    onPressed: () => queueAction(InTransactionsAction.back()),
+                  ),
+                  bottom: TabBar(tabs: [
+                    Tab(
+                        icon: const FaIcon(FontAwesomeIcons.fileInvoiceDollar),
+                        text: 'Invoice'),
+                    Tab(
+                        icon: const FaIcon(FontAwesomeIcons.stamp),
+                        text: 'Commit'),
+                  ])),
+              body: TabBarView(children: [
+                invoiceBody,
+                commitBody,
+              ]))));
 }
 
 Widget _renderCollected(
