@@ -48,7 +48,7 @@ Widget renderHome(BuiltMap<NodeName, NodeState> nodesStates,
         enabled: someCardActive,
         onTap: () => queueAction(HomeAction.selectInTransactions())),
     ListTile(
-        leading: Icon(Icons.account_balance),
+        leading: FaIcon(FontAwesomeIcons.balanceScale) ,
         title: Text('Balances'),
         subtitle: Text('View card balances'),
         enabled: someCardActive,
