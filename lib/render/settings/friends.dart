@@ -63,9 +63,9 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
 
   final children = <Widget>[];
 
-  for (final entry in nodeOpen.compactReport.friends.entries) {
-    final publicKey = entry.key;
-    final friendReport = entry.value;
+  for (final publicKey in nodeOpen.compactReport.friends.keys.toList()
+    ..sort()) {
+    final friendReport = nodeOpen.compactReport.friends[publicKey];
 
     children.add(ListTile(
       key: Key(publicKey.inner),

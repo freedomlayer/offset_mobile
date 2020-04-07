@@ -49,9 +49,8 @@ Widget renderSettings(
 Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
   final children = <Widget>[];
-  for (final entry in nodesStates.entries) {
-    final nodeName = entry.key;
-    final nodeState = entry.value;
+  for (final nodeName in nodesStates.keys.toList()..sort()) {
+    final nodeState = nodesStates[nodeName];
     final cardEntry = ListTile(
       key: Key(nodeName.inner),
       title: Text('${nodeName.inner}'),
@@ -244,7 +243,8 @@ Widget _renderSelectCardAddRelay(
     Function(SettingsAction) queueAction) {
   final children = <Widget>[];
 
-  nodesStates.forEach((nodeName, nodeState) {
+  for (final nodeName in nodesStates.keys.toList()..sort()) {
+    final nodeState = nodesStates[nodeName];
     // We only show open nodes. (We can not configure closed nodes):
     final cardEntry = nodeState.inner.isOpen
         ? ListTile(
@@ -258,7 +258,7 @@ Widget _renderSelectCardAddRelay(
             enabled: false);
 
     children.add(cardEntry);
-  });
+  }
 
   final listView =
       ListView(padding: const EdgeInsets.all(8), children: children);
@@ -275,7 +275,8 @@ Widget _renderSelectCardAddIndex(
     Function(SettingsAction) queueAction) {
   final children = <Widget>[];
 
-  nodesStates.forEach((nodeName, nodeState) {
+  for (final nodeName in nodesStates.keys.toList()..sort()) {
+    final nodeState = nodesStates[nodeName];
     // We only show open nodes. (We can not configure closed nodes):
     final cardEntry = nodeState.inner.isOpen
         ? ListTile(
@@ -289,7 +290,7 @@ Widget _renderSelectCardAddIndex(
             enabled: false);
 
     children.add(cardEntry);
-  });
+  }
 
   final listView =
       ListView(padding: const EdgeInsets.all(8), children: children);
@@ -305,7 +306,8 @@ Widget _renderSelectCardAddFriend(
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
   final children = <Widget>[];
-  nodesStates.forEach((nodeName, nodeState) {
+  for (final nodeName in nodesStates.keys.toList()..sort()) {
+    final nodeState = nodesStates[nodeName];
     // We only show open nodes. (We can not configure closed nodes):
     final cardEntry = nodeState.inner.isOpen
         ? ListTile(
@@ -319,7 +321,7 @@ Widget _renderSelectCardAddFriend(
             enabled: false);
 
     children.add(cardEntry);
-  });
+  }
 
   final listView =
       ListView(padding: const EdgeInsets.all(8), children: children);

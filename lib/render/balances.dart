@@ -22,9 +22,8 @@ Widget renderBalances(
 Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
     Function(BalancesAction) queueAction) {
   final children = <Widget>[];
-  for (final entry in nodesStates.entries) {
-    final nodeName = entry.key;
-    final nodeState = entry.value;
+  for (final nodeName in nodesStates.keys.toList()..sort()) {
+    final nodeState = nodesStates[nodeName];
     final cardEntry = ListTile(
       key: Key(nodeName.inner),
       title: Text('${nodeName.inner}'),

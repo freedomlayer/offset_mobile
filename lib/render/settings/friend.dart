@@ -49,10 +49,8 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
 
     final List<Widget> children = [];
     // TODO: Sort list here before iteration begins:
-    for (final entry in currencyConfigs.entries) {
-      final currency = entry.key;
-      final ConfigReport configReport = entry.value;
-
+    for (final currency in currencyConfigs.keys.toList()..sort()) {
+      final configReport = currencyConfigs[currency];
       final currencyReport = currencyReports[currency];
       Widget title;
       Widget trailing;

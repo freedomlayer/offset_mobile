@@ -96,7 +96,8 @@ Widget _renderSelectCard(
     Function(BuyAction) queueAction) {
   final children = <Widget>[];
 
-  nodesStates.forEach((nodeName, nodeState) {
+  for (final nodeName in nodesStates.keys.toList()..sort()) {
+    final nodeState = nodesStates[nodeName];
     // We only show open nodes. (We can not configure closed nodes):
     final cardEntry = nodeState.inner.isOpen
         ? ListTile(
@@ -109,7 +110,7 @@ Widget _renderSelectCard(
             enabled: false);
 
     children.add(cardEntry);
-  });
+  }
 
   final listView =
       ListView(padding: const EdgeInsets.all(8), children: children);
