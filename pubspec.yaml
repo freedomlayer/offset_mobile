@@ -36,6 +36,7 @@ dependencies:
   qr_flutter: ^3.2.0
   logger: ^0.8.3
   share_extend: ^1.1.1
+  font_awesome_flutter: ^8.8.1
 
 
 dev_dependencies:
