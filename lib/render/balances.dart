@@ -37,11 +37,20 @@ Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
     children.add(cardEntry);
   }
 
-  final listView = ListView(padding: EdgeInsets.all(8), children: children);
+  final body = Padding(
+      padding: EdgeInsets.all(14.0),
+      child: Column(children: [
+        Text(
+          'Please select a card',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+        ),
+        Expanded(
+            child: ListView(padding: EdgeInsets.all(8), children: children)),
+      ]));
 
   return frame(
       title: Text('Balances'),
-      body: listView,
+      body: body,
       backAction: () => queueAction(BalancesAction.back()));
 }
 
