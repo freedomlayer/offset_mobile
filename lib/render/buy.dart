@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../protocol/protocol.dart';
 import '../protocol/file.dart';
@@ -44,17 +45,26 @@ Widget _renderInvoiceSelect(BuiltMap<NodeName, NodeState> nodesStates,
     }
   };
 
-  final body = Center(
-      child: Column(children: [
-    Spacer(flex: 1),
-    Expanded(flex: 1, child: Text('How to load invoice')),
-    Expanded(
-        flex: 2,
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          RaisedButton(onPressed: scanQrCode, child: Text('QR code')),
-          RaisedButton(onPressed: openFileExplorer, child: Text('File')),
+  final body = Padding(
+      padding: EdgeInsets.all(16.0),
+      child: Center(
+          child: Column(children: [
+        Text(
+          'How to load invoice?',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+        ),
+        Expanded(
+            child: ListView(padding: EdgeInsets.all(8), children: [
+          ListTile(
+              leading: FaIcon(FontAwesomeIcons.qrcode),
+              onTap: scanQrCode,
+              title: Text('QR code')),
+          ListTile(
+              leading: FaIcon(FontAwesomeIcons.file),
+              onTap: openFileExplorer,
+              title: Text('File')),
         ])),
-  ]));
+      ])));
 
   return frame(
       title: Text('Select Invoice'),
