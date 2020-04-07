@@ -61,22 +61,3 @@ Widget renderHome(BuiltMap<NodeName, NodeState> nodesStates,
   ]);
   return frame(title: Text(APP_TITLE), body: listView);
 }
-
-/*
-  return MaterialApp(
-    title: APP_TITLE,
-    home: Scaffold(
-      appBar: AppBar(
-        title:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Expanded(
-              child: Container(
-                  child: BackButton(), alignment: Alignment.centerLeft),
-              flex: 1),
-          Expanded(child: Center(child: Text(APP_TITLE)), flex: 3),
-          Spacer(flex: 1),
-        ]),
-      ),
-    ),
-  );
-*/
