@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:built_collection/built_collection.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -122,9 +124,61 @@ Widget _renderNewCardSelect(BuiltMap<NodeName, NodeState> nodesStates,
 
 Widget _renderNewCardLocal(BuiltMap<NodeName, NodeState> nodesStates,
     Function(NewCardAction) queueAction) {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   // Saves current node name:
   String _nodeName = '';
 
+  final _submitForm = () {
+    final FormState form = _formKey.currentState;
+
+    if (!form.validate()) {
+      // Form is not valid
+    } else {
+      // Save form fields:
+      form.save();
+
+      queueAction(NewCardAction.newCardLocal(NodeName(_nodeName)));
+    }
+  };
+
+  final body =
+      StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+    final form = Form(
+        key: _formKey,
+        autovalidate: true,
+        child: ListView(
+          // padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          children: <Widget>[
+            ListTile(
+                leading: const FaIcon(FontAwesomeIcons.creditCard),
+                title: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: 'How do you want to call this card?',
+                    labelText: 'Card name',
+                  ),
+                  // TODO: Possibly add a validator?
+                  keyboardType: TextInputType.text,
+                  inputFormatters: [LengthLimitingTextInputFormatter(64)],
+                  onSaved: (nodeName) => _nodeName = nodeName,
+                )),
+            SizedBox(height: 24.0),
+            Align(
+                child: RaisedButton.icon(
+              icon: const FaIcon(FontAwesomeIcons.plus),
+              label: const Text('Add card'),
+              onPressed: _submitForm,
+            )),
+          ],
+        ));
+
+    return SafeArea(
+        top: false,
+        bottom: false,
+        child: Padding(padding: EdgeInsets.all(16.0), child: form));
+  });
+
+  /*
   final body = Center(
       child: Row(children: [
     Spacer(flex: 1),
@@ -157,6 +211,7 @@ Widget _renderNewCardLocal(BuiltMap<NodeName, NodeState> nodesStates,
         ])),
     Spacer(flex: 1),
   ]));
+  */
 
   return frame(
       title: Text('New local card'),
@@ -184,17 +239,27 @@ Widget _renderNewCardRemote(BuiltMap<NodeName, NodeState> nodesStates,
     }
   };
 
-  final body = Center(
-      child: Column(children: [
-    Spacer(flex: 1),
-    Expanded(flex: 1, child: Text('How to add remote card?')),
-    Expanded(
-        flex: 2,
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          RaisedButton(onPressed: scanQrCode, child: Text('QR code')),
-          RaisedButton(onPressed: openFileExplorer, child: Text('File')),
+  final body = Padding(
+      padding: EdgeInsets.all(16.0),
+      child: Center(
+          child: Column(children: [
+        Text(
+          'How to add remote card?',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+        ),
+        Expanded(
+            child: ListView(padding: EdgeInsets.all(8), children: [
+          ListTile(
+              leading: FaIcon(FontAwesomeIcons.qrcode),
+              onTap: scanQrCode,
+              title: Text('QR code')),
+          ListTile(
+              leading: FaIcon(FontAwesomeIcons.file),
+              onTap: openFileExplorer,
+              title: Text('File')),
         ])),
-  ]));
+      ])));
+
 
   return frame(
       title: Text('New remote card'),
