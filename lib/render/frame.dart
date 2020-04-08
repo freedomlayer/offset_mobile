@@ -56,19 +56,23 @@ class Frame extends StatelessWidget {
       };
     }
 
+    /*
     return MaterialApp(
         title: APP_TITLE,
-        home: WillPopScope(
-            onWillPop: onWillPop,
-            child: Scaffold(
-              appBar: AppBar(
-                title: _title,
-                leading: leading,
-                actions: _actions,
-              ),
-              body: _body,
-              floatingActionButton: _floatingActionButton,
-            )));
+        home: 
+      */
+
+    return WillPopScope(
+        onWillPop: onWillPop,
+        child: Scaffold(
+          appBar: AppBar(
+            title: _title,
+            leading: leading,
+            actions: _actions,
+          ),
+          body: _body,
+          floatingActionButton: _floatingActionButton,
+        ));
   }
 }
 

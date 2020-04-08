@@ -268,9 +268,7 @@ Widget _renderUncommittedTransaction(
                 title: Text('File')),
           ]);
 
-  return MaterialApp(
-      title: APP_TITLE,
-      home: DefaultTabController(
+  return DefaultTabController(
           length: 2,
           child: Scaffold(
               appBar: AppBar(
@@ -289,7 +287,7 @@ Widget _renderUncommittedTransaction(
               body: TabBarView(children: [
                 invoiceBody,
                 commitBody,
-              ]))));
+              ])));
 }
 
 Widget _renderCollected(

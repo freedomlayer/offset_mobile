@@ -22,18 +22,22 @@ final logger = createLogger('render::render');
 
 /// This is what we show to the user before we open the process
 Widget renderNotReady() {
-  return frame(
+  final home = frame(
       title: Text(APP_TITLE),
       body: Center(child: CircularProgressIndicator(value: null)));
+
+  return MaterialApp(title: APP_TITLE, home: home);
 }
 
 /// Rendering when we are connected to the process
 Widget render(AppState appState, Function(AppAction) queueAction) {
-  return appState.viewState.match(
+  final home = appState.viewState.match(
       view: (appView) =>
           renderAppView(appView, appState.nodesStates, queueAction),
       transition: (oldView, newView, nextRequests, optPendingRequest) =>
           renderTransition(oldView, appState.nodesStates));
+
+  return MaterialApp(title: APP_TITLE, home: home);
 }
 
 Widget renderAppView(AppView appView, BuiltMap<NodeName, NodeState> nodesStates,
@@ -70,8 +74,10 @@ Widget renderTransition(
   };
   // TODO: Possibly add some kind of shading over the old view, to let the user know
   // something is in progress.
-  return Stack(children: <Widget>[
-    renderAppView(oldView, nodesStates, noQueueAction),
-    CircularProgressIndicator(value: null)
-  ]);
+  return MaterialApp(
+      title: APP_TITLE,
+      home: Stack(children: <Widget>[
+        renderAppView(oldView, nodesStates, noQueueAction),
+        CircularProgressIndicator(value: null)
+      ]));
 }
