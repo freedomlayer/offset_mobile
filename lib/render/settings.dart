@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'utils/file_picker.dart';
 import 'utils/qr_scan.dart';
@@ -93,15 +94,25 @@ Widget _renderNewCard(
 
 Widget _renderNewCardSelect(BuiltMap<NodeName, NodeState> nodesStates,
     Function(NewCardAction) queueAction) {
-  final body = Center(
-      child: Column(children: [
-    RaisedButton(
-        onPressed: () => queueAction(NewCardAction.selectLocal()),
-        child: Text('Local card')),
-    RaisedButton(
-        onPressed: () => queueAction(NewCardAction.selectRemote()),
-        child: Text('Remote card')),
-  ]));
+  final body = ListView(padding: const EdgeInsets.all(8), children: <Widget>[
+    SizedBox(height: 16.0),
+    Center(
+        child: Text('Select card type',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0))),
+    SizedBox(height: 20.0),
+    ListTile(
+      leading: FaIcon(FontAwesomeIcons.mobileAlt, size: 36),
+      title: Text('Local card'),
+      subtitle: Text('Create a new card inside this device'),
+      onTap: () => queueAction(NewCardAction.selectLocal()),
+    ),
+    ListTile(
+      leading: FaIcon(FontAwesomeIcons.networkWired),
+      title: Text('Remote card'),
+      subtitle: Text('Connect to a remote card'),
+      onTap: () => queueAction(NewCardAction.selectRemote()),
+    )
+  ]);
 
   return frame(
       title: Text('New card'),
