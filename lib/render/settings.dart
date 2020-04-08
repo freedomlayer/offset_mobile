@@ -225,7 +225,6 @@ Widget _renderNewCardRemote(BuiltMap<NodeName, NodeState> nodesStates,
         ])),
       ])));
 
-
   return frame(
       title: Text('New remote card'),
       body: body,
@@ -236,41 +235,59 @@ Widget _renderNewRemoteName(
     RemoteCardFile remoteCardFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(NewCardAction) queueAction) {
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   // Saves current node name:
   String _nodeName = '';
 
-  final body = Center(
-      child: Row(children: [
-    Spacer(flex: 1),
-    Expanded(
-        flex: 4,
-        child: Column(children: [
-          Expanded(
-              flex: 1,
-              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Text('Name:'),
-                Expanded(
-                    child: TextField(
-                        onChanged: (newNodeName) => _nodeName = newNodeName)),
-              ])),
-          Spacer(flex: 2),
-          Expanded(
-              flex: 1,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    RaisedButton(
-                        onPressed: () => queueAction(
-                            NewCardAction.newCardRemote(
-                                NodeName(_nodeName), remoteCardFile)),
-                        child: Text('Ok')),
-                    RaisedButton(
-                        onPressed: () => queueAction(NewCardAction.back()),
-                        child: Text('Cancel')),
-                  ])),
-        ])),
-    Spacer(flex: 1),
-  ]));
+  final _submitForm = () {
+    final FormState form = _formKey.currentState;
+
+    if (!form.validate()) {
+      // Form is not valid
+    } else {
+      // Save form fields:
+      form.save();
+      queueAction(NewCardAction.newCardRemote(NodeName(_nodeName), remoteCardFile));
+    }
+  };
+
+  final body =
+      StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+    final form = Form(
+        key: _formKey,
+        autovalidate: true,
+        child: ListView(
+          // padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          children: <Widget>[
+            ListTile(
+                leading: const FaIcon(FontAwesomeIcons.creditCard),
+                title: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: 'How do you want to call this card?',
+                    labelText: 'Card name',
+                  ),
+                  // TODO: Possibly add a validator?
+                  keyboardType: TextInputType.text,
+                  inputFormatters: [LengthLimitingTextInputFormatter(64)],
+                  onSaved: (nodeName) => _nodeName = nodeName,
+                )),
+            SizedBox(height: 24.0),
+            Align(
+                child: RaisedButton.icon(
+              icon: const FaIcon(FontAwesomeIcons.plus),
+              label: const Text('Add card'),
+              onPressed: _submitForm,
+            )),
+          ],
+        ));
+
+    return SafeArea(
+        top: false,
+        bottom: false,
+        child: Padding(padding: EdgeInsets.all(16.0), child: form));
+  });
 
   return frame(
       title: Text('Remote card name'),
