@@ -155,29 +155,34 @@ Widget _renderTransaction(
 
 Widget _renderCommittedTransaction(NodeName nodeName, InvoiceId invoiceId,
     OpenInvoice openInvoice, Function(InTransactionsAction) queueAction) {
-  final body = Center(
-      child: Column(children: <Widget>[
-    SizedBox(height: 10),
-    Text('Card: ${nodeName.inner}'),
-    SizedBox(height: 10),
-    Text('Amount: ${amountToString(openInvoice.totalDestPayment)}'),
-    SizedBox(height: 10),
-    Text('Description: ${openInvoice.description}'),
-    SizedBox(height: 10),
-    Text('Status: received'),
-    SizedBox(height: 20),
+
+  final body = ListView(children: <Widget>[
+    ListTile(
+        leading: FaIcon(FontAwesomeIcons.creditCard),
+        title: Text('${nodeName.inner}')),
+    ListTile(
+        leading: FaIcon(FontAwesomeIcons.coins),
+        title: Text(
+            '${amountToString(openInvoice.totalDestPayment)} ${openInvoice.currency.inner}')),
+    ListTile(
+        leading: const FaIcon(FontAwesomeIcons.comment),
+        title: Text('${openInvoice.description}')),
+    ListTile(
+        leading: const FaIcon(FontAwesomeIcons.thermometerFull),
+        title: Text('Received'),
+        trailing: FlatButton(
+            child: const FaIcon(FontAwesomeIcons.minusCircle),
+            onPressed: () => queueAction(
+                InTransactionsAction.cancelInvoice(nodeName, invoiceId)))),
+    SizedBox(height: 16.0),
     Center(
-        child: RaisedButton(
+        child: RaisedButton.icon(
+            icon: const FaIcon(FontAwesomeIcons.truck),
             onPressed: () => queueAction(
                 InTransactionsAction.collectInvoice(nodeName, invoiceId)),
-            child: Text('Collect'))),
-    SizedBox(height: 15),
-    Center(
-        child: RaisedButton(
-            onPressed: () => queueAction(
-                InTransactionsAction.cancelInvoice(nodeName, invoiceId)),
-            child: Text('Cancel Invoice'))),
-  ]));
+            label: Text('Collect'))),
+  ]);
+
 
   return frame(
       title: Text('Incoming transaction'),
@@ -237,6 +242,10 @@ Widget _renderUncommittedTransaction(
   final invoiceBody = ListView(
       children: baseChildren +
           [
+            Center(
+                child: Text('Invoice',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16.0))),
             ListTile(
               title: Center(child: qrShow<InvoiceFile>(invoiceFile)),
             ),
@@ -255,9 +264,10 @@ Widget _renderUncommittedTransaction(
       children: baseChildren +
           [
             ListTile(
-                title: Center(child: Text('How to receive commitment?',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 16.0)))),
+                title: Center(
+                    child: Text('How to receive commitment?',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16.0)))),
             ListTile(
                 leading: FaIcon(FontAwesomeIcons.qrcode),
                 onTap: scanQrCode,

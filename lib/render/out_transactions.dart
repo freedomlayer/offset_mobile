@@ -196,8 +196,7 @@ Widget _renderFoundRoute(U128 fees, NodeName nodeName, PaymentId paymentId,
         leading: const FaIcon(FontAwesomeIcons.funnelDollar),
         title: Text('${amountToString(fees)} ${openPayment.currency.inner}')),
     Center(
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       RaisedButton(
           onPressed: () => queueAction(
               OutTransactionsAction.confirmFees(nodeName, paymentId)),
@@ -325,18 +324,18 @@ Widget _renderCommit(
         leading: const FaIcon(FontAwesomeIcons.thermometerHalf),
         title: Text('In progress...')),
     */
-    Center(child: Text('Send commitment')),
     Center(
-        child: Text(
-            'Payment is only complete when the seller receives the commitment')),
+        child: Text('Commitment',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0))),
     Center(child: qrShow<Commit>(commit)),
     SizedBox(height: 20),
     Center(
-        child: RaisedButton(
+        child: RaisedButton.icon(
             // TODO: Create a better name for the commitment file:
+            icon: const FaIcon(FontAwesomeIcons.shareAlt),
             onPressed: () async =>
                 await shareFile<Commit>(commit, 'commit.$COMMIT_EXT'),
-            child: Text('Send File'))),
+            label: Text('Send Commitment'))),
   ]);
 
   /*
@@ -381,6 +380,14 @@ Widget _renderSuccess(
     OpenPayment openPayment,
     Function(OutTransactionsAction) queueAction) {
   final body = ListView(padding: EdgeInsets.all(8), children: <Widget>[
+    SizedBox(height: 16.0),
+    Center(
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      const FaIcon(FontAwesomeIcons.checkCircle),
+      SizedBox(width: 16.0),
+      Text('Success')
+    ])),
+    SizedBox(height: 16.0),
     ListTile(
         leading: FaIcon(FontAwesomeIcons.creditCard),
         title: Text('${nodeName.inner}')),
@@ -394,15 +401,17 @@ Widget _renderSuccess(
     ListTile(
         leading: const FaIcon(FontAwesomeIcons.funnelDollar),
         title: Text('${amountToString(fees)} ${openPayment.currency.inner}')),
+    SizedBox(height: 30.0),
     Center(
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      RaisedButton(
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      RaisedButton.icon(
           // TODO: Create a better name for the produced receipt file:
+          icon: const FaIcon(FontAwesomeIcons.shareAlt),
           onPressed: () async =>
               await shareFile<Receipt>(receipt, 'receipt.receipt'),
-          child: Text('Send Receipt')),
-      RaisedButton.icon(
+          label: Text('Send Receipt')),
+      SizedBox(width: 20.0),
+      FlatButton.icon(
           icon: const FaIcon(FontAwesomeIcons.trashAlt),
           onPressed: () => queueAction(
               OutTransactionsAction.discardPayment(nodeName, paymentId)),
