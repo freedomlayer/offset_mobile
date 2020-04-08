@@ -178,41 +178,6 @@ Widget _renderNewCardLocal(BuiltMap<NodeName, NodeState> nodesStates,
         child: Padding(padding: EdgeInsets.all(16.0), child: form));
   });
 
-  /*
-  final body = Center(
-      child: Row(children: [
-    Spacer(flex: 1),
-    Expanded(
-        flex: 4,
-        child: Column(children: [
-          Expanded(
-              flex: 1,
-              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Text('Name:'),
-                Expanded(
-                    child: TextField(
-                        onChanged: (newNodeName) => _nodeName = newNodeName)),
-              ])),
-          Spacer(flex: 2),
-          Expanded(
-              flex: 1,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    RaisedButton(
-                        // TODO: Add some kind of validation, so that we won't have empty named relay.
-                        onPressed: () => queueAction(
-                            NewCardAction.newCardLocal(NodeName(_nodeName))),
-                        child: Text('Ok')),
-                    RaisedButton(
-                        onPressed: () => queueAction(NewCardAction.back()),
-                        child: Text('Cancel')),
-                  ])),
-        ])),
-    Spacer(flex: 1),
-  ]));
-  */
-
   return frame(
       title: Text('New local card'),
       body: body,
