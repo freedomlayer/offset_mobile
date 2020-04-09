@@ -52,43 +52,48 @@ Widget _renderChannelInfo(
       final currencyReport = currencyReports[currency];
       Widget title;
       Widget trailing;
+      void Function() onTap;
       if (currencyReport != null) {
-        title = Text(
-            '${currency.inner}: ${balanceToString(currencyReport.balance)}');
-        trailing = FlatButton(
-            child: Icon(Icons.edit),
-            onPressed: friendReport.status.isEnabled
-                ? () =>
-                    queueAction(FriendSettingsAction.selectCurrency(currency))
-                : null);
+        title = Text('${currency.inner}');
+        onTap = friendReport.status.isEnabled
+            ? () => queueAction(FriendSettingsAction.selectCurrency(currency))
+            : null;
+        trailing = FaIcon(FontAwesomeIcons.checkSquare);
       } else {
         title = Text('${currency.inner} (Pending)');
-        trailing = FlatButton(
-            child: Icon(Icons.delete),
-            onPressed: friendReport.status.isEnabled
-                ? () =>
-                    queueAction(FriendSettingsAction.removeCurrency(currency))
-                : null);
+        trailing = Row(mainAxisSize: MainAxisSize.min, children: [
+          FlatButton(
+              child: Icon(Icons.delete),
+              onPressed: friendReport.status.isEnabled
+                  ? () =>
+                      queueAction(FriendSettingsAction.removeCurrency(currency))
+                  : null),
+          FaIcon(FontAwesomeIcons.checkSquare)
+        ]);
       }
+
+      final balanceStr = currencyReport != null 
+          ? balanceToString(currencyReport.balance)
+          : '(Pending)';
 
       final double ratePercent = (configReport.rate.mul / (1 << 32)) * 100;
       final addStr = amountToString(U128(BigInt.from(configReport.rate.add)));
-      final subtitle = Text(
-          'limit: ${amountToString(configReport.remoteMaxDebt)}' +
+      final subtitle =
+          Text('balance: $balanceStr'
+                  '\nlimit: ${amountToString(configReport.remoteMaxDebt)}' +
               '\nrate: ${ratePercent.toStringAsFixed(2)}% + $addStr');
 
       children.add(ListTile(
         key: Key(currency.inner),
+        onTap: onTap,
         title: title,
         subtitle: subtitle,
         enabled: friendReport.status.isEnabled,
+        leading: const FaIcon(FontAwesomeIcons.coins),
         trailing: trailing,
       ));
     }
-    return Column(children: [
-      Text('Currencies'),
-      Expanded(child: ListView(children: children)),
-    ]);
+    return ListView(padding: EdgeInsets.all(8), children: children);
   });
 }
 
