@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'consts.dart';
 
 Future<bool> exitDialog(BuildContext context) async {
   return await showDialog(
