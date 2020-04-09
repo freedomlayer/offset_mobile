@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../protocol/protocol.dart';
 import '../../protocol/file.dart';
@@ -93,6 +94,20 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
   ]);
   */
 
+  final body = Container(
+      child: Column(children: [
+    Container(
+        width: double.infinity,
+        color: Colors.blue.shade50,
+        padding: EdgeInsets.all(8),
+        child: ListTile(
+            leading: const FaIcon(FontAwesomeIcons.creditCard, size: 20.0),
+            title: Text('${nodeName.inner}',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
+    Expanded(child: listView),
+  ]));
+
   final newFriendButton = FloatingActionButton.extended(
       onPressed: () => queueAction(FriendsSettingsAction.selectNewFriend()),
       label: Text('New Friend'),
@@ -104,8 +119,8 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
   );
 
   return frame(
-      title: Text('Friends (${nodeName.inner})'),
-      body: listView,
+      title: Text('Friends'),
+      body: body,
       backAction: () => queueAction(FriendsSettingsAction.back()),
       floatingActionButton: newFriendButton,
       actions: <Widget>[shareButton]);
