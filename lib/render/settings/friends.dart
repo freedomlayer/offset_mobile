@@ -81,19 +81,6 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
 
   final listView = ListView(children: children);
 
-  /*
-  final body = Column(children: [
-    Spacer(flex: 1),
-    Expanded(
-        flex: 2,
-        child: RaisedButton(
-            child: Text('Share info'),
-            onPressed: () => queueAction(FriendsSettingsAction.shareInfo()))),
-    Spacer(flex: 1),
-    Expanded(flex: 18, child: listView),
-  ]);
-  */
-
   final body = Container(
       child: Column(children: [
     Container(
