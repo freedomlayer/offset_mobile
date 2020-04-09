@@ -14,7 +14,6 @@ import 'utils/file_picker.dart';
 import 'utils/qr_scan.dart';
 import 'utils/amount.dart';
 
-import 'consts.dart';
 import 'frame.dart';
 
 import '../logger.dart';
