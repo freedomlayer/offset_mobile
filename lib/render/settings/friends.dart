@@ -80,6 +80,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
 
   final listView = ListView(children: children);
 
+  /*
   final body = Column(children: [
     Spacer(flex: 1),
     Expanded(
@@ -90,17 +91,24 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
     Spacer(flex: 1),
     Expanded(flex: 18, child: listView),
   ]);
+  */
 
   final newFriendButton = FloatingActionButton.extended(
       onPressed: () => queueAction(FriendsSettingsAction.selectNewFriend()),
       label: Text('New Friend'),
       icon: Icon(Icons.add));
 
+  final shareButton = IconButton(
+    icon: Icon(Icons.share),
+    onPressed: () => queueAction(FriendsSettingsAction.shareInfo()),
+  );
+
   return frame(
-      title: Text('${nodeName.inner}: Friends'),
-      body: body,
+      title: Text('Friends (${nodeName.inner})'),
+      body: listView,
       backAction: () => queueAction(FriendsSettingsAction.back()),
-      floatingActionButton: newFriendButton);
+      floatingActionButton: newFriendButton,
+      actions: <Widget>[shareButton]);
 }
 
 Widget _renderNewFriend(NodeName nodeName, NewFriendView newFriendView,
