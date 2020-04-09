@@ -22,7 +22,7 @@ Widget renderHome(BuiltMap<NodeName, NodeState> nodesStates,
     Function(HomeAction) queueAction) {
   final someCardActive = isAnyCardActive(nodesStates);
 
-  final listView = ListView(children: [
+  final listView = ListView(padding: EdgeInsets.all(8), children: [
     ListTile(
         leading: FaIcon(FontAwesomeIcons.shoppingCart),
         title: Text('Buy'),

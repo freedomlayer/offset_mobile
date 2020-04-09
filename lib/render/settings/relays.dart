@@ -52,26 +52,25 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
     ));
   }
 
-  final listView = ListView(children: children);
+  final listView = ListView(children: children, padding: EdgeInsets.all(8));
 
   final newRelayButton = FloatingActionButton.extended(
       onPressed: () => queueAction(RelaysSettingsAction.selectNewRelay()),
       label: Text('New Relay'),
       icon: Icon(Icons.add));
 
-  final body = Container(
-      child: Column(children: [
+  final body = Column(children: [
     Container(
+        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
         width: double.infinity,
         color: Colors.blue.shade50,
-        padding: EdgeInsets.all(8),
         child: ListTile(
             leading: const FaIcon(FontAwesomeIcons.creditCard),
             title: Text('${nodeName.inner}',
                 style:
                     TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
     Expanded(child: listView),
-  ]));
+  ]);
 
   return frame(
       title: Text('Relays'),

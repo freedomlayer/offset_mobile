@@ -82,7 +82,7 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
       icon: Icon(Icons.add));
 
   final body = Padding(
-      padding: EdgeInsets.all(14.0),
+      padding: EdgeInsets.only(top: 14.0),
       child: Column(children: [
         Text(
           'Please select a card',
@@ -193,7 +193,7 @@ Widget _renderNewCardLocal(BuiltMap<NodeName, NodeState> nodesStates,
     return SafeArea(
         top: false,
         bottom: false,
-        child: Padding(padding: EdgeInsets.all(16.0), child: form));
+        child: Padding(padding: EdgeInsets.all(8.0), child: form));
   });
 
   return frame(
@@ -223,7 +223,7 @@ Widget _renderNewCardRemote(BuiltMap<NodeName, NodeState> nodesStates,
   };
 
   final body = Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: EdgeInsets.only(top: 16.0),
       child: Center(
           child: Column(children: [
         Text(
@@ -304,7 +304,7 @@ Widget _renderNewRemoteName(
     return SafeArea(
         top: false,
         bottom: false,
-        child: Padding(padding: EdgeInsets.all(16.0), child: form));
+        child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
   });
 
   return frame(

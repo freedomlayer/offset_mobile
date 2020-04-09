@@ -59,7 +59,7 @@ Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
   }
 
   final body = Padding(
-      padding: EdgeInsets.all(14.0),
+      padding: EdgeInsets.only(top: 14.0),
       child: Column(
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -200,7 +200,7 @@ Widget _renderInvoiceDetails(
     return SafeArea(
         top: false,
         bottom: false,
-        child: Padding(padding: EdgeInsets.all(16.0), child: form));
+        child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
   });
 
   return frame(

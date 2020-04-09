@@ -46,7 +46,7 @@ Widget _renderInvoiceSelect(BuiltMap<NodeName, NodeState> nodesStates,
   };
 
   final body = Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: EdgeInsets.only(top: 16.0),
       child: Center(
           child: Column(children: [
         Text(
@@ -76,7 +76,7 @@ Widget _renderInvoiceInfo(
     InvoiceFile invoiceFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(BuyAction) queueAction) {
-  final body = ListView(padding: EdgeInsets.all(16), children: <Widget>[
+  final body = ListView(padding: EdgeInsets.all(8), children: <Widget>[
     Center(child: ListTile(
         leading: FaIcon(FontAwesomeIcons.coins),
         title: Text(

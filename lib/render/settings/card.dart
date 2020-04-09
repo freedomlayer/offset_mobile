@@ -43,10 +43,12 @@ enum CardPopup { remove }
 Widget _renderCardSettingsHome(NodeName nodeName, NodeState nodeState,
     Function(CardSettingsAction) queueAction) {
   final children = <Widget>[];
+  /*
   // Node name:
   children.add(ListTile(
       leading: FaIcon(FontAwesomeIcons.creditCard),
       title: Text('${nodeName.inner}')));
+  */
 
   // Node type:
   final cardType = nodeState.info.isLocal
@@ -130,6 +132,19 @@ Widget _renderCardSettingsHome(NodeName nodeName, NodeState nodeState,
   final listView =
       ListView(padding: const EdgeInsets.all(8), children: children);
 
+  final body = Column(children: [
+    Container(
+        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+        width: double.infinity,
+        color: Colors.blue.shade50,
+        child: ListTile(
+            leading: const FaIcon(FontAwesomeIcons.creditCard),
+            title: Text('${nodeName.inner}',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
+    Expanded(child: listView),
+  ]);
+
   final popupMenuButton = PopupMenuButton<CardPopup>(
       onSelected: (CardPopup _result) =>
           queueAction(CardSettingsAction.remove()),
@@ -144,7 +159,7 @@ Widget _renderCardSettingsHome(NodeName nodeName, NodeState nodeState,
 
   return frame(
       title: Text('Card settings'),
-      body: listView,
+      body: body,
       backAction: () => queueAction(CardSettingsAction.back()),
       actions: <Widget>[popupMenuButton]);
 }
