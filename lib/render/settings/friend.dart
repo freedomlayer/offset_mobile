@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../../protocol/protocol.dart';
 // import '../../protocol/file.dart';
 import '../../state/state.dart';
@@ -27,23 +29,19 @@ Widget renderFriendSettings(
           nodeName, friendPublicKey, friendReport, queueAction));
 }
 
-/// Possible options for friend popup menu:
-enum FriendPopup { unfriend }
-
-Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
+Widget _renderChannelInfo(
     FriendReport friendReport, Function(FriendSettingsAction) queueAction) {
   final currencyConfigs = friendReport.currencyConfigs;
-  final Widget channelInfo = friendReport.channelStatus.match(
+  return friendReport.channelStatus.match(
       inconsistent: (_channelInconsistentReport) {
-    return Center(
-        child: Column(children: [
+    return Column(children: [
       SizedBox(height: 20),
       Text('Inconsistency'),
       SizedBox(height: 20),
       RaisedButton(
           child: Text('Resolve inconsistency'),
           onPressed: () => queueAction(FriendSettingsAction.selectResolve())),
-    ]));
+    ]);
   }, consistent: (channelConsistentReport) {
     final currencyReports = channelConsistentReport.currencyReports;
 
@@ -92,28 +90,53 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
       Expanded(child: ListView(children: children)),
     ]);
   });
+}
 
-  final body = Center(
-      child: Column(children: [
-    Expanded(
-        flex: 1,
-        child: ListTile(
-            title: Center(
-                child: Text('${nodeName.inner} / ${friendReport.name}')))),
-    Expanded(
-        flex: 1,
-        child: SwitchListTile(
-            value: friendReport.status.isEnabled,
-            title: Text("Enable"),
-            onChanged: (bool newValue) {
-              if (newValue == true) {
-                queueAction(FriendSettingsAction.enableFriend());
-              } else {
-                queueAction(FriendSettingsAction.disableFriend());
-              }
-            })),
-    Expanded(flex: 10, child: channelInfo),
-  ]));
+/// Possible options for friend popup menu:
+enum FriendPopup { unfriend }
+
+Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
+    FriendReport friendReport, Function(FriendSettingsAction) queueAction) {
+  final connColor = friendReport.liveness.isOnline
+      ? Colors.green
+      : friendReport.status.isEnabled ? Colors.orange : Colors.red;
+
+  final body = Column(children: [
+    Container(
+        width: double.infinity,
+        child: Column(children: [
+          Container(
+              width: double.infinity,
+              color: Colors.blue.shade50,
+              padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+              child: ListTile(
+                  leading: const FaIcon(FontAwesomeIcons.creditCard),
+                  title: Text('${nodeName.inner}',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16.0)))),
+          Divider(height: 0, color: Colors.grey),
+          Container(
+              width: double.infinity,
+              color: Colors.blue.shade50,
+              padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+              child: SwitchListTile(
+                  secondary: FaIcon(FontAwesomeIcons.user, color: connColor),
+                  title: Text('${friendReport.name}',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16.0)),
+                  value: friendReport.status.isEnabled,
+                  onChanged: (bool newValue) {
+                    if (newValue == true) {
+                      queueAction(FriendSettingsAction.enableFriend());
+                    } else {
+                      queueAction(FriendSettingsAction.disableFriend());
+                    }
+                  })),
+          Divider(height: 0, color: Colors.grey),
+        ])),
+    SizedBox(height: 16.0),
+    Expanded(child: _renderChannelInfo(friendReport, queueAction)),
+  ]);
 
   // TODO: Possibly move "New Currency" to a place where it is less likely to be clicked
   // on accidentally? Maybe some drawer that opens when three dots are clicked?
@@ -131,7 +154,8 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
       itemBuilder: (BuildContext context) => <PopupMenuEntry<FriendPopup>>[
             const PopupMenuItem<FriendPopup>(
               value: FriendPopup.unfriend,
-              child: Text('Unfriend'),
+              child: ListTile(
+                  leading: Icon(Icons.delete), title: Text('Unfriend')),
             )
           ]);
 

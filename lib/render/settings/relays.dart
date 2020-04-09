@@ -69,6 +69,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
             title: Text('${nodeName.inner}',
                 style:
                     TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
+    Divider(height: 0, color: Colors.grey),
     Expanded(child: listView),
   ]);
 
