@@ -57,43 +57,32 @@ Widget _renderChannelInfo(
       } else {
         title = Text('${currency.inner}');
         trailing = FlatButton(
-              child: Icon(Icons.delete),
-              onPressed: friendReport.status.isEnabled
-                  ? () =>
-                      queueAction(FriendSettingsAction.removeCurrency(currency))
-                  : null);
+            child: Icon(Icons.delete),
+            onPressed: friendReport.status.isEnabled
+                ? () =>
+                    queueAction(FriendSettingsAction.removeCurrency(currency))
+                : null);
       }
 
-      final balanceStr = currencyReport != null 
+      final balanceStr = currencyReport != null
           ? balanceToString(currencyReport.balance)
           : '(Pending)';
 
       final double ratePercent = (configReport.rate.mul / (1 << 32)) * 100;
       final addStr = amountToString(U128(BigInt.from(configReport.rate.add)));
-      final subtitle =
-          Text('balance: $balanceStr'
-                  '\nlimit: ${amountToString(configReport.remoteMaxDebt)}' +
-              '\nrate: ${ratePercent.toStringAsFixed(2)}% + $addStr');
+      final subtitle = Text('balance: $balanceStr'
+              '\nlimit: ${amountToString(configReport.remoteMaxDebt)}' +
+          '\nrate: ${ratePercent.toStringAsFixed(2)}% + $addStr');
 
-      final currencyColor = currencyReport == null 
-          ?  Colors.grey
-          : configReport.isOpen 
-            ? Colors.green
-            : Colors.red;
-
-      /*
-      final currencyColor = configReport.isOpen 
-          ? (currencyReport == null 
-            ? Colors.orange
-            : Colors.green)
-          : Colors.grey;
-          */
+      final currencyColor = currencyReport == null
+          ? Colors.grey
+          : configReport.isOpen ? Colors.green : Colors.red;
 
       children.add(ListTile(
         key: Key(currency.inner),
         onTap: friendReport.status.isEnabled
-                    ? () => queueAction(FriendSettingsAction.selectCurrency(currency))
-                    : null,
+            ? () => queueAction(FriendSettingsAction.selectCurrency(currency))
+            : null,
         title: title,
         subtitle: subtitle,
         enabled: friendReport.status.isEnabled,
@@ -110,7 +99,7 @@ enum FriendPopup { unfriend }
 
 Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
     FriendReport friendReport, Function(FriendSettingsAction) queueAction) {
-  final connColor = friendReport.liveness.isOnline
+  final friendColor = friendReport.liveness.isOnline
       ? Colors.green
       : friendReport.status.isEnabled ? Colors.orange : Colors.red;
 
@@ -133,7 +122,7 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
               color: Colors.blue.shade50,
               padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
               child: SwitchListTile(
-                  secondary: FaIcon(FontAwesomeIcons.user, color: connColor),
+                  secondary: FaIcon(FontAwesomeIcons.user, color: friendColor),
                   title: Text('${friendReport.name}',
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 16.0)),
@@ -437,39 +426,74 @@ Widget _renderCurrencySettings(
         ));
   });
 
-  final balanceStr = currencyReport != null 
+  final balanceStr = currencyReport != null
       ? balanceToString(currencyReport.balance)
       : '(Pending)';
+
+  final friendColor = friendReport.liveness.isOnline
+      ? Colors.green
+      : friendReport.status.isEnabled ? Colors.orange : Colors.red;
+
+  final currencyColor = currencyReport == null
+      ? Colors.grey
+      : currencyConfig.isOpen ? Colors.green : Colors.red;
 
   final body = SafeArea(
       top: false,
       bottom: false,
-      child: Center(
-          child: Column(children: [
-        Spacer(flex: 1),
+      child: Column(children: [
+        /*
         Expanded(
             flex: 1,
             child: Text(
                 '${nodeName.inner} / ${friendReport.name} / ${currency.inner}')),
-        Expanded(
-            flex: 2,
-            child: SwitchListTile(
-                title: Text('Open'),
-                value: currencyConfig.isOpen,
-                onChanged: (bool newValue) {
-                  if (newValue == true) {
-                    queueAction(FriendSettingsAction.openCurrency(currency));
-                  } else {
-                    queueAction(FriendSettingsAction.closeCurrency(currency));
-                  }
-                })),
-        Expanded(
-            flex: 2,
-            child: ListTile(
-                title: Text(
-                    'Balance: $balanceStr'))),
-        Expanded(flex: 16, child: formBody),
-      ])));
+        */
+        Container(
+            width: double.infinity,
+            child: Column(children: [
+              Container(
+                  width: double.infinity,
+                  color: Colors.blue.shade50,
+                  padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                  child: ListTile(
+                      leading: const FaIcon(FontAwesomeIcons.creditCard),
+                      title: Text('${nodeName.inner}',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16.0)))),
+              Divider(height: 0, color: Colors.grey),
+              Container(
+                  width: double.infinity,
+                  color: Colors.blue.shade50,
+                  padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                  child: ListTile(
+                    leading: FaIcon(FontAwesomeIcons.user, color: friendColor),
+                    title: Text('${friendReport.name}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16.0)),
+                  )),
+              Divider(height: 0, color: Colors.grey),
+              Container(
+                  width: double.infinity,
+                  color: Colors.blue.shade50,
+                  padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                  child: SwitchListTile(
+                      secondary: FaIcon(FontAwesomeIcons.coins, color: currencyColor),
+                      title: Text('${currency.inner}'),
+                      value: currencyConfig.isOpen,
+                      onChanged: (bool newValue) {
+                        if (newValue == true) {
+                          queueAction(
+                              FriendSettingsAction.openCurrency(currency));
+                        } else {
+                          queueAction(
+                              FriendSettingsAction.closeCurrency(currency));
+                        }
+                      })),
+              Divider(height: 0, color: Colors.grey),
+            ])),
+        Expanded(child: ListTile(title: Text('Balance: $balanceStr'))),
+        Expanded(child: formBody),
+      ]));
 
   return frame(
       title: Text('Currency Settings'),
@@ -586,13 +610,12 @@ Widget _renderNewCurrency(NodeName nodeName, PublicKey friendPublicKey,
     return SafeArea(
         top: false,
         bottom: false,
-        child: Center(
-            child: Column(children: [
+        child: Column(children: [
           Spacer(flex: 1),
           Expanded(
               flex: 1, child: Text('${nodeName.inner} / ${friendReport.name}')),
           Expanded(flex: 16, child: form),
-        ])));
+        ]));
   });
 
   return frame(
