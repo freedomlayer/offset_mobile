@@ -88,7 +88,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
         color: Colors.blue.shade50,
         padding: EdgeInsets.all(8),
         child: ListTile(
-            leading: const FaIcon(FontAwesomeIcons.creditCard, size: 20.0),
+            leading: const FaIcon(FontAwesomeIcons.creditCard),
             title: Text('${nodeName.inner}',
                 style:
                     TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),

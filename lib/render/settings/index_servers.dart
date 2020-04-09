@@ -64,14 +64,28 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
 
   final listView = ListView(children: children);
 
+  final body = Container(
+      child: Column(children: [
+    Container(
+        width: double.infinity,
+        color: Colors.blue.shade50,
+        padding: EdgeInsets.all(8),
+        child: ListTile(
+            leading: const FaIcon(FontAwesomeIcons.creditCard),
+            title: Text('${nodeName.inner}',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
+    Expanded(child: listView),
+  ]));
+
   final newIndexServerButton = FloatingActionButton.extended(
       onPressed: () => queueAction(IndexServersSettingsAction.selectNewIndex()),
       label: Text('New index server'),
       icon: Icon(Icons.add));
 
   return frame(
-      title: Text('Index servers (${nodeName.inner})'),
-      body: listView,
+      title: Text('Index servers'),
+      body: body,
       backAction: () => queueAction(IndexServersSettingsAction.back()),
       floatingActionButton: newIndexServerButton);
 }

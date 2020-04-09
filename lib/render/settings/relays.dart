@@ -59,9 +59,23 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
       label: Text('New Relay'),
       icon: Icon(Icons.add));
 
+  final body = Container(
+      child: Column(children: [
+    Container(
+        width: double.infinity,
+        color: Colors.blue.shade50,
+        padding: EdgeInsets.all(8),
+        child: ListTile(
+            leading: const FaIcon(FontAwesomeIcons.creditCard),
+            title: Text('${nodeName.inner}',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
+    Expanded(child: listView),
+  ]));
+
   return frame(
-      title: Text('Relays (${nodeName.inner})'),
-      body: listView,
+      title: Text('Relays'),
+      body: body,
       backAction: () => queueAction(RelaysSettingsAction.back()),
       floatingActionButton: newRelayButton);
 }
