@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../protocol/protocol.dart';
 import '../../protocol/file.dart';
@@ -41,14 +42,23 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
   indexServers.sort((a, b) => a.name.compareTo(b.name));
 
   for (final namedIndexServerAddress in indexServers) {
+    // Check if this is the currently connected index server:
+    final iconColor = nodeOpen.compactReport.optConnectedIndexServer ==
+            namedIndexServerAddress.publicKey
+        ? Colors.green
+        : Colors.black;
+
     children.add(ListTile(
       key: Key(namedIndexServerAddress.publicKey.inner),
       title: Text(namedIndexServerAddress.name),
-      leading: Icon(Icons.computer),
-      trailing: FlatButton(
-          child: Icon(Icons.delete),
-          onPressed: () => queueAction(IndexServersSettingsAction.removeIndex(
-              namedIndexServerAddress.publicKey))),
+      leading:
+          FaIcon(FontAwesomeIcons.projectDiagram, size: 20.0, color: iconColor),
+      trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        FlatButton(
+            child: Icon(Icons.delete),
+            onPressed: () => queueAction(IndexServersSettingsAction.removeIndex(
+                namedIndexServerAddress.publicKey)))
+      ]),
     ));
   }
 
@@ -60,7 +70,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
       icon: Icon(Icons.add));
 
   return frame(
-      title: Text('${nodeName.inner}: Index Servers'),
+      title: Text('Index servers (${nodeName.inner})'),
       body: listView,
       backAction: () => queueAction(IndexServersSettingsAction.back()),
       floatingActionButton: newIndexServerButton);
@@ -98,7 +108,7 @@ Widget _renderNewIndexServer(NodeName nodeName, NodeState nodeState,
   ]));
 
   return frame(
-      title: Text('${nodeName.inner}: New Index Server'),
+      title: Text('${nodeName.inner}: New Index server'),
       body: body,
       backAction: () => queueAction(IndexServersSettingsAction.back()));
 }
@@ -151,7 +161,7 @@ Widget _renderIndexServerName(
   ]));
 
   return frame(
-      title: Text('${nodeName.inner}: New Index Server name'),
+      title: Text('${nodeName.inner}: New Index server name'),
       body: body,
       backAction: () => queueAction(IndexServersSettingsAction.back()));
 }

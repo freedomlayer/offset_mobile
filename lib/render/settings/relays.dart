@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../protocol/protocol.dart';
 import '../../protocol/file.dart';
@@ -43,7 +44,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
     children.add(ListTile(
       key: Key(namedRelayAddress.publicKey.inner),
       title: Text(namedRelayAddress.name),
-      leading: Icon(Icons.network_cell),
+      leading: FaIcon(FontAwesomeIcons.satellite),
       trailing: FlatButton(
           child: Icon(Icons.delete),
           onPressed: () => queueAction(
@@ -59,7 +60,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
       icon: Icon(Icons.add));
 
   return frame(
-      title: Text('${nodeName.inner}: Relays'),
+      title: Text('Relays (${nodeName.inner})'),
       body: listView,
       backAction: () => queueAction(RelaysSettingsAction.back()),
       floatingActionButton: newRelayButton);

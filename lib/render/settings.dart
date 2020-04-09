@@ -54,13 +54,19 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
   final children = <Widget>[];
   for (final nodeName in nodesStates.keys.toList()..sort()) {
     final nodeState = nodesStates[nodeName];
+
+    final trailing = !nodeState.isEnabled
+        ? FaIcon(FontAwesomeIcons.satelliteDish, color: Colors.red)
+        : nodeState.inner.isOpen
+          ? FaIcon(FontAwesomeIcons.satelliteDish, color: Colors.green)
+          : FaIcon(FontAwesomeIcons.satelliteDish, color: Colors.orange);
+
+
     final cardEntry = ListTile(
       key: Key(nodeName.inner),
       title: Text('${nodeName.inner}'),
       leading: Icon(Icons.credit_card),
-      trailing: nodeState.inner.isOpen
-          ? Icon(Icons.control_point)
-          : Icon(Icons.error),
+      trailing: trailing,
       onTap: () => queueAction(SettingsAction.selectCard(nodeName)),
     );
 
@@ -75,9 +81,21 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
       label: Text('New card'),
       icon: Icon(Icons.add));
 
+  final body = Padding(
+      padding: EdgeInsets.all(14.0),
+      child: Column(children: [
+        Text(
+          'Please select a card',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+        ),
+        Expanded(child: listView),
+      ]));
+
+
+
   return frame(
       title: Text('Settings'),
-      body: listView,
+      body: body,
       backAction: () => queueAction(SettingsAction.back()),
       floatingActionButton: newCardButton);
 }
@@ -354,7 +372,7 @@ Widget _renderSelectCardAddIndex(
       ListView(padding: const EdgeInsets.all(8), children: children);
 
   return frame(
-      title: Text('Import Index Server'),
+      title: Text('Import Index server'),
       body: listView,
       backAction: () => queueAction(SettingsAction.back()));
 }
