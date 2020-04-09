@@ -42,7 +42,6 @@ enum CardPopup { remove }
 
 Widget _renderCardSettingsHome(NodeName nodeName, NodeState nodeState,
     Function(CardSettingsAction) queueAction) {
-
   final children = <Widget>[];
   // Node name:
   children.add(ListTile(
@@ -64,9 +63,11 @@ Widget _renderCardSettingsHome(NodeName nodeName, NodeState nodeState,
       nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
   final nodeStatus = nodeOpen != null
       ? ListTile(
-          leading: FaIcon(FontAwesomeIcons.satelliteDish, color: Colors.green), title: Text('Connected'))
+          leading: FaIcon(FontAwesomeIcons.satelliteDish, color: Colors.green),
+          title: Text('Connected'))
       : ListTile(
-          leading: FaIcon(FontAwesomeIcons.satelliteDish, color: Colors.red), title: Text('Disconnected'));
+          leading: FaIcon(FontAwesomeIcons.satelliteDish, color: Colors.red),
+          title: Text('Disconnected'));
 
   children.add(nodeStatus);
 
@@ -87,6 +88,9 @@ Widget _renderCardSettingsHome(NodeName nodeName, NodeState nodeState,
 
   children.add(ListTile(
       leading: FaIcon(FontAwesomeIcons.userFriends),
+      trailing: nodeOpen?.compactReport?.friends?.isEmpty ?? false
+          ? FaIcon(FontAwesomeIcons.exclamationTriangle, color: Colors.orange)
+          : null,
       title: Text('Friends'),
       enabled: nodeState.inner.isOpen,
       onTap: () => queueAction(CardSettingsAction.selectFriends())));
@@ -100,19 +104,25 @@ Widget _renderCardSettingsHome(NodeName nodeName, NodeState nodeState,
         nodeOpen.compactReport.indexServers.isEmpty) {
       children.add(ListTile(
           leading: FaIcon(FontAwesomeIcons.hatWizard, color: Colors.blue),
-          title: Text('Configure servers automatically', style: TextStyle(color: Colors.blue)),
+          title: Text('Configure servers automatically',
+              style: TextStyle(color: Colors.blue)),
           onTap: () => queueAction(CardSettingsAction.addRandRelayIndex())));
     }
   }
 
-
   children.add(ListTile(
       leading: FaIcon(FontAwesomeIcons.satellite),
+      trailing: nodeOpen?.compactReport?.relays?.isEmpty ?? false
+          ? FaIcon(FontAwesomeIcons.exclamationTriangle, color: Colors.orange)
+          : null,
       title: Text('Relays'),
       enabled: nodeState.inner.isOpen,
       onTap: () => queueAction(CardSettingsAction.selectRelays())));
   children.add(ListTile(
       leading: FaIcon(FontAwesomeIcons.projectDiagram),
+      trailing: nodeOpen?.compactReport?.indexServers?.isEmpty ?? false
+          ? FaIcon(FontAwesomeIcons.exclamationTriangle, color: Colors.orange)
+          : null,
       title: Text('Index servers'),
       enabled: nodeState.inner.isOpen,
       onTap: () => queueAction(CardSettingsAction.selectIndexServers())));
@@ -126,7 +136,8 @@ Widget _renderCardSettingsHome(NodeName nodeName, NodeState nodeState,
       itemBuilder: (BuildContext context) => <PopupMenuEntry<CardPopup>>[
             PopupMenuItem<CardPopup>(
               value: CardPopup.remove,
-              child: ListTile(leading: Icon(Icons.delete), title: Text('Remove')),
+              child:
+                  ListTile(leading: Icon(Icons.delete), title: Text('Remove')),
               enabled: !nodeState.isEnabled,
             )
           ]);
