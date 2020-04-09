@@ -52,12 +52,8 @@ Widget _renderChannelInfo(
       final currencyReport = currencyReports[currency];
       Widget title;
       Widget trailing;
-      void Function() onTap;
       if (currencyReport != null) {
         title = Text('${currency.inner}');
-        onTap = friendReport.status.isEnabled
-            ? () => queueAction(FriendSettingsAction.selectCurrency(currency))
-            : null;
       } else {
         title = Text('${currency.inner}');
         trailing = FlatButton(
@@ -95,7 +91,9 @@ Widget _renderChannelInfo(
 
       children.add(ListTile(
         key: Key(currency.inner),
-        onTap: onTap,
+        onTap: friendReport.status.isEnabled
+                    ? () => queueAction(FriendSettingsAction.selectCurrency(currency))
+                    : null,
         title: title,
         subtitle: subtitle,
         enabled: friendReport.status.isEnabled,
@@ -337,7 +335,7 @@ Widget _renderCurrencySettings(
   assert(channelConsistentReport != null);
 
   final currencyReport = channelConsistentReport.currencyReports[currency];
-  assert(currencyReport != null);
+  // assert(currencyReport != null);
 
   int _mul = currencyConfig.rate.mul;
   int _add = currencyConfig.rate.add;
@@ -439,6 +437,10 @@ Widget _renderCurrencySettings(
         ));
   });
 
+  final balanceStr = currencyReport != null 
+      ? balanceToString(currencyReport.balance)
+      : '(Pending)';
+
   final body = SafeArea(
       top: false,
       bottom: false,
@@ -465,7 +467,7 @@ Widget _renderCurrencySettings(
             flex: 2,
             child: ListTile(
                 title: Text(
-                    'Balance: ${balanceToString(currencyReport.balance)}'))),
+                    'Balance: $balanceStr'))),
         Expanded(flex: 16, child: formBody),
       ])));
 
