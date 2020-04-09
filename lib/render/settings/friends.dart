@@ -68,13 +68,15 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
     ..sort()) {
     final friendReport = nodeOpen.compactReport.friends[publicKey];
 
+    final connColor = friendReport.liveness.isOnline
+        ? Colors.green
+        : friendReport.status.isEnabled ? Colors.orange : Colors.red;
+
     children.add(ListTile(
       key: Key(publicKey.inner),
       title: Text(friendReport.name),
       leading: Icon(Icons.person),
-      trailing: Icon(friendReport.liveness.isOnline
-          ? Icons.bluetooth_connected
-          : Icons.bluetooth_disabled),
+      trailing: FaIcon(FontAwesomeIcons.satelliteDish, color: connColor),
       onTap: () => queueAction(FriendsSettingsAction.selectFriend(publicKey)),
     ));
   }
