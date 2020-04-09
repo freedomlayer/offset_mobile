@@ -58,18 +58,14 @@ Widget _renderChannelInfo(
         onTap = friendReport.status.isEnabled
             ? () => queueAction(FriendSettingsAction.selectCurrency(currency))
             : null;
-        trailing = FaIcon(FontAwesomeIcons.checkSquare);
       } else {
-        title = Text('${currency.inner} (Pending)');
-        trailing = Row(mainAxisSize: MainAxisSize.min, children: [
-          FlatButton(
+        title = Text('${currency.inner}');
+        trailing = FlatButton(
               child: Icon(Icons.delete),
               onPressed: friendReport.status.isEnabled
                   ? () =>
                       queueAction(FriendSettingsAction.removeCurrency(currency))
-                  : null),
-          FaIcon(FontAwesomeIcons.checkSquare)
-        ]);
+                  : null);
       }
 
       final balanceStr = currencyReport != null 
@@ -83,13 +79,27 @@ Widget _renderChannelInfo(
                   '\nlimit: ${amountToString(configReport.remoteMaxDebt)}' +
               '\nrate: ${ratePercent.toStringAsFixed(2)}% + $addStr');
 
+      final currencyColor = currencyReport == null 
+          ?  Colors.grey
+          : configReport.isOpen 
+            ? Colors.green
+            : Colors.red;
+
+      /*
+      final currencyColor = configReport.isOpen 
+          ? (currencyReport == null 
+            ? Colors.orange
+            : Colors.green)
+          : Colors.grey;
+          */
+
       children.add(ListTile(
         key: Key(currency.inner),
         onTap: onTap,
         title: title,
         subtitle: subtitle,
         enabled: friendReport.status.isEnabled,
-        leading: const FaIcon(FontAwesomeIcons.coins),
+        leading: FaIcon(FontAwesomeIcons.coins, color: currencyColor),
         trailing: trailing,
       ));
     }
