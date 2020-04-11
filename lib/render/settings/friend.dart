@@ -114,8 +114,7 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
               child: ListTile(
                   leading: const FaIcon(FontAwesomeIcons.creditCard),
                   title: Text('${nodeName.inner}',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 16.0)))),
+                      style: TextStyle(fontSize: 16.0)))),
           Divider(height: 0, color: Colors.grey),
           Container(
               width: double.infinity,
@@ -458,8 +457,7 @@ Widget _renderCurrencySettings(
                   child: ListTile(
                       leading: const FaIcon(FontAwesomeIcons.creditCard),
                       title: Text('${nodeName.inner}',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16.0)))),
+                          style: TextStyle(fontSize: 16.0)))),
               Divider(height: 0, color: Colors.grey),
               Container(
                   width: double.infinity,
@@ -467,9 +465,7 @@ Widget _renderCurrencySettings(
                   padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
                   child: ListTile(
                     leading: FaIcon(FontAwesomeIcons.user, color: friendColor),
-                    title: Text('${friendReport.name}',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16.0)),
+                    title: Text('${friendReport.name}')
                   )),
               Divider(height: 0, color: Colors.grey),
               Container(
@@ -477,8 +473,9 @@ Widget _renderCurrencySettings(
                   color: Colors.blue.shade50,
                   padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
                   child: SwitchListTile(
-                      secondary: FaIcon(FontAwesomeIcons.coins, color: currencyColor),
-                      title: Text('${currency.inner}'),
+                      secondary:
+                          FaIcon(FontAwesomeIcons.coins, color: currencyColor),
+                      title: Text('${currency.inner}', style: TextStyle(fontWeight: FontWeight.bold)),
                       value: currencyConfig.isOpen,
                       onChanged: (bool newValue) {
                         if (newValue == true) {
