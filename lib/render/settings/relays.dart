@@ -45,6 +45,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
     children.add(ListTile(
       key: Key(namedRelayAddress.publicKey.inner),
       title: Text(namedRelayAddress.name),
+      subtitle: Text('${namedRelayAddress.address.inner}'),
       leading: FaIcon(FontAwesomeIcons.satellite),
       trailing: FlatButton(
           child: Icon(Icons.delete),

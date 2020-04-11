@@ -52,6 +52,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
     children.add(ListTile(
       key: Key(namedIndexServerAddress.publicKey.inner),
       title: Text(namedIndexServerAddress.name),
+      subtitle: Text(namedIndexServerAddress.address.inner),
       leading:
           FaIcon(FontAwesomeIcons.projectDiagram, size: 20.0, color: iconColor),
       trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
