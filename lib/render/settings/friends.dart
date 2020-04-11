@@ -81,7 +81,9 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
     ));
   }
 
-  final listView = ListView(children: children, padding: EdgeInsets.all(8));
+  final listView = children.isNotEmpty 
+      ? ListView(children: children, padding: EdgeInsets.all(8))
+      : Center(child: Text('No friends configured', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)));
 
   final body = Column(children: [
     Container(
