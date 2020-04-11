@@ -54,7 +54,9 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
     ));
   }
 
-  final listView = ListView(children: children, padding: EdgeInsets.all(8));
+  final relaysList = children.isNotEmpty 
+      ? ListView(children: children, padding: EdgeInsets.all(8))
+      : Center(child: Text('No relays configured', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)));
 
   final newRelayButton = FloatingActionButton.extended(
       onPressed: () => queueAction(RelaysSettingsAction.selectNewRelay()),
@@ -72,7 +74,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
                 style:
                     TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
     Divider(height: 0, color: Colors.grey),
-    Expanded(child: listView),
+    Expanded(child: relaysList),
   ]);
 
   return frame(

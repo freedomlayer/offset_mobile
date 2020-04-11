@@ -64,7 +64,9 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
     ));
   }
 
-  final listView = ListView(children: children, padding: EdgeInsets.all(8));
+  final indexServersList = children.isNotEmpty 
+      ? ListView(children: children, padding: EdgeInsets.all(8))
+      : Center(child: Text('No index servers configured', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)));
 
   final body = Column(children: [
     Container(
@@ -77,7 +79,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
                 style:
                     TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
     Divider(height: 0, color: Colors.grey),
-    Expanded(child: listView),
+    Expanded(child: indexServersList),
   ]);
 
   final newIndexServerButton = FloatingActionButton.extended(
