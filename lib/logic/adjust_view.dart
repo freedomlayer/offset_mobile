@@ -251,7 +251,7 @@ FriendSettingsInnerView adjustFriendSettingsInnerView(
         return friendReport.channelStatus.match(
             inconsistent: (_) => FriendSettingsInnerView.home(),
             consistent: (channelConsistentReport) =>
-                channelConsistentReport.currencyReports[currency] != null
+                friendReport.currencyConfigs[currency] != null
                     ? friendSettingsInner
                     : FriendSettingsInnerView.home());
       },
