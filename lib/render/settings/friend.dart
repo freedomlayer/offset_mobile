@@ -346,34 +346,40 @@ Widget _renderCurrencySettings(
     }
   };
 
+  final balanceStr = currencyReport != null
+      ? balanceToString(currencyReport.balance)
+      : '(Pending)';
+
   final formBody =
       StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
     return Form(
         key: _formKey,
         autovalidate: true,
         child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.all(8.0),
           children: <Widget>[
-            TextFormField(
-              decoration: const InputDecoration(
-                icon: const Icon(Icons.cake),
-                hintText: 'Maximum amount friend can owe me',
-                labelText: 'Credit limit',
-              ),
-              initialValue: '${amountToString(_creditLimit)}',
-              validator: _creditLimitValidator,
-              keyboardType: TextInputType.number,
-              onSaved: (creditLimitString) =>
-                  _creditLimit = stringToAmount(creditLimitString),
-            ),
-            Row(children: [
-              Expanded(
-                  flex: 8,
-                  child: TextFormField(
+            ListTile(
+                leading: FaIcon(FontAwesomeIcons.balanceScale),
+                title: Text('$balanceStr')),
+            ListTile(
+                leading: FaIcon(FontAwesomeIcons.exchangeAlt),
+                title: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: 'Maximum amount friend can owe me',
+                    labelText: 'Credit limit',
+                  ),
+                  initialValue: '${amountToString(_creditLimit)}',
+                  validator: _creditLimitValidator,
+                  keyboardType: TextInputType.number,
+                  onSaved: (creditLimitString) =>
+                      _creditLimit = stringToAmount(creditLimitString),
+                )),
+            ListTile(
+                leading: FaIcon(FontAwesomeIcons.percent),
+                title: TextFormField(
                     decoration: const InputDecoration(
-                      icon: const Icon(Icons.cake),
                       hintText: 'Percent commission',
-                      labelText: 'Percent',
+                      labelText: 'Percent commission',
                     ),
                     initialValue:
                         ((_mul / (1 << 32)) * 100.0).toStringAsFixed(2),
@@ -381,53 +387,30 @@ Widget _renderCurrencySettings(
                     keyboardType: TextInputType.number,
                     onSaved: (percentString) => _mul =
                         ((double.parse(percentString) / 100.0) * (1 << 32))
-                            .ceil(),
-                  )),
-              Expanded(flex: 1, child: Text('% + ')),
-              Expanded(
-                  flex: 8,
-                  child: TextFormField(
+                            .ceil())),
+            ListTile(
+                leading: FaIcon(FontAwesomeIcons.plus),
+                title: TextFormField(
                     decoration: const InputDecoration(
-                      icon: const Icon(Icons.cake),
                       hintText: 'Constant commission',
-                      labelText: 'Constant',
+                      labelText: 'Constant commission',
                     ),
                     initialValue: '$_add',
                     validator: _addValidator,
                     keyboardType: TextInputType.number,
                     onSaved: (addString) =>
-                        _add = stringToAmount(addString).inner.toInt(),
-                  )),
-            ]),
-            Container(
-                padding: EdgeInsets.only(top: 20.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Spacer(flex: 1),
-                      Expanded(
-                          flex: 2,
-                          child: RaisedButton(
-                            child: const Text('Ok'),
-                            onPressed: _submitForm,
-                          )),
-                      Spacer(flex: 1),
-                      Expanded(
-                          flex: 2,
-                          child: RaisedButton(
-                            child: const Text('Cancel'),
-                            onPressed: () =>
-                                queueAction(FriendSettingsAction.back()),
-                          )),
-                      Spacer(flex: 1),
-                    ])),
+                        _add = stringToAmount(addString).inner.toInt())),
+            SizedBox(height: 20.0),
+            ListTile(
+                title: Align(
+                    child: RaisedButton.icon(
+              icon: FaIcon(FontAwesomeIcons.check),
+              label: const Text('Apply'),
+              onPressed: _submitForm,
+            ))),
           ],
         ));
   });
-
-  final balanceStr = currencyReport != null
-      ? balanceToString(currencyReport.balance)
-      : '(Pending)';
 
   final friendColor = friendReport.liveness.isOnline
       ? Colors.green
@@ -464,9 +447,9 @@ Widget _renderCurrencySettings(
                   color: Colors.blue.shade50,
                   padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
                   child: ListTile(
-                    leading: FaIcon(FontAwesomeIcons.user, color: friendColor),
-                    title: Text('${friendReport.name}')
-                  )),
+                      leading:
+                          FaIcon(FontAwesomeIcons.user, color: friendColor),
+                      title: Text('${friendReport.name}'))),
               Divider(height: 0, color: Colors.grey),
               Container(
                   width: double.infinity,
@@ -475,7 +458,8 @@ Widget _renderCurrencySettings(
                   child: SwitchListTile(
                       secondary:
                           FaIcon(FontAwesomeIcons.coins, color: currencyColor),
-                      title: Text('${currency.inner}', style: TextStyle(fontWeight: FontWeight.bold)),
+                      title: Text('${currency.inner}',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                       value: currencyConfig.isOpen,
                       onChanged: (bool newValue) {
                         if (newValue == true) {
@@ -488,7 +472,6 @@ Widget _renderCurrencySettings(
                       })),
               Divider(height: 0, color: Colors.grey),
             ])),
-        Expanded(child: ListTile(title: Text('Balance: $balanceStr'))),
         Expanded(child: formBody),
       ]));
 
@@ -555,7 +538,7 @@ Widget _renderNewCurrency(NodeName nodeName, PublicKey friendPublicKey,
         key: _formKey,
         autovalidate: true,
         child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
           children: <Widget>[
             TextFormField(
               decoration: const InputDecoration(
