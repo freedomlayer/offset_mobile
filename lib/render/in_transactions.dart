@@ -104,7 +104,6 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
   final children = <Widget>[];
 
   for (final inTransaction in inTransactions) {
-    // final statusString = inTransaction.isCommitted ? 'Received' : 'Pending';
     final trailing = FaIcon(inTransaction.isCommitted
         ? FontAwesomeIcons.checkCircle
         : FontAwesomeIcons.thermometerHalf);
@@ -233,7 +232,7 @@ Widget _renderUncommittedTransaction(
         leading: const FaIcon(FontAwesomeIcons.thermometerHalf),
         title: Text('Pending'),
         trailing: FlatButton(
-            child: const FaIcon(FontAwesomeIcons.minusCircle),
+            child: const Icon(Icons.cancel, color: Colors.red),
             onPressed: () => queueAction(
                 InTransactionsAction.cancelInvoice(nodeName, invoiceId)))),
   ];
