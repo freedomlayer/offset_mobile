@@ -75,8 +75,8 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
   final listView = children.isNotEmpty
       ? ListView(children: children, padding: EdgeInsets.all(8))
       : Center(
-          child: Text('No cards configured',
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)));
+          child: Text('No cards configured'));
+              
 
   final newCardButton = FloatingActionButton.extended(
       onPressed: () => queueAction(SettingsAction.selectNewCard()),
