@@ -143,7 +143,7 @@ Widget _renderNewIndexServer(NodeName nodeName, NodeState nodeState,
   ]);
 
   return frame(
-      title: Text('New Index server'),
+      title: Text('New index server'),
       body: body,
       backAction: () => queueAction(IndexServersSettingsAction.back()));
 }

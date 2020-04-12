@@ -60,7 +60,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
 
   final newRelayButton = FloatingActionButton.extended(
       onPressed: () => queueAction(RelaysSettingsAction.selectNewRelay()),
-      label: Text('New Relay'),
+      label: Text('New relay'),
       icon: Icon(Icons.add));
 
   final body = Column(children: [
@@ -198,5 +198,4 @@ Widget _renderRelayName(NodeName nodeName, RelayAddress relayAddress,
       title: Text('Relay name'),
       body: body,
       backAction: () => queueAction(RelaysSettingsAction.back()));
-
 }
