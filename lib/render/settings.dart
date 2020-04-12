@@ -362,18 +362,22 @@ Widget _renderSelectCardAddIndex(
     IndexServerFile indexServerFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
+
   final children = <Widget>[];
 
   for (final nodeName in nodesStates.keys.toList()..sort()) {
     final nodeState = nodesStates[nodeName];
-    // We only show open nodes. (We can not configure closed nodes):
+
+    // Only open cards can be chosen:
     final cardEntry = nodeState.inner.isOpen
         ? ListTile(
+            leading: Icon(Icons.credit_card),
             key: Key(nodeName.inner),
             title: Text('${nodeName.inner}'),
-            onTap: () => queueAction(SettingsAction.selectCardSharedIndex(
-                nodeName, indexServerFile)))
+            onTap: () => queueAction(
+                SettingsAction.selectCardSharedIndex(nodeName, indexServerFile)))
         : ListTile(
+            leading: Icon(Icons.credit_card),
             key: Key(nodeName.inner),
             title: Text('${nodeName.inner}'),
             enabled: false);
@@ -381,12 +385,22 @@ Widget _renderSelectCardAddIndex(
     children.add(cardEntry);
   }
 
-  final listView =
-      ListView(padding: const EdgeInsets.all(8), children: children);
+  final body = Padding(
+      padding: EdgeInsets.only(top: 14.0),
+      child: Column(
+          children: <Widget>[
+            Text(
+              'Please select a card',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+            ),
+            Expanded(
+                child: ListView(
+                    padding: const EdgeInsets.all(8), children: children))
+          ]));
 
   return frame(
-      title: Text('Import Index server'),
-      body: listView,
+      title: Text('Import index server'),
+      body: body,
       backAction: () => queueAction(SettingsAction.back()));
 }
 
