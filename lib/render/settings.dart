@@ -58,9 +58,8 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
     final trailing = !nodeState.isEnabled
         ? FaIcon(FontAwesomeIcons.satelliteDish, color: Colors.red)
         : nodeState.inner.isOpen
-          ? FaIcon(FontAwesomeIcons.satelliteDish, color: Colors.green)
-          : FaIcon(FontAwesomeIcons.satelliteDish, color: Colors.orange);
-
+            ? FaIcon(FontAwesomeIcons.satelliteDish, color: Colors.green)
+            : FaIcon(FontAwesomeIcons.satelliteDish, color: Colors.orange);
 
     final cardEntry = ListTile(
       key: Key(nodeName.inner),
@@ -73,9 +72,11 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
     children.add(cardEntry);
   }
 
-  final listView = children.isNotEmpty 
+  final listView = children.isNotEmpty
       ? ListView(children: children, padding: EdgeInsets.all(8))
-      : Center(child: Text('No cards configured', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)));
+      : Center(
+          child: Text('No cards configured',
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)));
 
   final newCardButton = FloatingActionButton.extended(
       onPressed: () => queueAction(SettingsAction.selectNewCard()),
@@ -91,8 +92,6 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
         ),
         Expanded(child: listView),
       ]));
-
-
 
   return frame(
       title: Text('Settings'),
@@ -254,7 +253,6 @@ Widget _renderNewRemoteName(
     RemoteCardFile remoteCardFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(NewCardAction) queueAction) {
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // Saves current node name:
@@ -268,7 +266,8 @@ Widget _renderNewRemoteName(
     } else {
       // Save form fields:
       form.save();
-      queueAction(NewCardAction.newCardRemote(NodeName(_nodeName), remoteCardFile));
+      queueAction(
+          NewCardAction.newCardRemote(NodeName(_nodeName), remoteCardFile));
     }
   };
 
@@ -322,14 +321,17 @@ Widget _renderSelectCardAddRelay(
 
   for (final nodeName in nodesStates.keys.toList()..sort()) {
     final nodeState = nodesStates[nodeName];
-    // We only show open nodes. (We can not configure closed nodes):
+
+    // Only open cards can be chosen:
     final cardEntry = nodeState.inner.isOpen
         ? ListTile(
+            leading: Icon(Icons.credit_card),
             key: Key(nodeName.inner),
             title: Text('${nodeName.inner}'),
             onTap: () => queueAction(
                 SettingsAction.selectCardSharedRelay(nodeName, relayAddress)))
         : ListTile(
+            leading: Icon(Icons.credit_card),
             key: Key(nodeName.inner),
             title: Text('${nodeName.inner}'),
             enabled: false);
@@ -337,12 +339,22 @@ Widget _renderSelectCardAddRelay(
     children.add(cardEntry);
   }
 
-  final listView =
-      ListView(padding: const EdgeInsets.all(8), children: children);
+  final body = Padding(
+      padding: EdgeInsets.only(top: 14.0),
+      child: Column(
+          children: <Widget>[
+            Text(
+              'Please select a card',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+            ),
+            Expanded(
+                child: ListView(
+                    padding: const EdgeInsets.all(8), children: children))
+          ]));
 
   return frame(
-      title: Text('Import Relay'),
-      body: listView,
+      title: Text('Import relay'),
+      body: body,
       backAction: () => queueAction(SettingsAction.back()));
 }
 
