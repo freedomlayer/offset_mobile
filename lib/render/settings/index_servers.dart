@@ -66,7 +66,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
 
   final indexServersList = children.isNotEmpty 
       ? ListView(children: children, padding: EdgeInsets.all(8))
-      : Center(child: Text('No index servers configured', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)));
+      : Center(child: Text('No index servers configured'));
 
   final body = Column(children: [
     Container(
