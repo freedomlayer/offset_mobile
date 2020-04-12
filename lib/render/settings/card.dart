@@ -43,12 +43,6 @@ enum CardPopup { remove }
 Widget _renderCardSettingsHome(NodeName nodeName, NodeState nodeState,
     Function(CardSettingsAction) queueAction) {
   final children = <Widget>[];
-  /*
-  // Node name:
-  children.add(ListTile(
-      leading: FaIcon(FontAwesomeIcons.creditCard),
-      title: Text('${nodeName.inner}')));
-  */
 
   // Node type:
   final cardType = nodeState.info.isLocal
