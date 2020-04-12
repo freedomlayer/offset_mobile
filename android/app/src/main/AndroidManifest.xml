@@ -8,6 +8,7 @@
 
     <!-- When we used launchMode="singleTop", a new application instance was created when a file was shared with the application.
     Using launchMode="singleTask" instead seems to solve this issue -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="offset"
