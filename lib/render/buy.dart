@@ -87,12 +87,15 @@ Widget _renderInvoiceInfo(
     SizedBox(height: 24.0),
     Center(
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      RaisedButton(
-        child: const Text('Select card'),
+      RaisedButton.icon(
+        icon: Icon(Icons.done, color: Colors.green),
+        label: const Text('Select card'),
         onPressed: () => queueAction(BuyAction.confirmInfo()),
       ),
-      FlatButton(
-        child: const Text('Cancel'),
+      SizedBox(width: 20.0),
+      FlatButton.icon(
+        icon: Icon(Icons.cancel, color: Colors.red),
+        label: const Text('Cancel'),
         onPressed: () => queueAction(BuyAction.back()),
       )
     ])),
