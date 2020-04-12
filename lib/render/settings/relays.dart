@@ -56,7 +56,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
 
   final relaysList = children.isNotEmpty 
       ? ListView(children: children, padding: EdgeInsets.all(8))
-      : Center(child: Text('No relays configured', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)));
+      : Center(child: Text('No relays configured'));
 
   final newRelayButton = FloatingActionButton.extended(
       onPressed: () => queueAction(RelaysSettingsAction.selectNewRelay()),
