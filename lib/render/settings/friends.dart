@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -81,9 +82,11 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
     ));
   }
 
-  final listView = children.isNotEmpty 
+  final listView = children.isNotEmpty
       ? ListView(children: children, padding: EdgeInsets.all(8))
-      : Center(child: Text('No friends configured', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)));
+      : Center(
+          child: Text('No friends configured',
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)));
 
   final body = Column(children: [
     Container(
@@ -143,64 +146,97 @@ Widget _renderSelectNewFriend(NodeName nodeName, NodeState nodeState,
     }
   };
 
-  final body = Center(
-      child: Column(children: [
-    Spacer(flex: 1),
-    Expanded(flex: 1, child: Text('How to add new Friend?')),
+  final body = Column(children: [
+    Container(
+        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+        width: double.infinity,
+        color: Colors.blue.shade50,
+        child: ListTile(
+            leading: const FaIcon(FontAwesomeIcons.creditCard),
+            title: Text('${nodeName.inner}',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
+    Divider(height: 0, color: Colors.grey),
+    SizedBox(height: 20.0),
+    Text(
+      'How to add new friend?',
+      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+    ),
     Expanded(
-        flex: 2,
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          RaisedButton(onPressed: scanQrCode, child: Text('QR code')),
-          RaisedButton(onPressed: openFileExplorer, child: Text('File')),
-        ])),
-  ]));
+        child: ListView(padding: EdgeInsets.all(8), children: [
+      ListTile(
+          leading: FaIcon(FontAwesomeIcons.qrcode),
+          onTap: scanQrCode,
+          title: Text('QR code')),
+      ListTile(
+          leading: FaIcon(FontAwesomeIcons.file),
+          onTap: openFileExplorer,
+          title: Text('File')),
+    ])),
+  ]);
 
   return frame(
-      title: Text('${nodeName.inner}: New Friend'),
+      title: Text('New friend'),
       body: body,
       backAction: () => queueAction(NewFriendAction.back()));
 }
 
 Widget _renderNewFriendName(NodeName nodeName, FriendFile friendFile,
     NodeState nodeState, Function(NewFriendAction) queueAction) {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   // Saves current relay name:
   String _friendName = '';
 
-  final body = Center(
-      child: Row(children: [
-    Spacer(flex: 1),
-    Expanded(
-        flex: 4,
-        child: Column(children: [
-          Expanded(
-              flex: 1,
-              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Text('Name:'),
-                Expanded(
-                    child: TextField(
-                        onChanged: (newNodeName) => _friendName = newNodeName)),
-              ])),
-          Spacer(flex: 2),
-          Expanded(
-              flex: 1,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    RaisedButton(
-                        // TODO: Add some kind of validation, so that we won't have empty named relay.
-                        onPressed: () => queueAction(
-                            NewFriendAction.addFriend(_friendName, friendFile)),
-                        child: Text('Ok')),
-                    RaisedButton(
-                        onPressed: () => queueAction(NewFriendAction.back()),
-                        child: Text('Cancel')),
-                  ])),
-        ])),
-    Spacer(flex: 1),
-  ]));
+  final _submitForm = () {
+    final FormState form = _formKey.currentState;
+
+    if (!form.validate()) {
+      // Form is not valid
+    } else {
+      // Save form fields:
+      form.save();
+      queueAction(NewFriendAction.addFriend(_friendName, friendFile));
+    }
+  };
+
+  final body =
+      StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+    final form = Form(
+        key: _formKey,
+        autovalidate: true,
+        child: ListView(
+          children: <Widget>[
+            ListTile(
+                leading: const FaIcon(FontAwesomeIcons.satellite),
+                title: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: 'How do you want to call this friend?',
+                    labelText: 'Friend name',
+                  ),
+                  // TODO: Possibly add a validator?
+                  keyboardType: TextInputType.text,
+                  inputFormatters: [LengthLimitingTextInputFormatter(64)],
+                  onSaved: (friendName) => _friendName = friendName,
+                )),
+            SizedBox(height: 24.0),
+            Align(
+                child: RaisedButton.icon(
+              icon: const FaIcon(FontAwesomeIcons.plus),
+              label: const Text('Add friend'),
+              onPressed: _submitForm,
+            )),
+          ],
+        ));
+
+    return SafeArea(
+        top: false,
+        bottom: false,
+        child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
+  });
 
   return frame(
-      title: Text('${nodeName.inner}: New friend name'),
+      title: Text('Friend name'),
       body: body,
       backAction: () => queueAction(NewFriendAction.back()));
 }
