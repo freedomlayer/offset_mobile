@@ -90,7 +90,11 @@ Widget _renderChannelInfo(
         trailing: trailing,
       ));
     }
-    return ListView(padding: EdgeInsets.all(8), children: children);
+
+
+    return children.isNotEmpty 
+        ?  ListView(padding: EdgeInsets.all(8), children: children)
+        :  Center(child: Text('No currencies configured'));
   });
 }
 
@@ -161,7 +165,7 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
           ]);
 
   return frame(
-      title: Text('Friend Settings'),
+      title: Text('Friend settings'),
       body: body,
       backAction: () => queueAction(FriendSettingsAction.back()),
       floatingActionButton:
