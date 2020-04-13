@@ -5,7 +5,6 @@ import '../../servers/index.dart';
 import '../../servers/relay.dart';
 import '../../actions/actions.dart';
 import '../../protocol/protocol.dart';
-// import '../../protocol/file.dart';
 import '../../state/state.dart';
 
 import 'friends.dart';
@@ -210,10 +209,10 @@ AppState _handleRandRelayIndex(
         AppView.settings(SettingsView.cardSettings(cardSettingsView)));
   }
 
+  // We only get here when the node is open.
+
   // List of requests to send:
   final nextRequestsList = <UserToServerAck>[];
-
-  // We only get here when the node is open.
 
   // Add a maximum of two random relays:
   final relays = List<NamedRelayAddress>.from(knownRelays);

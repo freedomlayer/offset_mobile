@@ -139,6 +139,10 @@ Widget _renderNewIndexServer(NodeName nodeName, NodeState nodeState,
           leading: FaIcon(FontAwesomeIcons.file),
           onTap: openFileExplorer,
           title: Text('File')),
+      ListTile(
+          leading: FaIcon(FontAwesomeIcons.hatWizard, color: Colors.blue),
+          onTap: () => queueAction(IndexServersSettingsAction.newRandIndex()),
+          title: Text('Random')),
     ])),
   ]);
 

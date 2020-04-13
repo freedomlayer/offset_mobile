@@ -146,6 +146,7 @@ class RelaysSettingsAction extends _$RelaysSettingsAction {
       : super.loadRelay(relayAddress);
   RelaysSettingsAction.newRelay(NamedRelayAddress relay)
       : super.newRelay(relay);
+  RelaysSettingsAction.newRandRelay() : super.newRandRelay();
 }
 
 @BuiltUnion()
@@ -161,4 +162,5 @@ class IndexServersSettingsAction extends _$IndexServersSettingsAction {
       : super.loadIndexServer(indexServerFile);
   IndexServersSettingsAction.newIndex(NamedIndexServerAddress indexServer)
       : super.newIndex(indexServer);
+  IndexServersSettingsAction.newRandIndex() : super.newRandIndex();
 }

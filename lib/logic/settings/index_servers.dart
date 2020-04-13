@@ -7,6 +7,8 @@ import '../../protocol/file.dart';
 import '../../state/state.dart';
 import '../../logger.dart';
 
+import '../../servers/index.dart';
+
 import '../../rand.dart';
 
 final logger = createLogger('logic::settings::index_servers');
@@ -40,7 +42,8 @@ AppState handleIndexServersSettings(
           IndexServersSettingsView.newIndexSelect())),
       loadIndexServer: (indexServerFile) =>
           createStateInner(CardSettingsInnerView.indexServers(IndexServersSettingsView.newIndexName(indexServerFile))),
-      newIndex: (namedIndexServerAddress) => _handleNewIndex(nodeName, namedIndexServerAddress, nodesStates, rand));
+      newIndex: (namedIndexServerAddress) => _handleNewIndex(nodeName, namedIndexServerAddress, nodesStates, rand),
+      newRandIndex: () => _handleNewRandIndex(nodeName, nodesStates, rand));
 }
 
 AppState _handleRemoveIndex(NodeName nodeName, PublicKey indexPublicKey,
@@ -141,4 +144,50 @@ AppState _handleNewIndex(
     ..nodesStates = nodesStates.toBuilder()
     ..viewState = ViewState.transition(
         oldView, newView, nextRequests, optPendingRequest));
+}
+
+AppState _handleNewRandIndex(
+    NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
+  final createState = (AppView appView) => AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.view(appView));
+
+  final nodeState = nodesStates[nodeName];
+  if (nodeState == null) {
+    logger.w('_handleNewRandIndex(): node $nodeName does not exist!');
+    return createState(AppView.settings(SettingsView.home()));
+  }
+
+  final nodeOpen =
+      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
+
+  final nodeId = nodeOpen.nodeId;
+  if (nodeId == null) {
+    logger.w('_handleNewRandIndex(): node $nodeName is not open!');
+    return createState(AppView.settings(SettingsView.home()));
+  }
+
+  // Prepare known index servers list:
+  final knownIndexServersShuffled = List<NamedIndexServerAddress>.from(knownIndexServers);
+  knownIndexServersShuffled.shuffle(rand);
+
+  // Search for a index server in the known index servers list that the card doesn't have:
+  final cardIndexServers = nodeOpen.compactReport.indexServers
+      .map((namedIndexServerAddress) => namedIndexServerAddress.publicKey)
+      .toSet();
+
+  // Add the first index server that the card doesn't already have:
+  for (final knownIndexServer in knownIndexServersShuffled) {
+    if (!cardIndexServers.contains(knownIndexServer.publicKey)) {
+      return _handleNewIndex(nodeName, knownIndexServer, nodesStates, rand);
+    }
+  }
+
+  // We don't have any new index server to add. 
+  // We leave the user at the select add index server method
+  return createState(AppView.settings(SettingsView.cardSettings(
+      CardSettingsView((b) => b
+        ..nodeName = nodeName
+        ..inner = CardSettingsInnerView.indexServers(
+            IndexServersSettingsView.newIndexSelect())))));
 }

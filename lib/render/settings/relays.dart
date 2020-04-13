@@ -134,6 +134,10 @@ Widget _renderNewRelay(NodeName nodeName, NodeState nodeState,
           leading: FaIcon(FontAwesomeIcons.file),
           onTap: openFileExplorer,
           title: Text('File')),
+      ListTile(
+          leading: FaIcon(FontAwesomeIcons.hatWizard, color: Colors.blue),
+          onTap: () => queueAction(RelaysSettingsAction.newRandRelay()),
+          title: Text('Random')),
     ])),
   ]);
 
