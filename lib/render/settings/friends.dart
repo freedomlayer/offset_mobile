@@ -84,9 +84,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
 
   final listView = children.isNotEmpty
       ? ListView(children: children, padding: EdgeInsets.all(8))
-      : Center(
-          child: Text('No friends configured'));
-              
+      : Center(child: Text('No friends configured'));
 
   final body = Column(children: [
     Container(
@@ -107,10 +105,15 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
       label: Text('New Friend'),
       icon: Icon(Icons.add));
 
-  final shareButton = IconButton(
-    icon: Icon(Icons.share),
-    onPressed: () => queueAction(FriendsSettingsAction.shareInfo()),
-  );
+  final shareButton = nodeOpen.compactReport.relays.isNotEmpty
+      ? IconButton(
+          icon: Icon(Icons.share),
+          onPressed: () => queueAction(FriendsSettingsAction.shareInfo()),
+        )
+      : IconButton(
+          icon: Icon(Icons.share, color: Colors.grey),
+          onPressed: null,
+        );
 
   return frame(
       title: Text('Friends'),
@@ -274,10 +277,10 @@ Widget _renderShareInfo(NodeName nodeName, NodeState nodeState,
     qrShow<FriendFile>(friendFile),
     SizedBox(height: 20.0),
     RaisedButton.icon(
-            icon: FaIcon(FontAwesomeIcons.shareAlt),
-            label: Text('Send card'),
-            onPressed: () async =>
-                await shareFile<FriendFile>(friendFile, 'local.friend')),
+        icon: FaIcon(FontAwesomeIcons.shareAlt),
+        label: Text('Send card'),
+        onPressed: () async =>
+            await shareFile<FriendFile>(friendFile, 'local.friend')),
   ]);
 
   return frame(
