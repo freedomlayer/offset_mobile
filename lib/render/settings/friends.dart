@@ -73,11 +73,15 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
         ? Colors.green
         : friendReport.status.isEnabled ? Colors.orange : Colors.red;
 
+    final connIcon = friendReport.channelStatus.isConsistent
+        ? FontAwesomeIcons.handshake
+        : FontAwesomeIcons.handshakeSlash;
+
     children.add(ListTile(
       key: Key(publicKey.inner),
       title: Text(friendReport.name),
       leading: Icon(Icons.person),
-      trailing: FaIcon(FontAwesomeIcons.satelliteDish, color: connColor),
+      trailing: FaIcon(connIcon, color: connColor),
       onTap: () => queueAction(FriendsSettingsAction.selectFriend(publicKey)),
     ));
   }
