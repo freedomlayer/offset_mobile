@@ -79,11 +79,80 @@ AppState _handleNewFriend(
   return newFriendAction.match(
       back: () => createStateInner(
           CardSettingsInnerView.friends(FriendsSettingsView.home())),
-      loadFriend: (friendFile) => createStateInner(
-          CardSettingsInnerView.friends(
-              FriendsSettingsView.newFriend(NewFriendView.name(friendFile)))),
+      loadFriend: (friendFile) =>
+          _handleLoadFriend(nodeName, nodesStates, friendFile, rand),
       addFriend: (friendName, friendFile) => _handleAddFriend(
           nodeName, nodesStates, friendName, friendFile, rand));
+}
+
+AppState _handleLoadFriend(
+    NodeName nodeName,
+    BuiltMap<NodeName, NodeState> nodesStates,
+    FriendFile friendFile,
+    Random rand) {
+  final createState = (AppView appView) => AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.view(appView));
+
+  final nodeState = nodesStates[nodeName];
+  if (nodeState == null) {
+    logger.w('_handleLoadFriend(): node $nodeName does not exist!');
+    return createState(AppView.settings(SettingsView.home()));
+  }
+
+  final nodeOpen =
+      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
+
+  final nodeId = nodeOpen.nodeId;
+  if (nodeId == null) {
+    logger.w('_handleLoadFriend(): node $nodeName is not open!');
+    return createState(AppView.settings(SettingsView.home()));
+  }
+
+  if (nodeOpen.compactReport.friends.containsKey(friendFile.publicKey)) {
+    // Friend already exists. We will only update the friend's relays (Instead
+    // of attempting to re-add the friend):
+
+    final setFriendRelays = SetFriendRelays((b) => b
+      ..friendPublicKey = friendFile.publicKey
+      ..relays = friendFile.relays.toBuilder());
+
+    final userToCompact = UserToCompact.setFriendRelays(setFriendRelays);
+    final userToServer = UserToServer.node(nodeId, userToCompact);
+    final requestId = genUid(rand);
+    final userToServerAck = UserToServerAck((b) => b
+      ..requestId = requestId
+      ..inner = userToServer);
+
+    final newFriendView = NewFriendView.name(friendFile);
+    final oldView = AppView.settings(SettingsView.cardSettings(CardSettingsView(
+        (b) => b
+          ..nodeName = nodeName
+          ..inner = CardSettingsInnerView.friends(
+              FriendsSettingsView.newFriend(newFriendView)))));
+    final newView = AppView.settings(SettingsView.cardSettings(CardSettingsView(
+        (b) => b
+          ..nodeName = nodeName
+          ..inner =
+              CardSettingsInnerView.friends(FriendsSettingsView.home()))));
+
+    final nextRequests = BuiltList<UserToServerAck>([userToServerAck]);
+    final optPendingRequest = OptPendingRequest.none();
+
+    return AppState((b) => b
+      ..nodesStates = nodesStates.toBuilder()
+      ..viewState = ViewState.transition(
+          oldView, newView, nextRequests, optPendingRequest));
+  }
+
+  // Friend did not exist before, we move on to picking a name:
+  return AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.view(AppView.settings(SettingsView.cardSettings(
+        CardSettingsView((b) => b
+          ..nodeName = nodeName
+          ..inner = CardSettingsInnerView.friends(FriendsSettingsView.newFriend(
+              NewFriendView.name(friendFile))))))));
 }
 
 AppState _handleAddFriend(
