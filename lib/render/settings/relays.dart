@@ -41,6 +41,13 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
   final relays = nodeOpen.compactReport.relays.toList();
   relays.sort((a, b) => a.name.compareTo(b.name));
 
+  // Do not allow to remove the last relay if the card has configured friends.
+  final removeRelayFunc = ((relays.length <= 1) &&
+          nodeOpen.compactReport.friends.isNotEmpty)
+      ? (relayPublicKey) => null
+      : (relayPublicKey) =>
+          () => queueAction(RelaysSettingsAction.removeRelay(relayPublicKey));
+
   for (final namedRelayAddress in relays) {
     children.add(ListTile(
       key: Key(namedRelayAddress.publicKey.inner),
@@ -49,12 +56,11 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
       leading: FaIcon(FontAwesomeIcons.satellite),
       trailing: FlatButton(
           child: Icon(Icons.delete),
-          onPressed: () => queueAction(
-              RelaysSettingsAction.removeRelay(namedRelayAddress.publicKey))),
+          onPressed: removeRelayFunc(namedRelayAddress.publicKey)),
     ));
   }
 
-  final relaysList = children.isNotEmpty 
+  final relaysList = children.isNotEmpty
       ? ListView(children: children, padding: EdgeInsets.all(8))
       : Center(child: Text('No relays configured'));
 
