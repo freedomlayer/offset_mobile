@@ -50,29 +50,38 @@ Widget _renderChannelInfoInconsistent(
 
     final localBalance = localResetTerms[currency];
     if (localBalance != null) {
-      localData = Text('${balanceToString(localBalance)}\n' +
-          'limit: ${amountToString(configReport.remoteMaxDebt)}');
+      localData = Text('${balanceToString(localBalance)}');
+          // 'Limit: ${amountToString(configReport.remoteMaxDebt)}');
     } else {
-      localData = Text('(Pending)\n' +
-          'limit: ${amountToString(configReport.remoteMaxDebt)}');
+      localData = Text('Balance: (Pending)\n' +
+          'Limit: ${amountToString(configReport.remoteMaxDebt)}');
     }
 
-    Widget remoteData;
+    DataCell remoteData;
+    I128 remoteBalance;
     if (optRemoteProposalMap == null) {
-      remoteData = Text('?');
+      remoteData = DataCell(Text('?'));
     } else {
       final remoteProposalMap = optRemoteProposalMap;
       assert(remoteProposalMap != null);
 
-      final remoteBalance = remoteProposalMap.remove(currency);
+      remoteBalance = remoteProposalMap.remove(currency);
       if (remoteBalance == null) {
-        remoteData = Text('Empty');
+        remoteData = DataCell(Text('Empty'), placeholder: true);
       } else {
-        remoteData = Text('${remoteBalance.inner}');
+        remoteData = DataCell(Text('${remoteBalance.inner}'));
       }
     }
 
-    rows.add(DataRow(cells: [DataCell(Text('${currency.inner}')), DataCell(localData), DataCell(remoteData)]));
+    if ((localBalance == null) && (remoteBalance == null)) {
+      continue;
+    }
+
+    rows.add(DataRow(cells: [
+      DataCell(Text('${currency.inner}')),
+      DataCell(localData),
+      remoteData
+    ]));
   }
 
   if (optRemoteProposalMap != null) {
@@ -84,26 +93,61 @@ Widget _renderChannelInfoInconsistent(
       Widget remoteData;
 
       remoteData = Text('${balanceToString(remoteBalance)}');
-      rows.add(DataRow(cells: [DataCell(Text('${currency.inner}')), DataCell(Text('Empty')), DataCell(remoteData)]));
+      rows.add(DataRow(cells: [
+        DataCell(Text('${currency.inner}')),
+        DataCell(Text('Empty')),
+        DataCell(remoteData)
+      ]));
     }
   }
 
-  final dataTable = DataTable(columns: [
-    DataColumn(label: Text('Currency')),
-    DataColumn(label: Text('Local')),
-    DataColumn(label: Text('Remote'))
-  ], rows: rows);
+  final dataTable = DataTable(
+      sortColumnIndex: 0,
+      sortAscending: false,
+      columns: [
+        DataColumn(label: Text('Currency')),
+        DataColumn(label: Text('Local')),
+        DataColumn(label: Text('Remote'))
+      ],
+      rows: rows);
+
+  final scrollDataTable =
+      SingleChildScrollView(scrollDirection: Axis.vertical, child: dataTable);
+
+  /*
+  final scrollDataTable = LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints viewportConstraints) {
+    return SingleChildScrollView(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: viewportConstraints.maxHeight,
+        ),
+        child: IntrinsicHeight(
+          child: dataTable,
+        ),
+      ),
+    );
+  });
+  */
 
   return Column(children: [
-    dataTable,
-    Align(
-        child: RaisedButton.icon(
-      icon: FaIcon(FontAwesomeIcons.handshake),
-      label: const Text('Accept'),
-      onPressed: optRemoteProposal != null
-          ? () => queueAction(FriendSettingsAction.resolve())
-          : null,
-    )),
+    Expanded(child: scrollDataTable),
+    SizedBox(height: 20.0),
+    Container(
+        color: Colors.blue.shade50,
+        child: Column(children: [
+          Divider(height: 0, color: Colors.grey),
+          SizedBox(height: 10.0),
+          Align(
+              child: RaisedButton.icon(
+            icon: FaIcon(FontAwesomeIcons.handshake),
+            label: const Text('Accept'),
+            onPressed: optRemoteProposal != null
+                ? () => queueAction(FriendSettingsAction.resolve())
+                : null,
+          )),
+          SizedBox(height: 10.0),
+        ])),
   ]);
 
   /*
@@ -120,7 +164,6 @@ Widget _renderChannelInfoInconsistent(
 
 Widget _renderChannelInfoConsistent(
     FriendReport friendReport, Function(FriendSettingsAction) queueAction) {
-
   final channelConsistentReport = friendReport.channelStatus.match(
       inconsistent: (_) => null,
       consistent: (channelConsistentReport) => channelConsistentReport);
