@@ -208,7 +208,7 @@ Widget _renderNewFriendName(NodeName nodeName, FriendFile friendFile,
         child: ListView(
           children: <Widget>[
             ListTile(
-                leading: const FaIcon(FontAwesomeIcons.satellite),
+                leading: const FaIcon(FontAwesomeIcons.creditCard),
                 title: TextFormField(
                   decoration: const InputDecoration(
                     hintText: 'How do you want to call this friend?',
