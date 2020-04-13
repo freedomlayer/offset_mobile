@@ -5,7 +5,7 @@
 # See: https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
 set -eux -o pipefail
 
-VERSION="0.1.6"
+VERSION="0.1.7"
 DOWNLOAD_URL="https://github.com/freedomlayer/offset/releases/download"
 
 # curl -L https://capnproto.org/capnproto-c++-${CAPNP_VERSION}.tar.gz | tar -zxf -
