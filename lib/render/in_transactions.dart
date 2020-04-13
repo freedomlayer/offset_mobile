@@ -336,18 +336,36 @@ Widget _renderSelectCardApplyCommit(
     Commit commit,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(InTransactionsAction) queueAction) {
+
   final children = <Widget>[];
 
   for (final nodeName in nodesStates.keys.toList()..sort()) {
     final nodeState = nodesStates[nodeName];
-    // We only show open nodes. (We can not configure closed nodes):
-    final cardEntry = nodeState.inner.isOpen
+    // We only card that can be used for payment.
+    final canCardPay = nodeState.inner.match(
+        closed: () => false,
+        open: (openNode) {
+          for (final entry in openNode.compactReport.friends.entries) {
+            final res = entry.value.channelStatus.match(
+                inconsistent: (_) => false,
+                consistent: (channelConsistentReport) =>
+                    channelConsistentReport.currencyReports.isNotEmpty);
+            if (res == true) {
+              return true;
+            }
+          }
+          return false;
+        });
+
+    final cardEntry = canCardPay
         ? ListTile(
+            leading: Icon(Icons.credit_card),
             key: Key(nodeName.inner),
             title: Text('${nodeName.inner}'),
             onTap: () =>
                 queueAction(InTransactionsAction.applyCommit(nodeName, commit)))
         : ListTile(
+            leading: Icon(Icons.credit_card),
             key: Key(nodeName.inner),
             title: Text('${nodeName.inner}'),
             enabled: false);
@@ -355,11 +373,22 @@ Widget _renderSelectCardApplyCommit(
     children.add(cardEntry);
   }
 
-  final listView =
-      ListView(padding: const EdgeInsets.all(8), children: children);
+  final body = Padding(
+      padding: EdgeInsets.only(top: 14.0),
+      child: Column(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'Please select a card',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+            ),
+            Expanded(
+                child: ListView(
+                    padding: const EdgeInsets.all(8), children: children))
+          ]));
 
   return frame(
-      title: Text('Apply Commit'),
-      body: listView,
+      title: Text('Apply commit'),
+      body: body,
       backAction: () => queueAction(InTransactionsAction.back()));
 }
