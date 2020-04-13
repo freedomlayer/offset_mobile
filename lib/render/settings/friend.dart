@@ -21,81 +21,169 @@ Widget renderFriendSettings(
   return friendSettingsView.inner.match(
       home: () => _renderFriendHome(
           nodeName, friendPublicKey, friendReport, queueAction),
-      resolve: () =>
-          _renderResolve(nodeName, friendPublicKey, friendReport, queueAction),
       currencySettings: (currency) => _renderCurrencySettings(
           nodeName, friendPublicKey, currency, friendReport, queueAction),
       newCurrency: () => _renderNewCurrency(
           nodeName, friendPublicKey, friendReport, queueAction));
 }
 
-Widget _renderChannelInfo(
+Widget _renderChannelInfoInconsistent(
     FriendReport friendReport, Function(FriendSettingsAction) queueAction) {
-  final currencyConfigs = friendReport.currencyConfigs;
-  return friendReport.channelStatus.match(
-      inconsistent: (_channelInconsistentReport) {
-    return Column(children: [
-      SizedBox(height: 20),
-      Text('Inconsistency'),
-      SizedBox(height: 20),
-      RaisedButton(
-          child: Text('Resolve inconsistency'),
-          onPressed: () => queueAction(FriendSettingsAction.selectResolve())),
-    ]);
-  }, consistent: (channelConsistentReport) {
-    final currencyReports = channelConsistentReport.currencyReports;
+  final channelInconsistentReport = friendReport.channelStatus.match(
+      inconsistent: (channelInconsistentReport) => channelInconsistentReport,
+      consistent: (_) => null);
 
-    final List<Widget> children = [];
-    // TODO: Sort list here before iteration begins:
-    for (final currency in currencyConfigs.keys.toList()..sort()) {
-      final configReport = currencyConfigs[currency];
-      final currencyReport = currencyReports[currency];
-      Widget title;
-      Widget trailing;
-      if (currencyReport != null) {
-        title = Text('${currency.inner}');
-      } else {
-        title = Text('${currency.inner}');
-        trailing = FlatButton(
-            child: Icon(Icons.delete),
-            onPressed: friendReport.status.isEnabled
-                ? () =>
-                    queueAction(FriendSettingsAction.removeCurrency(currency))
-                : null);
-      }
+  final localResetTerms = channelInconsistentReport.localResetTerms;
+  final optRemoteProposal =
+      channelInconsistentReport.optRemoteResetTerms?.balanceForReset?.toMap();
+  Map<Currency, I128> optRemoteProposalMap;
+  if (optRemoteProposal != null) {
+    optRemoteProposalMap = Map<Currency, I128>.from(optRemoteProposal);
+  }
 
-      final balanceStr = currencyReport != null
-          ? balanceToString(currencyReport.balance)
-          : '(Pending)';
+  final List<DataRow> rows = [];
+  for (final entry in friendReport.currencyConfigs.entries) {
+    final currency = entry.key;
+    final configReport = entry.value;
 
-      final double ratePercent = (configReport.rate.mul / (1 << 32)) * 100;
-      final addStr = amountToString(U128(BigInt.from(configReport.rate.add)));
-      final subtitle = Text('balance: $balanceStr'
-              '\nlimit: ${amountToString(configReport.remoteMaxDebt)}' +
-          '\nrate: ${ratePercent.toStringAsFixed(2)}% + $addStr');
+    Widget localData;
 
-      final currencyColor = currencyReport == null
-          ? Colors.grey
-          : configReport.isOpen ? Colors.green : Colors.red;
-
-      children.add(ListTile(
-        key: Key(currency.inner),
-        onTap: friendReport.status.isEnabled
-            ? () => queueAction(FriendSettingsAction.selectCurrency(currency))
-            : null,
-        title: title,
-        subtitle: subtitle,
-        enabled: friendReport.status.isEnabled,
-        leading: FaIcon(FontAwesomeIcons.coins, color: currencyColor),
-        trailing: trailing,
-      ));
+    final localBalance = localResetTerms[currency];
+    if (localBalance != null) {
+      localData = Text('${balanceToString(localBalance)}\n' +
+          'limit: ${amountToString(configReport.remoteMaxDebt)}');
+    } else {
+      localData = Text('(Pending)\n' +
+          'limit: ${amountToString(configReport.remoteMaxDebt)}');
     }
 
+    Widget remoteData;
+    if (optRemoteProposalMap == null) {
+      remoteData = Text('?');
+    } else {
+      final remoteProposalMap = optRemoteProposalMap;
+      assert(remoteProposalMap != null);
 
-    return children.isNotEmpty 
-        ?  ListView(padding: EdgeInsets.all(8), children: children)
-        :  Center(child: Text('No currencies configured'));
-  });
+      final remoteBalance = remoteProposalMap.remove(currency);
+      if (remoteBalance == null) {
+        remoteData = Text('Empty');
+      } else {
+        remoteData = Text('${remoteBalance.inner}');
+      }
+    }
+
+    rows.add(DataRow(cells: [DataCell(Text('${currency.inner}')), DataCell(localData), DataCell(remoteData)]));
+  }
+
+  if (optRemoteProposalMap != null) {
+    final remoteProposalMap = optRemoteProposal;
+    for (final entry in remoteProposalMap.entries) {
+      final currency = entry.key;
+      final remoteBalance = entry.value;
+
+      Widget remoteData;
+
+      remoteData = Text('${balanceToString(remoteBalance)}');
+      rows.add(DataRow(cells: [DataCell(Text('${currency.inner}')), DataCell(Text('Empty')), DataCell(remoteData)]));
+    }
+  }
+
+  final dataTable = DataTable(columns: [
+    DataColumn(label: Text('Currency')),
+    DataColumn(label: Text('Local')),
+    DataColumn(label: Text('Remote'))
+  ], rows: rows);
+
+  return Column(children: [
+    dataTable,
+    Align(
+        child: RaisedButton.icon(
+      icon: FaIcon(FontAwesomeIcons.handshake),
+      label: const Text('Accept'),
+      onPressed: optRemoteProposal != null
+          ? () => queueAction(FriendSettingsAction.resolve())
+          : null,
+    )),
+  ]);
+
+  /*
+  return Column(children: [
+    SizedBox(height: 20),
+    Text('Conflict'),
+    SizedBox(height: 20),
+    RaisedButton(
+        child: Text('Resolve conflict'),
+        onPressed: () => queueAction(FriendSettingsAction.selectResolve())),
+  ]);
+  */
+}
+
+Widget _renderChannelInfoConsistent(
+    FriendReport friendReport, Function(FriendSettingsAction) queueAction) {
+
+  final channelConsistentReport = friendReport.channelStatus.match(
+      inconsistent: (_) => null,
+      consistent: (channelConsistentReport) => channelConsistentReport);
+
+  final currencyReports = channelConsistentReport.currencyReports;
+
+  final List<Widget> children = [];
+  // TODO: Sort list here before iteration begins:
+  for (final currency in friendReport.currencyConfigs.keys.toList()..sort()) {
+    final configReport = friendReport.currencyConfigs[currency];
+    final currencyReport = currencyReports[currency];
+    Widget title;
+    Widget trailing;
+    if (currencyReport != null) {
+      title = Text('${currency.inner}');
+    } else {
+      title = Text('${currency.inner}');
+      trailing = FlatButton(
+          child: Icon(Icons.delete),
+          onPressed: friendReport.status.isEnabled
+              ? () => queueAction(FriendSettingsAction.removeCurrency(currency))
+              : null);
+    }
+
+    final balanceStr = currencyReport != null
+        ? balanceToString(currencyReport.balance)
+        : '(Pending)';
+
+    final double ratePercent = (configReport.rate.mul / (1 << 32)) * 100;
+    final addStr = amountToString(U128(BigInt.from(configReport.rate.add)));
+    final subtitle = Text('balance: $balanceStr'
+            '\nlimit: ${amountToString(configReport.remoteMaxDebt)}' +
+        '\nrate: ${ratePercent.toStringAsFixed(2)}% + $addStr');
+
+    final currencyColor = currencyReport == null
+        ? Colors.grey
+        : configReport.isOpen ? Colors.green : Colors.red;
+
+    children.add(ListTile(
+      key: Key(currency.inner),
+      onTap: friendReport.status.isEnabled
+          ? () => queueAction(FriendSettingsAction.selectCurrency(currency))
+          : null,
+      title: title,
+      subtitle: subtitle,
+      enabled: friendReport.status.isEnabled,
+      leading: FaIcon(FontAwesomeIcons.coins, color: currencyColor),
+      trailing: trailing,
+    ));
+  }
+
+  return children.isNotEmpty
+      ? ListView(padding: EdgeInsets.all(8), children: children)
+      : Center(child: Text('No currencies configured'));
+}
+
+Widget _renderChannelInfo(
+    FriendReport friendReport, Function(FriendSettingsAction) queueAction) {
+  return friendReport.channelStatus.match(
+      inconsistent: (channelInconsistentReport) =>
+          _renderChannelInfoInconsistent(friendReport, queueAction),
+      consistent: (channelConsistentReport) =>
+          _renderChannelInfoConsistent(friendReport, queueAction));
 }
 
 /// Possible options for friend popup menu:
@@ -171,106 +259,6 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
       floatingActionButton:
           friendReport.status.isEnabled ? newCurrencyButton : null,
       actions: <Widget>[popupMenuButton]);
-}
-
-Widget _renderResolve(NodeName nodeName, PublicKey friendPublicKey,
-    FriendReport friendReport, Function(FriendSettingsAction) queueAction) {
-  final channelInconsistentReport = friendReport.channelStatus.match(
-      inconsistent: (channelInconsistentReport) => channelInconsistentReport,
-      consistent: (_) => null);
-
-  final localResetTerms = channelInconsistentReport.localResetTerms;
-  final optRemoteProposal =
-      channelInconsistentReport.optRemoteResetTerms?.balanceForReset?.toMap();
-  Map<Currency, I128> optRemoteProposalMap;
-  if (optRemoteProposal != null) {
-    optRemoteProposalMap = Map<Currency, I128>.from(optRemoteProposal);
-  }
-
-  final List<DataRow> rows = [];
-  for (final entry in friendReport.currencyConfigs.entries) {
-    final currency = entry.key;
-    final configReport = entry.value;
-
-    Widget localData;
-
-    final localBalance = localResetTerms[currency];
-    if (localBalance != null) {
-      localData = Text('${currency.inner}: ${localBalance.inner}\n' +
-          'limit: ${configReport.remoteMaxDebt.inner}');
-    } else {
-      localData = Text('${currency.inner} (Pending)\n' +
-          'limit: ${configReport.remoteMaxDebt.inner}');
-    }
-
-    Widget remoteData;
-    if (optRemoteProposalMap == null) {
-      remoteData = Text('?');
-    } else {
-      final remoteProposalMap = optRemoteProposalMap;
-      assert(remoteProposalMap != null);
-
-      final remoteBalance = remoteProposalMap.remove(currency);
-      if (remoteBalance == null) {
-        remoteData = Text('Empty');
-      } else {
-        remoteData = Text('${remoteBalance.inner}');
-      }
-    }
-
-    rows.add(DataRow(cells: [DataCell(localData), DataCell(remoteData)]));
-  }
-
-  if (optRemoteProposalMap != null) {
-    final remoteProposalMap = optRemoteProposal;
-    for (final entry in remoteProposalMap.entries) {
-      final currency = entry.key;
-      final remoteBalance = entry.value;
-
-      Widget remoteData;
-
-      remoteData = Text('${currency.inner}: ${remoteBalance.inner}');
-      rows.add(DataRow(cells: [DataCell(Text('Empty')), DataCell(remoteData)]));
-    }
-  }
-
-  final dataTable = DataTable(columns: [
-    DataColumn(label: Text('Local')),
-    DataColumn(label: Text('Remote'))
-  ], rows: rows);
-
-  final body = SafeArea(
-      top: false,
-      bottom: false,
-      child: Center(
-          child: Column(children: [
-        SizedBox(height: 10),
-        Text('${nodeName.inner} / ${friendReport.name}'),
-        SizedBox(height: 20),
-        dataTable,
-        SizedBox(height: 20),
-        Container(
-            padding: EdgeInsets.only(top: 20.0),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Spacer(flex: 1),
-                  Expanded(
-                      flex: 2,
-                      child: RaisedButton(
-                        child: const Text('Accept'),
-                        onPressed: optRemoteProposal != null
-                            ? () => queueAction(FriendSettingsAction.resolve())
-                            : null,
-                      )),
-                  Spacer(flex: 1),
-                ])),
-      ])));
-
-  return frame(
-      title: Text('Resolve inconsistency'),
-      body: body,
-      backAction: () => queueAction(FriendSettingsAction.back()));
 }
 
 String _percentValidator(String percentString) {

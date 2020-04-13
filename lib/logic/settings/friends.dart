@@ -230,9 +230,6 @@ AppState _handleFriendSettings(
   return friendSettingsAction.match(
       back: () => friendSettingsView.inner.match(
           home: () => createStateFriends(FriendsSettingsView.home()),
-          resolve: () => createStateFriends(FriendsSettingsView.friendSettings(
-              friendSettingsView
-                  .rebuild((b) => b..inner = FriendSettingsInnerView.home()))),
           currencySettings: (_currency) => createStateFriends(
               FriendsSettingsView.friendSettings(friendSettingsView
                   .rebuild((b) => b..inner = FriendSettingsInnerView.home()))),
@@ -248,7 +245,6 @@ AppState _handleFriendSettings(
       openCurrency: (currency) => _handleOpenCurrency(currency, nodeName, friendPublicKey, nodesStates, rand),
       closeCurrency: (currency) => _handleCloseCurrency(currency, nodeName, friendPublicKey, nodesStates, rand),
       updateCurrency: (currency, remoteMaxDebt, rate) => _handleUpdateCurrency(currency, remoteMaxDebt, rate, nodeName, friendPublicKey, nodesStates, rand),
-      selectResolve: () => createStateFriends(FriendsSettingsView.friendSettings(friendSettingsView.rebuild((b) => b..inner = FriendSettingsInnerView.resolve()))),
       resolve: () => _handleResolve(nodeName, friendPublicKey, nodesStates, rand));
 }
 
@@ -742,7 +738,7 @@ AppState _handleResolve(NodeName nodeName, PublicKey friendPublicKey,
         '_handleResolve(): node $nodeName: friend $friendPublicKey: no remote terms received!');
     final friendSettings = FriendSettingsView((b) => b
       ..friendPublicKey = friendPublicKey
-      ..inner = FriendSettingsInnerView.resolve());
+      ..inner = FriendSettingsInnerView.home());
     return createState(AppView.settings(SettingsView.cardSettings(
         CardSettingsView((b) => b
           ..inner = CardSettingsInnerView.friends(
@@ -762,7 +758,7 @@ AppState _handleResolve(NodeName nodeName, PublicKey friendPublicKey,
   final friendsSettingsView =
       FriendsSettingsView.friendSettings(FriendSettingsView((b) => b
         ..friendPublicKey = friendPublicKey
-        ..inner = FriendSettingsInnerView.resolve()));
+        ..inner = FriendSettingsInnerView.home()));
   final cardSettingsView = CardSettingsView((b) => b
     ..nodeName = nodeName
     ..inner = CardSettingsInnerView.friends(friendsSettingsView));

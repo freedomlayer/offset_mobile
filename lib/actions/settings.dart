@@ -129,7 +129,6 @@ class FriendSettingsAction extends _$FriendSettingsAction {
       Currency currency, U128 remoteMaxDebt, Rate rate)
       : super.updateCurrency(currency, remoteMaxDebt, rate);
 
-  FriendSettingsAction.selectResolve() : super.selectResolve();
   FriendSettingsAction.resolve() : super.resolve();
 }
 

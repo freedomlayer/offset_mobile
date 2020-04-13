@@ -244,9 +244,6 @@ FriendSettingsInnerView adjustFriendSettingsInnerView(
     FriendSettingsInnerView friendSettingsInner, FriendReport friendReport) {
   return friendSettingsInner.match(
       home: () => friendSettingsInner,
-      resolve: () => friendReport.channelStatus.isInconsistent
-          ? friendSettingsInner
-          : FriendSettingsInnerView.home(),
       currencySettings: (currency) {
         return friendReport.channelStatus.match(
             inconsistent: (_) => FriendSettingsInnerView.home(),
