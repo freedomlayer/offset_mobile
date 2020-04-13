@@ -341,7 +341,7 @@ Widget _renderSelectCardApplyCommit(
 
   for (final nodeName in nodesStates.keys.toList()..sort()) {
     final nodeState = nodesStates[nodeName];
-    // We only card that can be used for payment.
+    // We only list cards that can be used for payment.
     final canCardPay = nodeState.inner.match(
         closed: () => false,
         open: (openNode) {
@@ -376,7 +376,6 @@ Widget _renderSelectCardApplyCommit(
   final body = Padding(
       padding: EdgeInsets.only(top: 14.0),
       child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
               'Please select a card',
