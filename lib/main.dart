@@ -219,8 +219,8 @@ class MainAppState extends State<MainApp> {
 
   @override
   void initState() {
-    logger.d('initState() was called');
     super.initState();
+    logger.d('initState() was called');
 
     // Calling an async function. Should set `_isReady = true` when ready.
     initProcess();
