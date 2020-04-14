@@ -186,12 +186,15 @@ Widget _renderInvoiceDetails(
             Center(
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              RaisedButton(
-                child: const Text('Ok'),
+              RaisedButton.icon(
+                icon: Icon(Icons.done, color: Colors.green),
+                label: const Text('Ok'),
                 onPressed: _submitForm,
               ),
-              FlatButton(
-                child: const Text('Cancel'),
+              SizedBox(width: 10.0),
+              FlatButton.icon(
+                icon: Icon(Icons.cancel, color: Colors.red),
+                label: const Text('Cancel'),
                 onPressed: () => queueAction(SellAction.back()),
               )
             ])),
