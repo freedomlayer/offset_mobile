@@ -360,16 +360,22 @@ class _CurrencySettingsState extends State<CurrencySettings> {
   Widget build(BuildContext context) {
     // TODO: Possibly take more specific arguments for this function,
     // so that the following logic will be done on the outside?
-    final currencyConfig = this.widget.friendReport.currencyConfigs[this.widget.currency];
+    final currencyConfig =
+        this.widget.friendReport.currencyConfigs[this.widget.currency];
     assert(currencyConfig != null);
 
-    final channelConsistentReport = this.widget.friendReport.channelStatus.match(
-        consistent: (channelConsistentReport) => channelConsistentReport,
-        inconsistent: (_) => null);
+    final channelConsistentReport = this
+        .widget
+        .friendReport
+        .channelStatus
+        .match(
+            consistent: (channelConsistentReport) => channelConsistentReport,
+            inconsistent: (_) => null);
 
     assert(channelConsistentReport != null);
 
-    final currencyReport = channelConsistentReport.currencyReports[this.widget.currency];
+    final currencyReport =
+        channelConsistentReport.currencyReports[this.widget.currency];
 
     int _mul = currencyConfig.rate.mul;
     int _add = currencyConfig.rate.add;
@@ -387,8 +393,8 @@ class _CurrencySettingsState extends State<CurrencySettings> {
           ..mul = _mul
           ..add = _add);
 
-        this.widget.queueAction(
-            FriendSettingsAction.updateCurrency(this.widget.currency, _creditLimit, rate));
+        this.widget.queueAction(FriendSettingsAction.updateCurrency(
+            this.widget.currency, _creditLimit, rate));
       }
     };
 
@@ -459,7 +465,9 @@ class _CurrencySettingsState extends State<CurrencySettings> {
 
     final friendColor = this.widget.friendReport.liveness.isOnline
         ? Colors.green
-        : this.widget.friendReport.status.isEnabled ? Colors.orange : Colors.red;
+        : this.widget.friendReport.status.isEnabled
+            ? Colors.orange
+            : Colors.red;
 
     final currencyColor = currencyReport == null
         ? Colors.grey
@@ -503,10 +511,12 @@ class _CurrencySettingsState extends State<CurrencySettings> {
                         onChanged: (bool newValue) {
                           if (newValue == true) {
                             this.widget.queueAction(
-                                FriendSettingsAction.openCurrency(this.widget.currency));
+                                FriendSettingsAction.openCurrency(
+                                    this.widget.currency));
                           } else {
                             this.widget.queueAction(
-                                FriendSettingsAction.closeCurrency(this.widget.currency));
+                                FriendSettingsAction.closeCurrency(
+                                    this.widget.currency));
                           }
                         })),
                 Divider(height: 0, color: Colors.grey),

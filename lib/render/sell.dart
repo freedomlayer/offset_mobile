@@ -205,7 +205,8 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                     FlatButton.icon(
                       icon: Icon(Icons.cancel, color: Colors.red),
                       label: const Text('Cancel'),
-                      onPressed: () => this.widget.queueAction(SellAction.back()),
+                      onPressed: () =>
+                          this.widget.queueAction(SellAction.back()),
                     )
                   ])),
             ],

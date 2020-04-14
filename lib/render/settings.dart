@@ -290,8 +290,8 @@ class _NewRemoteNameState extends State<NewRemoteName> {
       } else {
         // Save form fields:
         form.save();
-        this.widget.queueAction(
-            NewCardAction.newCardRemote(NodeName(_nodeName), this.widget.remoteCardFile));
+        this.widget.queueAction(NewCardAction.newCardRemote(
+            NodeName(_nodeName), this.widget.remoteCardFile));
       }
     };
 
@@ -337,7 +337,6 @@ class _NewRemoteNameState extends State<NewRemoteName> {
         backAction: () => this.widget.queueAction(NewCardAction.back()));
   }
 }
-
 
 Widget _renderSelectCardAddRelay(
     RelayAddress relayAddress,

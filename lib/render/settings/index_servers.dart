@@ -230,7 +230,7 @@ class _IndexServerNameState extends State<IndexServerName> {
     return frame(
         title: Text('Index server name'),
         body: body,
-        backAction: () => this.widget.queueAction(IndexServersSettingsAction.back()));
+        backAction: () =>
+            this.widget.queueAction(IndexServersSettingsAction.back()));
   }
 }
-
