@@ -135,7 +135,6 @@ String _canonicalizeAmountString(String valueString, int accuracy) {
 
   // Find decimal point.
   final pointIndex = absValueString.indexOf('.');
-  assert(absValueString.length - pointIndex - 1 <= accuracy);
 
   // Find decimal point or add one ourselves.
   // Make sure that we have exactly `accuracy` decimal digits after the decimal point:
