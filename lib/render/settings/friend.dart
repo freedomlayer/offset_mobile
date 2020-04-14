@@ -101,8 +101,6 @@ Widget _renderChannelInfoInconsistent(
   }
 
   final dataTable = DataTable(
-      sortColumnIndex: 0,
-      sortAscending: false,
       columns: [
         DataColumn(label: Text('Currency')),
         DataColumn(label: Text('Local')),
