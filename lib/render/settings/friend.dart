@@ -111,22 +111,6 @@ Widget _renderChannelInfoInconsistent(
   final scrollDataTable =
       SingleChildScrollView(scrollDirection: Axis.vertical, child: dataTable);
 
-  /*
-  final scrollDataTable = LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints viewportConstraints) {
-    return SingleChildScrollView(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight: viewportConstraints.maxHeight,
-        ),
-        child: IntrinsicHeight(
-          child: dataTable,
-        ),
-      ),
-    );
-  });
-  */
-
   return Column(children: [
     Expanded(child: scrollDataTable),
     SizedBox(height: 20.0),
@@ -146,17 +130,6 @@ Widget _renderChannelInfoInconsistent(
           SizedBox(height: 10.0),
         ])),
   ]);
-
-  /*
-  return Column(children: [
-    SizedBox(height: 20),
-    Text('Conflict'),
-    SizedBox(height: 20),
-    RaisedButton(
-        child: Text('Resolve conflict'),
-        onPressed: () => queueAction(FriendSettingsAction.selectResolve())),
-  ]);
-  */
 }
 
 Widget _renderChannelInfoConsistent(
