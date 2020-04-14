@@ -43,7 +43,7 @@ Widget _renderChannelInfoInconsistent(
   final List<DataRow> rows = [];
   for (final entry in friendReport.currencyConfigs.entries) {
     final currency = entry.key;
-    final configReport = entry.value;
+    // final configReport = entry.value;
 
     Widget localData;
 
@@ -52,8 +52,7 @@ Widget _renderChannelInfoInconsistent(
       localData = Text('${balanceToString(localBalance)}');
       // 'Limit: ${amountToString(configReport.remoteMaxDebt)}');
     } else {
-      localData = Text('Balance: (Pending)\n' +
-          'Limit: ${amountToString(configReport.remoteMaxDebt)}');
+      localData = Text('(Pending)');
     }
 
     DataCell remoteData;
@@ -72,10 +71,6 @@ Widget _renderChannelInfoInconsistent(
       }
     }
 
-    if ((localBalance == null) && (remoteBalance == null)) {
-      continue;
-    }
-
     rows.add(DataRow(cells: [
       DataCell(Text('${currency.inner}')),
       DataCell(localData),
@@ -83,6 +78,7 @@ Widget _renderChannelInfoInconsistent(
     ]));
   }
 
+  // Possibly add remaining entries from the remote proposal:
   if (optRemoteProposalMap != null) {
     final remoteProposalMap = optRemoteProposal;
     for (final entry in remoteProposalMap.entries) {
@@ -100,13 +96,11 @@ Widget _renderChannelInfoInconsistent(
     }
   }
 
-  final dataTable = DataTable(
-      columns: [
-        DataColumn(label: Text('Currency')),
-        DataColumn(label: Text('Local')),
-        DataColumn(label: Text('Remote'))
-      ],
-      rows: rows);
+  final dataTable = DataTable(columns: [
+    DataColumn(label: Text('Currency')),
+    DataColumn(label: Text('Local')),
+    DataColumn(label: Text('Remote'))
+  ], rows: rows);
 
   final scrollDataTable =
       SingleChildScrollView(scrollDirection: Axis.vertical, child: dataTable);
