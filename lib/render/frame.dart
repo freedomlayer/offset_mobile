@@ -10,12 +10,12 @@ Future<bool> exitDialog(BuildContext context) async {
           actions: <Widget>[
             FlatButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: Text("No"),
+              child: Text("No", style: TextStyle(color: Colors.red)),
             ),
             // SizedBox(height: 32),
             FlatButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: Text("Yes"),
+              child: Text("Yes", style: TextStyle(color: Colors.green)),
             ),
           ],
         ),
