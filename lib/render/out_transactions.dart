@@ -227,7 +227,7 @@ Widget _renderSearchingRoute(NodeName nodeName, PaymentId paymentId,
             child: ListTile(
                 leading: FaIcon(FontAwesomeIcons.search),
                 title: Text('Searching route')))),
-    Divider(height: 0, color: Colors.black),
+    Divider(height: 0, color: Colors.grey),
     Expanded(child: listView),
   ]);
 
@@ -277,7 +277,7 @@ Widget _renderFoundRoute(U128 fees, NodeName nodeName, PaymentId paymentId,
             child: ListTile(
                 leading: FaIcon(FontAwesomeIcons.route),
                 title: Text('Found route')))),
-    Divider(height: 0, color: Colors.black),
+    Divider(height: 0, color: Colors.grey),
     Expanded(child: listView),
   ]);
 
@@ -322,7 +322,7 @@ Widget _renderSending(U128 fees, NodeName nodeName, PaymentId paymentId,
             child: ListTile(
                 leading: FaIcon(FontAwesomeIcons.paperPlane),
                 title: Text('Sending')))),
-    Divider(height: 0, color: Colors.black),
+    Divider(height: 0, color: Colors.grey),
     Expanded(child: listView),
   ]);
 
@@ -377,7 +377,7 @@ Widget _renderCommit(
             child: ListTile(
                 leading: FaIcon(FontAwesomeIcons.stamp),
                 title: Text('Commitment')))),
-    Divider(height: 0, color: Colors.black),
+    Divider(height: 0, color: Colors.grey),
     Expanded(child: listView),
   ]);
 
@@ -435,7 +435,7 @@ Widget _renderSuccess(
                 leading:
                     FaIcon(FontAwesomeIcons.checkCircle, color: Colors.green),
                 title: Text('Success')))),
-    Divider(height: 0, color: Colors.black),
+    Divider(height: 0, color: Colors.grey),
     Expanded(child: listView),
   ]);
 
@@ -476,7 +476,7 @@ Widget _renderFailure(NodeName nodeName, PaymentId paymentId,
                 leading: FaIcon(FontAwesomeIcons.exclamationTriangle,
                     color: Colors.red),
                 title: Text('Failure')))),
-    Divider(height: 0, color: Colors.black),
+    Divider(height: 0, color: Colors.grey),
     Expanded(child: listView),
   ]);
 
