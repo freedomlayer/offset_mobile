@@ -233,8 +233,9 @@ AppState _handleFriendSettings(
           currencySettings: (_currency) => createStateFriends(
               FriendsSettingsView.friendSettings(friendSettingsView
                   .rebuild((b) => b..inner = FriendSettingsInnerView.home()))),
-          newCurrency: () =>
-              createStateFriends(FriendsSettingsView.friendSettings(friendSettingsView.rebuild((b) => b..inner = FriendSettingsInnerView.home())))),
+          newCurrency: () => createStateFriends(
+              FriendsSettingsView.friendSettings(friendSettingsView
+                  .rebuild((b) => b..inner = FriendSettingsInnerView.home())))),
       enableFriend: () => _handleEnableFriend(nodeName, friendPublicKey, nodesStates, rand),
       disableFriend: () => _handleDisableFriend(nodeName, friendPublicKey, nodesStates, rand),
       removeFriend: () => _handleRemoveFriend(nodeName, friendPublicKey, nodesStates, rand),

@@ -66,7 +66,7 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
     ));
   }
 
-  final indexServersList = children.isNotEmpty 
+  final indexServersList = children.isNotEmpty
       ? ListView(children: children, padding: EdgeInsets.all(8))
       : Center(child: Text('No index servers configured'));
 
@@ -160,7 +160,8 @@ Widget _renderIndexServerName(
     NodeState nodeState,
     KeysStore keysStore,
     Function(IndexServersSettingsAction) queueAction) {
-  final _formKey = keysStore.formKey('_renderIndexServerName::$nodeName::${indexServerFile.publicKey}');
+  final _formKey = keysStore.formKey(
+      '_renderIndexServerName::$nodeName::${indexServerFile.publicKey}');
 
   // Saves current indexServer name:
   String _indexServerName = '';
@@ -198,7 +199,8 @@ Widget _renderIndexServerName(
                   // TODO: Possibly add a validator?
                   keyboardType: TextInputType.text,
                   inputFormatters: [LengthLimitingTextInputFormatter(64)],
-                  onSaved: (indexServerName) => _indexServerName = indexServerName,
+                  onSaved: (indexServerName) =>
+                      _indexServerName = indexServerName,
                 )),
             SizedBox(height: 24.0),
             Align(

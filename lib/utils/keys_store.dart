@@ -7,7 +7,7 @@ class KeysStore {
   final Map<String, GlobalKey> _formKeys;
 
   //TODO: How can we do this: KeysStore(): _formKeys = Map<String, GlobalKey<FormState>>();
-  KeysStore(): _formKeys = Map<String, GlobalKey>();
+  KeysStore() : _formKeys = Map<String, GlobalKey>();
 
   GlobalKey<FormState> formKey(String keyString) {
     if (_formKeys[keyString] == null) {

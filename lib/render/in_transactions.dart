@@ -153,7 +153,6 @@ Widget _renderTransaction(
 
 Widget _renderCommittedTransaction(NodeName nodeName, InvoiceId invoiceId,
     OpenInvoice openInvoice, Function(InTransactionsAction) queueAction) {
-
   final body = ListView(children: <Widget>[
     ListTile(
         leading: FaIcon(FontAwesomeIcons.creditCard),
@@ -180,7 +179,6 @@ Widget _renderCommittedTransaction(NodeName nodeName, InvoiceId invoiceId,
                 InTransactionsAction.collectInvoice(nodeName, invoiceId)),
             label: Text('Collect'))),
   ]);
-
 
   return frame(
       title: Text('Incoming transaction'),
@@ -277,25 +275,23 @@ Widget _renderUncommittedTransaction(
           ]);
 
   return DefaultTabController(
-          length: 2,
-          child: Scaffold(
-              appBar: AppBar(
-                  title: Text('Incoming transaction'),
-                  leading: BackButton(
-                    onPressed: () => queueAction(InTransactionsAction.back()),
-                  ),
-                  bottom: TabBar(tabs: [
-                    Tab(
-                        icon: const FaIcon(FontAwesomeIcons.fileInvoiceDollar),
-                        text: 'Invoice'),
-                    Tab(
-                        icon: const FaIcon(FontAwesomeIcons.stamp),
-                        text: 'Commit'),
-                  ])),
-              body: TabBarView(children: [
-                invoiceBody,
-                commitBody,
-              ])));
+      length: 2,
+      child: Scaffold(
+          appBar: AppBar(
+              title: Text('Incoming transaction'),
+              leading: BackButton(
+                onPressed: () => queueAction(InTransactionsAction.back()),
+              ),
+              bottom: TabBar(tabs: [
+                Tab(
+                    icon: const FaIcon(FontAwesomeIcons.fileInvoiceDollar),
+                    text: 'Invoice'),
+                Tab(icon: const FaIcon(FontAwesomeIcons.stamp), text: 'Commit'),
+              ])),
+          body: TabBarView(children: [
+            invoiceBody,
+            commitBody,
+          ])));
 }
 
 Widget _renderCollected(
@@ -336,7 +332,6 @@ Widget _renderSelectCardApplyCommit(
     Commit commit,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(InTransactionsAction) queueAction) {
-
   final children = <Widget>[];
 
   for (final nodeName in nodesStates.keys.toList()..sort()) {
@@ -375,16 +370,15 @@ Widget _renderSelectCardApplyCommit(
 
   final body = Padding(
       padding: EdgeInsets.only(top: 14.0),
-      child: Column(
-          children: <Widget>[
-            Text(
-              'Please select a card',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-            ),
-            Expanded(
-                child: ListView(
-                    padding: const EdgeInsets.all(8), children: children))
-          ]));
+      child: Column(children: <Widget>[
+        Text(
+          'Please select a card',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+        ),
+        Expanded(
+            child:
+                ListView(padding: const EdgeInsets.all(8), children: children))
+      ]));
 
   return frame(
       title: Text('Apply commit'),

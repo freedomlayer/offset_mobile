@@ -156,7 +156,7 @@ Widget _renderTransaction(
   */
 
   // return _renderSuccess(receipt, U128(BigInt.from(13)), NodeName('NodeName'),
-      // PaymentId('PaymentId'), openPayment, (_) => {});
+  // PaymentId('PaymentId'), openPayment, (_) => {});
   /*
   final commit = Commit((b) => b
       ..responseHash = HashResult('HashResult')
@@ -172,10 +172,10 @@ Widget _renderTransaction(
   */
 
   // return _renderSending(U128(BigInt.from(13)), NodeName('NodeName'),
-      // PaymentId('PaymentId'), openPayment, (_) => {});
+  // PaymentId('PaymentId'), openPayment, (_) => {});
 
   // return _renderFoundRoute(U128(BigInt.from(13)), NodeName('NodeName'),
-      // PaymentId('PaymentId'), openPayment, (_) => {});
+  // PaymentId('PaymentId'), openPayment, (_) => {});
 
   // DEBUG:
   // return _renderSearchingRoute(
@@ -432,7 +432,8 @@ Widget _renderSuccess(
         child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 8),
             child: ListTile(
-                leading: FaIcon(FontAwesomeIcons.checkCircle, color: Colors.green),
+                leading:
+                    FaIcon(FontAwesomeIcons.checkCircle, color: Colors.green),
                 title: Text('Success')))),
     Divider(height: 0, color: Colors.black),
     Expanded(child: listView),
@@ -458,7 +459,8 @@ Widget _renderFailure(NodeName nodeName, PaymentId paymentId,
         leading: const FaIcon(FontAwesomeIcons.comment),
         title: Text('${openPayment.description}')),
     SizedBox(width: 20.0),
-    Align(child: RaisedButton.icon(
+    Align(
+        child: RaisedButton.icon(
             icon: const FaIcon(FontAwesomeIcons.trashAlt),
             onPressed: () => queueAction(
                 OutTransactionsAction.discardPayment(nodeName, paymentId)),
@@ -471,7 +473,8 @@ Widget _renderFailure(NodeName nodeName, PaymentId paymentId,
         child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 8),
             child: ListTile(
-                leading: FaIcon(FontAwesomeIcons.exclamationTriangle, color: Colors.red),
+                leading: FaIcon(FontAwesomeIcons.exclamationTriangle,
+                    color: Colors.red),
                 title: Text('Failure')))),
     Divider(height: 0, color: Colors.black),
     Expanded(child: listView),

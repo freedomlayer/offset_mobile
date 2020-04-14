@@ -168,7 +168,8 @@ AppState _handleNewRandIndex(
   }
 
   // Prepare known index servers list:
-  final knownIndexServersShuffled = List<NamedIndexServerAddress>.from(knownIndexServers);
+  final knownIndexServersShuffled =
+      List<NamedIndexServerAddress>.from(knownIndexServers);
   knownIndexServersShuffled.shuffle(rand);
 
   // Search for a index server in the known index servers list that the card doesn't have:
@@ -183,7 +184,7 @@ AppState _handleNewRandIndex(
     }
   }
 
-  // We don't have any new index server to add. 
+  // We don't have any new index server to add.
   // We leave the user at the select add index server method
   return createState(AppView.settings(SettingsView.cardSettings(
       CardSettingsView((b) => b

@@ -55,7 +55,7 @@ Widget renderFriendsSettings(
           nodeName,
           newFriendView,
           nodeState,
-          keysStore, 
+          keysStore,
           (NewFriendAction newFriendAction) =>
               queueAction(FriendsSettingsAction.newFriend(newFriendAction))),
       shareInfo: () => _renderShareInfo(nodeName, nodeState, queueAction));
@@ -132,12 +132,16 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
       actions: <Widget>[shareButton]);
 }
 
-Widget _renderNewFriend(NodeName nodeName, NewFriendView newFriendView,
-    NodeState nodeState, KeysStore keysStore, Function(NewFriendAction) queueAction) {
+Widget _renderNewFriend(
+    NodeName nodeName,
+    NewFriendView newFriendView,
+    NodeState nodeState,
+    KeysStore keysStore,
+    Function(NewFriendAction) queueAction) {
   return newFriendView.match(
       select: () => _renderSelectNewFriend(nodeName, nodeState, queueAction),
-      name: (friendFile) =>
-          _renderNewFriendName(nodeName, friendFile, nodeState, keysStore, queueAction));
+      name: (friendFile) => _renderNewFriendName(
+          nodeName, friendFile, nodeState, keysStore, queueAction));
 }
 
 Widget _renderSelectNewFriend(NodeName nodeName, NodeState nodeState,
@@ -193,9 +197,14 @@ Widget _renderSelectNewFriend(NodeName nodeName, NodeState nodeState,
       backAction: () => queueAction(NewFriendAction.back()));
 }
 
-Widget _renderNewFriendName(NodeName nodeName, FriendFile friendFile,
-    NodeState nodeState, KeysStore keysStore, Function(NewFriendAction) queueAction) {
-  final _formKey = keysStore.formKey('_renderNewFriendName::$nodeName::${friendFile.publicKey}');
+Widget _renderNewFriendName(
+    NodeName nodeName,
+    FriendFile friendFile,
+    NodeState nodeState,
+    KeysStore keysStore,
+    Function(NewFriendAction) queueAction) {
+  final _formKey = keysStore
+      .formKey('_renderNewFriendName::$nodeName::${friendFile.publicKey}');
 
   // Saves current relay name:
   String _friendName = '';

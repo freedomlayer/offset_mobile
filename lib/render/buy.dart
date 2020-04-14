@@ -77,10 +77,11 @@ Widget _renderInvoiceInfo(
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(BuyAction) queueAction) {
   final body = ListView(padding: EdgeInsets.all(8), children: <Widget>[
-    Center(child: ListTile(
-        leading: FaIcon(FontAwesomeIcons.coins),
-        title: Text(
-            '${amountToString(invoiceFile.destPayment)} ${invoiceFile.currency.inner}'))),
+    Center(
+        child: ListTile(
+            leading: FaIcon(FontAwesomeIcons.coins),
+            title: Text(
+                '${amountToString(invoiceFile.destPayment)} ${invoiceFile.currency.inner}'))),
     ListTile(
         leading: const FaIcon(FontAwesomeIcons.comment),
         title: Text('${invoiceFile.description}')),

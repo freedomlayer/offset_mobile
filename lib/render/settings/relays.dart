@@ -26,8 +26,8 @@ Widget renderRelaysSettings(
   return relaysSettingsView.match(
       home: () => _renderHome(nodeName, nodeState, queueAction),
       newRelaySelect: () => _renderNewRelay(nodeName, nodeState, queueAction),
-      newRelayName: (relayAddress) =>
-          _renderRelayName(nodeName, relayAddress, nodeState, keysStore, queueAction));
+      newRelayName: (relayAddress) => _renderRelayName(
+          nodeName, relayAddress, nodeState, keysStore, queueAction));
 }
 
 Widget _renderHome(NodeName nodeName, NodeState nodeState,
@@ -149,9 +149,14 @@ Widget _renderNewRelay(NodeName nodeName, NodeState nodeState,
       backAction: () => queueAction(RelaysSettingsAction.back()));
 }
 
-Widget _renderRelayName(NodeName nodeName, RelayAddress relayAddress,
-    NodeState nodeState, KeysStore keysStore, Function(RelaysSettingsAction) queueAction) {
-  final _formKey = keysStore.formKey('_renderRelayName::$nodeName::${relayAddress.publicKey}');
+Widget _renderRelayName(
+    NodeName nodeName,
+    RelayAddress relayAddress,
+    NodeState nodeState,
+    KeysStore keysStore,
+    Function(RelaysSettingsAction) queueAction) {
+  final _formKey = keysStore
+      .formKey('_renderRelayName::$nodeName::${relayAddress.publicKey}');
 
   // Saves current relay name:
   String _relayName = '';

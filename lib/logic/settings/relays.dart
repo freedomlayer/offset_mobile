@@ -174,7 +174,7 @@ AppState _handleNewRandRelay(
     }
   }
 
-  // We don't have any new relay to add. 
+  // We don't have any new relay to add.
   // We leave the user at the select add relay method
   return createState(AppView.settings(SettingsView.cardSettings(
       CardSettingsView((b) => b

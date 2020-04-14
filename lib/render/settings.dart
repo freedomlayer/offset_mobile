@@ -78,9 +78,7 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
 
   final listView = children.isNotEmpty
       ? ListView(children: children, padding: EdgeInsets.all(8))
-      : Center(
-          child: Text('No cards configured'));
-              
+      : Center(child: Text('No cards configured'));
 
   final newCardButton = FloatingActionButton.extended(
       onPressed: () => queueAction(SettingsAction.selectNewCard()),
@@ -113,8 +111,8 @@ Widget _renderNewCard(
       select: () => _renderNewCardSelect(nodesStates, queueAction),
       newLocal: () => _renderNewCardLocal(nodesStates, keysStore, queueAction),
       newRemote: () => _renderNewCardRemote(nodesStates, queueAction),
-      newRemoteName: (remoteCardFile) =>
-          _renderNewRemoteName(remoteCardFile, nodesStates, keysStore, queueAction));
+      newRemoteName: (remoteCardFile) => _renderNewRemoteName(
+          remoteCardFile, nodesStates, keysStore, queueAction));
 }
 
 Widget _renderNewCardSelect(BuiltMap<NodeName, NodeState> nodesStates,
@@ -259,7 +257,8 @@ Widget _renderNewRemoteName(
     BuiltMap<NodeName, NodeState> nodesStates,
     KeysStore keysStore,
     Function(NewCardAction) queueAction) {
-  final _formKey = keysStore.formKey('_renderNewRemoteName::${remoteCardFile.nodePublicKey}');
+  final _formKey = keysStore
+      .formKey('_renderNewRemoteName::${remoteCardFile.nodePublicKey}');
 
   // Saves current node name:
   String _nodeName = '';
@@ -347,16 +346,15 @@ Widget _renderSelectCardAddRelay(
 
   final body = Padding(
       padding: EdgeInsets.only(top: 14.0),
-      child: Column(
-          children: <Widget>[
-            Text(
-              'Please select a card',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-            ),
-            Expanded(
-                child: ListView(
-                    padding: const EdgeInsets.all(8), children: children))
-          ]));
+      child: Column(children: <Widget>[
+        Text(
+          'Please select a card',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+        ),
+        Expanded(
+            child:
+                ListView(padding: const EdgeInsets.all(8), children: children))
+      ]));
 
   return frame(
       title: Text('Import relay'),
@@ -368,7 +366,6 @@ Widget _renderSelectCardAddIndex(
     IndexServerFile indexServerFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
-
   final children = <Widget>[];
 
   for (final nodeName in nodesStates.keys.toList()..sort()) {
@@ -380,8 +377,8 @@ Widget _renderSelectCardAddIndex(
             leading: Icon(Icons.credit_card),
             key: Key(nodeName.inner),
             title: Text('${nodeName.inner}'),
-            onTap: () => queueAction(
-                SettingsAction.selectCardSharedIndex(nodeName, indexServerFile)))
+            onTap: () => queueAction(SettingsAction.selectCardSharedIndex(
+                nodeName, indexServerFile)))
         : ListTile(
             leading: Icon(Icons.credit_card),
             key: Key(nodeName.inner),
@@ -393,16 +390,15 @@ Widget _renderSelectCardAddIndex(
 
   final body = Padding(
       padding: EdgeInsets.only(top: 14.0),
-      child: Column(
-          children: <Widget>[
-            Text(
-              'Please select a card',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-            ),
-            Expanded(
-                child: ListView(
-                    padding: const EdgeInsets.all(8), children: children))
-          ]));
+      child: Column(children: <Widget>[
+        Text(
+          'Please select a card',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+        ),
+        Expanded(
+            child:
+                ListView(padding: const EdgeInsets.all(8), children: children))
+      ]));
 
   return frame(
       title: Text('Import index server'),
@@ -414,7 +410,6 @@ Widget _renderSelectCardAddFriend(
     FriendFile friendFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
-
   final children = <Widget>[];
 
   for (final nodeName in nodesStates.keys.toList()..sort()) {
@@ -439,16 +434,15 @@ Widget _renderSelectCardAddFriend(
 
   final body = Padding(
       padding: EdgeInsets.only(top: 14.0),
-      child: Column(
-          children: <Widget>[
-            Text(
-              'Please select a card',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-            ),
-            Expanded(
-                child: ListView(
-                    padding: const EdgeInsets.all(8), children: children))
-          ]));
+      child: Column(children: <Widget>[
+        Text(
+          'Please select a card',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+        ),
+        Expanded(
+            child:
+                ListView(padding: const EdgeInsets.all(8), children: children))
+      ]));
 
   return frame(
       title: Text('Import friend'),

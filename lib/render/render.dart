@@ -32,7 +32,8 @@ Widget renderNotReady() {
 }
 
 /// Rendering when we are connected to the process
-Widget render(AppState appState, KeysStore keysStore, Function(AppAction) queueAction) {
+Widget render(
+    AppState appState, KeysStore keysStore, Function(AppAction) queueAction) {
   final home = appState.viewState.match(
       view: (appView) =>
           renderAppView(appView, appState.nodesStates, keysStore, queueAction),
@@ -43,8 +44,7 @@ Widget render(AppState appState, KeysStore keysStore, Function(AppAction) queueA
 }
 
 Widget renderAppView(AppView appView, BuiltMap<NodeName, NodeState> nodesStates,
-    KeysStore keysStore,
-    Function(AppAction) queueAction) {
+    KeysStore keysStore, Function(AppAction) queueAction) {
   return appView.match(
     home: () => renderHome(
         nodesStates, (homeAction) => queueAction(AppAction.home(homeAction))),
@@ -64,14 +64,17 @@ Widget renderAppView(AppView appView, BuiltMap<NodeName, NodeState> nodesStates,
             queueAction(AppAction.outTransactions(outTransactionsAction))),
     balances: (balancesView) => renderBalances(balancesView, nodesStates,
         (balancesAction) => queueAction(AppAction.balances(balancesAction))),
-    settings: (settingsView) => renderSettings(settingsView, nodesStates, keysStore,
+    settings: (settingsView) => renderSettings(
+        settingsView,
+        nodesStates,
+        keysStore,
         (settingsAction) => queueAction(AppAction.settings(settingsAction))),
   );
 }
 
 /// A transition view: We are waiting for some operations to complete
-Widget renderTransition(
-    AppView oldView, BuiltMap<NodeName, NodeState> nodesStates, KeysStore keysStore) {
+Widget renderTransition(AppView oldView,
+    BuiltMap<NodeName, NodeState> nodesStates, KeysStore keysStore) {
   final noQueueAction = (AppAction appAction) {
     logger.w('Received action $appAction during transition.');
   };
