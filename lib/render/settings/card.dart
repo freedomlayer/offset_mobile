@@ -41,30 +41,23 @@ enum CardPopup { remove }
 
 Widget _renderCardSettingsHome(NodeName nodeName, NodeState nodeState,
     Function(CardSettingsAction) queueAction) {
+  // Node status (Is node connected?)
+  final nodeOpen =
+      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
+
   final children = <Widget>[];
+
+  final connColor = nodeOpen != null ? Colors.green : Colors.red;
 
   // Node type:
   final cardType = nodeState.info.isLocal
       ? ListTile(
-          leading: FaIcon(FontAwesomeIcons.mobileAlt),
+          leading: FaIcon(FontAwesomeIcons.mobileAlt, color: connColor),
           title: Text('Local card'))
       : ListTile(
-          leading: FaIcon(FontAwesomeIcons.networkWired),
+          leading: FaIcon(FontAwesomeIcons.networkWired, color: connColor),
           title: Text('Remote card'));
   children.add(cardType);
-
-  // Node status (Is node connected?)
-  final nodeOpen =
-      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
-  final nodeStatus = nodeOpen != null
-      ? ListTile(
-          leading: FaIcon(FontAwesomeIcons.satelliteDish, color: Colors.green),
-          title: Text('Connected'))
-      : ListTile(
-          leading: FaIcon(FontAwesomeIcons.satelliteDish, color: Colors.red),
-          title: Text('Disconnected'));
-
-  children.add(nodeStatus);
 
   children.add(Divider(color: Colors.grey));
   // children.add(ListTile(title: Divider(color: Colors.grey)));
