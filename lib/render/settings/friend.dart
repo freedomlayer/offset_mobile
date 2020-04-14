@@ -94,7 +94,7 @@ Widget _renderChannelInfoInconsistent(
       remoteData = Text('${balanceToString(remoteBalance)}');
       rows.add(DataRow(cells: [
         DataCell(Text('${currency.inner}')),
-        DataCell(Text('Empty')),
+        DataCell(Text('Empty'), placeholder: true),
         DataCell(remoteData)
       ]));
     }
