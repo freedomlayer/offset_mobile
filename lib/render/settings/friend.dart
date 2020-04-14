@@ -122,7 +122,7 @@ Widget _renderChannelInfoInconsistent(
               ),
               // SizedBox(height: 32),
               FlatButton(
-                onPressed: () { 
+                onPressed: () {
                   queueAction(FriendSettingsAction.resolve());
                   Navigator.pop(context, true);
                 },
@@ -279,16 +279,45 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
           icon: Icon(Icons.add))
       : null;
 
-  final popupMenuButton = PopupMenuButton<FriendPopup>(
-      onSelected: (FriendPopup _result) =>
-          queueAction(FriendSettingsAction.removeFriend()),
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<FriendPopup>>[
-            const PopupMenuItem<FriendPopup>(
-              value: FriendPopup.unfriend,
-              child: ListTile(
-                  leading: Icon(Icons.delete), title: Text('Unfriend')),
-            )
-          ]);
+  final unfriendDialog = (BuildContext context) async {
+    return await showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: Text('Unfriend?'),
+            content: Text('Unfriend ${friendReport.name}?'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text("No", style: TextStyle(color: Colors.red)),
+              ),
+              // SizedBox(height: 32),
+              FlatButton(
+                onPressed: () {
+                  queueAction(FriendSettingsAction.removeFriend());
+                  Navigator.pop(context, true);
+                },
+                child: Text("Yes", style: TextStyle(color: Colors.green)),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  };
+
+  final popupMenuButton = StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) =>
+          PopupMenuButton<FriendPopup>(
+              // TODO: Do we connect sync and async correctly here?
+              // unfriendDialog is async function!
+              onSelected: (FriendPopup _result) => unfriendDialog(context),
+              itemBuilder: (BuildContext context) =>
+                  <PopupMenuEntry<FriendPopup>>[
+                    const PopupMenuItem<FriendPopup>(
+                      value: FriendPopup.unfriend,
+                      child: ListTile(
+                          leading: Icon(Icons.delete), title: Text('Unfriend')),
+                    )
+                  ]));
 
   return frame(
       title: Text('Friend settings'),
