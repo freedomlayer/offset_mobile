@@ -105,25 +105,49 @@ Widget _renderChannelInfoInconsistent(
   final scrollDataTable =
       SingleChildScrollView(scrollDirection: Axis.vertical, child: dataTable);
 
-  return Column(children: [
-    Expanded(child: scrollDataTable),
-    SizedBox(height: 20.0),
-    Container(
-        color: Colors.blue.shade50,
-        child: Column(children: [
-          Divider(height: 0, color: Colors.grey),
-          SizedBox(height: 10.0),
-          Align(
-              child: RaisedButton.icon(
-            icon: FaIcon(FontAwesomeIcons.handshake),
-            label: const Text('Accept'),
-            onPressed: optRemoteProposal != null
-                ? () => queueAction(FriendSettingsAction.resolve())
-                : null,
-          )),
-          SizedBox(height: 10.0),
-        ])),
-  ]);
+  final acceptDialog = (BuildContext context) async {
+    return await showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: Text('Accept?'),
+            content: Text('Accept remote proposal?'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text("No", style: TextStyle(color: Colors.red)),
+              ),
+              // SizedBox(height: 32),
+              FlatButton(
+                onPressed: () => queueAction(FriendSettingsAction.resolve()),
+                child: Text("Yes", style: TextStyle(color: Colors.green)),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  };
+
+  return StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) =>
+          Column(children: [
+            Expanded(child: scrollDataTable),
+            SizedBox(height: 20.0),
+            Container(
+                color: Colors.blue.shade50,
+                child: Column(children: [
+                  Divider(height: 0, color: Colors.grey),
+                  SizedBox(height: 10.0),
+                  Align(
+                      child: RaisedButton.icon(
+                    icon: FaIcon(FontAwesomeIcons.handshake),
+                    label: const Text('Accept'),
+                    onPressed: optRemoteProposal != null
+                        ? () async => await acceptDialog(context)
+                        : null,
+                  )),
+                  SizedBox(height: 10.0),
+                ])),
+          ]));
 }
 
 Widget _renderChannelInfoConsistent(
