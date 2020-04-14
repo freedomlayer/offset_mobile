@@ -70,19 +70,22 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
     ..sort()) {
     final friendReport = nodeOpen.compactReport.friends[publicKey];
 
-    final connColor = friendReport.liveness.isOnline
-        ? Colors.green
-        : friendReport.status.isEnabled ? Colors.orange : Colors.red;
+    final connIcon = friendReport.liveness.isOnline
+        ? FaIcon(FontAwesomeIcons.satelliteDish,
+            color: Colors.green, size: 20.0)
+        : FaIcon(FontAwesomeIcons.satelliteDish, color: Colors.red, size: 20.0);
 
-    final connIcon = friendReport.channelStatus.isConsistent
-        ? FontAwesomeIcons.handshake
-        : FontAwesomeIcons.handshakeSlash;
+    final channelIcon = friendReport.channelStatus.isConsistent
+        ? FaIcon(FontAwesomeIcons.handshake, color: Colors.green, size: 20.0)
+        : FaIcon(FontAwesomeIcons.handshakeSlash,
+            color: Colors.red, size: 20.0);
 
     children.add(ListTile(
       key: Key(publicKey.inner),
       title: Text(friendReport.name),
       leading: Icon(Icons.person),
-      trailing: FaIcon(connIcon, color: connColor),
+      trailing: Row(
+          mainAxisSize: MainAxisSize.min, children: [channelIcon, SizedBox(width: 10.0), connIcon]),
       onTap: () => queueAction(FriendsSettingsAction.selectFriend(publicKey)),
     ));
   }
