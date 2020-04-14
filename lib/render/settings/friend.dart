@@ -50,7 +50,6 @@ Widget _renderChannelInfoInconsistent(
 
   final balanceRows = <BalanceRow>[];
 
-  final List<DataRow> rows = [];
   for (final entry in friendReport.currencyConfigs.entries) {
     final currency = entry.key;
     // final configReport = entry.value;
