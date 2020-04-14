@@ -26,6 +26,14 @@ Widget renderFriendSettings(
           NewCurrency(nodeName, friendPublicKey, friendReport, queueAction));
 }
 
+class BalanceRow {
+  final Currency currency;
+  final String local;
+  final String remote;
+
+  BalanceRow(this.currency, this.local, this.remote);
+}
+
 Widget _renderChannelInfoInconsistent(
     FriendReport friendReport, Function(FriendSettingsAction) queueAction) {
   final channelInconsistentReport = friendReport.channelStatus.match(
@@ -40,42 +48,34 @@ Widget _renderChannelInfoInconsistent(
     optRemoteProposalMap = Map<Currency, I128>.from(optRemoteProposal);
   }
 
+  final balanceRows = <BalanceRow>[];
+
   final List<DataRow> rows = [];
   for (final entry in friendReport.currencyConfigs.entries) {
     final currency = entry.key;
     // final configReport = entry.value;
 
-    Widget localData;
-
     final localBalance = localResetTerms[currency];
-    if (localBalance != null) {
-      localData = Text('${balanceToString(localBalance)}');
-      // 'Limit: ${amountToString(configReport.remoteMaxDebt)}');
-    } else {
-      localData = Text('(Pending)');
-    }
+    final localData =
+        localBalance != null ? '${balanceToString(localBalance)}' : '(Pending)';
 
-    DataCell remoteData;
+    String remoteData;
     I128 remoteBalance;
     if (optRemoteProposalMap == null) {
-      remoteData = DataCell(Text('?'));
+      remoteData = '?';
     } else {
       final remoteProposalMap = optRemoteProposalMap;
       assert(remoteProposalMap != null);
 
       remoteBalance = remoteProposalMap.remove(currency);
       if (remoteBalance == null) {
-        remoteData = DataCell(Text('Empty'), placeholder: true);
+        remoteData = '(Empty)';
       } else {
-        remoteData = DataCell(Text('${remoteBalance.inner}'));
+        remoteData = '${remoteBalance.inner}';
       }
     }
 
-    rows.add(DataRow(cells: [
-      DataCell(Text('${currency.inner}')),
-      DataCell(localData),
-      remoteData
-    ]));
+    balanceRows.add(BalanceRow(currency, localData, remoteData));
   }
 
   // Possibly add remaining entries from the remote proposal:
@@ -85,22 +85,24 @@ Widget _renderChannelInfoInconsistent(
       final currency = entry.key;
       final remoteBalance = entry.value;
 
-      Widget remoteData;
-
-      remoteData = Text('${balanceToString(remoteBalance)}');
-      rows.add(DataRow(cells: [
-        DataCell(Text('${currency.inner}')),
-        DataCell(Text('Empty'), placeholder: true),
-        DataCell(remoteData)
-      ]));
+      final String remoteData = '${balanceToString(remoteBalance)}';
+      balanceRows.add(BalanceRow(currency, '(Empty)', remoteData));
     }
   }
 
-  final dataTable = DataTable(columns: [
-    DataColumn(label: Text('Currency')),
-    DataColumn(label: Text('Local')),
-    DataColumn(label: Text('Remote'))
-  ], rows: rows);
+  balanceRows.sort((a,b) => a.currency.compareTo(b.currency));
+
+  final dataTable = DataTable(
+      columns: [
+        DataColumn(label: Text('Currency')),
+        DataColumn(label: Text('Local')),
+        DataColumn(label: Text('Remote'))
+      ],
+      rows: balanceRows.map((balanceRow) => DataRow(cells: [
+            DataCell(Text('${balanceRow.currency.inner}')),
+            DataCell(Text(balanceRow.local)),
+            DataCell(Text(balanceRow.remote))
+          ])).toList());
 
   final scrollDataTable =
       SingleChildScrollView(scrollDirection: Axis.vertical, child: dataTable);
