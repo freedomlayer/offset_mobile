@@ -6,6 +6,7 @@ import '../../protocol/protocol.dart';
 import '../../protocol/file.dart';
 import '../../state/state.dart';
 import '../../actions/actions.dart';
+import '../../utils/keys_store.dart';
 
 import '../utils/file_picker.dart';
 import '../utils/qr_scan.dart';
@@ -20,12 +21,13 @@ Widget renderRelaysSettings(
     NodeName nodeName,
     RelaysSettingsView relaysSettingsView,
     NodeState nodeState,
+    KeysStore keysStore,
     Function(RelaysSettingsAction) queueAction) {
   return relaysSettingsView.match(
       home: () => _renderHome(nodeName, nodeState, queueAction),
       newRelaySelect: () => _renderNewRelay(nodeName, nodeState, queueAction),
       newRelayName: (relayAddress) =>
-          _renderRelayName(nodeName, relayAddress, nodeState, queueAction));
+          _renderRelayName(nodeName, relayAddress, nodeState, keysStore, queueAction));
 }
 
 Widget _renderHome(NodeName nodeName, NodeState nodeState,
@@ -148,8 +150,8 @@ Widget _renderNewRelay(NodeName nodeName, NodeState nodeState,
 }
 
 Widget _renderRelayName(NodeName nodeName, RelayAddress relayAddress,
-    NodeState nodeState, Function(RelaysSettingsAction) queueAction) {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    NodeState nodeState, KeysStore keysStore, Function(RelaysSettingsAction) queueAction) {
+  final _formKey = keysStore.formKey('_renderRelayName::$nodeName::${relayAddress.publicKey}');
 
   // Saves current relay name:
   String _relayName = '';

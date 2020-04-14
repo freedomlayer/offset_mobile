@@ -11,6 +11,7 @@ import '../protocol/protocol.dart';
 import '../protocol/file.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
+import '../utils/keys_store.dart';
 
 import 'settings/card.dart';
 
@@ -23,6 +24,7 @@ final logger = createLogger('render::settings');
 Widget renderSettings(
     SettingsView settingsView,
     BuiltMap<NodeName, NodeState> nodesStates,
+    KeysStore keysStore,
     Function(SettingsAction) queueAction) {
   return settingsView.match(
       home: () => _renderHome(nodesStates, queueAction),
@@ -32,6 +34,7 @@ Widget renderSettings(
         return renderCardSettings(
             cardSettingsView,
             nodeState,
+            keysStore,
             (CardSettingsAction cardSettingsAction) => queueAction(
                 SettingsAction.cardSettings(
                     cardSettingsView.nodeName, cardSettingsAction)));
@@ -39,6 +42,7 @@ Widget renderSettings(
       newCard: (newCardView) => _renderNewCard(
           newCardView,
           nodesStates,
+          keysStore,
           (NewCardAction newCardAction) =>
               queueAction(SettingsAction.newCard(newCardAction))),
       selectCardAddRelay: (relayAddress) =>
@@ -103,13 +107,14 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
 Widget _renderNewCard(
     NewCardView newCardView,
     BuiltMap<NodeName, NodeState> nodesStates,
+    KeysStore keysStore,
     Function(NewCardAction) queueAction) {
   return newCardView.match(
       select: () => _renderNewCardSelect(nodesStates, queueAction),
-      newLocal: () => _renderNewCardLocal(nodesStates, queueAction),
+      newLocal: () => _renderNewCardLocal(nodesStates, keysStore, queueAction),
       newRemote: () => _renderNewCardRemote(nodesStates, queueAction),
       newRemoteName: (remoteCardFile) =>
-          _renderNewRemoteName(remoteCardFile, nodesStates, queueAction));
+          _renderNewRemoteName(remoteCardFile, nodesStates, keysStore, queueAction));
 }
 
 Widget _renderNewCardSelect(BuiltMap<NodeName, NodeState> nodesStates,
@@ -141,8 +146,8 @@ Widget _renderNewCardSelect(BuiltMap<NodeName, NodeState> nodesStates,
 }
 
 Widget _renderNewCardLocal(BuiltMap<NodeName, NodeState> nodesStates,
-    Function(NewCardAction) queueAction) {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    KeysStore keysStore, Function(NewCardAction) queueAction) {
+  final _formKey = keysStore.formKey('_renderNewCardLocal');
 
   // Saves current node name:
   String _nodeName = '';
@@ -252,8 +257,9 @@ Widget _renderNewCardRemote(BuiltMap<NodeName, NodeState> nodesStates,
 Widget _renderNewRemoteName(
     RemoteCardFile remoteCardFile,
     BuiltMap<NodeName, NodeState> nodesStates,
+    KeysStore keysStore,
     Function(NewCardAction) queueAction) {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _formKey = keysStore.formKey('_renderNewRemoteName::${remoteCardFile.nodePublicKey}');
 
   // Saves current node name:
   String _nodeName = '';

@@ -5,20 +5,20 @@ import 'package:built_collection/built_collection.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../protocol/protocol.dart';
-// import '../protocol/file.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
+import '../utils/keys_store.dart';
 
 import 'utils/amount.dart';
 
 import 'frame.dart';
 
 Widget renderSell(SellView sellView, BuiltMap<NodeName, NodeState> nodesStates,
-    Function(SellAction) queueAction) {
+    KeysStore keysStore, Function(SellAction) queueAction) {
   return sellView.match(
       selectCard: () => _renderSelectCard(nodesStates, queueAction),
       invoiceDetails: (nodeName) =>
-          _renderInvoiceDetails(nodeName, nodesStates, queueAction));
+          _renderInvoiceDetails(nodeName, nodesStates, keysStore, queueAction));
 }
 
 Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
@@ -107,13 +107,14 @@ List<Currency> _loadCurrencies(NodeState nodeState) {
 Widget _renderInvoiceDetails(
     NodeName nodeName,
     BuiltMap<NodeName, NodeState> nodesStates,
+    KeysStore keysStore,
     Function(SellAction) queueAction) {
   final nodeState = nodesStates[nodeName];
   assert(nodeState != null);
   final currencies = _loadCurrencies(nodeState);
   assert(currencies.isNotEmpty);
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _formKey = keysStore.formKey('_renderInvoiceDetails::$nodeName');
 
   Currency _currency;
   U128 _amount;

@@ -7,6 +7,8 @@ import '../../protocol/protocol.dart';
 import '../../protocol/file.dart';
 import '../../state/state.dart';
 import '../../actions/actions.dart';
+import '../../utils/keys_store.dart';
+
 import '../utils/qr_show.dart';
 import '../utils/share_file.dart';
 
@@ -25,6 +27,7 @@ Widget renderFriendsSettings(
     NodeName nodeName,
     FriendsSettingsView friendsSettingsView,
     NodeState nodeState,
+    KeysStore keysStore,
     Function(FriendsSettingsAction) queueAction) {
   return friendsSettingsView.match(
       home: () => _renderHome(nodeName, nodeState, queueAction),
@@ -43,6 +46,7 @@ Widget renderFriendsSettings(
             nodeName,
             friendSettingsView,
             friendReport,
+            keysStore,
             (FriendSettingsAction friendSettingsAction) => queueAction(
                 FriendsSettingsAction.friendSettings(
                     friendSettingsView.friendPublicKey, friendSettingsAction)));
@@ -51,6 +55,7 @@ Widget renderFriendsSettings(
           nodeName,
           newFriendView,
           nodeState,
+          keysStore, 
           (NewFriendAction newFriendAction) =>
               queueAction(FriendsSettingsAction.newFriend(newFriendAction))),
       shareInfo: () => _renderShareInfo(nodeName, nodeState, queueAction));
@@ -128,11 +133,11 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
 }
 
 Widget _renderNewFriend(NodeName nodeName, NewFriendView newFriendView,
-    NodeState nodeState, Function(NewFriendAction) queueAction) {
+    NodeState nodeState, KeysStore keysStore, Function(NewFriendAction) queueAction) {
   return newFriendView.match(
       select: () => _renderSelectNewFriend(nodeName, nodeState, queueAction),
       name: (friendFile) =>
-          _renderNewFriendName(nodeName, friendFile, nodeState, queueAction));
+          _renderNewFriendName(nodeName, friendFile, nodeState, keysStore, queueAction));
 }
 
 Widget _renderSelectNewFriend(NodeName nodeName, NodeState nodeState,
@@ -189,8 +194,8 @@ Widget _renderSelectNewFriend(NodeName nodeName, NodeState nodeState,
 }
 
 Widget _renderNewFriendName(NodeName nodeName, FriendFile friendFile,
-    NodeState nodeState, Function(NewFriendAction) queueAction) {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    NodeState nodeState, KeysStore keysStore, Function(NewFriendAction) queueAction) {
+  final _formKey = keysStore.formKey('_renderNewFriendName::$nodeName::${friendFile.publicKey}');
 
   // Saves current relay name:
   String _friendName = '';

@@ -4,9 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../protocol/protocol.dart';
-// import '../../protocol/file.dart';
 import '../../state/state.dart';
 import '../../actions/actions.dart';
+import '../../utils/keys_store.dart';
 
 import '../utils/amount.dart';
 
@@ -16,15 +16,16 @@ Widget renderFriendSettings(
     NodeName nodeName,
     FriendSettingsView friendSettingsView,
     FriendReport friendReport,
+    KeysStore keysStore,
     Function(FriendSettingsAction) queueAction) {
   final friendPublicKey = friendSettingsView.friendPublicKey;
   return friendSettingsView.inner.match(
       home: () => _renderFriendHome(
           nodeName, friendPublicKey, friendReport, queueAction),
-      currencySettings: (currency) => _renderCurrencySettings(
-          nodeName, friendPublicKey, currency, friendReport, queueAction),
+      currencySettings: (currency) => _renderCurrencySettings(nodeName,
+          friendPublicKey, currency, friendReport, keysStore, queueAction),
       newCurrency: () => _renderNewCurrency(
-          nodeName, friendPublicKey, friendReport, queueAction));
+          nodeName, friendPublicKey, friendReport, keysStore, queueAction));
 }
 
 Widget _renderChannelInfoInconsistent(
@@ -51,7 +52,7 @@ Widget _renderChannelInfoInconsistent(
     final localBalance = localResetTerms[currency];
     if (localBalance != null) {
       localData = Text('${balanceToString(localBalance)}');
-          // 'Limit: ${amountToString(configReport.remoteMaxDebt)}');
+      // 'Limit: ${amountToString(configReport.remoteMaxDebt)}');
     } else {
       localData = Text('Balance: (Pending)\n' +
           'Limit: ${amountToString(configReport.remoteMaxDebt)}');
@@ -343,8 +344,10 @@ Widget _renderCurrencySettings(
     PublicKey friendPublicKey,
     Currency currency,
     FriendReport friendReport,
+    KeysStore keysStore,
     Function(FriendSettingsAction) queueAction) {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _formKey = keysStore.formKey(
+      '_renderCurrencySettings::$nodeName::$friendPublicKey::$currency');
 
   // TODO: Possibly take more specific arguments for this function,
   // so that the following logic will be done on the outside?
@@ -537,9 +540,14 @@ String _creditLimitValidator(String creditLimitString) {
   return null;
 }
 
-Widget _renderNewCurrency(NodeName nodeName, PublicKey friendPublicKey,
-    FriendReport friendReport, Function(FriendSettingsAction) queueAction) {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+Widget _renderNewCurrency(
+    NodeName nodeName,
+    PublicKey friendPublicKey,
+    FriendReport friendReport,
+    KeysStore keysStore,
+    Function(FriendSettingsAction) queueAction) {
+  final _formKey =
+      keysStore.formKey('_renderNewCurrency::$nodeName::$friendPublicKey');
 
   Currency _currency;
   U128 _creditLimit;

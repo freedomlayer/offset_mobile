@@ -6,6 +6,7 @@ import '../../protocol/protocol.dart';
 import '../../protocol/file.dart';
 import '../../state/state.dart';
 import '../../actions/actions.dart';
+import '../../utils/keys_store.dart';
 
 import '../utils/file_picker.dart';
 import '../utils/qr_scan.dart';
@@ -20,13 +21,14 @@ Widget renderIndexServersSettings(
     NodeName nodeName,
     IndexServersSettingsView indexServersSettingsView,
     NodeState nodeState,
+    KeysStore keysStore,
     Function(IndexServersSettingsAction) queueAction) {
   return indexServersSettingsView.match(
       home: () => _renderHome(nodeName, nodeState, queueAction),
       newIndexSelect: () =>
           _renderNewIndexServer(nodeName, nodeState, queueAction),
       newIndexName: (indexServerAddress) => _renderIndexServerName(
-          nodeName, indexServerAddress, nodeState, queueAction));
+          nodeName, indexServerAddress, nodeState, keysStore, queueAction));
 }
 
 Widget _renderHome(NodeName nodeName, NodeState nodeState,
@@ -156,8 +158,9 @@ Widget _renderIndexServerName(
     NodeName nodeName,
     IndexServerFile indexServerFile,
     NodeState nodeState,
+    KeysStore keysStore,
     Function(IndexServersSettingsAction) queueAction) {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _formKey = keysStore.formKey('_renderIndexServerName::$nodeName::${indexServerFile.publicKey}');
 
   // Saves current indexServer name:
   String _indexServerName = '';
