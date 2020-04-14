@@ -142,81 +142,76 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
       }
     };
 
-    final body =
-        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-      final form = Form(
-          key: _formKey,
-          autovalidate: true,
-          child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            children: <Widget>[
-              ListTile(
-                  leading: const FaIcon(FontAwesomeIcons.creditCard),
-                  title: Text('${this.widget.nodeName.inner}')),
-              ListTile(
-                  leading: const FaIcon(FontAwesomeIcons.yenSign),
-                  title: DropdownButton<Currency>(
-                      hint: Text('Select currency'),
-                      items: currencies
-                          .map((currency) => DropdownMenuItem<Currency>(
-                              key: Key(currency.inner),
-                              child: Text('${currency.inner}'),
-                              value: currency))
-                          .toList(),
-                      value: _currency,
-                      onChanged: (newCurrency) =>
-                          setState(() => _currency = newCurrency),
-                      isExpanded: true)),
-              ListTile(
-                  leading: const FaIcon(FontAwesomeIcons.coins),
-                  title: TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: 'Amount of currency units',
-                      labelText: 'Amount',
-                    ),
-                    validator: _amountValidator,
-                    keyboardType: TextInputType.number,
-                    onSaved: (amountString) =>
-                        _amount = stringToAmount(amountString),
-                  )),
-              ListTile(
-                  leading: const FaIcon(FontAwesomeIcons.comment),
-                  title: TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: 'What is this invoice for?',
-                      labelText: 'Description',
-                    ),
-                    // TODO: Possibly add a validator?
-                    keyboardType: TextInputType.text,
-                    inputFormatters: [LengthLimitingTextInputFormatter(64)],
-                    onSaved: (description) => _description = description,
-                  )),
-              SizedBox(height: 24.0),
-              Center(
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                    RaisedButton.icon(
-                      icon: Icon(Icons.done, color: Colors.green),
-                      label: const Text('Ok'),
-                      onPressed: _submitForm,
-                    ),
-                    SizedBox(width: 10.0),
-                    FlatButton.icon(
-                      icon: Icon(Icons.cancel, color: Colors.red),
-                      label: const Text('Cancel'),
-                      onPressed: () =>
-                          this.widget.queueAction(SellAction.back()),
-                    )
-                  ])),
-            ],
-          ));
+    final form = Form(
+        key: _formKey,
+        autovalidate: true,
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          children: <Widget>[
+            ListTile(
+                leading: const FaIcon(FontAwesomeIcons.creditCard),
+                title: Text('${this.widget.nodeName.inner}')),
+            ListTile(
+                leading: const FaIcon(FontAwesomeIcons.yenSign),
+                title: DropdownButton<Currency>(
+                    hint: Text('Select currency'),
+                    items: currencies
+                        .map((currency) => DropdownMenuItem<Currency>(
+                            key: Key(currency.inner),
+                            child: Text('${currency.inner}'),
+                            value: currency))
+                        .toList(),
+                    value: _currency,
+                    onChanged: (newCurrency) =>
+                        setState(() => _currency = newCurrency),
+                    isExpanded: true)),
+            ListTile(
+                leading: const FaIcon(FontAwesomeIcons.coins),
+                title: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: 'Amount of currency units',
+                    labelText: 'Amount',
+                  ),
+                  validator: _amountValidator,
+                  keyboardType: TextInputType.number,
+                  onSaved: (amountString) =>
+                      _amount = stringToAmount(amountString),
+                )),
+            ListTile(
+                leading: const FaIcon(FontAwesomeIcons.comment),
+                title: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: 'What is this invoice for?',
+                    labelText: 'Description',
+                  ),
+                  // TODO: Possibly add a validator?
+                  keyboardType: TextInputType.text,
+                  inputFormatters: [LengthLimitingTextInputFormatter(64)],
+                  onSaved: (description) => _description = description,
+                )),
+            SizedBox(height: 24.0),
+            Center(
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              RaisedButton.icon(
+                icon: Icon(Icons.done, color: Colors.green),
+                label: const Text('Ok'),
+                onPressed: _submitForm,
+              ),
+              SizedBox(width: 10.0),
+              FlatButton.icon(
+                icon: Icon(Icons.cancel, color: Colors.red),
+                label: const Text('Cancel'),
+                onPressed: () => this.widget.queueAction(SellAction.back()),
+              )
+            ])),
+          ],
+        ));
 
-      return SafeArea(
-          top: false,
-          bottom: false,
-          child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
-    });
+    final body = SafeArea(
+        top: false,
+        bottom: false,
+        child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
 
     return frame(
         title: Text('New invoice'),

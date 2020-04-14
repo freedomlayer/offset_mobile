@@ -85,7 +85,8 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
       title: Text(friendReport.name),
       leading: Icon(Icons.person),
       trailing: Row(
-          mainAxisSize: MainAxisSize.min, children: [channelIcon, SizedBox(width: 10.0), connIcon]),
+          mainAxisSize: MainAxisSize.min,
+          children: [channelIcon, SizedBox(width: 10.0), connIcon]),
       onTap: () => queueAction(FriendsSettingsAction.selectFriend(publicKey)),
     ));
   }
@@ -228,40 +229,37 @@ class _NewFriendNameState extends State<NewFriendName> {
       }
     };
 
-    final body =
-        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-      final form = Form(
-          key: _formKey,
-          autovalidate: true,
-          child: ListView(
-            children: <Widget>[
-              ListTile(
-                  leading: const FaIcon(FontAwesomeIcons.creditCard),
-                  title: TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: 'How do you want to call this friend?',
-                      labelText: 'Friend name',
-                    ),
-                    // TODO: Possibly add a validator?
-                    keyboardType: TextInputType.text,
-                    inputFormatters: [LengthLimitingTextInputFormatter(64)],
-                    onSaved: (friendName) => _friendName = friendName,
-                  )),
-              SizedBox(height: 24.0),
-              Align(
-                  child: RaisedButton.icon(
-                icon: const FaIcon(FontAwesomeIcons.plus),
-                label: const Text('Add friend'),
-                onPressed: _submitForm,
-              )),
-            ],
-          ));
+    final form = Form(
+        key: _formKey,
+        autovalidate: true,
+        child: ListView(
+          children: <Widget>[
+            ListTile(
+                leading: const FaIcon(FontAwesomeIcons.creditCard),
+                title: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: 'How do you want to call this friend?',
+                    labelText: 'Friend name',
+                  ),
+                  // TODO: Possibly add a validator?
+                  keyboardType: TextInputType.text,
+                  inputFormatters: [LengthLimitingTextInputFormatter(64)],
+                  onSaved: (friendName) => _friendName = friendName,
+                )),
+            SizedBox(height: 24.0),
+            Align(
+                child: RaisedButton.icon(
+              icon: const FaIcon(FontAwesomeIcons.plus),
+              label: const Text('Add friend'),
+              onPressed: _submitForm,
+            )),
+          ],
+        ));
 
-      return SafeArea(
-          top: false,
-          bottom: false,
-          child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
-    });
+    final body = SafeArea(
+        top: false,
+        bottom: false,
+        child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
 
     return frame(
         title: Text('Friend name'),

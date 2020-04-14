@@ -185,9 +185,7 @@ class _RelayNameState extends State<RelayName> {
       }
     };
 
-    final body =
-        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-      final form = Form(
+        final form = Form(
           key: _formKey,
           autovalidate: true,
           child: ListView(
@@ -214,11 +212,11 @@ class _RelayNameState extends State<RelayName> {
             ],
           ));
 
-      return SafeArea(
+
+    final body = SafeArea(
           top: false,
           bottom: false,
           child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
-    });
 
     return frame(
         title: Text('Relay name'),

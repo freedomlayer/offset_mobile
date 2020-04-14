@@ -191,41 +191,38 @@ class _IndexServerNameState extends State<IndexServerName> {
       }
     };
 
-    final body =
-        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-      final form = Form(
-          key: _formKey,
-          autovalidate: true,
-          child: ListView(
-            children: <Widget>[
-              ListTile(
-                  leading: const FaIcon(FontAwesomeIcons.projectDiagram),
-                  title: TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: 'How do you want to call this server?',
-                      labelText: 'Index server name',
-                    ),
-                    // TODO: Possibly add a validator?
-                    keyboardType: TextInputType.text,
-                    inputFormatters: [LengthLimitingTextInputFormatter(64)],
-                    onSaved: (indexServerName) =>
-                        _indexServerName = indexServerName,
-                  )),
-              SizedBox(height: 24.0),
-              Align(
-                  child: RaisedButton.icon(
-                icon: const FaIcon(FontAwesomeIcons.plus),
-                label: const Text('Add index server'),
-                onPressed: _submitForm,
-              )),
-            ],
-          ));
+    final form = Form(
+        key: _formKey,
+        autovalidate: true,
+        child: ListView(
+          children: <Widget>[
+            ListTile(
+                leading: const FaIcon(FontAwesomeIcons.projectDiagram),
+                title: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: 'How do you want to call this server?',
+                    labelText: 'Index server name',
+                  ),
+                  // TODO: Possibly add a validator?
+                  keyboardType: TextInputType.text,
+                  inputFormatters: [LengthLimitingTextInputFormatter(64)],
+                  onSaved: (indexServerName) =>
+                      _indexServerName = indexServerName,
+                )),
+            SizedBox(height: 24.0),
+            Align(
+                child: RaisedButton.icon(
+              icon: const FaIcon(FontAwesomeIcons.plus),
+              label: const Text('Add index server'),
+              onPressed: _submitForm,
+            )),
+          ],
+        ));
 
-      return SafeArea(
-          top: false,
-          bottom: false,
-          child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
-    });
+    final body = SafeArea(
+        top: false,
+        bottom: false,
+        child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
 
     return frame(
         title: Text('Index server name'),
