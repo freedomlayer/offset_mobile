@@ -361,7 +361,6 @@ Widget _renderCurrencySettings(
   assert(channelConsistentReport != null);
 
   final currencyReport = channelConsistentReport.currencyReports[currency];
-  // assert(currencyReport != null);
 
   int _mul = currencyConfig.rate.mul;
   int _add = currencyConfig.rate.add;
@@ -388,67 +387,66 @@ Widget _renderCurrencySettings(
       ? balanceToString(currencyReport.balance)
       : '(Pending)';
 
-  final formBody =
-      StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-    return Form(
-        key: _formKey,
-        autovalidate: true,
-        child: ListView(
-          padding: const EdgeInsets.all(8.0),
-          children: <Widget>[
-            ListTile(
-                leading: FaIcon(FontAwesomeIcons.balanceScale),
-                title: Text('$balanceStr')),
-            ListTile(
-                leading: FaIcon(FontAwesomeIcons.exchangeAlt),
-                title: TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: 'Maximum amount friend can owe me',
-                    labelText: 'Credit limit',
-                  ),
-                  initialValue: '${amountToString(_creditLimit)}',
-                  validator: _creditLimitValidator,
-                  keyboardType: TextInputType.number,
-                  onSaved: (creditLimitString) =>
-                      _creditLimit = stringToAmount(creditLimitString),
-                )),
-            ListTile(
-                leading: FaIcon(FontAwesomeIcons.percent),
-                title: TextFormField(
+  final formBody = StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) => Form(
+          key: _formKey,
+          autovalidate: true,
+          child: ListView(
+            padding: const EdgeInsets.all(8.0),
+            children: <Widget>[
+              ListTile(
+                  leading: FaIcon(FontAwesomeIcons.balanceScale),
+                  title: Text('$balanceStr')),
+              ListTile(
+                  leading: FaIcon(FontAwesomeIcons.exchangeAlt),
+                  title: TextFormField(
                     decoration: const InputDecoration(
-                      hintText: 'Percent commission',
-                      labelText: 'Percent commission',
+                      hintText: 'Maximum amount friend can owe me',
+                      labelText: 'Credit limit',
                     ),
-                    initialValue:
-                        ((_mul / (1 << 32)) * 100.0).toStringAsFixed(2),
-                    validator: _percentValidator,
+                    initialValue: '${amountToString(_creditLimit)}',
+                    validator: _creditLimitValidator,
                     keyboardType: TextInputType.number,
-                    onSaved: (percentString) => _mul =
-                        ((double.parse(percentString) / 100.0) * (1 << 32))
-                            .ceil())),
-            ListTile(
-                leading: FaIcon(FontAwesomeIcons.plus),
-                title: TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: 'Constant commission',
-                      labelText: 'Constant commission',
-                    ),
-                    initialValue: '$_add',
-                    validator: _addValidator,
-                    keyboardType: TextInputType.number,
-                    onSaved: (addString) =>
-                        _add = stringToAmount(addString).inner.toInt())),
-            SizedBox(height: 20.0),
-            ListTile(
-                title: Align(
-                    child: RaisedButton.icon(
-              icon: FaIcon(FontAwesomeIcons.check),
-              label: const Text('Apply'),
-              onPressed: _submitForm,
-            ))),
-          ],
-        ));
-  });
+                    onSaved: (creditLimitString) =>
+                        _creditLimit = stringToAmount(creditLimitString),
+                  )),
+              ListTile(
+                  leading: FaIcon(FontAwesomeIcons.percent),
+                  title: TextFormField(
+                      decoration: const InputDecoration(
+                        hintText: 'Percent commission',
+                        labelText: 'Percent commission',
+                      ),
+                      initialValue:
+                          ((_mul / (1 << 32)) * 100.0).toStringAsFixed(2),
+                      validator: _percentValidator,
+                      keyboardType: TextInputType.number,
+                      onSaved: (percentString) => _mul =
+                          ((double.parse(percentString) / 100.0) * (1 << 32))
+                              .ceil())),
+              ListTile(
+                  leading: FaIcon(FontAwesomeIcons.plus),
+                  title: TextFormField(
+                      decoration: const InputDecoration(
+                        hintText: 'Constant commission',
+                        labelText: 'Constant commission',
+                      ),
+                      initialValue:
+                          '${amountToString(U128(BigInt.from(_add)))}',
+                      validator: _addValidator,
+                      keyboardType: TextInputType.number,
+                      onSaved: (addString) =>
+                          _add = stringToAmount(addString).inner.toInt())),
+              SizedBox(height: 20.0),
+              ListTile(
+                  title: Align(
+                      child: RaisedButton.icon(
+                icon: FaIcon(FontAwesomeIcons.check),
+                label: const Text('Apply'),
+                onPressed: _submitForm,
+              ))),
+            ],
+          )));
 
   final friendColor = friendReport.liveness.isOnline
       ? Colors.green
