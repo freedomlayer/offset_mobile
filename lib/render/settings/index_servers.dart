@@ -6,7 +6,6 @@ import '../../protocol/protocol.dart';
 import '../../protocol/file.dart';
 import '../../state/state.dart';
 import '../../actions/actions.dart';
-import '../../utils/keys_store.dart';
 
 import '../utils/file_picker.dart';
 import '../utils/qr_scan.dart';
@@ -21,14 +20,13 @@ Widget renderIndexServersSettings(
     NodeName nodeName,
     IndexServersSettingsView indexServersSettingsView,
     NodeState nodeState,
-    KeysStore keysStore,
     Function(IndexServersSettingsAction) queueAction) {
   return indexServersSettingsView.match(
       home: () => _renderHome(nodeName, nodeState, queueAction),
       newIndexSelect: () =>
           _renderNewIndexServer(nodeName, nodeState, queueAction),
-      newIndexName: (indexServerAddress) => _renderIndexServerName(
-          nodeName, indexServerAddress, nodeState, keysStore, queueAction));
+      newIndexName: (indexServerAddress) => IndexServerName(
+          nodeName, indexServerAddress, nodeState, queueAction));
 }
 
 Widget _renderHome(NodeName nodeName, NodeState nodeState,
@@ -154,72 +152,85 @@ Widget _renderNewIndexServer(NodeName nodeName, NodeState nodeState,
       backAction: () => queueAction(IndexServersSettingsAction.back()));
 }
 
-Widget _renderIndexServerName(
-    NodeName nodeName,
-    IndexServerFile indexServerFile,
-    NodeState nodeState,
-    KeysStore keysStore,
-    Function(IndexServersSettingsAction) queueAction) {
-  final _formKey = keysStore.formKey(
-      '_renderIndexServerName::$nodeName::${indexServerFile.publicKey}');
+class IndexServerName extends StatefulWidget {
+  final NodeName nodeName;
+  final IndexServerFile indexServerFile;
+  final NodeState nodeState;
+  final Function(IndexServersSettingsAction) queueAction;
 
-  // Saves current indexServer name:
-  String _indexServerName = '';
+  IndexServerName(
+      this.nodeName, this.indexServerFile, this.nodeState, this.queueAction,
+      {Key key})
+      : super(key: key);
 
-  final _submitForm = () {
-    final FormState form = _formKey.currentState;
-
-    if (!form.validate()) {
-      // Form is not valid
-    } else {
-      // Save form fields:
-      form.save();
-      queueAction(
-          IndexServersSettingsAction.newIndex(NamedIndexServerAddress((b) => b
-            ..publicKey = indexServerFile.publicKey
-            ..address = indexServerFile.address
-            ..name = _indexServerName)));
-    }
-  };
-
-  final body =
-      StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-    final form = Form(
-        key: _formKey,
-        autovalidate: true,
-        child: ListView(
-          children: <Widget>[
-            ListTile(
-                leading: const FaIcon(FontAwesomeIcons.projectDiagram),
-                title: TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: 'How do you want to call this server?',
-                    labelText: 'Index server name',
-                  ),
-                  // TODO: Possibly add a validator?
-                  keyboardType: TextInputType.text,
-                  inputFormatters: [LengthLimitingTextInputFormatter(64)],
-                  onSaved: (indexServerName) =>
-                      _indexServerName = indexServerName,
-                )),
-            SizedBox(height: 24.0),
-            Align(
-                child: RaisedButton.icon(
-              icon: const FaIcon(FontAwesomeIcons.plus),
-              label: const Text('Add index server'),
-              onPressed: _submitForm,
-            )),
-          ],
-        ));
-
-    return SafeArea(
-        top: false,
-        bottom: false,
-        child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
-  });
-
-  return frame(
-      title: Text('Index server name'),
-      body: body,
-      backAction: () => queueAction(IndexServersSettingsAction.back()));
+  @override
+  _IndexServerNameState createState() => _IndexServerNameState();
 }
+
+class _IndexServerNameState extends State<IndexServerName> {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    // Saves current indexServer name:
+    String _indexServerName = '';
+
+    final _submitForm = () {
+      final FormState form = _formKey.currentState;
+
+      if (!form.validate()) {
+        // Form is not valid
+      } else {
+        // Save form fields:
+        form.save();
+        this.widget.queueAction(
+            IndexServersSettingsAction.newIndex(NamedIndexServerAddress((b) => b
+              ..publicKey = this.widget.indexServerFile.publicKey
+              ..address = this.widget.indexServerFile.address
+              ..name = _indexServerName)));
+      }
+    };
+
+    final body =
+        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+      final form = Form(
+          key: _formKey,
+          autovalidate: true,
+          child: ListView(
+            children: <Widget>[
+              ListTile(
+                  leading: const FaIcon(FontAwesomeIcons.projectDiagram),
+                  title: TextFormField(
+                    decoration: const InputDecoration(
+                      hintText: 'How do you want to call this server?',
+                      labelText: 'Index server name',
+                    ),
+                    // TODO: Possibly add a validator?
+                    keyboardType: TextInputType.text,
+                    inputFormatters: [LengthLimitingTextInputFormatter(64)],
+                    onSaved: (indexServerName) =>
+                        _indexServerName = indexServerName,
+                  )),
+              SizedBox(height: 24.0),
+              Align(
+                  child: RaisedButton.icon(
+                icon: const FaIcon(FontAwesomeIcons.plus),
+                label: const Text('Add index server'),
+                onPressed: _submitForm,
+              )),
+            ],
+          ));
+
+      return SafeArea(
+          top: false,
+          bottom: false,
+          child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
+    });
+
+    return frame(
+        title: Text('Index server name'),
+        body: body,
+        backAction: () => this.widget.queueAction(IndexServersSettingsAction.back()));
+  }
+}
+

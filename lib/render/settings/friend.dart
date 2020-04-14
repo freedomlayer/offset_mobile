@@ -6,7 +6,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../protocol/protocol.dart';
 import '../../state/state.dart';
 import '../../actions/actions.dart';
-import '../../utils/keys_store.dart';
 
 import '../utils/amount.dart';
 
@@ -16,16 +15,15 @@ Widget renderFriendSettings(
     NodeName nodeName,
     FriendSettingsView friendSettingsView,
     FriendReport friendReport,
-    KeysStore keysStore,
     Function(FriendSettingsAction) queueAction) {
   final friendPublicKey = friendSettingsView.friendPublicKey;
   return friendSettingsView.inner.match(
       home: () => _renderFriendHome(
           nodeName, friendPublicKey, friendReport, queueAction),
-      currencySettings: (currency) => _renderCurrencySettings(nodeName,
-          friendPublicKey, currency, friendReport, keysStore, queueAction),
-      newCurrency: () => _renderNewCurrency(
-          nodeName, friendPublicKey, friendReport, keysStore, queueAction));
+      currencySettings: (currency) => CurrencySettings(
+          nodeName, friendPublicKey, currency, friendReport, queueAction),
+      newCurrency: () =>
+          NewCurrency(nodeName, friendPublicKey, friendReport, queueAction));
 }
 
 Widget _renderChannelInfoInconsistent(
@@ -339,176 +337,188 @@ String _addValidator(String addString) {
   return null;
 }
 
-Widget _renderCurrencySettings(
-    NodeName nodeName,
-    PublicKey friendPublicKey,
-    Currency currency,
-    FriendReport friendReport,
-    KeysStore keysStore,
-    Function(FriendSettingsAction) queueAction) {
-  final _formKey = keysStore.formKey(
-      '_renderCurrencySettings::$nodeName::$friendPublicKey::$currency');
+class CurrencySettings extends StatefulWidget {
+  final NodeName nodeName;
+  final PublicKey friendPublicKey;
+  final Currency currency;
+  final FriendReport friendReport;
+  final Function(FriendSettingsAction) queueAction;
 
-  // TODO: Possibly take more specific arguments for this function,
-  // so that the following logic will be done on the outside?
-  final currencyConfig = friendReport.currencyConfigs[currency];
-  assert(currencyConfig != null);
+  CurrencySettings(this.nodeName, this.friendPublicKey, this.currency,
+      this.friendReport, this.queueAction,
+      {Key key})
+      : super(key: key);
 
-  final channelConsistentReport = friendReport.channelStatus.match(
-      consistent: (channelConsistentReport) => channelConsistentReport,
-      inconsistent: (_) => null);
+  @override
+  _CurrencySettingsState createState() => _CurrencySettingsState();
+}
 
-  assert(channelConsistentReport != null);
+class _CurrencySettingsState extends State<CurrencySettings> {
+  final _formKey = GlobalKey<FormState>();
 
-  final currencyReport = channelConsistentReport.currencyReports[currency];
+  @override
+  Widget build(BuildContext context) {
+    // TODO: Possibly take more specific arguments for this function,
+    // so that the following logic will be done on the outside?
+    final currencyConfig = this.widget.friendReport.currencyConfigs[this.widget.currency];
+    assert(currencyConfig != null);
 
-  int _mul = currencyConfig.rate.mul;
-  int _add = currencyConfig.rate.add;
-  U128 _creditLimit = currencyConfig.remoteMaxDebt;
+    final channelConsistentReport = this.widget.friendReport.channelStatus.match(
+        consistent: (channelConsistentReport) => channelConsistentReport,
+        inconsistent: (_) => null);
 
-  final _submitForm = () {
-    final FormState form = _formKey.currentState;
+    assert(channelConsistentReport != null);
 
-    if (!form.validate()) {
-      // Form is not valid
-    } else {
-      // Save form fields:
-      form.save();
-      final rate = Rate((b) => b
-        ..mul = _mul
-        ..add = _add);
+    final currencyReport = channelConsistentReport.currencyReports[this.widget.currency];
 
-      queueAction(
-          FriendSettingsAction.updateCurrency(currency, _creditLimit, rate));
-    }
-  };
+    int _mul = currencyConfig.rate.mul;
+    int _add = currencyConfig.rate.add;
+    U128 _creditLimit = currencyConfig.remoteMaxDebt;
 
-  final balanceStr = currencyReport != null
-      ? balanceToString(currencyReport.balance)
-      : '(Pending)';
+    final _submitForm = () {
+      final FormState form = _formKey.currentState;
 
-  final formBody = StatefulBuilder(
-      builder: (BuildContext context, StateSetter setState) => Form(
-          key: _formKey,
-          autovalidate: true,
-          child: ListView(
-            padding: const EdgeInsets.all(8.0),
-            children: <Widget>[
-              ListTile(
-                  leading: FaIcon(FontAwesomeIcons.balanceScale),
-                  title: Text('$balanceStr')),
-              ListTile(
-                  leading: FaIcon(FontAwesomeIcons.exchangeAlt),
-                  title: TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: 'Maximum amount friend can owe me',
-                      labelText: 'Credit limit',
-                    ),
-                    initialValue: '${amountToString(_creditLimit)}',
-                    validator: _creditLimitValidator,
-                    keyboardType: TextInputType.number,
-                    onSaved: (creditLimitString) =>
-                        _creditLimit = stringToAmount(creditLimitString),
-                  )),
-              ListTile(
-                  leading: FaIcon(FontAwesomeIcons.percent),
-                  title: TextFormField(
+      if (!form.validate()) {
+        // Form is not valid
+      } else {
+        // Save form fields:
+        form.save();
+        final rate = Rate((b) => b
+          ..mul = _mul
+          ..add = _add);
+
+        this.widget.queueAction(
+            FriendSettingsAction.updateCurrency(this.widget.currency, _creditLimit, rate));
+      }
+    };
+
+    final balanceStr = currencyReport != null
+        ? balanceToString(currencyReport.balance)
+        : '(Pending)';
+
+    final formBody = StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) => Form(
+            key: _formKey,
+            autovalidate: true,
+            child: ListView(
+              padding: const EdgeInsets.all(8.0),
+              children: <Widget>[
+                ListTile(
+                    leading: FaIcon(FontAwesomeIcons.balanceScale),
+                    title: Text('$balanceStr')),
+                ListTile(
+                    leading: FaIcon(FontAwesomeIcons.exchangeAlt),
+                    title: TextFormField(
                       decoration: const InputDecoration(
-                        hintText: 'Percent commission',
-                        labelText: 'Percent commission',
+                        hintText: 'Maximum amount friend can owe me',
+                        labelText: 'Credit limit',
                       ),
-                      initialValue:
-                          ((_mul / (1 << 32)) * 100.0).toStringAsFixed(2),
-                      validator: _percentValidator,
+                      initialValue: '${amountToString(_creditLimit)}',
+                      validator: _creditLimitValidator,
                       keyboardType: TextInputType.number,
-                      onSaved: (percentString) => _mul =
-                          ((double.parse(percentString) / 100.0) * (1 << 32))
-                              .ceil())),
-              ListTile(
-                  leading: FaIcon(FontAwesomeIcons.plus),
-                  title: TextFormField(
-                      decoration: const InputDecoration(
-                        hintText: 'Constant commission',
-                        labelText: 'Constant commission',
-                      ),
-                      initialValue:
-                          '${amountToString(U128(BigInt.from(_add)))}',
-                      validator: _addValidator,
-                      keyboardType: TextInputType.number,
-                      onSaved: (addString) =>
-                          _add = stringToAmount(addString).inner.toInt())),
-              SizedBox(height: 20.0),
-              ListTile(
-                  title: Align(
-                      child: RaisedButton.icon(
-                icon: FaIcon(FontAwesomeIcons.check),
-                label: const Text('Apply'),
-                onPressed: _submitForm,
-              ))),
-            ],
-          )));
+                      onSaved: (creditLimitString) =>
+                          _creditLimit = stringToAmount(creditLimitString),
+                    )),
+                ListTile(
+                    leading: FaIcon(FontAwesomeIcons.percent),
+                    title: TextFormField(
+                        decoration: const InputDecoration(
+                          hintText: 'Percent commission',
+                          labelText: 'Percent commission',
+                        ),
+                        initialValue:
+                            ((_mul / (1 << 32)) * 100.0).toStringAsFixed(2),
+                        validator: _percentValidator,
+                        keyboardType: TextInputType.number,
+                        onSaved: (percentString) => _mul =
+                            ((double.parse(percentString) / 100.0) * (1 << 32))
+                                .ceil())),
+                ListTile(
+                    leading: FaIcon(FontAwesomeIcons.plus),
+                    title: TextFormField(
+                        decoration: const InputDecoration(
+                          hintText: 'Constant commission',
+                          labelText: 'Constant commission',
+                        ),
+                        initialValue:
+                            '${amountToString(U128(BigInt.from(_add)))}',
+                        validator: _addValidator,
+                        keyboardType: TextInputType.number,
+                        onSaved: (addString) =>
+                            _add = stringToAmount(addString).inner.toInt())),
+                SizedBox(height: 20.0),
+                ListTile(
+                    title: Align(
+                        child: RaisedButton.icon(
+                  icon: FaIcon(FontAwesomeIcons.check),
+                  label: const Text('Apply'),
+                  onPressed: _submitForm,
+                ))),
+              ],
+            )));
 
-  final friendColor = friendReport.liveness.isOnline
-      ? Colors.green
-      : friendReport.status.isEnabled ? Colors.orange : Colors.red;
+    final friendColor = this.widget.friendReport.liveness.isOnline
+        ? Colors.green
+        : this.widget.friendReport.status.isEnabled ? Colors.orange : Colors.red;
 
-  final currencyColor = currencyReport == null
-      ? Colors.grey
-      : currencyConfig.isOpen ? Colors.green : Colors.red;
+    final currencyColor = currencyReport == null
+        ? Colors.grey
+        : currencyConfig.isOpen ? Colors.green : Colors.red;
 
-  final body = SafeArea(
-      top: false,
-      bottom: false,
-      child: Column(children: [
-        Container(
-            width: double.infinity,
-            child: Column(children: [
-              Container(
-                  width: double.infinity,
-                  color: Colors.blue.shade50,
-                  padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                  child: ListTile(
-                      leading: const FaIcon(FontAwesomeIcons.creditCard),
-                      title: Text('${nodeName.inner}',
-                          style: TextStyle(fontSize: 16.0)))),
-              Divider(height: 0, color: Colors.grey),
-              Container(
-                  width: double.infinity,
-                  color: Colors.blue.shade50,
-                  padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                  child: ListTile(
-                      leading:
-                          FaIcon(FontAwesomeIcons.user, color: friendColor),
-                      title: Text('${friendReport.name}'))),
-              Divider(height: 0, color: Colors.grey),
-              Container(
-                  width: double.infinity,
-                  color: Colors.blue.shade50,
-                  padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                  child: SwitchListTile(
-                      secondary:
-                          FaIcon(FontAwesomeIcons.coins, color: currencyColor),
-                      title: Text('${currency.inner}',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      value: currencyConfig.isOpen,
-                      onChanged: (bool newValue) {
-                        if (newValue == true) {
-                          queueAction(
-                              FriendSettingsAction.openCurrency(currency));
-                        } else {
-                          queueAction(
-                              FriendSettingsAction.closeCurrency(currency));
-                        }
-                      })),
-              Divider(height: 0, color: Colors.grey),
-            ])),
-        Expanded(child: formBody),
-      ]));
+    final body = SafeArea(
+        top: false,
+        bottom: false,
+        child: Column(children: [
+          Container(
+              width: double.infinity,
+              child: Column(children: [
+                Container(
+                    width: double.infinity,
+                    color: Colors.blue.shade50,
+                    padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                    child: ListTile(
+                        leading: const FaIcon(FontAwesomeIcons.creditCard),
+                        title: Text('${this.widget.nodeName.inner}',
+                            style: TextStyle(fontSize: 16.0)))),
+                Divider(height: 0, color: Colors.grey),
+                Container(
+                    width: double.infinity,
+                    color: Colors.blue.shade50,
+                    padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                    child: ListTile(
+                        leading:
+                            FaIcon(FontAwesomeIcons.user, color: friendColor),
+                        title: Text('${this.widget.friendReport.name}'))),
+                Divider(height: 0, color: Colors.grey),
+                Container(
+                    width: double.infinity,
+                    color: Colors.blue.shade50,
+                    padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                    child: SwitchListTile(
+                        secondary: FaIcon(FontAwesomeIcons.coins,
+                            color: currencyColor),
+                        title: Text('${this.widget.currency.inner}',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        value: currencyConfig.isOpen,
+                        onChanged: (bool newValue) {
+                          if (newValue == true) {
+                            this.widget.queueAction(
+                                FriendSettingsAction.openCurrency(this.widget.currency));
+                          } else {
+                            this.widget.queueAction(
+                                FriendSettingsAction.closeCurrency(this.widget.currency));
+                          }
+                        })),
+                Divider(height: 0, color: Colors.grey),
+              ])),
+          Expanded(child: formBody),
+        ]));
 
-  return frame(
-      title: Text('Currency Settings'),
-      body: body,
-      backAction: () => queueAction(FriendSettingsAction.back()));
+    return frame(
+        title: Text('Currency Settings'),
+        body: body,
+        backAction: () => this.widget.queueAction(FriendSettingsAction.back()));
+  }
 }
 
 String _currencyNameValidator(String currencyName) {
@@ -538,113 +548,128 @@ String _creditLimitValidator(String creditLimitString) {
   return null;
 }
 
-Widget _renderNewCurrency(
-    NodeName nodeName,
-    PublicKey friendPublicKey,
-    FriendReport friendReport,
-    KeysStore keysStore,
-    Function(FriendSettingsAction) queueAction) {
-  final _formKey =
-      keysStore.formKey('_renderNewCurrency::$nodeName::$friendPublicKey');
+class NewCurrency extends StatefulWidget {
+  final NodeName nodeName;
+  final PublicKey friendPublicKey;
+  final FriendReport friendReport;
+  final Function(FriendSettingsAction) queueAction;
 
-  Currency _currency;
-  U128 _creditLimit;
+  NewCurrency(
+      this.nodeName, this.friendPublicKey, this.friendReport, this.queueAction,
+      {Key key})
+      : super(key: key);
 
-  final _submitForm = () {
-    final FormState form = _formKey.currentState;
+  @override
+  _NewCurrencyState createState() => _NewCurrencyState();
+}
 
-    if (!form.validate()) {
-      // Form is not valid
-    } else {
-      // Save form fields:
-      form.save();
-      final rate = Rate((b) => b
-        ..mul = 0
-        ..add = 0);
+class _NewCurrencyState extends State<NewCurrency> {
+  final _formKey = GlobalKey<FormState>();
 
-      queueAction(
-          FriendSettingsAction.newCurrency(_currency, _creditLimit, rate));
-    }
-  };
+  @override
+  Widget build(BuildContext context) {
+    Currency _currency;
+    U128 _creditLimit;
 
-  final formBody =
-      StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-    return Form(
-        key: _formKey,
-        autovalidate: true,
-        child: ListView(
-          padding: const EdgeInsets.all(8.0),
-          children: <Widget>[
-            ListTile(
-                leading: const FaIcon(FontAwesomeIcons.coins),
-                title: TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: 'Currency name',
-                    labelText: 'Currency name',
-                  ),
-                  inputFormatters: [LengthLimitingTextInputFormatter(16)],
-                  validator: _currencyNameValidator,
-                  keyboardType: TextInputType.text,
-                  onSaved: (currencyName) => _currency = Currency(currencyName),
-                )),
-            ListTile(
-                leading: const FaIcon(FontAwesomeIcons.exchangeAlt),
-                title: TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: 'Maximum amount friend can owe me',
-                    labelText: 'Credit limit',
-                  ),
-                  validator: _creditLimitValidator,
-                  keyboardType: TextInputType.number,
-                  onSaved: (creditLimitString) =>
-                      _creditLimit = stringToAmount(creditLimitString),
-                )),
-            SizedBox(height: 20.0),
-            Align(
-                child: RaisedButton.icon(
-              icon: FaIcon(FontAwesomeIcons.plus),
-              label: const Text('Add currency'),
-              onPressed: _submitForm,
-            )),
-          ],
-        ));
-  });
+    final _submitForm = () {
+      final FormState form = _formKey.currentState;
 
-  final friendColor = friendReport.liveness.isOnline
-      ? Colors.green
-      : friendReport.status.isEnabled ? Colors.orange : Colors.red;
+      if (!form.validate()) {
+        // Form is not valid
+      } else {
+        // Save form fields:
+        form.save();
+        final rate = Rate((b) => b
+          ..mul = 0
+          ..add = 0);
 
-  final body = SafeArea(
-      top: false,
-      bottom: false,
-      child: Column(children: [
-        Container(
-            width: double.infinity,
-            child: Column(children: [
-              Container(
-                  width: double.infinity,
-                  color: Colors.blue.shade50,
-                  padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                  child: ListTile(
-                      leading: const FaIcon(FontAwesomeIcons.creditCard),
-                      title: Text('${nodeName.inner}',
-                          style: TextStyle(fontSize: 16.0)))),
-              Divider(height: 0, color: Colors.grey),
-              Container(
-                  width: double.infinity,
-                  color: Colors.blue.shade50,
-                  padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                  child: ListTile(
-                      leading:
-                          FaIcon(FontAwesomeIcons.user, color: friendColor),
-                      title: Text('${friendReport.name}'))),
-              Divider(height: 0, color: Colors.grey),
-            ])),
-        Expanded(child: formBody)
-      ]));
+        this.widget.queueAction(
+            FriendSettingsAction.newCurrency(_currency, _creditLimit, rate));
+      }
+    };
 
-  return frame(
-      title: Text('New Currency'),
-      body: body,
-      backAction: () => queueAction(FriendSettingsAction.back()));
+    final formBody =
+        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+      return Form(
+          key: _formKey,
+          autovalidate: true,
+          child: ListView(
+            padding: const EdgeInsets.all(8.0),
+            children: <Widget>[
+              ListTile(
+                  leading: const FaIcon(FontAwesomeIcons.coins),
+                  title: TextFormField(
+                    decoration: const InputDecoration(
+                      hintText: 'Currency name',
+                      labelText: 'Currency name',
+                    ),
+                    inputFormatters: [LengthLimitingTextInputFormatter(16)],
+                    validator: _currencyNameValidator,
+                    keyboardType: TextInputType.text,
+                    onSaved: (currencyName) =>
+                        _currency = Currency(currencyName),
+                  )),
+              ListTile(
+                  leading: const FaIcon(FontAwesomeIcons.exchangeAlt),
+                  title: TextFormField(
+                    decoration: const InputDecoration(
+                      hintText: 'Maximum amount friend can owe me',
+                      labelText: 'Credit limit',
+                    ),
+                    validator: _creditLimitValidator,
+                    keyboardType: TextInputType.number,
+                    onSaved: (creditLimitString) =>
+                        _creditLimit = stringToAmount(creditLimitString),
+                  )),
+              SizedBox(height: 20.0),
+              Align(
+                  child: RaisedButton.icon(
+                icon: FaIcon(FontAwesomeIcons.plus),
+                label: const Text('Add currency'),
+                onPressed: _submitForm,
+              )),
+            ],
+          ));
+    });
+
+    final friendColor = this.widget.friendReport.liveness.isOnline
+        ? Colors.green
+        : this.widget.friendReport.status.isEnabled
+            ? Colors.orange
+            : Colors.red;
+
+    final body = SafeArea(
+        top: false,
+        bottom: false,
+        child: Column(children: [
+          Container(
+              width: double.infinity,
+              child: Column(children: [
+                Container(
+                    width: double.infinity,
+                    color: Colors.blue.shade50,
+                    padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                    child: ListTile(
+                        leading: const FaIcon(FontAwesomeIcons.creditCard),
+                        title: Text('${this.widget.nodeName.inner}',
+                            style: TextStyle(fontSize: 16.0)))),
+                Divider(height: 0, color: Colors.grey),
+                Container(
+                    width: double.infinity,
+                    color: Colors.blue.shade50,
+                    padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                    child: ListTile(
+                        leading:
+                            FaIcon(FontAwesomeIcons.user, color: friendColor),
+                        title: Text('${this.widget.friendReport.name}'))),
+                Divider(height: 0, color: Colors.grey),
+              ])),
+          Expanded(child: formBody)
+        ]));
+
+    return frame(
+        title: Text('New Currency'),
+        body: body,
+        backAction: () => this.widget.queueAction(FriendSettingsAction.back()));
+  }
 }

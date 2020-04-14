@@ -7,18 +7,17 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../protocol/protocol.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
-import '../utils/keys_store.dart';
 
 import 'utils/amount.dart';
 
 import 'frame.dart';
 
 Widget renderSell(SellView sellView, BuiltMap<NodeName, NodeState> nodesStates,
-    KeysStore keysStore, Function(SellAction) queueAction) {
+    Function(SellAction) queueAction) {
   return sellView.match(
       selectCard: () => _renderSelectCard(nodesStates, queueAction),
       invoiceDetails: (nodeName) =>
-          _renderInvoiceDetails(nodeName, nodesStates, keysStore, queueAction));
+          InvoiceDetails(nodeName, nodesStates, queueAction));
 }
 
 Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
@@ -104,167 +103,123 @@ List<Currency> _loadCurrencies(NodeState nodeState) {
   return List.from(currencies)..sort();
 }
 
-Widget _renderInvoiceDetails(
-    NodeName nodeName,
-    BuiltMap<NodeName, NodeState> nodesStates,
-    KeysStore keysStore,
-    Function(SellAction) queueAction) {
-  final nodeState = nodesStates[nodeName];
-  assert(nodeState != null);
-  final currencies = _loadCurrencies(nodeState);
-  assert(currencies.isNotEmpty);
+class InvoiceDetails extends StatefulWidget {
+  final NodeName nodeName;
+  final BuiltMap<NodeName, NodeState> nodesStates;
+  final Function(SellAction) queueAction;
 
-  final _formKey = keysStore.formKey('_renderInvoiceDetails::$nodeName');
+  InvoiceDetails(this.nodeName, this.nodesStates, this.queueAction, {Key key})
+      : super(key: key);
 
-  Currency _currency;
-  U128 _amount;
-  String _description;
-
-  final _submitForm = () {
-    final FormState form = _formKey.currentState;
-
-    if (!form.validate()) {
-      // Form is not valid
-    } else {
-      // Save form fields:
-      form.save();
-      queueAction(
-          SellAction.createInvoice(nodeName, _currency, _amount, _description));
-    }
-  };
-
-  final body =
-      StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-    final form = Form(
-        key: _formKey,
-        autovalidate: true,
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          children: <Widget>[
-            ListTile(
-                leading: const FaIcon(FontAwesomeIcons.creditCard),
-                title: Text('${nodeName.inner}')),
-            ListTile(
-                leading: const FaIcon(FontAwesomeIcons.yenSign),
-                title: DropdownButton<Currency>(
-                    hint: Text('Select Currency'),
-                    items: currencies
-                        .map((currency) => DropdownMenuItem<Currency>(
-                            key: Key(currency.inner),
-                            child: Text('${currency.inner}'),
-                            value: currency))
-                        .toList(),
-                    value: _currency,
-                    onChanged: (newCurrency) =>
-                        setState(() => _currency = newCurrency),
-                    isExpanded: true)),
-            ListTile(
-                leading: const FaIcon(FontAwesomeIcons.coins),
-                title: TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: 'Amount of currency units',
-                    labelText: 'Amount',
-                  ),
-                  validator: _amountValidator,
-                  keyboardType: TextInputType.number,
-                  onSaved: (amountString) =>
-                      _amount = stringToAmount(amountString),
-                )),
-            ListTile(
-                leading: const FaIcon(FontAwesomeIcons.comment),
-                title: TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: 'What is this invoice for?',
-                    labelText: 'Description',
-                  ),
-                  // TODO: Possibly add a validator?
-                  keyboardType: TextInputType.text,
-                  inputFormatters: [LengthLimitingTextInputFormatter(64)],
-                  onSaved: (description) => _description = description,
-                )),
-            SizedBox(height: 24.0),
-            Center(
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              RaisedButton.icon(
-                icon: Icon(Icons.done, color: Colors.green),
-                label: const Text('Ok'),
-                onPressed: _submitForm,
-              ),
-              SizedBox(width: 10.0),
-              FlatButton.icon(
-                icon: Icon(Icons.cancel, color: Colors.red),
-                label: const Text('Cancel'),
-                onPressed: () => queueAction(SellAction.back()),
-              )
-            ])),
-          ],
-        ));
-
-    return SafeArea(
-        top: false,
-        bottom: false,
-        child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
-  });
-
-  return frame(
-      title: Text('New invoice'),
-      body: body,
-      backAction: () => queueAction(SellAction.back()));
+  @override
+  _InvoiceDetailsState createState() => _InvoiceDetailsState();
 }
 
-/*
-Widget _renderSendInvoice(
-    NodeName nodeName,
-    InvoiceId invoiceId,
-    BuiltMap<NodeName, NodeState> nodesStates,
-    Function(SellAction) queueAction) {
-  final nodeState = nodesStates[nodeName];
-  assert(nodeState != null);
+class _InvoiceDetailsState extends State<InvoiceDetails> {
+  final _formKey = GlobalKey<FormState>();
 
-  final nodeOpen =
-      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
-  assert(nodeOpen != null);
+  @override
+  Widget build(BuildContext context) {
+    final nodeState = this.widget.nodesStates[this.widget.nodeName];
+    assert(nodeState != null);
+    final currencies = _loadCurrencies(nodeState);
+    assert(currencies.isNotEmpty);
 
-  final openInvoice = nodeOpen.compactReport.openInvoices[invoiceId];
-  assert(openInvoice != null);
+    Currency _currency;
+    U128 _amount;
+    String _description;
 
-  final invoiceFile = InvoiceFile((b) => b
-    ..invoiceId = invoiceId
-    ..currency = openInvoice.currency
-    ..destPublicKey = nodeOpen.compactReport.localPublicKey
-    ..destPayment = openInvoice.totalDestPayment
-    ..description = openInvoice.description);
+    final _submitForm = () {
+      final FormState form = _formKey.currentState;
 
-  final body = Center(
-      child: Column(children: [
-    SizedBox(height: 20),
-    Center(child: Text('Send invoice to buyer')),
-    Center(child: qrShow<InvoiceFile>(invoiceFile)),
-    SizedBox(height: 20),
-    Center(
-        child: RaisedButton(
-            // TODO: Create a better name for the invoice file:
-            onPressed: () async => await shareFile<InvoiceFile>(
-                invoiceFile, 'invoice.$INVOICE_EXT'),
-            child: Text('Send File'))),
-    SizedBox(height: 20),
-    Center(
-        child: RaisedButton(
-            onPressed: () =>
-                queueAction(SellAction.viewTransaction(nodeName, invoiceId)),
-            child: Text('Ok'))),
-    SizedBox(height: 20),
-    Center(
-        child: RaisedButton(
-            onPressed: () =>
-                queueAction(SellAction.cancelInvoice(nodeName, invoiceId)),
-            child: Text('Cancel Invoice'))),
-  ]));
+      if (!form.validate()) {
+        // Form is not valid
+      } else {
+        // Save form fields:
+        form.save();
+        this.widget.queueAction(SellAction.createInvoice(
+            this.widget.nodeName, _currency, _amount, _description));
+      }
+    };
 
-  return frame(
-      title: Text('Send Invoice'),
-      body: body,
-      backAction: () => queueAction(SellAction.back()));
+    final body =
+        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+      final form = Form(
+          key: _formKey,
+          autovalidate: true,
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            children: <Widget>[
+              ListTile(
+                  leading: const FaIcon(FontAwesomeIcons.creditCard),
+                  title: Text('${this.widget.nodeName.inner}')),
+              ListTile(
+                  leading: const FaIcon(FontAwesomeIcons.yenSign),
+                  title: DropdownButton<Currency>(
+                      hint: Text('Select Currency'),
+                      items: currencies
+                          .map((currency) => DropdownMenuItem<Currency>(
+                              key: Key(currency.inner),
+                              child: Text('${currency.inner}'),
+                              value: currency))
+                          .toList(),
+                      value: _currency,
+                      onChanged: (newCurrency) =>
+                          setState(() => _currency = newCurrency),
+                      isExpanded: true)),
+              ListTile(
+                  leading: const FaIcon(FontAwesomeIcons.coins),
+                  title: TextFormField(
+                    decoration: const InputDecoration(
+                      hintText: 'Amount of currency units',
+                      labelText: 'Amount',
+                    ),
+                    validator: _amountValidator,
+                    keyboardType: TextInputType.number,
+                    onSaved: (amountString) =>
+                        _amount = stringToAmount(amountString),
+                  )),
+              ListTile(
+                  leading: const FaIcon(FontAwesomeIcons.comment),
+                  title: TextFormField(
+                    decoration: const InputDecoration(
+                      hintText: 'What is this invoice for?',
+                      labelText: 'Description',
+                    ),
+                    // TODO: Possibly add a validator?
+                    keyboardType: TextInputType.text,
+                    inputFormatters: [LengthLimitingTextInputFormatter(64)],
+                    onSaved: (description) => _description = description,
+                  )),
+              SizedBox(height: 24.0),
+              Center(
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                    RaisedButton.icon(
+                      icon: Icon(Icons.done, color: Colors.green),
+                      label: const Text('Ok'),
+                      onPressed: _submitForm,
+                    ),
+                    SizedBox(width: 10.0),
+                    FlatButton.icon(
+                      icon: Icon(Icons.cancel, color: Colors.red),
+                      label: const Text('Cancel'),
+                      onPressed: () => this.widget.queueAction(SellAction.back()),
+                    )
+                  ])),
+            ],
+          ));
+
+      return SafeArea(
+          top: false,
+          bottom: false,
+          child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
+    });
+
+    return frame(
+        title: Text('New invoice'),
+        body: body,
+        backAction: () => this.widget.queueAction(SellAction.back()));
+  }
 }
-*/

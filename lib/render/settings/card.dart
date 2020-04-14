@@ -4,7 +4,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../protocol/protocol.dart';
 import '../../state/state.dart';
 import '../../actions/actions.dart';
-import '../../utils/keys_store.dart';
 
 import '../frame.dart';
 
@@ -15,7 +14,6 @@ import 'index_servers.dart';
 Widget renderCardSettings(
     CardSettingsView cardSettingsView,
     NodeState nodeState,
-    KeysStore keysStore,
     Function(CardSettingsAction) queueAction) {
   final nodeName = cardSettingsView.nodeName;
   return cardSettingsView.inner.match(
@@ -24,21 +22,18 @@ Widget renderCardSettings(
           nodeName,
           friendsSettingsView,
           nodeState,
-          keysStore,
           (FriendsSettingsAction friendsSettingsAction) => queueAction(
               CardSettingsAction.friendsSettings(friendsSettingsAction))),
       relays: (relaysSettingsView) => renderRelaysSettings(
           nodeName,
           relaysSettingsView,
           nodeState,
-          keysStore,
           (RelaysSettingsAction relaysSettingsAction) => queueAction(
               CardSettingsAction.relaysSettings(relaysSettingsAction))),
       indexServers: (indexServersSettingsView) => renderIndexServersSettings(
           nodeName,
           indexServersSettingsView,
           nodeState,
-          keysStore,
           (IndexServersSettingsAction indexServersSettingsAction) =>
               queueAction(CardSettingsAction.indexServersSettings(
                   indexServersSettingsAction))));

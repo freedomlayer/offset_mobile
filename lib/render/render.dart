@@ -6,8 +6,6 @@ import '../state/state.dart';
 import '../protocol/protocol.dart';
 import '../actions/actions.dart';
 
-import '../utils/keys_store.dart';
-
 import 'consts.dart';
 import 'home.dart';
 import 'buy.dart';
@@ -33,24 +31,24 @@ Widget renderNotReady() {
 
 /// Rendering when we are connected to the process
 Widget render(
-    AppState appState, KeysStore keysStore, Function(AppAction) queueAction) {
+    AppState appState, Function(AppAction) queueAction) {
   final home = appState.viewState.match(
       view: (appView) =>
-          renderAppView(appView, appState.nodesStates, keysStore, queueAction),
+          renderAppView(appView, appState.nodesStates, queueAction),
       transition: (oldView, newView, nextRequests, optPendingRequest) =>
-          renderTransition(oldView, appState.nodesStates, keysStore));
+          renderTransition(oldView, appState.nodesStates));
 
   return MaterialApp(title: APP_TITLE, home: home);
 }
 
 Widget renderAppView(AppView appView, BuiltMap<NodeName, NodeState> nodesStates,
-    KeysStore keysStore, Function(AppAction) queueAction) {
+    Function(AppAction) queueAction) {
   return appView.match(
     home: () => renderHome(
         nodesStates, (homeAction) => queueAction(AppAction.home(homeAction))),
     buy: (buyView) => renderBuy(buyView, nodesStates,
         (buyAction) => queueAction(AppAction.buy(buyAction))),
-    sell: (sellView) => renderSell(sellView, nodesStates, keysStore,
+    sell: (sellView) => renderSell(sellView, nodesStates,
         (sellAction) => queueAction(AppAction.sell(sellAction))),
     inTransactions: (inTransactionsView) => renderInTransactions(
         inTransactionsView,
@@ -67,14 +65,13 @@ Widget renderAppView(AppView appView, BuiltMap<NodeName, NodeState> nodesStates,
     settings: (settingsView) => renderSettings(
         settingsView,
         nodesStates,
-        keysStore,
         (settingsAction) => queueAction(AppAction.settings(settingsAction))),
   );
 }
 
 /// A transition view: We are waiting for some operations to complete
 Widget renderTransition(AppView oldView,
-    BuiltMap<NodeName, NodeState> nodesStates, KeysStore keysStore) {
+    BuiltMap<NodeName, NodeState> nodesStates) {
   final noQueueAction = (AppAction appAction) {
     logger.w('Received action $appAction during transition.');
   };
@@ -83,7 +80,7 @@ Widget renderTransition(AppView oldView,
   return MaterialApp(
       title: APP_TITLE,
       home: Stack(children: <Widget>[
-        renderAppView(oldView, nodesStates, keysStore, noQueueAction),
+        renderAppView(oldView, nodesStates, noQueueAction),
         CircularProgressIndicator(value: null)
       ]));
 }

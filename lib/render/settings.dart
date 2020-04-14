@@ -11,7 +11,6 @@ import '../protocol/protocol.dart';
 import '../protocol/file.dart';
 import '../state/state.dart';
 import '../actions/actions.dart';
-import '../utils/keys_store.dart';
 
 import 'settings/card.dart';
 
@@ -24,7 +23,6 @@ final logger = createLogger('render::settings');
 Widget renderSettings(
     SettingsView settingsView,
     BuiltMap<NodeName, NodeState> nodesStates,
-    KeysStore keysStore,
     Function(SettingsAction) queueAction) {
   return settingsView.match(
       home: () => _renderHome(nodesStates, queueAction),
@@ -34,7 +32,6 @@ Widget renderSettings(
         return renderCardSettings(
             cardSettingsView,
             nodeState,
-            keysStore,
             (CardSettingsAction cardSettingsAction) => queueAction(
                 SettingsAction.cardSettings(
                     cardSettingsView.nodeName, cardSettingsAction)));
@@ -42,7 +39,6 @@ Widget renderSettings(
       newCard: (newCardView) => _renderNewCard(
           newCardView,
           nodesStates,
-          keysStore,
           (NewCardAction newCardAction) =>
               queueAction(SettingsAction.newCard(newCardAction))),
       selectCardAddRelay: (relayAddress) =>
@@ -105,14 +101,13 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
 Widget _renderNewCard(
     NewCardView newCardView,
     BuiltMap<NodeName, NodeState> nodesStates,
-    KeysStore keysStore,
     Function(NewCardAction) queueAction) {
   return newCardView.match(
       select: () => _renderNewCardSelect(nodesStates, queueAction),
-      newLocal: () => _renderNewCardLocal(nodesStates, keysStore, queueAction),
+      newLocal: () => NewCardLocal(nodesStates, queueAction),
       newRemote: () => _renderNewCardRemote(nodesStates, queueAction),
-      newRemoteName: (remoteCardFile) => _renderNewRemoteName(
-          remoteCardFile, nodesStates, keysStore, queueAction));
+      newRemoteName: (remoteCardFile) =>
+          NewRemoteName(remoteCardFile, nodesStates, queueAction));
 }
 
 Widget _renderNewCardSelect(BuiltMap<NodeName, NodeState> nodesStates,
@@ -143,66 +138,80 @@ Widget _renderNewCardSelect(BuiltMap<NodeName, NodeState> nodesStates,
       backAction: () => queueAction(NewCardAction.back()));
 }
 
-Widget _renderNewCardLocal(BuiltMap<NodeName, NodeState> nodesStates,
-    KeysStore keysStore, Function(NewCardAction) queueAction) {
-  final _formKey = keysStore.formKey('_renderNewCardLocal');
+class NewCardLocal extends StatefulWidget {
+  final BuiltMap<NodeName, NodeState> nodesStates;
+  final Function(NewCardAction) queueAction;
 
-  // Saves current node name:
-  String _nodeName = '';
+  NewCardLocal(this.nodesStates, this.queueAction, {Key key}) : super(key: key);
 
-  final _submitForm = () {
-    final FormState form = _formKey.currentState;
+  @override
+  _NewCardLocalState createState() => _NewCardLocalState();
+}
 
-    if (!form.validate()) {
-      // Form is not valid
-    } else {
-      // Save form fields:
-      form.save();
+class _NewCardLocalState extends State<NewCardLocal> {
+  final _formKey = GlobalKey<FormState>();
 
-      queueAction(NewCardAction.newCardLocal(NodeName(_nodeName)));
-    }
-  };
+  @override
+  Widget build(BuildContext context) {
+    // Saves current node name:
+    String _nodeName = '';
 
-  final body =
-      StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-    final form = Form(
-        key: _formKey,
-        autovalidate: true,
-        child: ListView(
-          // padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          children: <Widget>[
-            ListTile(
-                leading: const FaIcon(FontAwesomeIcons.creditCard),
-                title: TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: 'How do you want to call this card?',
-                    labelText: 'Card name',
-                  ),
-                  // TODO: Possibly add a validator?
-                  keyboardType: TextInputType.text,
-                  inputFormatters: [LengthLimitingTextInputFormatter(64)],
-                  onSaved: (nodeName) => _nodeName = nodeName,
-                )),
-            SizedBox(height: 24.0),
-            Align(
-                child: RaisedButton.icon(
-              icon: const FaIcon(FontAwesomeIcons.plus),
-              label: const Text('Add card'),
-              onPressed: _submitForm,
-            )),
-          ],
-        ));
+    final _submitForm = () {
+      final FormState form = _formKey.currentState;
 
-    return SafeArea(
-        top: false,
-        bottom: false,
-        child: Padding(padding: EdgeInsets.all(8.0), child: form));
-  });
+      if (!form.validate()) {
+        // Form is not valid
+      } else {
+        // Save form fields:
+        form.save();
 
-  return frame(
-      title: Text('New local card'),
-      body: body,
-      backAction: () => queueAction(NewCardAction.back()));
+        this
+            .widget
+            .queueAction(NewCardAction.newCardLocal(NodeName(_nodeName)));
+      }
+    };
+
+    final body =
+        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+      final form = Form(
+          key: _formKey,
+          autovalidate: true,
+          child: ListView(
+            // padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            children: <Widget>[
+              ListTile(
+                  leading: const FaIcon(FontAwesomeIcons.creditCard),
+                  title: TextFormField(
+                    decoration: const InputDecoration(
+                      hintText: 'How do you want to call this card?',
+                      labelText: 'Card name',
+                    ),
+                    // TODO: Possibly add a validator?
+                    keyboardType: TextInputType.text,
+                    inputFormatters: [LengthLimitingTextInputFormatter(64)],
+                    onSaved: (nodeName) => _nodeName = nodeName,
+                  )),
+              SizedBox(height: 24.0),
+              Align(
+                  child: RaisedButton.icon(
+                icon: const FaIcon(FontAwesomeIcons.plus),
+                label: const Text('Add card'),
+                onPressed: _submitForm,
+              )),
+            ],
+          ));
+
+      return SafeArea(
+          top: false,
+          bottom: false,
+          child: Padding(padding: EdgeInsets.all(8.0), child: form));
+    });
+
+    return frame(
+        title: Text('New local card'),
+        body: body,
+        backAction: () => this.widget.queueAction(NewCardAction.back()));
+  }
 }
 
 Widget _renderNewCardRemote(BuiltMap<NodeName, NodeState> nodesStates,
@@ -252,71 +261,83 @@ Widget _renderNewCardRemote(BuiltMap<NodeName, NodeState> nodesStates,
       backAction: () => queueAction(NewCardAction.back()));
 }
 
-Widget _renderNewRemoteName(
-    RemoteCardFile remoteCardFile,
-    BuiltMap<NodeName, NodeState> nodesStates,
-    KeysStore keysStore,
-    Function(NewCardAction) queueAction) {
-  final _formKey = keysStore
-      .formKey('_renderNewRemoteName::${remoteCardFile.nodePublicKey}');
+class NewRemoteName extends StatefulWidget {
+  final RemoteCardFile remoteCardFile;
+  final BuiltMap<NodeName, NodeState> nodesStates;
+  final Function(NewCardAction) queueAction;
 
-  // Saves current node name:
-  String _nodeName = '';
+  NewRemoteName(this.remoteCardFile, this.nodesStates, this.queueAction,
+      {Key key})
+      : super(key: key);
 
-  final _submitForm = () {
-    final FormState form = _formKey.currentState;
-
-    if (!form.validate()) {
-      // Form is not valid
-    } else {
-      // Save form fields:
-      form.save();
-      queueAction(
-          NewCardAction.newCardRemote(NodeName(_nodeName), remoteCardFile));
-    }
-  };
-
-  final body =
-      StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-    final form = Form(
-        key: _formKey,
-        autovalidate: true,
-        child: ListView(
-          // padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          children: <Widget>[
-            ListTile(
-                leading: const FaIcon(FontAwesomeIcons.creditCard),
-                title: TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: 'How do you want to call this card?',
-                    labelText: 'Card name',
-                  ),
-                  // TODO: Possibly add a validator?
-                  keyboardType: TextInputType.text,
-                  inputFormatters: [LengthLimitingTextInputFormatter(64)],
-                  onSaved: (nodeName) => _nodeName = nodeName,
-                )),
-            SizedBox(height: 24.0),
-            Align(
-                child: RaisedButton.icon(
-              icon: const FaIcon(FontAwesomeIcons.plus),
-              label: const Text('Add card'),
-              onPressed: _submitForm,
-            )),
-          ],
-        ));
-
-    return SafeArea(
-        top: false,
-        bottom: false,
-        child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
-  });
-
-  return frame(
-      title: Text('Remote card name'),
-      body: body,
-      backAction: () => queueAction(NewCardAction.back()));
+  @override
+  _NewRemoteNameState createState() => _NewRemoteNameState();
 }
+
+class _NewRemoteNameState extends State<NewRemoteName> {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    // Saves current node name:
+    String _nodeName = '';
+
+    final _submitForm = () {
+      final FormState form = _formKey.currentState;
+
+      if (!form.validate()) {
+        // Form is not valid
+      } else {
+        // Save form fields:
+        form.save();
+        this.widget.queueAction(
+            NewCardAction.newCardRemote(NodeName(_nodeName), this.widget.remoteCardFile));
+      }
+    };
+
+    final body =
+        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+      final form = Form(
+          key: _formKey,
+          autovalidate: true,
+          child: ListView(
+            // padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            children: <Widget>[
+              ListTile(
+                  leading: const FaIcon(FontAwesomeIcons.creditCard),
+                  title: TextFormField(
+                    decoration: const InputDecoration(
+                      hintText: 'How do you want to call this card?',
+                      labelText: 'Card name',
+                    ),
+                    // TODO: Possibly add a validator?
+                    keyboardType: TextInputType.text,
+                    inputFormatters: [LengthLimitingTextInputFormatter(64)],
+                    onSaved: (nodeName) => _nodeName = nodeName,
+                  )),
+              SizedBox(height: 24.0),
+              Align(
+                  child: RaisedButton.icon(
+                icon: const FaIcon(FontAwesomeIcons.plus),
+                label: const Text('Add card'),
+                onPressed: _submitForm,
+              )),
+            ],
+          ));
+
+      return SafeArea(
+          top: false,
+          bottom: false,
+          child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
+    });
+
+    return frame(
+        title: Text('Remote card name'),
+        body: body,
+        backAction: () => this.widget.queueAction(NewCardAction.back()));
+  }
+}
+
 
 Widget _renderSelectCardAddRelay(
     RelayAddress relayAddress,

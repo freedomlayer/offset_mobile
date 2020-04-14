@@ -18,7 +18,6 @@ import 'protocol/protocol.dart';
 import 'protocol/serialize.dart';
 import 'actions/actions.dart';
 import 'render/render.dart';
-import 'utils/keys_store.dart';
 import 'logger.dart';
 import 'error.dart';
 
@@ -30,7 +29,7 @@ class MainAppError extends AppError {
 
 void main() {
   // Set log level for the whole application:
-  Logger.level = Level.warning;
+  Logger.level = Level.info;
   return runApp(MainApp());
 }
 
@@ -89,7 +88,6 @@ class MainAppState extends State<MainApp> {
   bool _isReady = false;
   Process _process;
   AppState _appState;
-  KeysStore _keysStore;
 
   /// Sender side of events channel
   StreamController<AppEvent> _eventController;
@@ -100,7 +98,6 @@ class MainAppState extends State<MainApp> {
   Future<void> initProcess() async {
     _process = await openProcess();
     _eventController = StreamController<AppEvent>();
-    _keysStore = KeysStore();
 
     // TODO: We use asBroadcastStream() to be able to read the first element.
     // There is possibly a cleaner way to do this.
@@ -240,7 +237,7 @@ class MainAppState extends State<MainApp> {
     if (!_isReady) {
       return renderNotReady();
     } else {
-      return render(_appState, _keysStore, _queueAction);
+      return render(_appState, _queueAction);
     }
   }
 }

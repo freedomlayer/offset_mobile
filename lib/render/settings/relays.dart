@@ -6,7 +6,6 @@ import '../../protocol/protocol.dart';
 import '../../protocol/file.dart';
 import '../../state/state.dart';
 import '../../actions/actions.dart';
-import '../../utils/keys_store.dart';
 
 import '../utils/file_picker.dart';
 import '../utils/qr_scan.dart';
@@ -21,13 +20,12 @@ Widget renderRelaysSettings(
     NodeName nodeName,
     RelaysSettingsView relaysSettingsView,
     NodeState nodeState,
-    KeysStore keysStore,
     Function(RelaysSettingsAction) queueAction) {
   return relaysSettingsView.match(
       home: () => _renderHome(nodeName, nodeState, queueAction),
       newRelaySelect: () => _renderNewRelay(nodeName, nodeState, queueAction),
-      newRelayName: (relayAddress) => _renderRelayName(
-          nodeName, relayAddress, nodeState, keysStore, queueAction));
+      newRelayName: (relayAddress) =>
+          RelayName(nodeName, relayAddress, nodeState, queueAction));
 }
 
 Widget _renderHome(NodeName nodeName, NodeState nodeState,
@@ -149,70 +147,82 @@ Widget _renderNewRelay(NodeName nodeName, NodeState nodeState,
       backAction: () => queueAction(RelaysSettingsAction.back()));
 }
 
-Widget _renderRelayName(
-    NodeName nodeName,
-    RelayAddress relayAddress,
-    NodeState nodeState,
-    KeysStore keysStore,
-    Function(RelaysSettingsAction) queueAction) {
-  final _formKey = keysStore
-      .formKey('_renderRelayName::$nodeName::${relayAddress.publicKey}');
+class RelayName extends StatefulWidget {
+  final NodeName nodeName;
+  final RelayAddress relayAddress;
+  final NodeState nodeState;
+  final Function(RelaysSettingsAction) queueAction;
 
-  // Saves current relay name:
-  String _relayName = '';
+  RelayName(this.nodeName, this.relayAddress, this.nodeState, this.queueAction,
+      {Key key})
+      : super(key: key);
 
-  final _submitForm = () {
-    final FormState form = _formKey.currentState;
+  @override
+  _RelayNameState createState() => _RelayNameState();
+}
 
-    if (!form.validate()) {
-      // Form is not valid
-    } else {
-      // Save form fields:
-      form.save();
-      queueAction(RelaysSettingsAction.newRelay(NamedRelayAddress((b) => b
-        ..publicKey = relayAddress.publicKey
-        ..address = relayAddress.address
-        ..name = _relayName)));
-    }
-  };
+class _RelayNameState extends State<RelayName> {
+  final _formKey = GlobalKey<FormState>();
 
-  final body =
-      StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-    final form = Form(
-        key: _formKey,
-        autovalidate: true,
-        child: ListView(
-          children: <Widget>[
-            ListTile(
-                leading: const FaIcon(FontAwesomeIcons.satellite),
-                title: TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: 'How do you want to call this relay?',
-                    labelText: 'Relay name',
-                  ),
-                  // TODO: Possibly add a validator?
-                  keyboardType: TextInputType.text,
-                  inputFormatters: [LengthLimitingTextInputFormatter(64)],
-                  onSaved: (relayName) => _relayName = relayName,
-                )),
-            SizedBox(height: 24.0),
-            Align(
-                child: RaisedButton.icon(
-              icon: const FaIcon(FontAwesomeIcons.plus),
-              label: const Text('Add relay'),
-              onPressed: _submitForm,
-            )),
-          ],
-        ));
+  @override
+  Widget build(BuildContext context) {
+    // Saves current relay name:
+    String _relayName = '';
 
-    return SafeArea(
-        top: false,
-        bottom: false,
-        child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
-  });
+    final _submitForm = () {
+      final FormState form = _formKey.currentState;
 
-  return frame(
-      title: Text('Relay name'),
-      body: body,
-      backAction: () => queueAction(RelaysSettingsAction.back()));
+      if (!form.validate()) {
+        // Form is not valid
+      } else {
+        // Save form fields:
+        form.save();
+        this.widget.queueAction(
+            RelaysSettingsAction.newRelay(NamedRelayAddress((b) => b
+              ..publicKey = this.widget.relayAddress.publicKey
+              ..address = this.widget.relayAddress.address
+              ..name = _relayName)));
+      }
+    };
+
+    final body =
+        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+      final form = Form(
+          key: _formKey,
+          autovalidate: true,
+          child: ListView(
+            children: <Widget>[
+              ListTile(
+                  leading: const FaIcon(FontAwesomeIcons.satellite),
+                  title: TextFormField(
+                    decoration: const InputDecoration(
+                      hintText: 'How do you want to call this relay?',
+                      labelText: 'Relay name',
+                    ),
+                    // TODO: Possibly add a validator?
+                    keyboardType: TextInputType.text,
+                    inputFormatters: [LengthLimitingTextInputFormatter(64)],
+                    onSaved: (relayName) => _relayName = relayName,
+                  )),
+              SizedBox(height: 24.0),
+              Align(
+                  child: RaisedButton.icon(
+                icon: const FaIcon(FontAwesomeIcons.plus),
+                label: const Text('Add relay'),
+                onPressed: _submitForm,
+              )),
+            ],
+          ));
+
+      return SafeArea(
+          top: false,
+          bottom: false,
+          child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
+    });
+
+    return frame(
+        title: Text('Relay name'),
+        body: body,
+        backAction: () => this.widget.queueAction(RelaysSettingsAction.back()));
+  }
 }

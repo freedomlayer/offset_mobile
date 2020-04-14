@@ -7,7 +7,6 @@ import '../../protocol/protocol.dart';
 import '../../protocol/file.dart';
 import '../../state/state.dart';
 import '../../actions/actions.dart';
-import '../../utils/keys_store.dart';
 
 import '../utils/qr_show.dart';
 import '../utils/share_file.dart';
@@ -27,7 +26,6 @@ Widget renderFriendsSettings(
     NodeName nodeName,
     FriendsSettingsView friendsSettingsView,
     NodeState nodeState,
-    KeysStore keysStore,
     Function(FriendsSettingsAction) queueAction) {
   return friendsSettingsView.match(
       home: () => _renderHome(nodeName, nodeState, queueAction),
@@ -46,7 +44,6 @@ Widget renderFriendsSettings(
             nodeName,
             friendSettingsView,
             friendReport,
-            keysStore,
             (FriendSettingsAction friendSettingsAction) => queueAction(
                 FriendsSettingsAction.friendSettings(
                     friendSettingsView.friendPublicKey, friendSettingsAction)));
@@ -55,7 +52,6 @@ Widget renderFriendsSettings(
           nodeName,
           newFriendView,
           nodeState,
-          keysStore,
           (NewFriendAction newFriendAction) =>
               queueAction(FriendsSettingsAction.newFriend(newFriendAction))),
       shareInfo: () => _renderShareInfo(nodeName, nodeState, queueAction));
@@ -132,16 +128,12 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
       actions: <Widget>[shareButton]);
 }
 
-Widget _renderNewFriend(
-    NodeName nodeName,
-    NewFriendView newFriendView,
-    NodeState nodeState,
-    KeysStore keysStore,
-    Function(NewFriendAction) queueAction) {
+Widget _renderNewFriend(NodeName nodeName, NewFriendView newFriendView,
+    NodeState nodeState, Function(NewFriendAction) queueAction) {
   return newFriendView.match(
       select: () => _renderSelectNewFriend(nodeName, nodeState, queueAction),
-      name: (friendFile) => _renderNewFriendName(
-          nodeName, friendFile, nodeState, keysStore, queueAction));
+      name: (friendFile) =>
+          NewFriendName(nodeName, friendFile, nodeState, queueAction));
 }
 
 Widget _renderSelectNewFriend(NodeName nodeName, NodeState nodeState,
@@ -197,69 +189,82 @@ Widget _renderSelectNewFriend(NodeName nodeName, NodeState nodeState,
       backAction: () => queueAction(NewFriendAction.back()));
 }
 
-Widget _renderNewFriendName(
-    NodeName nodeName,
-    FriendFile friendFile,
-    NodeState nodeState,
-    KeysStore keysStore,
-    Function(NewFriendAction) queueAction) {
-  final _formKey = keysStore
-      .formKey('_renderNewFriendName::$nodeName::${friendFile.publicKey}');
+class NewFriendName extends StatefulWidget {
+  final NodeName nodeName;
+  final FriendFile friendFile;
+  final NodeState nodeState;
+  final Function(NewFriendAction) queueAction;
 
-  // Saves current relay name:
-  String _friendName = '';
+  NewFriendName(
+      this.nodeName, this.friendFile, this.nodeState, this.queueAction,
+      {Key key})
+      : super(key: key);
 
-  final _submitForm = () {
-    final FormState form = _formKey.currentState;
+  @override
+  _NewFriendNameState createState() => _NewFriendNameState();
+}
 
-    if (!form.validate()) {
-      // Form is not valid
-    } else {
-      // Save form fields:
-      form.save();
-      queueAction(NewFriendAction.addFriend(_friendName, friendFile));
-    }
-  };
+class _NewFriendNameState extends State<NewFriendName> {
+  final _formKey = GlobalKey<FormState>();
 
-  final body =
-      StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-    final form = Form(
-        key: _formKey,
-        autovalidate: true,
-        child: ListView(
-          children: <Widget>[
-            ListTile(
-                leading: const FaIcon(FontAwesomeIcons.creditCard),
-                title: TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: 'How do you want to call this friend?',
-                    labelText: 'Friend name',
-                  ),
-                  // TODO: Possibly add a validator?
-                  keyboardType: TextInputType.text,
-                  inputFormatters: [LengthLimitingTextInputFormatter(64)],
-                  onSaved: (friendName) => _friendName = friendName,
-                )),
-            SizedBox(height: 24.0),
-            Align(
-                child: RaisedButton.icon(
-              icon: const FaIcon(FontAwesomeIcons.plus),
-              label: const Text('Add friend'),
-              onPressed: _submitForm,
-            )),
-          ],
-        ));
+  @override
+  Widget build(BuildContext context) {
+    // Saves current relay name:
+    String _friendName = '';
 
-    return SafeArea(
-        top: false,
-        bottom: false,
-        child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
-  });
+    final _submitForm = () {
+      final FormState form = _formKey.currentState;
 
-  return frame(
-      title: Text('Friend name'),
-      body: body,
-      backAction: () => queueAction(NewFriendAction.back()));
+      if (!form.validate()) {
+        // Form is not valid
+      } else {
+        // Save form fields:
+        form.save();
+        this.widget.queueAction(
+            NewFriendAction.addFriend(_friendName, this.widget.friendFile));
+      }
+    };
+
+    final body =
+        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+      final form = Form(
+          key: _formKey,
+          autovalidate: true,
+          child: ListView(
+            children: <Widget>[
+              ListTile(
+                  leading: const FaIcon(FontAwesomeIcons.creditCard),
+                  title: TextFormField(
+                    decoration: const InputDecoration(
+                      hintText: 'How do you want to call this friend?',
+                      labelText: 'Friend name',
+                    ),
+                    // TODO: Possibly add a validator?
+                    keyboardType: TextInputType.text,
+                    inputFormatters: [LengthLimitingTextInputFormatter(64)],
+                    onSaved: (friendName) => _friendName = friendName,
+                  )),
+              SizedBox(height: 24.0),
+              Align(
+                  child: RaisedButton.icon(
+                icon: const FaIcon(FontAwesomeIcons.plus),
+                label: const Text('Add friend'),
+                onPressed: _submitForm,
+              )),
+            ],
+          ));
+
+      return SafeArea(
+          top: false,
+          bottom: false,
+          child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
+    });
+
+    return frame(
+        title: Text('Friend name'),
+        body: body,
+        backAction: () => this.widget.queueAction(NewFriendAction.back()));
+  }
 }
 
 Widget _renderShareInfo(NodeName nodeName, NodeState nodeState,
