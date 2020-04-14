@@ -292,38 +292,38 @@ class _NewRemoteNameState extends State<NewRemoteName> {
       }
     };
 
-      final form = Form(
-          key: _formKey,
-          autovalidate: true,
-          child: ListView(
-            // padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            children: <Widget>[
-              ListTile(
-                  leading: const FaIcon(FontAwesomeIcons.creditCard),
-                  title: TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: 'How do you want to call this card?',
-                      labelText: 'Card name',
-                    ),
-                    // TODO: Possibly add a validator?
-                    keyboardType: TextInputType.text,
-                    inputFormatters: [LengthLimitingTextInputFormatter(64)],
-                    onSaved: (nodeName) => _nodeName = nodeName,
-                  )),
-              SizedBox(height: 24.0),
-              Align(
-                  child: RaisedButton.icon(
-                icon: const FaIcon(FontAwesomeIcons.plus),
-                label: const Text('Add card'),
-                onPressed: _submitForm,
-              )),
-            ],
-          ));
+    final form = Form(
+        key: _formKey,
+        autovalidate: true,
+        child: ListView(
+          // padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          children: <Widget>[
+            ListTile(
+                leading: const FaIcon(FontAwesomeIcons.creditCard),
+                title: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: 'How do you want to call this card?',
+                    labelText: 'Card name',
+                  ),
+                  // TODO: Possibly add a validator?
+                  keyboardType: TextInputType.text,
+                  inputFormatters: [LengthLimitingTextInputFormatter(64)],
+                  onSaved: (nodeName) => _nodeName = nodeName,
+                )),
+            SizedBox(height: 24.0),
+            Align(
+                child: RaisedButton.icon(
+              icon: const FaIcon(FontAwesomeIcons.plus),
+              label: const Text('Add card'),
+              onPressed: _submitForm,
+            )),
+          ],
+        ));
 
-    final body =SafeArea(
-          top: false,
-          bottom: false,
-          child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
+    final body = SafeArea(
+        top: false,
+        bottom: false,
+        child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
 
     return frame(
         title: Text('Remote card name'),

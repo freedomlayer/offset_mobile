@@ -185,38 +185,37 @@ class _RelayNameState extends State<RelayName> {
       }
     };
 
-        final form = Form(
-          key: _formKey,
-          autovalidate: true,
-          child: ListView(
-            children: <Widget>[
-              ListTile(
-                  leading: const FaIcon(FontAwesomeIcons.satellite),
-                  title: TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: 'How do you want to call this relay?',
-                      labelText: 'Relay name',
-                    ),
-                    // TODO: Possibly add a validator?
-                    keyboardType: TextInputType.text,
-                    inputFormatters: [LengthLimitingTextInputFormatter(64)],
-                    onSaved: (relayName) => _relayName = relayName,
-                  )),
-              SizedBox(height: 24.0),
-              Align(
-                  child: RaisedButton.icon(
-                icon: const FaIcon(FontAwesomeIcons.plus),
-                label: const Text('Add relay'),
-                onPressed: _submitForm,
-              )),
-            ],
-          ));
-
+    final form = Form(
+        key: _formKey,
+        autovalidate: true,
+        child: ListView(
+          children: <Widget>[
+            ListTile(
+                leading: const FaIcon(FontAwesomeIcons.satellite),
+                title: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: 'How do you want to call this relay?',
+                    labelText: 'Relay name',
+                  ),
+                  // TODO: Possibly add a validator?
+                  keyboardType: TextInputType.text,
+                  inputFormatters: [LengthLimitingTextInputFormatter(64)],
+                  onSaved: (relayName) => _relayName = relayName,
+                )),
+            SizedBox(height: 24.0),
+            Align(
+                child: RaisedButton.icon(
+              icon: const FaIcon(FontAwesomeIcons.plus),
+              label: const Text('Add relay'),
+              onPressed: _submitForm,
+            )),
+          ],
+        ));
 
     final body = SafeArea(
-          top: false,
-          bottom: false,
-          child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
+        top: false,
+        bottom: false,
+        child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
 
     return frame(
         title: Text('Relay name'),
