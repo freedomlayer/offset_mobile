@@ -156,7 +156,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
               ListTile(
                   leading: const FaIcon(FontAwesomeIcons.yenSign),
                   title: DropdownButton<Currency>(
-                      hint: Text('Select Currency'),
+                      hint: Text('Select currency'),
                       items: currencies
                           .map((currency) => DropdownMenuItem<Currency>(
                               key: Key(currency.inner),
