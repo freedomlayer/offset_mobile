@@ -103,6 +103,7 @@ Widget _renderCardBalances(
               ),
           itemCount: balanceRows.length,
           itemBuilder: (context, index) => Padding(
+              key: Key(balanceRows[index].currency.inner),
               padding: EdgeInsets.fromLTRB(8.0, 0.0, 32.0, 0.0),
               child: ListTile(
                   leading: const FaIcon(FontAwesomeIcons.coins),
