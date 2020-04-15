@@ -492,7 +492,7 @@ class _CurrencySettingsState extends State<CurrencySettings> {
             ListTile(
                 title: Align(
                     child: RaisedButton.icon(
-              icon: FaIcon(FontAwesomeIcons.check),
+              icon: FaIcon(FontAwesomeIcons.check, color: Colors.green),
               label: const Text('Apply'),
               onPressed: _submitForm,
             ))),
