@@ -14,6 +14,7 @@ import 'in_transactions.dart';
 import 'out_transactions.dart';
 import 'balances.dart';
 import 'settings.dart';
+import 'about.dart';
 import 'frame.dart';
 
 import '../logger.dart';
@@ -63,6 +64,8 @@ Widget renderAppView(AppView appView, BuiltMap<NodeName, NodeState> nodesStates,
         (balancesAction) => queueAction(AppAction.balances(balancesAction))),
     settings: (settingsView) => renderSettings(settingsView, nodesStates,
         (settingsAction) => queueAction(AppAction.settings(settingsAction))),
+    about: () =>
+        renderAbout((aboutAction) => queueAction(AppAction.about(aboutAction))),
   );
 }
 

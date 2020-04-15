@@ -78,6 +78,7 @@ AppView adjustAppView(
         AppView.balances(adjustBalancesView(balancesView, nodesStates)),
     settings: (settingsView) =>
         AppView.settings(adjustSettingsView(settingsView, nodesStates)),
+    about: () => appView,
   );
 }
 

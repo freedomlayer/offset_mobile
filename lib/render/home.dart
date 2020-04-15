@@ -57,7 +57,12 @@ Widget renderHome(BuiltMap<NodeName, NodeState> nodesStates,
         leading: Icon(Icons.settings),
         title: Text('Settings'),
         subtitle: Text('Configure cards'),
-        onTap: () => queueAction(HomeAction.selectSettings()))
+        onTap: () => queueAction(HomeAction.selectSettings())),
+    ListTile(
+        leading: Icon(Icons.info),
+        title: Text('About'),
+        subtitle: Text('About Offset'),
+        onTap: () => queueAction(HomeAction.selectAbout())),
   ]);
   return frame(title: Text(APP_TITLE), body: listView);
 }
