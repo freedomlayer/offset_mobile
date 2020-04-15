@@ -56,11 +56,15 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
   for (final nodeName in nodesStates.keys.toList()..sort()) {
     final nodeState = nodesStates[nodeName];
 
+    final trailingIcon = nodeState.info.isLocal ?
+        FontAwesomeIcons.mobileAlt
+        : FontAwesomeIcons.networkWired;
+
     final trailing = !nodeState.isEnabled
-        ? FaIcon(FontAwesomeIcons.satelliteDish, color: Colors.red)
+        ? FaIcon(trailingIcon, color: Colors.red)
         : nodeState.inner.isOpen
-            ? FaIcon(FontAwesomeIcons.satelliteDish, color: Colors.green)
-            : FaIcon(FontAwesomeIcons.satelliteDish, color: Colors.orange);
+            ? FaIcon(trailingIcon, color: Colors.green)
+            : FaIcon(trailingIcon, color: Colors.orange);
 
     final cardEntry = ListTile(
       key: Key(nodeName.inner),
