@@ -113,7 +113,7 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
       statusColor = Colors.orange;
     }, foundRoute: (_a, _b) {
       trailingIcon = FontAwesomeIcons.route;
-      statusColor = Colors.blue;
+      statusColor = Colors.orange;
     }, sending: (_) {
       trailingIcon = FontAwesomeIcons.paperPlane;
       statusColor = Colors.orange;
@@ -413,7 +413,7 @@ Widget _renderCommit(
             icon: const FaIcon(FontAwesomeIcons.shareAlt),
             onPressed: () async =>
                 await shareFile<Commit>(commit, 'commit.$COMMIT_EXT'),
-            label: Text('Send Commitment'))),
+            label: Text('Send commitment'))),
   ]);
 
   final body = Column(children: [

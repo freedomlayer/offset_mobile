@@ -115,15 +115,26 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
         title: InkWell(
             onTap: () => queueAction(InTransactionsAction.selectInvoice(
                 inTransaction.nodeName, inTransaction.invoiceId)),
-            child: Text(
-                '${inTransaction.nodeName.inner}\n${amountToString(inTransaction.totalDestPayment)} ${inTransaction.currency.inner}\n' +
-                    '${inTransaction.description}')),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text('${inTransaction.nodeName.inner}'),
+              Text(
+                  '${amountToString(inTransaction.totalDestPayment)} ${inTransaction.currency.inner}',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              Text('${inTransaction.description}'),
+            ])),
         trailing: trailing);
 
     children.add(outEntry);
   }
 
-  final listView = ListView(padding: EdgeInsets.all(8), children: children);
+  final listView = ListView.separated(
+      padding: EdgeInsets.all(8),
+      itemCount: children.length,
+      separatorBuilder: (context, index) => Divider(
+            color: Colors.grey,
+          ),
+      itemBuilder: (context, index) => children[index]);
 
   return frame(
       title: Text('Incoming'),
@@ -155,7 +166,7 @@ Widget _renderTransaction(
 
 Widget _renderCommittedTransaction(NodeName nodeName, InvoiceId invoiceId,
     OpenInvoice openInvoice, Function(InTransactionsAction) queueAction) {
-  final body = ListView(children: <Widget>[
+  final body = ListView(padding: EdgeInsets.all(8), children: <Widget>[
     ListTile(
         leading: FaIcon(FontAwesomeIcons.creditCard),
         title: Text('${nodeName.inner}')),
@@ -167,7 +178,8 @@ Widget _renderCommittedTransaction(NodeName nodeName, InvoiceId invoiceId,
         leading: const FaIcon(FontAwesomeIcons.comment),
         title: Text('${openInvoice.description}')),
     ListTile(
-        leading: const FaIcon(FontAwesomeIcons.thermometerFull, color: Colors.green),
+        leading:
+            const FaIcon(FontAwesomeIcons.thermometerFull, color: Colors.green),
         title: Text('Received'),
         trailing: FlatButton(
             child: const Icon(Icons.cancel, color: Colors.red),
@@ -239,6 +251,7 @@ Widget _renderUncommittedTransaction(
   ];
 
   final invoiceBody = ListView(
+      padding: EdgeInsets.all(8),
       children: baseChildren +
           [
             Center(
@@ -259,7 +272,7 @@ Widget _renderUncommittedTransaction(
             ))),
           ]);
 
-  final commitBody = ListView(children: [
+  final commitBody = ListView(padding: EdgeInsets.all(8), children: [
     ListTile(
         title: Center(
             child: Text('How to receive commitment?',
