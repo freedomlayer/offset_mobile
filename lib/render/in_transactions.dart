@@ -97,7 +97,7 @@ List<InTransaction> _loadTransactions(
     return 0;
   });
 
-  return inTransactions;
+  return inTransactions.reversed.toList();
 }
 
 Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
