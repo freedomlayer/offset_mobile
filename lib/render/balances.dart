@@ -24,13 +24,11 @@ Widget renderBalances(
 
 Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
     Function(BalancesAction) queueAction) {
-
   final body = renderSelectCard(
       nodesStates.keys,
       List.from(nodesStates.keys)
         ..removeWhere((nodeName) => !nodesStates[nodeName].inner.isOpen),
-      (nodeName) => queueAction(
-          BalancesAction.selectCard(nodeName)));
+      (nodeName) => queueAction(BalancesAction.selectCard(nodeName)));
 
   return frame(
       title: Text('Balances'),
@@ -73,6 +71,13 @@ Map<Currency, BigInt> calcBalances(BuiltMap<PublicKey, FriendReport> friends) {
   return balances;
 }
 
+class BalanceRow {
+  final Currency currency;
+  final I128 balance;
+
+  BalanceRow(this.currency, this.balance);
+}
+
 Widget _renderCardBalances(
     NodeName nodeName,
     BuiltMap<NodeName, NodeState> nodesStates,
@@ -86,13 +91,10 @@ Widget _renderCardBalances(
 
   final balances = calcBalances(nodeOpen.compactReport.friends);
   final sortedCurrencies = balances.keys.toList()..sort();
-  final rows = <DataRow>[];
+  final balanceRows = <BalanceRow>[];
   for (final currency in sortedCurrencies) {
-    final balanceStr = balanceToString(I128(balances[currency]));
-    rows.add(DataRow(cells: [
-      DataCell(Text('${currency.inner}')),
-      DataCell(Text('$balanceStr'))
-    ]));
+    // final balanceStr = balanceToString(I128(balances[currency]));
+    balanceRows.add(BalanceRow(currency, I128(balances[currency])));
   }
 
   final body = Column(children: [
@@ -106,23 +108,24 @@ Widget _renderCardBalances(
                 style:
                     TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
     Divider(height: 0, color: Colors.grey),
-    DataTable(columns: [
-      DataColumn(label: Text('Currency')),
-      DataColumn(label: Text('Balance')),
-    ], rows: rows)]);
-
-  /*
-  final body = Center(
-      child: Column(children: [
-    SizedBox(height: 10),
-    Text('${nodeName.inner}'),
-    SizedBox(height: 10),
-    DataTable(columns: [
-      DataColumn(label: Text('Currency')),
-      DataColumn(label: Text('Balance')),
-    ], rows: rows)
-  ]));
-  */
+    Expanded(
+        child: ListView.separated(
+            separatorBuilder: (context, index) => Divider(
+                  color: Colors.grey,
+                ),
+            itemCount: balanceRows.length,
+            itemBuilder: (context, index) => Padding(
+                padding: EdgeInsets.fromLTRB(8.0, 0.0, 32.0, 0.0),
+                child: ListTile(
+                    leading: const FaIcon(FontAwesomeIcons.coins),
+                    title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('${balanceRows[index].currency.inner}'),
+                          Text(
+                              '${balanceToString(balanceRows[index].balance)}'),
+                        ]))))),
+  ]);
 
   return frame(
       title: Text('Card Balances'),
