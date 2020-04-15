@@ -61,15 +61,15 @@ Widget renderAbout(Function(AboutAction) queueAction) {
                   ),
                   bottom: TabBar(tabs: [
                     Tab(icon: const FaIcon(FontAwesomeIcons.infoCircle)),
-                    Tab(icon: const FaIcon(FontAwesomeIcons.stamp)),
+                    Tab(icon: const FaIcon(FontAwesomeIcons.stethoscope)),
                   ])),
               body: TabBarView(children: [
-                _renderAboutVersion(queueAction),
-                _renderAboutVersion(queueAction),
+                _renderVersion(queueAction),
+                _renderLogs(queueAction),
               ]))));
 }
 
-Widget _renderAboutVersion(queueAction) {
+Widget _renderVersion(queueAction) {
   // TODO: Possibly be able to change those functions to be async in the future,
   // hence eliminating the need to use FutureBuilder here.
   return FutureBuilder<VersionInfo>(
@@ -77,7 +77,7 @@ Widget _renderAboutVersion(queueAction) {
       builder: (BuildContext context, AsyncSnapshot<VersionInfo> snapshot) {
         if (snapshot.hasData) {
           final packageInfo = snapshot.data;
-          return _renderAboutVersionAfter(packageInfo, queueAction);
+          return _renderVersionAfter(packageInfo, queueAction);
         } else if (snapshot.hasError) {
           logger.e('Error loading version information: ${snapshot.error}');
           return Center(child: Text('Error loading version information!'));
@@ -96,7 +96,7 @@ _launchURL(String url) async {
   }
 }
 
-Widget _renderAboutVersionAfter(
+Widget _renderVersionAfter(
     VersionInfo versionInfo, Function(AboutAction) queueAction) {
   final packageInfo = versionInfo.packageInfo;
   return ListView(padding: EdgeInsets.all(8), children: [
@@ -130,4 +130,28 @@ Widget _renderAboutVersionAfter(
     SizedBox(height: 10.0),
     ListTile(title: Text(QUOTE)),
   ]);
+}
+
+Widget _renderLogs(queueAction) {
+  // TODO: How to make sure that this Widget redraws 
+  // whenever cyclicLogOutput changes? Currently we just hope for the best.
+
+  final List<Widget> children = [];
+
+  for (final logStr in cyclicLogOutput) {
+    children.add(Text(logStr));
+    children.add(Divider(height: 8.0, color: Colors.grey));
+  }
+
+  return Padding(
+    padding: EdgeInsets.all(8),
+    child: SelectableText(cyclicLogOutput.reversed.join('\n\n')),
+    /*
+      child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: children.reversed.toList()))
+              */
+  );
 }

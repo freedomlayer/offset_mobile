@@ -29,7 +29,7 @@ class MainAppError extends AppError {
 
 void main() {
   // Set log level for the whole application:
-  Logger.level = Level.info;
+  Logger.level = Level.warning;
   return runApp(MainApp());
 }
 
