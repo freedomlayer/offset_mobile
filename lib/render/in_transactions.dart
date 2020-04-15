@@ -106,9 +106,9 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
   final children = <Widget>[];
 
   for (final inTransaction in inTransactions) {
-    final trailing = FaIcon(inTransaction.isCommitted
-        ? FontAwesomeIcons.checkCircle
-        : FontAwesomeIcons.thermometerHalf);
+    final trailing = inTransaction.isCommitted
+        ? FaIcon(FontAwesomeIcons.thermometerFull, color: Colors.green)
+        : FaIcon(FontAwesomeIcons.thermometerHalf, color: Colors.orange);
     final outEntry = ListTile(
         key: Key(inTransaction.invoiceId.inner),
         leading: Icon(Icons.call_received),
@@ -167,16 +167,16 @@ Widget _renderCommittedTransaction(NodeName nodeName, InvoiceId invoiceId,
         leading: const FaIcon(FontAwesomeIcons.comment),
         title: Text('${openInvoice.description}')),
     ListTile(
-        leading: const FaIcon(FontAwesomeIcons.thermometerFull),
+        leading: const FaIcon(FontAwesomeIcons.thermometerFull, color: Colors.green),
         title: Text('Received'),
         trailing: FlatButton(
-            child: const FaIcon(FontAwesomeIcons.minusCircle),
+            child: const Icon(Icons.cancel, color: Colors.red),
             onPressed: () => queueAction(
                 InTransactionsAction.cancelInvoice(nodeName, invoiceId)))),
     SizedBox(height: 16.0),
     Center(
         child: RaisedButton.icon(
-            icon: const FaIcon(FontAwesomeIcons.truck),
+            icon: const FaIcon(FontAwesomeIcons.truck, color: Colors.green),
             onPressed: () => queueAction(
                 InTransactionsAction.collectInvoice(nodeName, invoiceId)),
             label: Text('Collect'))),
@@ -229,7 +229,8 @@ Widget _renderUncommittedTransaction(
         leading: const FaIcon(FontAwesomeIcons.comment),
         title: Text('${openInvoice.description}')),
     ListTile(
-        leading: const FaIcon(FontAwesomeIcons.thermometerHalf),
+        leading: const FaIcon(FontAwesomeIcons.thermometerHalf,
+            color: Colors.orange),
         title: Text('Pending'),
         trailing: FlatButton(
             child: const Icon(Icons.cancel, color: Colors.red),
@@ -258,23 +259,21 @@ Widget _renderUncommittedTransaction(
             ))),
           ]);
 
-  final commitBody = ListView(
-      children: baseChildren +
-          [
-            ListTile(
-                title: Center(
-                    child: Text('How to receive commitment?',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16.0)))),
-            ListTile(
-                leading: FaIcon(FontAwesomeIcons.qrcode),
-                onTap: scanQrCode,
-                title: Text('QR code')),
-            ListTile(
-                leading: FaIcon(FontAwesomeIcons.file),
-                onTap: openFileExplorer,
-                title: Text('File')),
-          ]);
+  final commitBody = ListView(children: [
+    ListTile(
+        title: Center(
+            child: Text('How to receive commitment?',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
+    ListTile(
+        leading: FaIcon(FontAwesomeIcons.qrcode),
+        onTap: scanQrCode,
+        title: Text('QR code')),
+    ListTile(
+        leading: FaIcon(FontAwesomeIcons.file),
+        onTap: openFileExplorer,
+        title: Text('File')),
+  ]);
 
   return DefaultTabController(
       length: 2,
@@ -334,28 +333,27 @@ Widget _renderSelectCardApplyCommit(
     Commit commit,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(InTransactionsAction) queueAction) {
-
   final canCardPay = (nodeName) => nodesStates[nodeName].inner.match(
-        closed: () => false,
-        open: (openNode) {
-          for (final entry in openNode.compactReport.friends.entries) {
-            final res = entry.value.channelStatus.match(
-                inconsistent: (_) => false,
-                consistent: (channelConsistentReport) =>
-                    channelConsistentReport.currencyReports.isNotEmpty);
-            if (res == true) {
-              return true;
-            }
+      closed: () => false,
+      open: (openNode) {
+        for (final entry in openNode.compactReport.friends.entries) {
+          final res = entry.value.channelStatus.match(
+              inconsistent: (_) => false,
+              consistent: (channelConsistentReport) =>
+                  channelConsistentReport.currencyReports.isNotEmpty);
+          if (res == true) {
+            return true;
           }
-          return false;
-        });
+        }
+        return false;
+      });
 
   final body = renderSelectCard(
       nodesStates.keys,
       List.from(nodesStates.keys)
         ..removeWhere((nodeName) => !canCardPay(nodeName)),
-      (nodeName) => queueAction(
-          InTransactionsAction.applyCommit(nodeName, commit)));
+      (nodeName) =>
+          queueAction(InTransactionsAction.applyCommit(nodeName, commit)));
 
   return frame(
       title: Text('Apply commit'),
