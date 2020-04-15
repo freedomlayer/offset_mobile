@@ -31,7 +31,7 @@ class OutTransaction {
   U128 destPayment;
   final String description;
   Generation generation;
-  String status;
+  OpenPaymentStatus status;
 
   OutTransaction(
       {this.nodeName,
@@ -74,7 +74,7 @@ List<OutTransaction> _loadTransactions(
           destPayment: openPayment.destPayment,
           description: openPayment.description,
           generation: openPayment.generation,
-          status: _statusAsString(openPayment.status));
+          status: openPayment.status);
       outTransactions.add(outTransaction);
     });
   });
@@ -100,22 +100,96 @@ List<OutTransaction> _loadTransactions(
 Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
     Function(OutTransactionsAction) queueAction) {
   final outTransactions = _loadTransactions(nodesStates);
+
   final children = <Widget>[];
 
+  /*
   for (final outTransaction in outTransactions) {
-    final outEntry = Card(
+    final trailing = outTransaction.isCommitted
+        ? FaIcon(FontAwesomeIcons.thermometerFull, color: Colors.green)
+        : FaIcon(FontAwesomeIcons.thermometerHalf, color: Colors.orange);
+    final outEntry = ListTile(
         key: Key(outTransaction.paymentId.inner),
-        child: InkWell(
-            onTap: () => queueAction(OutTransactionsAction.selectPayment(
-                outTransaction.nodeName, outTransaction.paymentId)),
+        leading: Icon(Icons.call_received),
+        title: InkWell(
+            onTap: () => queueAction(InTransactionsAction.selectInvoice(
+                outTransaction.nodeName, outTransaction.invoiceId)),
             child: Text(
-                '${outTransaction.nodeName.inner}: ${amountToString(outTransaction.destPayment)}\n' +
-                    '${outTransaction.description}\n' +
-                    'status: ${outTransaction.status}')));
+                '${outTransaction.nodeName.inner}\n${amountToString(outTransaction.totalDestPayment)} ${outTransaction.currency.inner}\n' +
+                    '${outTransaction.description}')),
+        trailing: trailing);
+
+    children.add(outEntry);
+  }
+  */
+
+  for (final outTransaction in outTransactions) {
+    /*
+
+      {@required T Function(Uid) searchingRoute,
+      @required T Function(Uid, U128) foundRoute,
+      @required T Function(U128) sending,
+      @required T Function(Commit, U128) commit,
+      @required T Function(Receipt, U128, Uid) success,
+      @required T Function(Uid) failure}) {
+    */
+    IconData trailingIcon;
+    Color statusColor;
+    outTransaction.status.match(searchingRoute: (_) {
+      trailingIcon = FontAwesomeIcons.search;
+      statusColor = Colors.orange;
+    }, foundRoute: (_a, _b) {
+      trailingIcon = FontAwesomeIcons.route;
+      statusColor = Colors.blue;
+    }, sending: (_) {
+      trailingIcon = FontAwesomeIcons.paperPlane;
+      statusColor = Colors.orange;
+    }, commit: (_a, _b) {
+      trailingIcon = FontAwesomeIcons.stamp;
+      statusColor = Colors.orange;
+    }, success: (_a, _b, _c) {
+      trailingIcon = FontAwesomeIcons.checkCircle;
+      statusColor = Colors.green;
+    }, failure: (_) {
+      trailingIcon = FontAwesomeIcons.exclamationTriangle;
+      statusColor = Colors.red;
+    });
+
+    assert(trailingIcon != null);
+    assert(statusColor != null);
+
+    final trailing = FaIcon(trailingIcon, color: statusColor);
+    final outEntry = ListTile(
+        key: Key(outTransaction.paymentId.inner),
+        leading: Icon(Icons.call_made),
+        title: InkWell(
+          onTap: () => queueAction(OutTransactionsAction.selectPayment(
+              outTransaction.nodeName, outTransaction.paymentId)),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text('${outTransaction.nodeName.inner}'),
+            Text(
+                '${amountToString(outTransaction.destPayment)} ${outTransaction.currency.inner}',
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('${outTransaction.description}'),
+            /*
+            Text('${_statusAsString(outTransaction.status)}',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: statusColor)),
+            */
+          ]),
+        ),
+        trailing: trailing);
     children.add(outEntry);
   }
 
-  final listView = ListView(padding: EdgeInsets.all(8), children: children);
+  final listView = ListView.separated(
+      padding: EdgeInsets.all(8),
+      itemCount: children.length,
+      separatorBuilder: (context, index) => Divider(
+            color: Colors.grey,
+          ),
+      itemBuilder: (context, index) => children[index]);
 
   return frame(
       title: Text('Outgoing'),
