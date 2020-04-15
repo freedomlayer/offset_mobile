@@ -132,17 +132,44 @@ Widget _renderCardSettingsHome(NodeName nodeName, NodeState nodeState,
     Expanded(child: listView),
   ]);
 
-  final popupMenuButton = PopupMenuButton<CardPopup>(
-      onSelected: (CardPopup _result) =>
-          queueAction(CardSettingsAction.remove()),
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<CardPopup>>[
-            PopupMenuItem<CardPopup>(
-              value: CardPopup.remove,
-              child:
-                  ListTile(leading: Icon(Icons.delete), title: Text('Remove')),
-              enabled: !nodeState.isEnabled,
-            )
-          ]);
+  final removeCardDialog = (BuildContext context) async {
+    return await showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: Text('Remove?'),
+            content: Text('Remove card ${nodeName.inner}?'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text("No", style: TextStyle(color: Colors.red)),
+              ),
+              // SizedBox(height: 32),
+              FlatButton(
+                onPressed: () {
+                  queueAction(CardSettingsAction.remove());
+                  Navigator.pop(context, true);
+                },
+                child: Text("Yes", style: TextStyle(color: Colors.green)),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  };
+
+  final popupMenuButton = StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) =>
+          PopupMenuButton<CardPopup>(
+              onSelected: (CardPopup _result) => removeCardDialog(context),
+              itemBuilder: (BuildContext context) =>
+                  <PopupMenuEntry<CardPopup>>[
+                    PopupMenuItem<CardPopup>(
+                      value: CardPopup.remove,
+                      child: ListTile(
+                          leading: Icon(Icons.delete), title: Text('Remove')),
+                      enabled: !nodeState.isEnabled,
+                    )
+                  ]));
 
   return frame(
       title: Text('Card settings'),
