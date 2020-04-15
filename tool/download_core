@@ -5,11 +5,13 @@
 # See: https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
 set -eux -o pipefail
 
-VERSION="0.1.8"
-DOWNLOAD_URL="https://github.com/freedomlayer/offset/releases/download"
+# Get current directory, 
+# see: https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
+CUR_DIR=`dirname $(readlink -f $0)`
 
-# curl -L https://capnproto.org/capnproto-c++-${CAPNP_VERSION}.tar.gz | tar -zxf -
-# pushd capnproto-c++-${CAPNP_VERSION}
+# Obtain core's version:
+CORE_VERSION="$(cat $CUR_DIR/../CORE_VERSION | tr -d '\n')"
+DOWNLOAD_URL="https://github.com/freedomlayer/offset/releases/download"
 
 # Remove previous external files:
 rm -rf ./external
@@ -20,22 +22,22 @@ mkdir -p ./external
 TEMP_DIR=$(mktemp -d -t ci-XXXXXXXXXX)
 
 # aarch64
-FILENAME="offset-v${VERSION}-aarch64-linux-android"
-curl -L "${DOWNLOAD_URL}/v${VERSION}/${FILENAME}.tar.gz" \
+FILENAME="offset-v${CORE_VERSION}-aarch64-linux-android"
+curl -L "${DOWNLOAD_URL}/v${CORE_VERSION}/${FILENAME}.tar.gz" \
         | tar -zxf - -C $TEMP_DIR
 cp $TEMP_DIR/$FILENAME/bin/stcompact ./external/stcompact_aarch64
 rm -rf $TEMP_DIR/*
 
 # armv7
-FILENAME="offset-v${VERSION}-armv7-linux-androideabi"
-curl -L "${DOWNLOAD_URL}/v${VERSION}/${FILENAME}.tar.gz" \
+FILENAME="offset-v${CORE_VERSION}-armv7-linux-androideabi"
+curl -L "${DOWNLOAD_URL}/v${CORE_VERSION}/${FILENAME}.tar.gz" \
         | tar -zxf - -C $TEMP_DIR
 cp $TEMP_DIR/$FILENAME/bin/stcompact ./external/stcompact_armv7
 rm -rf $TEMP_DIR/*
 
 # i686
-FILENAME="offset-v${VERSION}-i686-linux-android"
-curl -L "${DOWNLOAD_URL}/v${VERSION}/${FILENAME}.tar.gz" \
+FILENAME="offset-v${CORE_VERSION}-i686-linux-android"
+curl -L "${DOWNLOAD_URL}/v${CORE_VERSION}/${FILENAME}.tar.gz" \
         | tar -zxf - -C $TEMP_DIR
 cp $TEMP_DIR/$FILENAME/bin/stcompact ./external/stcompact_i686
 rm -rf $TEMP_DIR/*
