@@ -189,7 +189,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
         child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
 
     return frame(
-        title: Text('New invoice'),
+        title: Text('Sell'),
         body: body,
         backAction: () => this.widget.queueAction(SellAction.back()));
   }
