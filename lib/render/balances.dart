@@ -96,6 +96,23 @@ Widget _renderCardBalances(
     balanceRows.add(BalanceRow(currency, I128(balances[currency])));
   }
 
+  final listView = balanceRows.isNotEmpty ? ListView.separated(
+      separatorBuilder: (context, index) => Divider(
+            color: Colors.grey,
+          ),
+      itemCount: balanceRows.length,
+      itemBuilder: (context, index) => Padding(
+          padding: EdgeInsets.fromLTRB(8.0, 0.0, 32.0, 0.0),
+          child: ListTile(
+              leading: const FaIcon(FontAwesomeIcons.coins),
+              title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('${balanceRows[index].currency.inner}'),
+                    Text('${balanceToString(balanceRows[index].balance)}'),
+                  ]))))
+      : Center(child: Text('No active currencies'));
+
   final body = Column(children: [
     Container(
         padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
@@ -107,23 +124,7 @@ Widget _renderCardBalances(
                 style:
                     TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
     Divider(height: 0, color: Colors.grey),
-    Expanded(
-        child: ListView.separated(
-            separatorBuilder: (context, index) => Divider(
-                  color: Colors.grey,
-                ),
-            itemCount: balanceRows.length,
-            itemBuilder: (context, index) => Padding(
-                padding: EdgeInsets.fromLTRB(8.0, 0.0, 32.0, 0.0),
-                child: ListTile(
-                    leading: const FaIcon(FontAwesomeIcons.coins),
-                    title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('${balanceRows[index].currency.inner}'),
-                          Text(
-                              '${balanceToString(balanceRows[index].balance)}'),
-                        ]))))),
+    Expanded(child: listView)
   ]);
 
   return frame(
