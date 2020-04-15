@@ -290,24 +290,28 @@ Widget _renderUncommittedTransaction(
         title: Text('File')),
   ]);
 
-  return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-          appBar: AppBar(
-              title: Text('Incoming transaction'),
-              leading: BackButton(
-                onPressed: () => queueAction(InTransactionsAction.back()),
-              ),
-              bottom: TabBar(tabs: [
-                Tab(
-                    icon: const FaIcon(FontAwesomeIcons.fileInvoiceDollar),
-                    text: 'Invoice'),
-                Tab(icon: const FaIcon(FontAwesomeIcons.stamp), text: 'Commit'),
-              ])),
-          body: TabBarView(children: [
-            invoiceBody,
-            commitBody,
-          ])));
+  return WillPopScope(
+      onWillPop: () async => queueAction(InTransactionsAction.back()),
+      child: DefaultTabController(
+          length: 2,
+          child: Scaffold(
+              appBar: AppBar(
+                  title: Text('Incoming transaction'),
+                  leading: BackButton(
+                    onPressed: () => queueAction(InTransactionsAction.back()),
+                  ),
+                  bottom: TabBar(tabs: [
+                    Tab(
+                        icon: const FaIcon(FontAwesomeIcons.fileInvoiceDollar),
+                        text: 'Invoice'),
+                    Tab(
+                        icon: const FaIcon(FontAwesomeIcons.stamp),
+                        text: 'Commit'),
+                  ])),
+              body: TabBarView(children: [
+                invoiceBody,
+                commitBody,
+              ]))));
 }
 
 Widget _renderCollected(
