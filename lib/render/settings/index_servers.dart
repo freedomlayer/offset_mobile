@@ -170,10 +170,11 @@ class IndexServerName extends StatefulWidget {
 class _IndexServerNameState extends State<IndexServerName> {
   final _formKey = GlobalKey<FormState>();
 
+  // Saves current indexServer name:
+  String _indexServerName = '';
+
   @override
   Widget build(BuildContext context) {
-    // Saves current indexServer name:
-    String _indexServerName = '';
 
     final _submitForm = () {
       final FormState form = _formKey.currentState;

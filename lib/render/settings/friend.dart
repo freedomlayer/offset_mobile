@@ -380,6 +380,23 @@ class CurrencySettings extends StatefulWidget {
 class _CurrencySettingsState extends State<CurrencySettings> {
   final _formKey = GlobalKey<FormState>();
 
+  int _mul;
+  int _add;
+  U128 _creditLimit;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final currencyConfig =
+        this.widget.friendReport.currencyConfigs[this.widget.currency];
+    assert(currencyConfig != null);
+
+    _mul = currencyConfig.rate.mul;
+    _add = currencyConfig.rate.add;
+    _creditLimit = currencyConfig.remoteMaxDebt;
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: Possibly take more specific arguments for this function,
@@ -401,9 +418,6 @@ class _CurrencySettingsState extends State<CurrencySettings> {
     final currencyReport =
         channelConsistentReport.currencyReports[this.widget.currency];
 
-    int _mul = currencyConfig.rate.mul;
-    int _add = currencyConfig.rate.add;
-    U128 _creditLimit = currencyConfig.remoteMaxDebt;
 
     final _submitForm = () {
       final FormState form = _formKey.currentState;
@@ -597,11 +611,11 @@ class NewCurrency extends StatefulWidget {
 
 class _NewCurrencyState extends State<NewCurrency> {
   final _formKey = GlobalKey<FormState>();
+  Currency _currency;
+  U128 _creditLimit;
 
   @override
   Widget build(BuildContext context) {
-    Currency _currency;
-    U128 _creditLimit;
 
     final _submitForm = () {
       final FormState form = _formKey.currentState;

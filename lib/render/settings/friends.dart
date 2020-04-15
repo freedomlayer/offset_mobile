@@ -211,10 +211,11 @@ class NewFriendName extends StatefulWidget {
 class _NewFriendNameState extends State<NewFriendName> {
   final _formKey = GlobalKey<FormState>();
 
+  // Saves current relay name:
+  String _friendName = '';
+
   @override
   Widget build(BuildContext context) {
-    // Saves current relay name:
-    String _friendName = '';
 
     final _submitForm = () {
       final FormState form = _formKey.currentState;

@@ -164,10 +164,11 @@ class RelayName extends StatefulWidget {
 class _RelayNameState extends State<RelayName> {
   final _formKey = GlobalKey<FormState>();
 
+  // Saves current relay name:
+  String _relayName = '';
+
   @override
   Widget build(BuildContext context) {
-    // Saves current relay name:
-    String _relayName = '';
 
     final _submitForm = () {
       final FormState form = _formKey.currentState;

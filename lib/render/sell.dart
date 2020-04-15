@@ -24,28 +24,26 @@ Widget renderSell(SellView sellView, BuiltMap<NodeName, NodeState> nodesStates,
 
 Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
     Function(SellAction) queueAction) {
-
   final canCardPay = (nodeName) => nodesStates[nodeName].inner.match(
-        closed: () => false,
-        open: (openNode) {
-          for (final entry in openNode.compactReport.friends.entries) {
-            final res = entry.value.channelStatus.match(
-                inconsistent: (_) => false,
-                consistent: (channelConsistentReport) =>
-                    channelConsistentReport.currencyReports.isNotEmpty);
-            if (res == true) {
-              return true;
-            }
+      closed: () => false,
+      open: (openNode) {
+        for (final entry in openNode.compactReport.friends.entries) {
+          final res = entry.value.channelStatus.match(
+              inconsistent: (_) => false,
+              consistent: (channelConsistentReport) =>
+                  channelConsistentReport.currencyReports.isNotEmpty);
+          if (res == true) {
+            return true;
           }
-          return false;
-        });
+        }
+        return false;
+      });
 
   final body = renderSelectCard(
       nodesStates.keys,
       List.from(nodesStates.keys)
         ..removeWhere((nodeName) => !canCardPay(nodeName)),
-      (nodeName) => queueAction(
-          SellAction.selectCard(nodeName)));
+      (nodeName) => queueAction(SellAction.selectCard(nodeName)));
 
   return frame(
       title: Text('New Invoice'),
@@ -94,6 +92,10 @@ class InvoiceDetails extends StatefulWidget {
 class _InvoiceDetailsState extends State<InvoiceDetails> {
   final _formKey = GlobalKey<FormState>();
 
+  Currency _currency;
+  U128 _amount;
+  String _description;
+
   @override
   Widget build(BuildContext context) {
     final nodeState = this.widget.nodesStates[this.widget.nodeName];
@@ -101,9 +103,6 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
     final currencies = _loadCurrencies(nodeState);
     assert(currencies.isNotEmpty);
 
-    Currency _currency;
-    U128 _amount;
-    String _description;
 
     final _submitForm = () {
       final FormState form = _formKey.currentState;
@@ -139,7 +138,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                         .toList(),
                     value: _currency,
                     onChanged: (newCurrency) =>
-                        setState(() => _currency = newCurrency),
+                        this.setState(() => _currency = newCurrency),
                     isExpanded: true)),
             ListTile(
                 leading: const FaIcon(FontAwesomeIcons.coins),

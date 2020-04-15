@@ -144,10 +144,11 @@ class NewCardLocal extends StatefulWidget {
 class _NewCardLocalState extends State<NewCardLocal> {
   final _formKey = GlobalKey<FormState>();
 
+  // Saves current node name:
+  String _nodeName = '';
+
   @override
   Widget build(BuildContext context) {
-    // Saves current node name:
-    String _nodeName = '';
 
     final _submitForm = () {
       final FormState form = _formKey.currentState;
@@ -267,10 +268,11 @@ class NewRemoteName extends StatefulWidget {
 class _NewRemoteNameState extends State<NewRemoteName> {
   final _formKey = GlobalKey<FormState>();
 
+  // Saves current node name:
+  String _nodeName = '';
+
   @override
   Widget build(BuildContext context) {
-    // Saves current node name:
-    String _nodeName = '';
 
     final _submitForm = () {
       final FormState form = _formKey.currentState;
