@@ -67,7 +67,7 @@ Widget _renderInvoiceSelect(BuiltMap<NodeName, NodeState> nodesStates,
       ])));
 
   return frame(
-      title: Text('Select Invoice'),
+      title: Text('Buy'),
       body: body,
       backAction: () => queueAction(BuyAction.back()));
 }
