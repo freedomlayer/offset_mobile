@@ -76,7 +76,7 @@ Widget _renderInvoiceInfo(
     InvoiceFile invoiceFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(BuyAction) queueAction) {
-  final body = ListView(padding: EdgeInsets.all(8), children: <Widget>[
+  final listView = ListView(padding: EdgeInsets.all(8), children: <Widget>[
     Center(
         child: ListTile(
             leading: FaIcon(FontAwesomeIcons.coins),
@@ -102,28 +102,21 @@ Widget _renderInvoiceInfo(
     ])),
   ]);
 
-  /*
-  final body = Center(
-      child: Column(children: <Widget>[
-    SizedBox(height: 10),
-    Text('Amount: ${amountToString(invoiceFile.destPayment)}'),
-    SizedBox(height: 10),
-    Text('Description: ${invoiceFile.description}'),
-    SizedBox(height: 10),
-    Center(
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      RaisedButton(
-          child: Text('Pay'),
-          onPressed: () => queueAction(BuyAction.confirmInfo())),
-      RaisedButton(
-          child: Text('Cancel'),
-          onPressed: () => queueAction(BuyAction.back())),
-    ]))
-  ]));
-  */
+  final body = Column(children: [
+    Container(
+        color: Colors.brown.shade50,
+        child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: ListTile(
+                leading: FaIcon(FontAwesomeIcons.info),
+                title: Text('Invoice details')))),
+    Divider(height: 0, color: Colors.grey),
+    Expanded(child: listView),
+  ]);
+
 
   return frame(
-      title: Text('Invoice info'),
+      title: Text('Buy'),
       body: body,
       backAction: () => queueAction(BuyAction.back()));
 }
