@@ -128,13 +128,15 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
     children.add(outEntry);
   }
 
-  final listView = ListView.separated(
-      padding: EdgeInsets.all(8),
-      itemCount: children.length,
-      separatorBuilder: (context, index) => Divider(
-            color: Colors.grey,
-          ),
-      itemBuilder: (context, index) => children[index]);
+  final listView = children.isNotEmpty
+      ? ListView.separated(
+          padding: EdgeInsets.all(8),
+          itemCount: children.length,
+          separatorBuilder: (context, index) => Divider(
+                color: Colors.grey,
+              ),
+          itemBuilder: (context, index) => children[index])
+      : Center(child: Text('No incoming transactions'));
 
   return frame(
       title: Text('Incoming'),
