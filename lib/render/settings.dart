@@ -13,6 +13,7 @@ import '../state/state.dart';
 import '../actions/actions.dart';
 
 import 'settings/card.dart';
+import 'select_card.dart';
 
 import 'frame.dart';
 
@@ -81,15 +82,7 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
       label: Text('New card'),
       icon: Icon(Icons.add));
 
-  final body = Padding(
-      padding: EdgeInsets.only(top: 14.0),
-      child: Column(children: [
-        Text(
-          'Please select a card',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-        ),
-        Expanded(child: listView),
-      ]));
+  final body = Padding(padding: EdgeInsets.only(top: 8.0), child: listView);
 
   return frame(
       title: Text('Settings'),
@@ -336,39 +329,13 @@ Widget _renderSelectCardAddRelay(
     RelayAddress relayAddress,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
-  final children = <Widget>[];
 
-  for (final nodeName in nodesStates.keys.toList()..sort()) {
-    final nodeState = nodesStates[nodeName];
-
-    // Only open cards can be chosen:
-    final cardEntry = nodeState.inner.isOpen
-        ? ListTile(
-            leading: Icon(Icons.credit_card),
-            key: Key(nodeName.inner),
-            title: Text('${nodeName.inner}'),
-            onTap: () => queueAction(
-                SettingsAction.selectCardSharedRelay(nodeName, relayAddress)))
-        : ListTile(
-            leading: Icon(Icons.credit_card),
-            key: Key(nodeName.inner),
-            title: Text('${nodeName.inner}'),
-            enabled: false);
-
-    children.add(cardEntry);
-  }
-
-  final body = Padding(
-      padding: EdgeInsets.only(top: 14.0),
-      child: Column(children: <Widget>[
-        Text(
-          'Please select a card',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-        ),
-        Expanded(
-            child:
-                ListView(padding: const EdgeInsets.all(8), children: children))
-      ]));
+  final body = renderSelectCard(
+      nodesStates.keys,
+      List.from(nodesStates.keys)
+        ..removeWhere((nodeName) => !nodesStates[nodeName].inner.isOpen),
+      (nodeName) => queueAction(
+          SettingsAction.selectCardSharedRelay(nodeName, relayAddress)));
 
   return frame(
       title: Text('Import relay'),
@@ -380,39 +347,13 @@ Widget _renderSelectCardAddIndex(
     IndexServerFile indexServerFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
-  final children = <Widget>[];
 
-  for (final nodeName in nodesStates.keys.toList()..sort()) {
-    final nodeState = nodesStates[nodeName];
-
-    // Only open cards can be chosen:
-    final cardEntry = nodeState.inner.isOpen
-        ? ListTile(
-            leading: Icon(Icons.credit_card),
-            key: Key(nodeName.inner),
-            title: Text('${nodeName.inner}'),
-            onTap: () => queueAction(SettingsAction.selectCardSharedIndex(
-                nodeName, indexServerFile)))
-        : ListTile(
-            leading: Icon(Icons.credit_card),
-            key: Key(nodeName.inner),
-            title: Text('${nodeName.inner}'),
-            enabled: false);
-
-    children.add(cardEntry);
-  }
-
-  final body = Padding(
-      padding: EdgeInsets.only(top: 14.0),
-      child: Column(children: <Widget>[
-        Text(
-          'Please select a card',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-        ),
-        Expanded(
-            child:
-                ListView(padding: const EdgeInsets.all(8), children: children))
-      ]));
+  final body = renderSelectCard(
+      nodesStates.keys,
+      List.from(nodesStates.keys)
+        ..removeWhere((nodeName) => !nodesStates[nodeName].inner.isOpen),
+      (nodeName) => queueAction(
+          SettingsAction.selectCardSharedIndex(nodeName, indexServerFile)));
 
   return frame(
       title: Text('Import index server'),
@@ -424,39 +365,13 @@ Widget _renderSelectCardAddFriend(
     FriendFile friendFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
-  final children = <Widget>[];
 
-  for (final nodeName in nodesStates.keys.toList()..sort()) {
-    final nodeState = nodesStates[nodeName];
-
-    // Only open cards can be chosen:
-    final cardEntry = nodeState.inner.isOpen
-        ? ListTile(
-            leading: Icon(Icons.credit_card),
-            key: Key(nodeName.inner),
-            title: Text('${nodeName.inner}'),
-            onTap: () => queueAction(
-                SettingsAction.selectCardSharedFriend(nodeName, friendFile)))
-        : ListTile(
-            leading: Icon(Icons.credit_card),
-            key: Key(nodeName.inner),
-            title: Text('${nodeName.inner}'),
-            enabled: false);
-
-    children.add(cardEntry);
-  }
-
-  final body = Padding(
-      padding: EdgeInsets.only(top: 14.0),
-      child: Column(children: <Widget>[
-        Text(
-          'Please select a card',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-        ),
-        Expanded(
-            child:
-                ListView(padding: const EdgeInsets.all(8), children: children))
-      ]));
+  final body = renderSelectCard(
+      nodesStates.keys,
+      List.from(nodesStates.keys)
+        ..removeWhere((nodeName) => !nodesStates[nodeName].inner.isOpen),
+      (nodeName) => queueAction(
+          SettingsAction.selectCardSharedFriend(nodeName, friendFile)));
 
   return frame(
       title: Text('Import friend'),

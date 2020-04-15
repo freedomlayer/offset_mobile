@@ -14,6 +14,8 @@ import 'utils/file_picker.dart';
 import 'utils/qr_scan.dart';
 import 'utils/amount.dart';
 
+import 'select_card.dart';
+
 import 'frame.dart';
 
 import '../logger.dart';
@@ -332,12 +334,8 @@ Widget _renderSelectCardApplyCommit(
     Commit commit,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(InTransactionsAction) queueAction) {
-  final children = <Widget>[];
 
-  for (final nodeName in nodesStates.keys.toList()..sort()) {
-    final nodeState = nodesStates[nodeName];
-    // We only list cards that can be used for payment.
-    final canCardPay = nodeState.inner.match(
+  final canCardPay = (nodeName) => nodesStates[nodeName].inner.match(
         closed: () => false,
         open: (openNode) {
           for (final entry in openNode.compactReport.friends.entries) {
@@ -352,33 +350,12 @@ Widget _renderSelectCardApplyCommit(
           return false;
         });
 
-    final cardEntry = canCardPay
-        ? ListTile(
-            leading: Icon(Icons.credit_card),
-            key: Key(nodeName.inner),
-            title: Text('${nodeName.inner}'),
-            onTap: () =>
-                queueAction(InTransactionsAction.applyCommit(nodeName, commit)))
-        : ListTile(
-            leading: Icon(Icons.credit_card),
-            key: Key(nodeName.inner),
-            title: Text('${nodeName.inner}'),
-            enabled: false);
-
-    children.add(cardEntry);
-  }
-
-  final body = Padding(
-      padding: EdgeInsets.only(top: 14.0),
-      child: Column(children: <Widget>[
-        Text(
-          'Please select a card',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-        ),
-        Expanded(
-            child:
-                ListView(padding: const EdgeInsets.all(8), children: children))
-      ]));
+  final body = renderSelectCard(
+      nodesStates.keys,
+      List.from(nodesStates.keys)
+        ..removeWhere((nodeName) => !canCardPay(nodeName)),
+      (nodeName) => queueAction(
+          InTransactionsAction.applyCommit(nodeName, commit)));
 
   return frame(
       title: Text('Apply commit'),

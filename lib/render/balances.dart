@@ -7,6 +7,8 @@ import '../actions/actions.dart';
 
 import 'utils/amount.dart';
 
+import 'select_card.dart';
+
 import 'frame.dart';
 
 Widget renderBalances(
@@ -21,32 +23,13 @@ Widget renderBalances(
 
 Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
     Function(BalancesAction) queueAction) {
-  final children = <Widget>[];
-  for (final nodeName in nodesStates.keys.toList()..sort()) {
-    final nodeState = nodesStates[nodeName];
-    final cardEntry = ListTile(
-      key: Key(nodeName.inner),
-      title: Text('${nodeName.inner}'),
-      enabled: nodeState.inner.isOpen,
-      leading: Icon(Icons.credit_card),
-      onTap: nodeState.inner.isOpen
-          ? () => queueAction(BalancesAction.selectCard(nodeName))
-          : null,
-    );
 
-    children.add(cardEntry);
-  }
-
-  final body = Padding(
-      padding: EdgeInsets.all(14.0),
-      child: Column(children: [
-        Text(
-          'Please select a card',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-        ),
-        Expanded(
-            child: ListView(padding: EdgeInsets.all(8), children: children)),
-      ]));
+  final body = renderSelectCard(
+      nodesStates.keys,
+      List.from(nodesStates.keys)
+        ..removeWhere((nodeName) => !nodesStates[nodeName].inner.isOpen),
+      (nodeName) => queueAction(
+          BalancesAction.selectCard(nodeName)));
 
   return frame(
       title: Text('Balances'),

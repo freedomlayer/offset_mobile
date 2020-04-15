@@ -10,6 +10,8 @@ import '../actions/actions.dart';
 
 import 'utils/amount.dart';
 
+import 'select_card.dart';
+
 import 'frame.dart';
 
 Widget renderSell(SellView sellView, BuiltMap<NodeName, NodeState> nodesStates,
@@ -22,12 +24,8 @@ Widget renderSell(SellView sellView, BuiltMap<NodeName, NodeState> nodesStates,
 
 Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
     Function(SellAction) queueAction) {
-  final children = <Widget>[];
 
-  for (final nodeName in nodesStates.keys.toList()..sort()) {
-    final nodeState = nodesStates[nodeName];
-    // We only card that can be used for payment.
-    final canCardPay = nodeState.inner.match(
+  final canCardPay = (nodeName) => nodesStates[nodeName].inner.match(
         closed: () => false,
         open: (openNode) {
           for (final entry in openNode.compactReport.friends.entries) {
@@ -42,34 +40,12 @@ Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
           return false;
         });
 
-    final cardEntry = canCardPay
-        ? ListTile(
-            leading: Icon(Icons.credit_card),
-            key: Key(nodeName.inner),
-            title: Text('${nodeName.inner}'),
-            onTap: () => queueAction(SellAction.selectCard(nodeName)))
-        : ListTile(
-            leading: Icon(Icons.credit_card),
-            key: Key(nodeName.inner),
-            title: Text('${nodeName.inner}'),
-            enabled: false);
-
-    children.add(cardEntry);
-  }
-
-  final body = Padding(
-      padding: EdgeInsets.only(top: 14.0),
-      child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Please select a card',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-            ),
-            Expanded(
-                child: ListView(
-                    padding: const EdgeInsets.all(8), children: children))
-          ]));
+  final body = renderSelectCard(
+      nodesStates.keys,
+      List.from(nodesStates.keys)
+        ..removeWhere((nodeName) => !canCardPay(nodeName)),
+      (nodeName) => queueAction(
+          SellAction.selectCard(nodeName)));
 
   return frame(
       title: Text('New Invoice'),
