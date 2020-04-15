@@ -345,7 +345,7 @@ String _percentValidator(String percentString) {
 
 String _addValidator(String addString) {
   if (!verifyAmountString(addString)) {
-    return 'Must be a non negative value, up to $ACCURACY digits after decimal dot';
+    return 'Invalid value';
   }
 
   final amount = stringToAmount(addString);
@@ -589,7 +589,7 @@ String _currencyNameValidator(String currencyName) {
 
 String _creditLimitValidator(String creditLimitString) {
   if (!verifyAmountString(creditLimitString)) {
-    return 'Must be a non negative value, up to $ACCURACY digits after decimal dot';
+    return 'Invalid value';
   }
   return null;
 }

@@ -53,7 +53,7 @@ Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
 
 String _amountValidator(String amountString) {
   if (!verifyAmountString(amountString)) {
-    return 'Must be a non negative value, up to $ACCURACY digits after decimal dot';
+    return 'Invalid value';
   }
 
   return null;
