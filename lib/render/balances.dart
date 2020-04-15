@@ -93,7 +93,6 @@ Widget _renderCardBalances(
   final sortedCurrencies = balances.keys.toList()..sort();
   final balanceRows = <BalanceRow>[];
   for (final currency in sortedCurrencies) {
-    // final balanceStr = balanceToString(I128(balances[currency]));
     balanceRows.add(BalanceRow(currency, I128(balances[currency])));
   }
 
