@@ -46,7 +46,7 @@ Widget _renderSelectCard(BuiltMap<NodeName, NodeState> nodesStates,
       (nodeName) => queueAction(SellAction.selectCard(nodeName)));
 
   return frame(
-      title: Text('New Invoice'),
+      title: Text('Sell'),
       body: body,
       backAction: () => queueAction(SellAction.back()));
 }
