@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../protocol/protocol.dart';
 import '../state/state.dart';
@@ -94,6 +95,23 @@ Widget _renderCardBalances(
     ]));
   }
 
+  final body = Column(children: [
+    Container(
+        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+        width: double.infinity,
+        color: Colors.blue.shade50,
+        child: ListTile(
+            leading: const FaIcon(FontAwesomeIcons.creditCard),
+            title: Text('${nodeName.inner}',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
+    Divider(height: 0, color: Colors.grey),
+    DataTable(columns: [
+      DataColumn(label: Text('Currency')),
+      DataColumn(label: Text('Balance')),
+    ], rows: rows)]);
+
+  /*
   final body = Center(
       child: Column(children: [
     SizedBox(height: 10),
@@ -104,6 +122,7 @@ Widget _renderCardBalances(
       DataColumn(label: Text('Balance')),
     ], rows: rows)
   ]));
+  */
 
   return frame(
       title: Text('Card Balances'),
