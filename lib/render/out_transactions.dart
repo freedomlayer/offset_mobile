@@ -43,6 +43,7 @@ class OutTransaction {
       this.status});
 }
 
+/*
 String _statusAsString(OpenPaymentStatus openPaymentStatus) {
   return openPaymentStatus.match(
       searchingRoute: (_) => 'searching route',
@@ -52,6 +53,7 @@ String _statusAsString(OpenPaymentStatus openPaymentStatus) {
       success: (_a, _b, _c) => 'success',
       failure: (_) => 'failure');
 }
+*/
 
 List<OutTransaction> _loadTransactions(
     BuiltMap<NodeName, NodeState> nodesStates) {
@@ -103,36 +105,7 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
 
   final children = <Widget>[];
 
-  /*
   for (final outTransaction in outTransactions) {
-    final trailing = outTransaction.isCommitted
-        ? FaIcon(FontAwesomeIcons.thermometerFull, color: Colors.green)
-        : FaIcon(FontAwesomeIcons.thermometerHalf, color: Colors.orange);
-    final outEntry = ListTile(
-        key: Key(outTransaction.paymentId.inner),
-        leading: Icon(Icons.call_received),
-        title: InkWell(
-            onTap: () => queueAction(InTransactionsAction.selectInvoice(
-                outTransaction.nodeName, outTransaction.invoiceId)),
-            child: Text(
-                '${outTransaction.nodeName.inner}\n${amountToString(outTransaction.totalDestPayment)} ${outTransaction.currency.inner}\n' +
-                    '${outTransaction.description}')),
-        trailing: trailing);
-
-    children.add(outEntry);
-  }
-  */
-
-  for (final outTransaction in outTransactions) {
-    /*
-
-      {@required T Function(Uid) searchingRoute,
-      @required T Function(Uid, U128) foundRoute,
-      @required T Function(U128) sending,
-      @required T Function(Commit, U128) commit,
-      @required T Function(Receipt, U128, Uid) success,
-      @required T Function(Uid) failure}) {
-    */
     IconData trailingIcon;
     Color statusColor;
     outTransaction.status.match(searchingRoute: (_) {
