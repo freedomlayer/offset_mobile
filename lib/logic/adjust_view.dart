@@ -78,6 +78,7 @@ AppView adjustAppView(
         AppView.balances(adjustBalancesView(balancesView, nodesStates)),
     settings: (settingsView) =>
         AppView.settings(adjustSettingsView(settingsView, nodesStates)),
+    about: () => appView,
   );
 }
 
@@ -244,14 +245,11 @@ FriendSettingsInnerView adjustFriendSettingsInnerView(
     FriendSettingsInnerView friendSettingsInner, FriendReport friendReport) {
   return friendSettingsInner.match(
       home: () => friendSettingsInner,
-      resolve: () => friendReport.channelStatus.isInconsistent
-          ? friendSettingsInner
-          : FriendSettingsInnerView.home(),
       currencySettings: (currency) {
         return friendReport.channelStatus.match(
             inconsistent: (_) => FriendSettingsInnerView.home(),
             consistent: (channelConsistentReport) =>
-                channelConsistentReport.currencyReports[currency] != null
+                friendReport.currencyConfigs[currency] != null
                     ? friendSettingsInner
                     : FriendSettingsInnerView.home());
       },

@@ -4,17 +4,18 @@ Future<bool> exitDialog(BuildContext context) async {
   return await showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-          title: Text('Are you sure?'),
-          content: Text('Do you want to exit?'),
+          title: Text('Exit?'),
+          content: Text('Your local cards will become offline.\n' +
+              'Are you sure you want to exit?'),
           actions: <Widget>[
-            GestureDetector(
-              onTap: () => Navigator.of(context).pop(false),
-              child: Text("No"),
+            FlatButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text("No", style: TextStyle(color: Colors.red)),
             ),
-            SizedBox(height: 32),
-            GestureDetector(
-              onTap: () => Navigator.of(context).pop(true),
-              child: Text("Yes"),
+            // SizedBox(height: 32),
+            FlatButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text("Yes", style: TextStyle(color: Colors.green)),
             ),
           ],
         ),
@@ -53,6 +54,12 @@ class Frame extends StatelessWidget {
         return false;
       };
     }
+
+    /*
+    return MaterialApp(
+        title: APP_TITLE,
+        home: 
+      */
 
     return WillPopScope(
         onWillPop: onWillPop,

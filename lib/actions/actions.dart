@@ -10,6 +10,7 @@ import 'in_transactions.dart';
 import 'sell.dart';
 import 'balances.dart';
 import 'settings.dart';
+import 'about.dart';
 
 export 'buy.dart';
 export 'home.dart';
@@ -18,6 +19,7 @@ export 'in_transactions.dart';
 export 'sell.dart';
 export 'balances.dart';
 export 'settings.dart';
+export 'about.dart';
 
 part 'actions.g.dart';
 
@@ -34,4 +36,5 @@ class AppAction extends _$AppAction {
       : super.outTransactions(outTransactions);
   AppAction.balances(BalancesAction balances) : super.balances(balances);
   AppAction.settings(SettingsAction settings) : super.settings(settings);
+  AppAction.about(AboutAction about) : super.about(about);
 }

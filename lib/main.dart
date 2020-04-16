@@ -97,7 +97,6 @@ class MainAppState extends State<MainApp> {
 
   Future<void> initProcess() async {
     _process = await openProcess();
-
     _eventController = StreamController<AppEvent>();
 
     // TODO: We use asBroadcastStream() to be able to read the first element.
@@ -217,8 +216,8 @@ class MainAppState extends State<MainApp> {
 
   @override
   void initState() {
-    logger.d('initState() was called');
     super.initState();
+    logger.d('initState() was called');
 
     // Calling an async function. Should set `_isReady = true` when ready.
     initProcess();

@@ -7,6 +7,7 @@ import '../../state/state.dart';
 
 import '../../logger.dart';
 import '../../rand.dart';
+import '../../servers/relay.dart';
 
 final logger = createLogger('logic::settings::index_servers');
 
@@ -39,7 +40,8 @@ AppState handleRelaysSettings(
           CardSettingsInnerView.relays(
               RelaysSettingsView.newRelayName(relayAddress))),
       newRelay: (namedRelayAddress) =>
-          _handleNewRelay(nodeName, namedRelayAddress, nodesStates, rand));
+          _handleNewRelay(nodeName, namedRelayAddress, nodesStates, rand),
+      newRandRelay: () => _handleNewRandRelay(nodeName, nodesStates, rand));
 }
 
 AppState _handleRemoveRelay(NodeName nodeName, PublicKey relayPublicKey,
@@ -133,4 +135,50 @@ AppState _handleNewRelay(NodeName nodeName, NamedRelayAddress namedRelayAddress,
     ..nodesStates = nodesStates.toBuilder()
     ..viewState = ViewState.transition(
         oldView, newView, nextRequests, optPendingRequest));
+}
+
+AppState _handleNewRandRelay(
+    NodeName nodeName, BuiltMap<NodeName, NodeState> nodesStates, Random rand) {
+  final createState = (AppView appView) => AppState((b) => b
+    ..nodesStates = nodesStates.toBuilder()
+    ..viewState = ViewState.view(appView));
+
+  final nodeState = nodesStates[nodeName];
+  if (nodeState == null) {
+    logger.w('_handleNewRandRelay(): node $nodeName does not exist!');
+    return createState(AppView.settings(SettingsView.home()));
+  }
+
+  final nodeOpen =
+      nodeState.inner.match(open: (nodeOpen) => nodeOpen, closed: () => null);
+
+  final nodeId = nodeOpen.nodeId;
+  if (nodeId == null) {
+    logger.w('_handleNewRandRelay(): node $nodeName is not open!');
+    return createState(AppView.settings(SettingsView.home()));
+  }
+
+  // Prepare known relays list:
+  final knownRelaysShuffled = List<NamedRelayAddress>.from(knownRelays);
+  knownRelaysShuffled.shuffle(rand);
+
+  // Search for a relay in the known relays list that is not already in the card relays list:
+  final cardRelays = nodeOpen.compactReport.relays
+      .map((namedRelayAddress) => namedRelayAddress.publicKey)
+      .toSet();
+
+  // Add the first relay that the card doesn't already have:
+  for (final knownRelay in knownRelaysShuffled) {
+    if (!cardRelays.contains(knownRelay.publicKey)) {
+      return _handleNewRelay(nodeName, knownRelay, nodesStates, rand);
+    }
+  }
+
+  // We don't have any new relay to add.
+  // We leave the user at the select add relay method
+  return createState(AppView.settings(SettingsView.cardSettings(
+      CardSettingsView((b) => b
+        ..nodeName = nodeName
+        ..inner = CardSettingsInnerView.relays(
+            RelaysSettingsView.newRelaySelect())))));
 }

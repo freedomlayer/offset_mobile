@@ -33,4 +33,5 @@ class AppView extends _$AppView {
       : super.outTransactions(outTransactions);
   AppView.balances(BalancesView balances) : super.balances(balances);
   AppView.settings(SettingsView settings) : super.settings(settings);
+  AppView.about() : super.about();
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../protocol/protocol.dart';
 import '../state/state.dart';
@@ -21,60 +22,47 @@ Widget renderHome(BuiltMap<NodeName, NodeState> nodesStates,
     Function(HomeAction) queueAction) {
   final someCardActive = isAnyCardActive(nodesStates);
 
-  final listView = ListView(children: [
+  final listView = ListView(padding: EdgeInsets.all(8), children: [
     ListTile(
-        leading: Icon(Icons.burst_mode),
+        leading: FaIcon(FontAwesomeIcons.shoppingCart),
         title: Text('Buy'),
         subtitle: Text('Pay an invoice'),
         enabled: someCardActive,
         onTap: () => queueAction(HomeAction.selectBuy())),
     ListTile(
-        leading: Icon(Icons.signal_cellular_4_bar),
+        leading: FaIcon(FontAwesomeIcons.store),
         title: Text('Sell'),
         subtitle: Text('Create a new invoice'),
         enabled: someCardActive,
         onTap: () => queueAction(HomeAction.selectSell())),
     ListTile(
-        leading: Icon(Icons.zoom_out),
+        leading: Icon(Icons.call_made),
         title: Text('Outgoing'),
         subtitle: Text('View outgoing transactions'),
         enabled: someCardActive,
         onTap: () => queueAction(HomeAction.selectOutTransactions())),
     ListTile(
-        leading: Icon(Icons.zoom_in),
+        leading: Icon(Icons.call_received),
         title: Text('Incoming'),
         subtitle: Text('View incoming transactions'),
         enabled: someCardActive,
         onTap: () => queueAction(HomeAction.selectInTransactions())),
     ListTile(
-        leading: Icon(Icons.account_balance),
+        leading: FaIcon(FontAwesomeIcons.balanceScale),
         title: Text('Balances'),
-        subtitle: Text('View current card balances'),
+        subtitle: Text('View card balances'),
         enabled: someCardActive,
         onTap: () => queueAction(HomeAction.selectBalances())),
     ListTile(
         leading: Icon(Icons.settings),
         title: Text('Settings'),
-        onTap: () => queueAction(HomeAction.selectSettings()))
+        subtitle: Text('Configure cards'),
+        onTap: () => queueAction(HomeAction.selectSettings())),
+    ListTile(
+        leading: Icon(Icons.info),
+        title: Text('About'),
+        subtitle: Text('About Offset'),
+        onTap: () => queueAction(HomeAction.selectAbout())),
   ]);
   return frame(title: Text(APP_TITLE), body: listView);
 }
-
-/*
-  return MaterialApp(
-    title: APP_TITLE,
-    home: Scaffold(
-      appBar: AppBar(
-        title:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Expanded(
-              child: Container(
-                  child: BackButton(), alignment: Alignment.centerLeft),
-              flex: 1),
-          Expanded(child: Center(child: Text(APP_TITLE)), flex: 3),
-          Spacer(flex: 1),
-        ]),
-      ),
-    ),
-  );
-*/

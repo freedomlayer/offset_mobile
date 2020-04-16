@@ -109,7 +109,7 @@ class FriendSettingsInnerView extends _$FriendSettingsInnerView {
       _$friendSettingsInnerViewSerializer;
 
   FriendSettingsInnerView.home() : super.home();
-  FriendSettingsInnerView.resolve() : super.resolve();
+  // FriendSettingsInnerView.resolve() : super.resolve();
   FriendSettingsInnerView.currencySettings(Currency currency)
       : super.currencySettings(currency);
   FriendSettingsInnerView.newCurrency() : super.newCurrency();

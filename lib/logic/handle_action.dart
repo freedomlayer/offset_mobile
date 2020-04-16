@@ -11,6 +11,7 @@ import 'handle_out_trans_action.dart';
 import 'handle_in_trans_action.dart';
 import 'handle_balances_action.dart';
 import 'handle_settings_action.dart';
+import 'handle_about_action.dart';
 
 import '../logger.dart';
 
@@ -46,7 +47,8 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
       outTransactions: (outTransactionsView0) =>
           outTransactionsView = outTransactionsView0,
       balances: (balancesView0) => balancesView = balancesView0,
-      settings: (settingsView0) => settingsView = settingsView0);
+      settings: (settingsView0) => settingsView = settingsView0,
+      about: () => null);
 
   return appAction.match(home: (homeAction) {
     if (appView.isHome) {
@@ -105,6 +107,13 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
           .w('handleAction(): Received settings action during incorrect view');
       return appState;
     }
+  }, about: (aboutAction) {
+    if (appView.isAbout) {
+      return handleAboutAction(appState.nodesStates, aboutAction);
+    } else {
+      logger.w('handleAction(): Received about action during incorrect view');
+      return appState;
+    }
   });
 }
 
@@ -123,5 +132,6 @@ AppState handleHomeAction(
           createState(AppView.outTransactions(OutTransactionsView.home())),
       selectBalances: () =>
           createState(AppView.balances(BalancesView.selectCard())),
-      selectSettings: () => createState(AppView.settings(SettingsView.home())));
+      selectSettings: () => createState(AppView.settings(SettingsView.home())),
+      selectAbout: () => createState(AppView.about()));
 }

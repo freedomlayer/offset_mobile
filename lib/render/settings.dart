@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:built_collection/built_collection.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'utils/file_picker.dart';
 import 'utils/qr_scan.dart';
@@ -10,6 +13,7 @@ import '../state/state.dart';
 import '../actions/actions.dart';
 
 import 'settings/card.dart';
+import 'select_card.dart';
 
 import 'frame.dart';
 
@@ -49,33 +53,44 @@ Widget renderSettings(
 Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
   final children = <Widget>[];
-  for (final entry in nodesStates.entries) {
-    final nodeName = entry.key;
-    final nodeState = entry.value;
+  for (final nodeName in nodesStates.keys.toList()..sort()) {
+    final nodeState = nodesStates[nodeName];
+
+    final trailingIcon = nodeState.info.isLocal
+        ? FontAwesomeIcons.mobileAlt
+        : FontAwesomeIcons.networkWired;
+
+    final trailing = !nodeState.isEnabled
+        ? FaIcon(trailingIcon, color: Colors.red)
+        : nodeState.inner.isOpen
+            ? FaIcon(trailingIcon, color: Colors.green)
+            : FaIcon(trailingIcon, color: Colors.orange);
+
     final cardEntry = ListTile(
       key: Key(nodeName.inner),
       title: Text('${nodeName.inner}'),
       leading: Icon(Icons.credit_card),
-      trailing: nodeState.inner.isOpen
-          ? Icon(Icons.control_point)
-          : Icon(Icons.error),
+      trailing: trailing,
       onTap: () => queueAction(SettingsAction.selectCard(nodeName)),
     );
 
     children.add(cardEntry);
   }
 
-  final listView =
-      ListView(padding: const EdgeInsets.all(8), children: children);
+  final listView = children.isNotEmpty
+      ? ListView(children: children, padding: EdgeInsets.all(8))
+      : Center(child: Text('No cards configured'));
 
   final newCardButton = FloatingActionButton.extended(
       onPressed: () => queueAction(SettingsAction.selectNewCard()),
       label: Text('New card'),
       icon: Icon(Icons.add));
 
+  final body = Padding(padding: EdgeInsets.only(top: 8.0), child: listView);
+
   return frame(
       title: Text('Settings'),
-      body: listView,
+      body: body,
       backAction: () => queueAction(SettingsAction.back()),
       floatingActionButton: newCardButton);
 }
@@ -86,23 +101,33 @@ Widget _renderNewCard(
     Function(NewCardAction) queueAction) {
   return newCardView.match(
       select: () => _renderNewCardSelect(nodesStates, queueAction),
-      newLocal: () => _renderNewCardLocal(nodesStates, queueAction),
+      newLocal: () => NewCardLocal(nodesStates, queueAction),
       newRemote: () => _renderNewCardRemote(nodesStates, queueAction),
       newRemoteName: (remoteCardFile) =>
-          _renderNewRemoteName(remoteCardFile, nodesStates, queueAction));
+          NewRemoteName(remoteCardFile, nodesStates, queueAction));
 }
 
 Widget _renderNewCardSelect(BuiltMap<NodeName, NodeState> nodesStates,
     Function(NewCardAction) queueAction) {
-  final body = Center(
-      child: Column(children: [
-    RaisedButton(
-        onPressed: () => queueAction(NewCardAction.selectLocal()),
-        child: Text('Local card')),
-    RaisedButton(
-        onPressed: () => queueAction(NewCardAction.selectRemote()),
-        child: Text('Remote card')),
-  ]));
+  final body = ListView(padding: const EdgeInsets.all(8), children: <Widget>[
+    SizedBox(height: 16.0),
+    Center(
+        child: Text('Select card type',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0))),
+    SizedBox(height: 20.0),
+    ListTile(
+      leading: FaIcon(FontAwesomeIcons.mobileAlt, size: 36),
+      title: Text('Local card'),
+      subtitle: Text('Create a new card inside this device'),
+      onTap: () => queueAction(NewCardAction.selectLocal()),
+    ),
+    ListTile(
+      leading: FaIcon(FontAwesomeIcons.networkWired),
+      title: Text('Remote card'),
+      subtitle: Text('Connect to a remote card'),
+      onTap: () => queueAction(NewCardAction.selectRemote()),
+    )
+  ]);
 
   return frame(
       title: Text('New card'),
@@ -110,48 +135,77 @@ Widget _renderNewCardSelect(BuiltMap<NodeName, NodeState> nodesStates,
       backAction: () => queueAction(NewCardAction.back()));
 }
 
-Widget _renderNewCardLocal(BuiltMap<NodeName, NodeState> nodesStates,
-    Function(NewCardAction) queueAction) {
+class NewCardLocal extends StatefulWidget {
+  final BuiltMap<NodeName, NodeState> nodesStates;
+  final Function(NewCardAction) queueAction;
+
+  NewCardLocal(this.nodesStates, this.queueAction, {Key key}) : super(key: key);
+
+  @override
+  _NewCardLocalState createState() => _NewCardLocalState();
+}
+
+class _NewCardLocalState extends State<NewCardLocal> {
+  final _formKey = GlobalKey<FormState>();
+
   // Saves current node name:
   String _nodeName = '';
 
-  final body = Center(
-      child: Row(children: [
-    Spacer(flex: 1),
-    Expanded(
-        flex: 4,
-        child: Column(children: [
-          Expanded(
-              flex: 1,
-              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Text('Name:'),
-                Expanded(
-                    child: TextField(
-                        onChanged: (newNodeName) => _nodeName = newNodeName)),
-              ])),
-          Spacer(flex: 2),
-          Expanded(
-              flex: 1,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    RaisedButton(
-                        // TODO: Add some kind of validation, so that we won't have empty named relay.
-                        onPressed: () => queueAction(
-                            NewCardAction.newCardLocal(NodeName(_nodeName))),
-                        child: Text('Ok')),
-                    RaisedButton(
-                        onPressed: () => queueAction(NewCardAction.back()),
-                        child: Text('Cancel')),
-                  ])),
-        ])),
-    Spacer(flex: 1),
-  ]));
+  @override
+  Widget build(BuildContext context) {
+    final _submitForm = () {
+      final FormState form = _formKey.currentState;
 
-  return frame(
-      title: Text('New local card'),
-      body: body,
-      backAction: () => queueAction(NewCardAction.back()));
+      if (!form.validate()) {
+        // Form is not valid
+      } else {
+        // Save form fields:
+        form.save();
+
+        this
+            .widget
+            .queueAction(NewCardAction.newCardLocal(NodeName(_nodeName)));
+      }
+    };
+
+    final form = Form(
+        key: _formKey,
+        autovalidate: true,
+        child: ListView(
+          // padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          children: <Widget>[
+            ListTile(
+                leading: const FaIcon(FontAwesomeIcons.creditCard),
+                title: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: 'How do you want to call this card?',
+                    labelText: 'Card name',
+                  ),
+                  // TODO: Possibly add a validator?
+                  keyboardType: TextInputType.text,
+                  inputFormatters: [LengthLimitingTextInputFormatter(64)],
+                  onSaved: (nodeName) => _nodeName = nodeName,
+                )),
+            SizedBox(height: 24.0),
+            Align(
+                child: RaisedButton.icon(
+              icon: const FaIcon(FontAwesomeIcons.plus),
+              label: const Text('Add card'),
+              onPressed: _submitForm,
+            )),
+          ],
+        ));
+
+    final body = SafeArea(
+        top: false,
+        bottom: false,
+        child: Padding(padding: EdgeInsets.all(8.0), child: form));
+
+    return frame(
+        title: Text('New local card'),
+        body: body,
+        backAction: () => this.widget.queueAction(NewCardAction.back()));
+  }
 }
 
 Widget _renderNewCardRemote(BuiltMap<NodeName, NodeState> nodesStates,
@@ -174,17 +228,26 @@ Widget _renderNewCardRemote(BuiltMap<NodeName, NodeState> nodesStates,
     }
   };
 
-  final body = Center(
-      child: Column(children: [
-    Spacer(flex: 1),
-    Expanded(flex: 1, child: Text('How to add remote card?')),
-    Expanded(
-        flex: 2,
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          RaisedButton(onPressed: scanQrCode, child: Text('QR code')),
-          RaisedButton(onPressed: openFileExplorer, child: Text('File')),
+  final body = Padding(
+      padding: EdgeInsets.only(top: 16.0),
+      child: Center(
+          child: Column(children: [
+        Text(
+          'How to add remote card?',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+        ),
+        Expanded(
+            child: ListView(padding: EdgeInsets.all(8), children: [
+          ListTile(
+              leading: FaIcon(FontAwesomeIcons.qrcode),
+              onTap: scanQrCode,
+              title: Text('QR code')),
+          ListTile(
+              leading: FaIcon(FontAwesomeIcons.file),
+              onTap: openFileExplorer,
+              title: Text('File')),
         ])),
-  ]));
+      ])));
 
   return frame(
       title: Text('New remote card'),
@@ -192,80 +255,94 @@ Widget _renderNewCardRemote(BuiltMap<NodeName, NodeState> nodesStates,
       backAction: () => queueAction(NewCardAction.back()));
 }
 
-Widget _renderNewRemoteName(
-    RemoteCardFile remoteCardFile,
-    BuiltMap<NodeName, NodeState> nodesStates,
-    Function(NewCardAction) queueAction) {
+class NewRemoteName extends StatefulWidget {
+  final RemoteCardFile remoteCardFile;
+  final BuiltMap<NodeName, NodeState> nodesStates;
+  final Function(NewCardAction) queueAction;
+
+  NewRemoteName(this.remoteCardFile, this.nodesStates, this.queueAction,
+      {Key key})
+      : super(key: key);
+
+  @override
+  _NewRemoteNameState createState() => _NewRemoteNameState();
+}
+
+class _NewRemoteNameState extends State<NewRemoteName> {
+  final _formKey = GlobalKey<FormState>();
+
   // Saves current node name:
   String _nodeName = '';
 
-  final body = Center(
-      child: Row(children: [
-    Spacer(flex: 1),
-    Expanded(
-        flex: 4,
-        child: Column(children: [
-          Expanded(
-              flex: 1,
-              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Text('Name:'),
-                Expanded(
-                    child: TextField(
-                        onChanged: (newNodeName) => _nodeName = newNodeName)),
-              ])),
-          Spacer(flex: 2),
-          Expanded(
-              flex: 1,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    RaisedButton(
-                        onPressed: () => queueAction(
-                            NewCardAction.newCardRemote(
-                                NodeName(_nodeName), remoteCardFile)),
-                        child: Text('Ok')),
-                    RaisedButton(
-                        onPressed: () => queueAction(NewCardAction.back()),
-                        child: Text('Cancel')),
-                  ])),
-        ])),
-    Spacer(flex: 1),
-  ]));
+  @override
+  Widget build(BuildContext context) {
+    final _submitForm = () {
+      final FormState form = _formKey.currentState;
 
-  return frame(
-      title: Text('Remote card name'),
-      body: body,
-      backAction: () => queueAction(NewCardAction.back()));
+      if (!form.validate()) {
+        // Form is not valid
+      } else {
+        // Save form fields:
+        form.save();
+        this.widget.queueAction(NewCardAction.newCardRemote(
+            NodeName(_nodeName), this.widget.remoteCardFile));
+      }
+    };
+
+    final form = Form(
+        key: _formKey,
+        autovalidate: true,
+        child: ListView(
+          // padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          children: <Widget>[
+            ListTile(
+                leading: const FaIcon(FontAwesomeIcons.creditCard),
+                title: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: 'How do you want to call this card?',
+                    labelText: 'Card name',
+                  ),
+                  // TODO: Possibly add a validator?
+                  keyboardType: TextInputType.text,
+                  inputFormatters: [LengthLimitingTextInputFormatter(64)],
+                  onSaved: (nodeName) => _nodeName = nodeName,
+                )),
+            SizedBox(height: 24.0),
+            Align(
+                child: RaisedButton.icon(
+              icon: const FaIcon(FontAwesomeIcons.plus),
+              label: const Text('Add card'),
+              onPressed: _submitForm,
+            )),
+          ],
+        ));
+
+    final body = SafeArea(
+        top: false,
+        bottom: false,
+        child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
+
+    return frame(
+        title: Text('Remote card name'),
+        body: body,
+        backAction: () => this.widget.queueAction(NewCardAction.back()));
+  }
 }
 
 Widget _renderSelectCardAddRelay(
     RelayAddress relayAddress,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
-  final children = <Widget>[];
-
-  nodesStates.forEach((nodeName, nodeState) {
-    // We only show open nodes. (We can not configure closed nodes):
-    final cardEntry = nodeState.inner.isOpen
-        ? ListTile(
-            key: Key(nodeName.inner),
-            title: Text('${nodeName.inner}'),
-            onTap: () => queueAction(
-                SettingsAction.selectCardSharedRelay(nodeName, relayAddress)))
-        : ListTile(
-            key: Key(nodeName.inner),
-            title: Text('${nodeName.inner}'),
-            enabled: false);
-
-    children.add(cardEntry);
-  });
-
-  final listView =
-      ListView(padding: const EdgeInsets.all(8), children: children);
+  final body = renderSelectCard(
+      nodesStates.keys,
+      List.from(nodesStates.keys)
+        ..removeWhere((nodeName) => !nodesStates[nodeName].inner.isOpen),
+      (nodeName) => queueAction(
+          SettingsAction.selectCardSharedRelay(nodeName, relayAddress)));
 
   return frame(
-      title: Text('Import Relay'),
-      body: listView,
+      title: Text('Import relay'),
+      body: body,
       backAction: () => queueAction(SettingsAction.back()));
 }
 
@@ -273,30 +350,16 @@ Widget _renderSelectCardAddIndex(
     IndexServerFile indexServerFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
-  final children = <Widget>[];
-
-  nodesStates.forEach((nodeName, nodeState) {
-    // We only show open nodes. (We can not configure closed nodes):
-    final cardEntry = nodeState.inner.isOpen
-        ? ListTile(
-            key: Key(nodeName.inner),
-            title: Text('${nodeName.inner}'),
-            onTap: () => queueAction(SettingsAction.selectCardSharedIndex(
-                nodeName, indexServerFile)))
-        : ListTile(
-            key: Key(nodeName.inner),
-            title: Text('${nodeName.inner}'),
-            enabled: false);
-
-    children.add(cardEntry);
-  });
-
-  final listView =
-      ListView(padding: const EdgeInsets.all(8), children: children);
+  final body = renderSelectCard(
+      nodesStates.keys,
+      List.from(nodesStates.keys)
+        ..removeWhere((nodeName) => !nodesStates[nodeName].inner.isOpen),
+      (nodeName) => queueAction(
+          SettingsAction.selectCardSharedIndex(nodeName, indexServerFile)));
 
   return frame(
-      title: Text('Import Index Server'),
-      body: listView,
+      title: Text('Import index server'),
+      body: body,
       backAction: () => queueAction(SettingsAction.back()));
 }
 
@@ -304,28 +367,15 @@ Widget _renderSelectCardAddFriend(
     FriendFile friendFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
-  final children = <Widget>[];
-  nodesStates.forEach((nodeName, nodeState) {
-    // We only show open nodes. (We can not configure closed nodes):
-    final cardEntry = nodeState.inner.isOpen
-        ? ListTile(
-            key: Key(nodeName.inner),
-            title: Text('${nodeName.inner}'),
-            onTap: () => queueAction(
-                SettingsAction.selectCardSharedFriend(nodeName, friendFile)))
-        : ListTile(
-            key: Key(nodeName.inner),
-            title: Text('${nodeName.inner}'),
-            enabled: false);
-
-    children.add(cardEntry);
-  });
-
-  final listView =
-      ListView(padding: const EdgeInsets.all(8), children: children);
+  final body = renderSelectCard(
+      nodesStates.keys,
+      List.from(nodesStates.keys)
+        ..removeWhere((nodeName) => !nodesStates[nodeName].inner.isOpen),
+      (nodeName) => queueAction(
+          SettingsAction.selectCardSharedFriend(nodeName, friendFile)));
 
   return frame(
-      title: Text('Import Friend'),
-      body: listView,
+      title: Text('Import friend'),
+      body: body,
       backAction: () => queueAction(SettingsAction.back()));
 }

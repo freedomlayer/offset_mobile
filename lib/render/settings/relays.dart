@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../protocol/protocol.dart';
 import '../../protocol/file.dart';
@@ -23,7 +25,7 @@ Widget renderRelaysSettings(
       home: () => _renderHome(nodeName, nodeState, queueAction),
       newRelaySelect: () => _renderNewRelay(nodeName, nodeState, queueAction),
       newRelayName: (relayAddress) =>
-          _renderRelayName(nodeName, relayAddress, nodeState, queueAction));
+          RelayName(nodeName, relayAddress, nodeState, queueAction));
 }
 
 Widget _renderHome(NodeName nodeName, NodeState nodeState,
@@ -35,28 +37,55 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
 
   final children = <Widget>[];
 
-  for (final namedRelayAddress in nodeOpen.compactReport.relays) {
+  // Sort relays by name:
+  final relays = nodeOpen.compactReport.relays.toList();
+  relays.sort((a, b) => a.name.compareTo(b.name));
+
+  // Do not allow to remove the last relay if the card has configured friends.
+  final removeRelayFunc = ((relays.length <= 1) &&
+          nodeOpen.compactReport.friends.isNotEmpty)
+      ? (relayPublicKey) => null
+      : (relayPublicKey) =>
+          () => queueAction(RelaysSettingsAction.removeRelay(relayPublicKey));
+
+  for (final namedRelayAddress in relays) {
     children.add(ListTile(
       key: Key(namedRelayAddress.publicKey.inner),
       title: Text(namedRelayAddress.name),
-      leading: Icon(Icons.network_cell),
+      subtitle: Text('${namedRelayAddress.address.inner}'),
+      leading: FaIcon(FontAwesomeIcons.satellite),
       trailing: FlatButton(
           child: Icon(Icons.delete),
-          onPressed: () => queueAction(
-              RelaysSettingsAction.removeRelay(namedRelayAddress.publicKey))),
+          onPressed: removeRelayFunc(namedRelayAddress.publicKey)),
     ));
   }
 
-  final listView = ListView(children: children);
+  final relaysList = children.isNotEmpty
+      ? ListView(children: children, padding: EdgeInsets.all(8))
+      : Center(child: Text('No relays configured'));
 
   final newRelayButton = FloatingActionButton.extended(
       onPressed: () => queueAction(RelaysSettingsAction.selectNewRelay()),
-      label: Text('New Relay'),
+      label: Text('New relay'),
       icon: Icon(Icons.add));
 
+  final body = Column(children: [
+    Container(
+        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+        width: double.infinity,
+        color: Colors.blue.shade50,
+        child: ListTile(
+            leading: const FaIcon(FontAwesomeIcons.creditCard),
+            title: Text('${nodeName.inner}',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
+    Divider(height: 0, color: Colors.grey),
+    Expanded(child: relaysList),
+  ]);
+
   return frame(
-      title: Text('${nodeName.inner}: Relays'),
-      body: listView,
+      title: Text('Relays'),
+      body: body,
       backAction: () => queueAction(RelaysSettingsAction.back()),
       floatingActionButton: newRelayButton);
 }
@@ -79,69 +108,118 @@ Widget _renderNewRelay(NodeName nodeName, NodeState nodeState,
     }
   };
 
-  final body = Center(
-      child: Column(children: [
-    Spacer(flex: 1),
-    Expanded(flex: 1, child: Text('How to add new relay?')),
+  final body = Column(children: [
+    Container(
+        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+        width: double.infinity,
+        color: Colors.blue.shade50,
+        child: ListTile(
+            leading: const FaIcon(FontAwesomeIcons.creditCard),
+            title: Text('${nodeName.inner}',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
+    Divider(height: 0, color: Colors.grey),
+    SizedBox(height: 20.0),
+    Text(
+      'How to add new relay?',
+      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+    ),
     Expanded(
-        flex: 2,
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          RaisedButton(onPressed: scanQrCode, child: Text('QR code')),
-          RaisedButton(onPressed: openFileExplorer, child: Text('File')),
-        ])),
-  ]));
+        child: ListView(padding: EdgeInsets.all(8), children: [
+      ListTile(
+          leading: FaIcon(FontAwesomeIcons.qrcode),
+          onTap: scanQrCode,
+          title: Text('QR code')),
+      ListTile(
+          leading: FaIcon(FontAwesomeIcons.file),
+          onTap: openFileExplorer,
+          title: Text('File')),
+      ListTile(
+          leading: FaIcon(FontAwesomeIcons.hatWizard, color: Colors.blue),
+          onTap: () => queueAction(RelaysSettingsAction.newRandRelay()),
+          title: Text('Random')),
+    ])),
+  ]);
 
   return frame(
-      title: Text('${nodeName.inner}: New relay'),
+      title: Text('New relay'),
       body: body,
       backAction: () => queueAction(RelaysSettingsAction.back()));
 }
 
-Widget _renderRelayName(NodeName nodeName, RelayAddress relayAddress,
-    NodeState nodeState, Function(RelaysSettingsAction) queueAction) {
+class RelayName extends StatefulWidget {
+  final NodeName nodeName;
+  final RelayAddress relayAddress;
+  final NodeState nodeState;
+  final Function(RelaysSettingsAction) queueAction;
+
+  RelayName(this.nodeName, this.relayAddress, this.nodeState, this.queueAction,
+      {Key key})
+      : super(key: key);
+
+  @override
+  _RelayNameState createState() => _RelayNameState();
+}
+
+class _RelayNameState extends State<RelayName> {
+  final _formKey = GlobalKey<FormState>();
+
   // Saves current relay name:
   String _relayName = '';
 
-  final body = Center(
-      child: Row(children: [
-    Spacer(flex: 1),
-    Expanded(
-        flex: 4,
-        child: Column(children: [
-          Expanded(
-              flex: 1,
-              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Text('Name:'),
-                Expanded(
-                    child: TextField(
-                        onChanged: (newNodeName) => _relayName = newNodeName)),
-              ])),
-          Spacer(flex: 2),
-          Expanded(
-              flex: 1,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    RaisedButton(
-                        // TODO: Add some kind of validation, so that we won't have empty named relay.
-                        onPressed: () => queueAction(
-                            RelaysSettingsAction.newRelay(
-                                NamedRelayAddress((b) => b
-                                  ..publicKey = relayAddress.publicKey
-                                  ..address = relayAddress.address
-                                  ..name = _relayName))),
-                        child: Text('Ok')),
-                    RaisedButton(
-                        onPressed: () =>
-                            queueAction(RelaysSettingsAction.back()),
-                        child: Text('Cancel')),
-                  ])),
-        ])),
-    Spacer(flex: 1),
-  ]));
+  @override
+  Widget build(BuildContext context) {
+    final _submitForm = () {
+      final FormState form = _formKey.currentState;
 
-  return frame(
-      title: Text('${nodeName.inner}: New relay name'),
-      body: body,
-      backAction: () => queueAction(RelaysSettingsAction.back()));
+      if (!form.validate()) {
+        // Form is not valid
+      } else {
+        // Save form fields:
+        form.save();
+        this.widget.queueAction(
+            RelaysSettingsAction.newRelay(NamedRelayAddress((b) => b
+              ..publicKey = this.widget.relayAddress.publicKey
+              ..address = this.widget.relayAddress.address
+              ..name = _relayName)));
+      }
+    };
+
+    final form = Form(
+        key: _formKey,
+        autovalidate: true,
+        child: ListView(
+          children: <Widget>[
+            ListTile(
+                leading: const FaIcon(FontAwesomeIcons.satellite),
+                title: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: 'How do you want to call this relay?',
+                    labelText: 'Relay name',
+                  ),
+                  // TODO: Possibly add a validator?
+                  keyboardType: TextInputType.text,
+                  inputFormatters: [LengthLimitingTextInputFormatter(64)],
+                  onSaved: (relayName) => _relayName = relayName,
+                )),
+            SizedBox(height: 24.0),
+            Align(
+                child: RaisedButton.icon(
+              icon: const FaIcon(FontAwesomeIcons.plus),
+              label: const Text('Add relay'),
+              onPressed: _submitForm,
+            )),
+          ],
+        ));
+
+    final body = SafeArea(
+        top: false,
+        bottom: false,
+        child: Padding(padding: EdgeInsets.only(top: 16.0), child: form));
+
+    return frame(
+        title: Text('Relay name'),
+        body: body,
+        backAction: () => this.widget.queueAction(RelaysSettingsAction.back()));
+  }
 }

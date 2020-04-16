@@ -129,7 +129,6 @@ class FriendSettingsAction extends _$FriendSettingsAction {
       Currency currency, U128 remoteMaxDebt, Rate rate)
       : super.updateCurrency(currency, remoteMaxDebt, rate);
 
-  FriendSettingsAction.selectResolve() : super.selectResolve();
   FriendSettingsAction.resolve() : super.resolve();
 }
 
@@ -146,6 +145,7 @@ class RelaysSettingsAction extends _$RelaysSettingsAction {
       : super.loadRelay(relayAddress);
   RelaysSettingsAction.newRelay(NamedRelayAddress relay)
       : super.newRelay(relay);
+  RelaysSettingsAction.newRandRelay() : super.newRandRelay();
 }
 
 @BuiltUnion()
@@ -161,4 +161,5 @@ class IndexServersSettingsAction extends _$IndexServersSettingsAction {
       : super.loadIndexServer(indexServerFile);
   IndexServersSettingsAction.newIndex(NamedIndexServerAddress indexServer)
       : super.newIndex(indexServer);
+  IndexServersSettingsAction.newRandIndex() : super.newRandIndex();
 }
