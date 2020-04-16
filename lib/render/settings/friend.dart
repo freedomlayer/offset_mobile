@@ -139,7 +139,7 @@ Widget _renderChannelInfoInconsistent(
             Expanded(child: scrollDataTable),
             SizedBox(height: 20.0),
             Container(
-                color: Colors.blue.shade50,
+                color: Theme.of(context).accentColor,
                 child: Column(children: [
                   Divider(height: 0, color: Colors.grey),
                   SizedBox(height: 10.0),
@@ -232,41 +232,43 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
       ? Colors.green
       : friendReport.status.isEnabled ? Colors.orange : Colors.red;
 
-  final body = Column(children: [
-    Container(
-        width: double.infinity,
-        child: Column(children: [
-          Container(
-              width: double.infinity,
-              color: Colors.blue.shade50,
-              padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-              child: ListTile(
-                  leading: const FaIcon(FontAwesomeIcons.creditCard),
-                  title: Text('${nodeName.inner}',
-                      style: TextStyle(fontSize: 16.0)))),
-          Divider(height: 0, color: Colors.grey),
-          Container(
-              width: double.infinity,
-              color: Colors.blue.shade50,
-              padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-              child: SwitchListTile(
-                  secondary: FaIcon(FontAwesomeIcons.user, color: friendColor),
-                  title: Text('${friendReport.name}',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 16.0)),
-                  value: friendReport.status.isEnabled,
-                  onChanged: (bool newValue) {
-                    if (newValue == true) {
-                      queueAction(FriendSettingsAction.enableFriend());
-                    } else {
-                      queueAction(FriendSettingsAction.disableFriend());
-                    }
-                  })),
-          Divider(height: 0, color: Colors.grey),
-        ])),
-    SizedBox(height: 16.0),
-    Expanded(child: _renderChannelInfo(friendReport, queueAction)),
-  ]);
+  final body = Builder(
+      builder: (BuildContext context) => Column(children: [
+            Container(
+                width: double.infinity,
+                child: Column(children: [
+                  Container(
+                      width: double.infinity,
+                      color: Theme.of(context).accentColor,
+                      padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                      child: ListTile(
+                          leading: const FaIcon(FontAwesomeIcons.creditCard),
+                          title: Text('${nodeName.inner}',
+                              style: TextStyle(fontSize: 16.0)))),
+                  Divider(height: 0, color: Colors.grey),
+                  Container(
+                      width: double.infinity,
+                      // color: Theme.of(context).accentColor,
+                      padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                      child: SwitchListTile(
+                          secondary:
+                              FaIcon(FontAwesomeIcons.user, color: friendColor),
+                          title: Text('${friendReport.name}',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16.0)),
+                          value: friendReport.status.isEnabled,
+                          onChanged: (bool newValue) {
+                            if (newValue == true) {
+                              queueAction(FriendSettingsAction.enableFriend());
+                            } else {
+                              queueAction(FriendSettingsAction.disableFriend());
+                            }
+                          })),
+                  Divider(height: 0, color: Colors.grey),
+                ])),
+            SizedBox(height: 16.0),
+            Expanded(child: _renderChannelInfo(friendReport, queueAction)),
+          ]));
 
   // TODO: Possibly move "New Currency" to a place where it is less likely to be clicked
   // on accidentally? Maybe some drawer that opens when three dots are clicked?
@@ -511,56 +513,60 @@ class _CurrencySettingsState extends State<CurrencySettings> {
     final body = SafeArea(
         top: false,
         bottom: false,
-        child: Column(children: [
-          Container(
-              width: double.infinity,
-              child: Column(children: [
-                Container(
-                    width: double.infinity,
-                    color: Colors.blue.shade50,
-                    padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                    child: ListTile(
-                        leading: const FaIcon(FontAwesomeIcons.creditCard),
-                        title: Text('${this.widget.nodeName.inner}',
-                            style: TextStyle(fontSize: 16.0)))),
-                Divider(height: 0, color: Colors.grey),
-                Container(
-                    width: double.infinity,
-                    color: Colors.blue.shade50,
-                    padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                    child: ListTile(
-                        leading:
-                            FaIcon(FontAwesomeIcons.user, color: friendColor),
-                        title: Text('${this.widget.friendReport.name}'))),
-                Divider(height: 0, color: Colors.grey),
-                Container(
-                    width: double.infinity,
-                    color: Colors.blue.shade50,
-                    padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                    child: SwitchListTile(
-                        secondary: FaIcon(FontAwesomeIcons.coins,
-                            color: currencyColor),
-                        title: Text('${this.widget.currency.inner}',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        value: currencyConfig.isOpen,
-                        onChanged: (bool newValue) {
-                          if (newValue == true) {
-                            this.widget.queueAction(
-                                FriendSettingsAction.openCurrency(
-                                    this.widget.currency));
-                          } else {
-                            this.widget.queueAction(
-                                FriendSettingsAction.closeCurrency(
-                                    this.widget.currency));
-                          }
-                        })),
-                Divider(height: 0, color: Colors.grey),
-              ])),
-          Expanded(child: formBody),
-        ]));
+        child: Builder(
+            builder: (BuildContext context) => Column(children: [
+                  Container(
+                      width: double.infinity,
+                      child: Column(children: [
+                        Container(
+                            width: double.infinity,
+                            color: Theme.of(context).accentColor,
+                            padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                            child: ListTile(
+                                leading:
+                                    const FaIcon(FontAwesomeIcons.creditCard),
+                                title: Text('${this.widget.nodeName.inner}',
+                                    style: TextStyle(fontSize: 16.0)))),
+                        Divider(height: 0, color: Colors.grey),
+                        Container(
+                            width: double.infinity,
+                            color: Theme.of(context).accentColor,
+                            padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                            child: ListTile(
+                                leading: FaIcon(FontAwesomeIcons.user,
+                                    color: friendColor),
+                                title:
+                                    Text('${this.widget.friendReport.name}'))),
+                        Divider(height: 0, color: Colors.grey),
+                        Container(
+                            width: double.infinity,
+                            // color: Theme.of(context).accentColor,
+                            padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                            child: SwitchListTile(
+                                secondary: FaIcon(FontAwesomeIcons.coins,
+                                    color: currencyColor),
+                                title: Text('${this.widget.currency.inner}',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                value: currencyConfig.isOpen,
+                                onChanged: (bool newValue) {
+                                  if (newValue == true) {
+                                    this.widget.queueAction(
+                                        FriendSettingsAction.openCurrency(
+                                            this.widget.currency));
+                                  } else {
+                                    this.widget.queueAction(
+                                        FriendSettingsAction.closeCurrency(
+                                            this.widget.currency));
+                                  }
+                                })),
+                        Divider(height: 0, color: Colors.grey),
+                      ])),
+                  Expanded(child: formBody),
+                ])));
 
     return frame(
-        title: Text('Currency Settings'),
+        title: Text('Currency settings'),
         body: body,
         backAction: () => this.widget.queueAction(FriendSettingsAction.back()));
   }
@@ -682,31 +688,34 @@ class _NewCurrencyState extends State<NewCurrency> {
     final body = SafeArea(
         top: false,
         bottom: false,
-        child: Column(children: [
-          Container(
-              width: double.infinity,
-              child: Column(children: [
-                Container(
-                    width: double.infinity,
-                    color: Colors.blue.shade50,
-                    padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                    child: ListTile(
-                        leading: const FaIcon(FontAwesomeIcons.creditCard),
-                        title: Text('${this.widget.nodeName.inner}',
-                            style: TextStyle(fontSize: 16.0)))),
-                Divider(height: 0, color: Colors.grey),
-                Container(
-                    width: double.infinity,
-                    color: Colors.blue.shade50,
-                    padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                    child: ListTile(
-                        leading:
-                            FaIcon(FontAwesomeIcons.user, color: friendColor),
-                        title: Text('${this.widget.friendReport.name}'))),
-                Divider(height: 0, color: Colors.grey),
-              ])),
-          Expanded(child: formBody)
-        ]));
+        child: Builder(
+            builder: (BuildContext context) => Column(children: [
+                  Container(
+                      width: double.infinity,
+                      child: Column(children: [
+                        Container(
+                            width: double.infinity,
+                            color: Theme.of(context).accentColor,
+                            padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                            child: ListTile(
+                                leading:
+                                    const FaIcon(FontAwesomeIcons.creditCard),
+                                title: Text('${this.widget.nodeName.inner}',
+                                    style: TextStyle(fontSize: 16.0)))),
+                        Divider(height: 0, color: Colors.grey),
+                        Container(
+                            width: double.infinity,
+                            color: Theme.of(context).accentColor,
+                            padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                            child: ListTile(
+                                leading: FaIcon(FontAwesomeIcons.user,
+                                    color: friendColor),
+                                title:
+                                    Text('${this.widget.friendReport.name}'))),
+                        Divider(height: 0, color: Colors.grey),
+                      ])),
+                  Expanded(child: formBody)
+                ])));
 
     return frame(
         title: Text('New currency'),

@@ -55,12 +55,6 @@ class Frame extends StatelessWidget {
       };
     }
 
-    /*
-    return MaterialApp(
-        title: APP_TITLE,
-        home: 
-      */
-
     return WillPopScope(
         onWillPop: onWillPop,
         child: Scaffold(

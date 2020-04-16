@@ -102,17 +102,18 @@ Widget _renderInvoiceInfo(
     ])),
   ]);
 
-  final body = Column(children: [
-    Container(
-        color: Colors.brown.shade50,
-        child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: ListTile(
-                leading: FaIcon(FontAwesomeIcons.info),
-                title: Text('Invoice details')))),
-    Divider(height: 0, color: Colors.grey),
-    Expanded(child: listView),
-  ]);
+  final body = Builder(
+      builder: (BuildContext context) => Column(children: [
+            Container(
+                color: Theme.of(context).accentColor,
+                child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: ListTile(
+                        leading: FaIcon(FontAwesomeIcons.info),
+                        title: Text('Invoice details')))),
+            Divider(height: 0, color: Colors.grey),
+            Expanded(child: listView),
+          ]));
 
   return frame(
       title: Text('Buy'),

@@ -95,19 +95,20 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
       ? ListView(children: children, padding: EdgeInsets.all(8))
       : Center(child: Text('No friends configured'));
 
-  final body = Column(children: [
-    Container(
-        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-        width: double.infinity,
-        color: Colors.blue.shade50,
-        child: ListTile(
-            leading: const FaIcon(FontAwesomeIcons.creditCard),
-            title: Text('${nodeName.inner}',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
-    Divider(height: 0, color: Colors.grey),
-    Expanded(child: listView),
-  ]);
+  final body = Builder(
+      builder: (BuildContext context) => Column(children: [
+            Container(
+                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                width: double.infinity,
+                color: Theme.of(context).accentColor,
+                child: ListTile(
+                    leading: const FaIcon(FontAwesomeIcons.creditCard),
+                    title: Text('${nodeName.inner}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16.0)))),
+            Divider(height: 0, color: Colors.grey),
+            Expanded(child: listView),
+          ]));
 
   final newFriendButton = FloatingActionButton.extended(
       onPressed: () => queueAction(FriendsSettingsAction.selectNewFriend()),
@@ -158,34 +159,35 @@ Widget _renderSelectNewFriend(NodeName nodeName, NodeState nodeState,
     }
   };
 
-  final body = Column(children: [
-    Container(
-        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-        width: double.infinity,
-        color: Colors.blue.shade50,
-        child: ListTile(
-            leading: const FaIcon(FontAwesomeIcons.creditCard),
-            title: Text('${nodeName.inner}',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
-    Divider(height: 0, color: Colors.grey),
-    SizedBox(height: 20.0),
-    Text(
-      'How to add new friend?',
-      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-    ),
-    Expanded(
-        child: ListView(padding: EdgeInsets.all(8), children: [
-      ListTile(
-          leading: FaIcon(FontAwesomeIcons.qrcode),
-          onTap: scanQrCode,
-          title: Text('QR code')),
-      ListTile(
-          leading: FaIcon(FontAwesomeIcons.file),
-          onTap: openFileExplorer,
-          title: Text('File')),
-    ])),
-  ]);
+  final body = Builder(
+      builder: (BuildContext context) => Column(children: [
+            Container(
+                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                width: double.infinity,
+                color: Theme.of(context).accentColor,
+                child: ListTile(
+                    leading: const FaIcon(FontAwesomeIcons.creditCard),
+                    title: Text('${nodeName.inner}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16.0)))),
+            Divider(height: 0, color: Colors.grey),
+            SizedBox(height: 20.0),
+            Text(
+              'How to add new friend?',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+            ),
+            Expanded(
+                child: ListView(padding: EdgeInsets.all(8), children: [
+              ListTile(
+                  leading: FaIcon(FontAwesomeIcons.qrcode),
+                  onTap: scanQrCode,
+                  title: Text('QR code')),
+              ListTile(
+                  leading: FaIcon(FontAwesomeIcons.file),
+                  onTap: openFileExplorer,
+                  title: Text('File')),
+            ])),
+          ]));
 
   return frame(
       title: Text('New friend'),
@@ -286,11 +288,12 @@ Widget _renderShareInfo(NodeName nodeName, NodeState nodeState,
     ..publicKey = nodeOpen.compactReport.localPublicKey
     ..relays = relays.toBuilder());
 
-  final body = Column(children: [
-    Container(
-        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-        width: double.infinity,
-        color: Colors.blue.shade50,
+  final body = Builder(
+      builder: (BuildContext context) => Column(children: [
+            Container(
+                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                width: double.infinity,
+                color: Theme.of(context).accentColor,
         child: ListTile(
             leading: const FaIcon(FontAwesomeIcons.creditCard),
             title: Text('${nodeName.inner}',
@@ -305,7 +308,7 @@ Widget _renderShareInfo(NodeName nodeName, NodeState nodeState,
         label: Text('Send card'),
         onPressed: () async =>
             await shareFile<FriendFile>(friendFile, 'local.friend')),
-  ]);
+  ]));
 
   return frame(
       title: Text('Share card'),

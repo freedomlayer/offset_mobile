@@ -268,17 +268,18 @@ Widget _renderSearchingRoute(NodeName nodeName, PaymentId paymentId,
         label: Text('Cancel')),
   ]);
 
-  final body = Column(children: [
-    Container(
-        color: Colors.brown.shade50,
-        child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: ListTile(
-                leading: FaIcon(FontAwesomeIcons.search),
-                title: Text('Searching route')))),
-    Divider(height: 0, color: Colors.grey),
-    Expanded(child: listView),
-  ]);
+  final body = Builder(
+      builder: (BuildContext context) => Column(children: [
+            Container(
+                color: Theme.of(context).accentColor,
+                child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: ListTile(
+                        leading: FaIcon(FontAwesomeIcons.search),
+                        title: Text('Searching route')))),
+            Divider(height: 0, color: Colors.grey),
+            Expanded(child: listView),
+          ]));
 
   return frame(
       title: Text('Outgoing transaction'),
@@ -318,17 +319,18 @@ Widget _renderFoundRoute(U128 fees, NodeName nodeName, PaymentId paymentId,
     ]))
   ]);
 
-  final body = Column(children: [
-    Container(
-        color: Colors.brown.shade50,
-        child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: ListTile(
-                leading: FaIcon(FontAwesomeIcons.route),
-                title: Text('Found route')))),
-    Divider(height: 0, color: Colors.grey),
-    Expanded(child: listView),
-  ]);
+  final body = Builder(
+      builder: (BuildContext context) => Column(children: [
+            Container(
+                color: Theme.of(context).accentColor,
+                child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: ListTile(
+                        leading: FaIcon(FontAwesomeIcons.route),
+                        title: Text('Found route')))),
+            Divider(height: 0, color: Colors.grey),
+            Expanded(child: listView),
+          ]));
 
   return frame(
       title: Text('Outgoing transaction'),
@@ -363,17 +365,18 @@ Widget _renderSending(U128 fees, NodeName nodeName, PaymentId paymentId,
             label: Text('Cancel'))),
   ]);
 
-  final body = Column(children: [
-    Container(
-        color: Colors.brown.shade50,
-        child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: ListTile(
-                leading: FaIcon(FontAwesomeIcons.paperPlane),
-                title: Text('Sending')))),
-    Divider(height: 0, color: Colors.grey),
-    Expanded(child: listView),
-  ]);
+  final body = Builder(
+      builder: (BuildContext context) => Column(children: [
+            Container(
+                color: Theme.of(context).accentColor,
+                child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: ListTile(
+                        leading: FaIcon(FontAwesomeIcons.paperPlane),
+                        title: Text('Sending')))),
+            Divider(height: 0, color: Colors.grey),
+            Expanded(child: listView),
+          ]));
 
   return frame(
       title: Text('Outgoing transaction'),
@@ -418,17 +421,18 @@ Widget _renderCommit(
             label: Text('Send commitment'))),
   ]);
 
-  final body = Column(children: [
-    Container(
-        color: Colors.brown.shade50,
-        child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: ListTile(
-                leading: FaIcon(FontAwesomeIcons.stamp),
-                title: Text('Commitment')))),
-    Divider(height: 0, color: Colors.grey),
-    Expanded(child: listView),
-  ]);
+  final body = Builder(
+      builder: (BuildContext context) => Column(children: [
+            Container(
+                color: Theme.of(context).accentColor,
+                child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: ListTile(
+                        leading: FaIcon(FontAwesomeIcons.stamp),
+                        title: Text('Commitment')))),
+            Divider(height: 0, color: Colors.grey),
+            Expanded(child: listView),
+          ]));
 
   return frame(
       title: Text('Outgoing transaction'),
@@ -475,18 +479,19 @@ Widget _renderSuccess(
     ]))
   ]);
 
-  final body = Column(children: [
-    Container(
-        color: Colors.brown.shade50,
-        child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: ListTile(
-                leading:
-                    FaIcon(FontAwesomeIcons.checkCircle, color: Colors.green),
-                title: Text('Success')))),
-    Divider(height: 0, color: Colors.grey),
-    Expanded(child: listView),
-  ]);
+  final body = Builder(
+      builder: (BuildContext context) => Column(children: [
+            Container(
+                color: Theme.of(context).accentColor,
+                child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: ListTile(
+                        leading: FaIcon(FontAwesomeIcons.checkCircle,
+                            color: Colors.green),
+                        title: Text('Success')))),
+            Divider(height: 0, color: Colors.grey),
+            Expanded(child: listView),
+          ]));
 
   return frame(
       title: Text('Outgoing transaction'),
@@ -516,18 +521,19 @@ Widget _renderFailure(NodeName nodeName, PaymentId paymentId,
             label: Text('Discard'))),
   ]);
 
-  final body = Column(children: [
-    Container(
-        color: Colors.brown.shade50,
-        child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: ListTile(
-                leading: FaIcon(FontAwesomeIcons.exclamationTriangle,
-                    color: Colors.red),
-                title: Text('Failure')))),
-    Divider(height: 0, color: Colors.grey),
-    Expanded(child: listView),
-  ]);
+  final body = Builder(
+      builder: (BuildContext context) => Column(children: [
+            Container(
+                color: Theme.of(context).accentColor,
+                child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: ListTile(
+                        leading: FaIcon(FontAwesomeIcons.exclamationTriangle,
+                            color: Colors.red),
+                        title: Text('Failure')))),
+            Divider(height: 0, color: Colors.grey),
+            Expanded(child: listView),
+          ]));
 
   return frame(
       title: Text('Outgoing transaction'),

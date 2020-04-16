@@ -17,6 +17,8 @@ import 'settings.dart';
 import 'about.dart';
 import 'frame.dart';
 
+import 'theme.dart';
+
 import '../logger.dart';
 
 final logger = createLogger('render::render');
@@ -27,7 +29,7 @@ Widget renderNotReady() {
       title: Text(APP_TITLE),
       body: Center(child: CircularProgressIndicator(value: null)));
 
-  return MaterialApp(title: APP_TITLE, home: home);
+  return MaterialApp(title: APP_TITLE, theme: appTheme(), home: home);
 }
 
 /// Rendering when we are connected to the process
@@ -38,7 +40,7 @@ Widget render(AppState appState, Function(AppAction) queueAction) {
       transition: (oldView, newView, nextRequests, optPendingRequest) =>
           renderTransition(oldView, appState.nodesStates));
 
-  return MaterialApp(title: APP_TITLE, home: home);
+  return MaterialApp(title: APP_TITLE, theme: appTheme(), home: home);
 }
 
 Widget renderAppView(AppView appView, BuiltMap<NodeName, NodeState> nodesStates,
@@ -79,6 +81,7 @@ Widget renderTransition(
   // something is in progress.
   return MaterialApp(
       title: APP_TITLE,
+      theme: appTheme(),
       home: Stack(children: <Widget>[
         renderAppView(oldView, nodesStates, noQueueAction),
         CircularProgressIndicator(value: null)

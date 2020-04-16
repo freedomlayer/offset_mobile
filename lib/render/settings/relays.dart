@@ -69,19 +69,20 @@ Widget _renderHome(NodeName nodeName, NodeState nodeState,
       label: Text('New relay'),
       icon: Icon(Icons.add));
 
-  final body = Column(children: [
-    Container(
-        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-        width: double.infinity,
-        color: Colors.blue.shade50,
-        child: ListTile(
-            leading: const FaIcon(FontAwesomeIcons.creditCard),
-            title: Text('${nodeName.inner}',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
-    Divider(height: 0, color: Colors.grey),
-    Expanded(child: relaysList),
-  ]);
+  final body = Builder(
+      builder: (BuildContext context) => Column(children: [
+            Container(
+                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                width: double.infinity,
+                color: Theme.of(context).accentColor,
+                child: ListTile(
+                    leading: const FaIcon(FontAwesomeIcons.creditCard),
+                    title: Text('${nodeName.inner}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16.0)))),
+            Divider(height: 0, color: Colors.grey),
+            Expanded(child: relaysList),
+          ]));
 
   return frame(
       title: Text('Relays'),
@@ -108,11 +109,12 @@ Widget _renderNewRelay(NodeName nodeName, NodeState nodeState,
     }
   };
 
-  final body = Column(children: [
-    Container(
-        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-        width: double.infinity,
-        color: Colors.blue.shade50,
+  final body = Builder(
+      builder: (BuildContext context) => Column(children: [
+            Container(
+                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                width: double.infinity,
+                color: Theme.of(context).accentColor,
         child: ListTile(
             leading: const FaIcon(FontAwesomeIcons.creditCard),
             title: Text('${nodeName.inner}',
@@ -139,7 +141,7 @@ Widget _renderNewRelay(NodeName nodeName, NodeState nodeState,
           onTap: () => queueAction(RelaysSettingsAction.newRandRelay()),
           title: Text('Random')),
     ])),
-  ]);
+  ]));
 
   return frame(
       title: Text('New relay'),
