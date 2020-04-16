@@ -49,11 +49,19 @@ dev_dependencies:
   build_runner: ^1.0.0
   test: ^1.0.0
   build: ^1.1.0
-  analyzer: '>=0.39.3 <0.40.0'
+  analyzer: ">=0.39.3 <0.40.0"
   source_gen: ^0.9.0
   pedantic: ^1.0.0
+  flutter_launcher_icons: ^0.7.3
+  
 
-
+flutter_icons:
+  image_path_ios: "assets/images/icon_1024_1024_full.png"
+  image_path_android: "assets/images/icon_1024_1024_full.png"
+  adaptive_icon_foreground: "assets/images/icon_1024_1024_foreground.png"
+  adaptive_icon_background: "assets/images/icon_1024_1024_background.png"
+  ios: true
+  android: true
 
 
 # For information on the generic Dart part of this file, see the

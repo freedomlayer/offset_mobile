@@ -118,19 +118,20 @@ Widget _renderCardSettingsHome(NodeName nodeName, NodeState nodeState,
   final listView =
       ListView(padding: const EdgeInsets.all(8), children: children);
 
-  final body = Column(children: [
-    Container(
-        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-        width: double.infinity,
-        color: Colors.blue.shade50,
-        child: ListTile(
-            leading: const FaIcon(FontAwesomeIcons.creditCard),
-            title: Text('${nodeName.inner}',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
-    Divider(height: 0, color: Colors.grey),
-    Expanded(child: listView),
-  ]);
+  final body = Builder(
+      builder: (BuildContext context) => Column(children: [
+            Container(
+                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                width: double.infinity,
+                color: Theme.of(context).accentColor,
+                child: ListTile(
+                    leading: const FaIcon(FontAwesomeIcons.creditCard),
+                    title: Text('${nodeName.inner}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16.0)))),
+            Divider(height: 0, color: Colors.grey),
+            Expanded(child: listView),
+          ]));
 
   final removeCardDialog = (BuildContext context) async {
     return await showDialog(

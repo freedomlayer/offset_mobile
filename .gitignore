@@ -1,6 +1,9 @@
 # External files should not be saved
 external/*
 
+# Ignore reference to keystore
+key.properties
+
 # Miscellaneous
 *.class
 *.log
