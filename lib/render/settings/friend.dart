@@ -274,7 +274,7 @@ Widget _renderFriendHome(NodeName nodeName, PublicKey friendPublicKey,
       ? FloatingActionButton.extended(
           onPressed: () =>
               queueAction(FriendSettingsAction.selectNewCurrency()),
-          label: Text('New Currency'),
+          label: Text('New currency'),
           icon: Icon(Icons.add))
       : null;
 
@@ -710,7 +710,7 @@ class _NewCurrencyState extends State<NewCurrency> {
         ]));
 
     return frame(
-        title: Text('New Currency'),
+        title: Text('New currency'),
         body: body,
         backAction: () => this.widget.queueAction(FriendSettingsAction.back()));
   }
