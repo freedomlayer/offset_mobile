@@ -1,4 +1,4 @@
-package com.example.offset
+package org.freedomlayer.offset
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
