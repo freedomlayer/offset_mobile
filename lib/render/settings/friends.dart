@@ -294,21 +294,21 @@ Widget _renderShareInfo(NodeName nodeName, NodeState nodeState,
                 padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
                 width: double.infinity,
                 color: Theme.of(context).accentColor,
-        child: ListTile(
-            leading: const FaIcon(FontAwesomeIcons.creditCard),
-            title: Text('${nodeName.inner}',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
-    Divider(height: 0, color: Colors.grey),
-    SizedBox(height: 20.0),
-    qrShow<FriendFile>(friendFile),
-    SizedBox(height: 20.0),
-    RaisedButton.icon(
-        icon: FaIcon(FontAwesomeIcons.shareAlt),
-        label: Text('Send card'),
-        onPressed: () async =>
-            await shareFile<FriendFile>(friendFile, 'local.friend')),
-  ]));
+                child: ListTile(
+                    leading: const FaIcon(FontAwesomeIcons.creditCard),
+                    title: Text('${nodeName.inner}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16.0)))),
+            Divider(height: 0, color: Colors.grey),
+            SizedBox(height: 20.0),
+            qrShow<FriendFile>(friendFile),
+            SizedBox(height: 20.0),
+            RaisedButton.icon(
+                icon: FaIcon(FontAwesomeIcons.shareAlt),
+                label: Text('Send card'),
+                onPressed: () async =>
+                    await shareFile<FriendFile>(friendFile, 'local.friend')),
+          ]));
 
   return frame(
       title: Text('Share card'),

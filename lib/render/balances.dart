@@ -121,14 +121,14 @@ Widget _renderCardBalances(
                 padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
                 width: double.infinity,
                 color: Theme.of(context).accentColor,
-        child: ListTile(
-            leading: const FaIcon(FontAwesomeIcons.creditCard),
-            title: Text('${nodeName.inner}',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)))),
-    Divider(height: 0, color: Colors.grey),
-    Expanded(child: listView)
-  ]));
+                child: ListTile(
+                    leading: const FaIcon(FontAwesomeIcons.creditCard),
+                    title: Text('${nodeName.inner}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16.0)))),
+            Divider(height: 0, color: Colors.grey),
+            Expanded(child: listView)
+          ]));
 
   return frame(
       title: Text('Card Balances'),
