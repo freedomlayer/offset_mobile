@@ -125,7 +125,10 @@ Widget _renderVersionAfter(
         title: Text(PROJECT_WEBSITE, style: TextStyle(color: Colors.blue)),
         onTap: () => _launchURL(PROJECT_WEBSITE_URL)),
     Divider(height: 0, color: Colors.grey),
-    ListTile(leading: FaIcon(FontAwesomeIcons.at), title: Text(PROJECT_EMAIL)),
+    ListTile(
+        leading: FaIcon(FontAwesomeIcons.at),
+        title: Text(PROJECT_EMAIL, style: TextStyle(color: Colors.blue)),
+        onTap: () => _launchURL('mailto:$PROJECT_EMAIL?subject=Offset')),
     Divider(height: 0, color: Colors.grey),
     SizedBox(height: 10.0),
     ListTile(title: Text(QUOTE)),
@@ -133,7 +136,7 @@ Widget _renderVersionAfter(
 }
 
 Widget _renderLogs(queueAction) {
-  // TODO: How to make sure that this Widget redraws 
+  // TODO: How to make sure that this Widget redraws
   // whenever cyclicLogOutput changes? Currently we just hope for the best.
 
   final List<Widget> children = [];
