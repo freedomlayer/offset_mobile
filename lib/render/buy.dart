@@ -114,7 +114,6 @@ Widget _renderInvoiceInfo(
     Expanded(child: listView),
   ]);
 
-
   return frame(
       title: Text('Buy'),
       body: body,

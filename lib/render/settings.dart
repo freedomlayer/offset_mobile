@@ -56,8 +56,8 @@ Widget _renderHome(BuiltMap<NodeName, NodeState> nodesStates,
   for (final nodeName in nodesStates.keys.toList()..sort()) {
     final nodeState = nodesStates[nodeName];
 
-    final trailingIcon = nodeState.info.isLocal ?
-        FontAwesomeIcons.mobileAlt
+    final trailingIcon = nodeState.info.isLocal
+        ? FontAwesomeIcons.mobileAlt
         : FontAwesomeIcons.networkWired;
 
     final trailing = !nodeState.isEnabled
@@ -153,7 +153,6 @@ class _NewCardLocalState extends State<NewCardLocal> {
 
   @override
   Widget build(BuildContext context) {
-
     final _submitForm = () {
       final FormState form = _formKey.currentState;
 
@@ -277,7 +276,6 @@ class _NewRemoteNameState extends State<NewRemoteName> {
 
   @override
   Widget build(BuildContext context) {
-
     final _submitForm = () {
       final FormState form = _formKey.currentState;
 
@@ -335,7 +333,6 @@ Widget _renderSelectCardAddRelay(
     RelayAddress relayAddress,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
-
   final body = renderSelectCard(
       nodesStates.keys,
       List.from(nodesStates.keys)
@@ -353,7 +350,6 @@ Widget _renderSelectCardAddIndex(
     IndexServerFile indexServerFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
-
   final body = renderSelectCard(
       nodesStates.keys,
       List.from(nodesStates.keys)
@@ -371,7 +367,6 @@ Widget _renderSelectCardAddFriend(
     FriendFile friendFile,
     BuiltMap<NodeName, NodeState> nodesStates,
     Function(SettingsAction) queueAction) {
-
   final body = renderSelectCard(
       nodesStates.keys,
       List.from(nodesStates.keys)

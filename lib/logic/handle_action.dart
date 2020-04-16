@@ -111,8 +111,7 @@ AppState handleAction(AppState appState, AppAction appAction, Random rand) {
     if (appView.isAbout) {
       return handleAboutAction(appState.nodesStates, aboutAction);
     } else {
-      logger
-          .w('handleAction(): Received about action during incorrect view');
+      logger.w('handleAction(): Received about action during incorrect view');
       return appState;
     }
   });

@@ -169,7 +169,6 @@ class _RelayNameState extends State<RelayName> {
 
   @override
   Widget build(BuildContext context) {
-
     final _submitForm = () {
       final FormState form = _formKey.currentState;
 

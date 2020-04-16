@@ -216,7 +216,6 @@ class _NewFriendNameState extends State<NewFriendName> {
 
   @override
   Widget build(BuildContext context) {
-
     final _submitForm = () {
       final FormState form = _formKey.currentState;
 

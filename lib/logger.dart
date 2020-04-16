@@ -7,14 +7,14 @@ List<String> cyclicLogOutput = [];
 
 /// Add a log entry to in memory cyclic log:
 _addLogCyclic(String logString) {
-    // Add event to kept events cyclic list:
-    cyclicLogOutput.add(logString);
-        // .add('[${event.level.toString()}] ${event.lines.join('\n')}');
+  // Add event to kept events cyclic list:
+  cyclicLogOutput.add(logString);
+  // .add('[${event.level.toString()}] ${event.lines.join('\n')}');
 
-    if (cyclicLogOutput.length > MAX_LOG_EVENTS) {
-      // If we have exceeded maximum events, we remove the first event:
-      cyclicLogOutput.removeAt(0);
-    }
+  if (cyclicLogOutput.length > MAX_LOG_EVENTS) {
+    // If we have exceeded maximum events, we remove the first event:
+    cyclicLogOutput.removeAt(0);
+  }
 }
 
 /// Return log level as a compact string
@@ -28,7 +28,6 @@ String _levelToString(Level level) {
   }
 }
 
-
 class SimpleLogPrinter extends LogPrinter {
   final String moduleName;
   SimpleLogPrinter(this.moduleName);
@@ -37,7 +36,8 @@ class SimpleLogPrinter extends LogPrinter {
     // TODO: This is a hack: We redirect colorless and emojiless log output
     // to the cyclic in memory log store
     final currentTime = DateTime.now();
-    _addLogCyclic('[$currentTime:${_levelToString(logEvent.level)}] ${this.moduleName}: ${logEvent.message}');
+    _addLogCyclic(
+        '[$currentTime:${_levelToString(logEvent.level)}] ${this.moduleName}: ${logEvent.message}');
 
     var color = PrettyPrinter.levelColors[logEvent.level];
     var emoji = PrettyPrinter.levelEmojis[logEvent.level];
@@ -50,7 +50,6 @@ class CyclicConsoleOutput extends ConsoleOutput {
   @override
   void output(OutputEvent event) {
     super.output(event);
-
   }
 }
 
@@ -67,7 +66,5 @@ class ReleaseFilter extends LogFilter {
 }
 
 Logger createLogger(String moduleName) {
-  return Logger(
-      filter: ReleaseFilter(),
-      printer: SimpleLogPrinter(moduleName));
+  return Logger(filter: ReleaseFilter(), printer: SimpleLogPrinter(moduleName));
 }

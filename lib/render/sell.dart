@@ -103,7 +103,6 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
     final currencies = _loadCurrencies(nodeState);
     assert(currencies.isNotEmpty);
 
-
     final _submitForm = () {
       final FormState form = _formKey.currentState;
 

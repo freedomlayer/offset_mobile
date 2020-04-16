@@ -418,7 +418,6 @@ class _CurrencySettingsState extends State<CurrencySettings> {
     final currencyReport =
         channelConsistentReport.currencyReports[this.widget.currency];
 
-
     final _submitForm = () {
       final FormState form = _formKey.currentState;
 
@@ -616,7 +615,6 @@ class _NewCurrencyState extends State<NewCurrency> {
 
   @override
   Widget build(BuildContext context) {
-
     final _submitForm = () {
       final FormState form = _formKey.currentState;
 

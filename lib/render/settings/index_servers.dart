@@ -175,7 +175,6 @@ class _IndexServerNameState extends State<IndexServerName> {
 
   @override
   Widget build(BuildContext context) {
-
     final _submitForm = () {
       final FormState form = _formKey.currentState;
 
