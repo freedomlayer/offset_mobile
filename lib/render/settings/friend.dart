@@ -647,6 +647,7 @@ class _NewCurrencyState extends State<NewCurrency> {
                     hintText: 'Currency name',
                     labelText: 'Currency name',
                   ),
+                  textCapitalization: TextCapitalization.characters,
                   inputFormatters: [LengthLimitingTextInputFormatter(16)],
                   validator: _currencyNameValidator,
                   keyboardType: TextInputType.text,
