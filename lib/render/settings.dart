@@ -141,8 +141,11 @@ String _nodeNameValidator(String nodeName) {
     return 'Please select a card name';
   }
 
-  if (nodeName.contains('\\') || nodeName.contains('/') ||
-      nodeName.contains(':') || nodeName.contains('\$') || nodeName.contains('.')) {
+  if (nodeName.contains('\\') ||
+      nodeName.contains('/') ||
+      nodeName.contains(':') ||
+      nodeName.contains('\$') ||
+      nodeName.contains('.')) {
     return 'Invalid card name';
   }
 
@@ -158,7 +161,6 @@ class NewCardLocal extends StatefulWidget {
   @override
   _NewCardLocalState createState() => _NewCardLocalState();
 }
-
 
 class _NewCardLocalState extends State<NewCardLocal> {
   final _formKey = GlobalKey<FormState>();
