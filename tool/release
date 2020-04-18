@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+# Create a release
+
+# See: https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
+set -eux -o pipefail
+
+# Get current directory, 
+# see: https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
+CUR_DIR=`dirname $(readlink -f $0)`
+# Directory that contains downloaded core binaries
+EXTERNAL_DIR="$CUR_DIR/../external"
+RELEASE_DIR="$CUR_DIR/../release"
+
+# Remove release directory:
+rm -rf $RELEASE_DIR
+# Create an empty release directory:
+mkdir -p $RELEASE_DIR
+
+# Create a temporary directory:
+TEMP_DIR=$(mktemp -d -t ci-XXXXXXXXXX)
+
+# Temporarily move all core binaries to a temp directory:
+mv $EXTERNAL_DIR/* $TEMP_DIR/
+
+# For each of the builds, 
+# we copy only the required architecture binary to the external directory:
+cp $TEMP_DIR/stcompact_aarch64 $EXTERNAL_DIR/
+flutter build apk --split-per-abi --target-platform android-arm64
+cp build/app/outputs/apk/release/*.apk $RELEASE_DIR/
+rm $EXTERNAL_DIR/*
+
+cp $TEMP_DIR/stcompact_armv7 $EXTERNAL_DIR
+flutter build apk --split-per-abi --target-platform android-arm
+cp build/app/outputs/apk/release/*.apk $RELEASE_DIR/
+rm $EXTERNAL_DIR/*
+
+cp $TEMP_DIR/stcompact_i686 $EXTERNAL_DIR
+flutter build apk --split-per-abi --target-platform android-x64
+cp build/app/outputs/apk/release/*.apk $RELEASE_DIR/
+rm $EXTERNAL_DIR/*
+
+# Restore files to external dir:
+cp $TEMP_DIR/* $EXTERNAL_DIR/
+
+# Remote temporary directory
+rm -rf ${TEMP_DIR}

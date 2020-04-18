@@ -1,6 +1,9 @@
 # External files should not be saved
 external/*
 
+# Release directory
+/release/
+
 # Ignore reference to keystore
 key.properties
 

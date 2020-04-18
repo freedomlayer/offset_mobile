@@ -1,11 +1,16 @@
 import 'dart:io';
 import 'dart:async';
+import 'dart:typed_data';
+
 import 'package:path/path.dart' as path;
 import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:path_provider/path_provider.dart';
 
 import 'error.dart';
+import 'logger.dart';
+
+final logger = createLogger('process');
 
 const ASSETS_DIR = 'external';
 const List<String> STCOMPACT_FILENAMES = [
@@ -23,10 +28,17 @@ class ProcessError extends AppError {
   ProcessError(cause) : super(cause);
 }
 
+/// Attempt to load binary asset
 Future<void> _loadBinary(
     String appDir, String assetFile, String destFile) async {
-  // Obtain the binary file from assets:
-  var bytes = await rootBundle.load(path.join(ASSETS_DIR, assetFile));
+  final assetPath = path.join(ASSETS_DIR, assetFile);
+  ByteData bytes;
+  try {
+    // Obtain the binary file from assets:
+    bytes = await rootBundle.load(assetPath);
+  } catch (e) {
+    throw ProcessError('Failed to load asset: $assetPath, error: $e');
+  }
 
   // Get the path we want the binary file to live in:
   final String binaryPath = path.join(appDir, BIN_DIR, destFile);
@@ -80,7 +92,12 @@ Future<String> _selectBinary(String appDir, List<String> filenames) async {
   // Check if each of the binaries is runnable.
   // We pick the first runnable binary file:
   for (final assetFile in filenames) {
-    await _loadBinary(appDir, assetFile, TEMP_STCOMPACT);
+    try {
+      await _loadBinary(appDir, assetFile, TEMP_STCOMPACT);
+    } on ProcessError catch (e) {
+      logger.w('Failed to load asset $assetFile, error: $e');
+      continue;
+    }
     final srcPath = path.join(appDir, BIN_DIR, TEMP_STCOMPACT);
     if (await _canBinaryRun(path.join(appDir, BIN_DIR, TEMP_STCOMPACT))) {
       // Move to stcompact:
