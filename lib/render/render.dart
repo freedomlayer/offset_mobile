@@ -84,6 +84,6 @@ Widget renderTransition(
       theme: appTheme(),
       home: Stack(children: <Widget>[
         renderAppView(oldView, nodesStates, noQueueAction),
-        CircularProgressIndicator(value: null)
+        Center(child: CircularProgressIndicator(value: null)),
       ]));
 }
