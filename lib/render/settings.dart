@@ -135,6 +135,20 @@ Widget _renderNewCardSelect(BuiltMap<NodeName, NodeState> nodesStates,
       backAction: () => queueAction(NewCardAction.back()));
 }
 
+// TODO: Make validation more strict
+String _nodeNameValidator(String nodeName) {
+  if (nodeName.isEmpty) {
+    return 'Please select a card name';
+  }
+
+  if (nodeName.contains('\\') || nodeName.contains('/') ||
+      nodeName.contains(':') || nodeName.contains('\$') || nodeName.contains('.')) {
+    return 'Invalid card name';
+  }
+
+  return null;
+}
+
 class NewCardLocal extends StatefulWidget {
   final BuiltMap<NodeName, NodeState> nodesStates;
   final Function(NewCardAction) queueAction;
@@ -144,6 +158,7 @@ class NewCardLocal extends StatefulWidget {
   @override
   _NewCardLocalState createState() => _NewCardLocalState();
 }
+
 
 class _NewCardLocalState extends State<NewCardLocal> {
   final _formKey = GlobalKey<FormState>();
@@ -181,7 +196,7 @@ class _NewCardLocalState extends State<NewCardLocal> {
                     hintText: 'How do you want to call this card?',
                     labelText: 'Card name',
                   ),
-                  // TODO: Possibly add a validator?
+                  validator: _nodeNameValidator,
                   keyboardType: TextInputType.text,
                   inputFormatters: [LengthLimitingTextInputFormatter(64)],
                   onSaved: (nodeName) => _nodeName = nodeName,
