@@ -186,11 +186,12 @@ Widget _renderChannelInfoConsistent(
         ? balanceToString(currencyReport.balance)
         : '(Pending)';
 
-    final double ratePercent = (configReport.rate.mul / (1 << 32)) * 100;
+    final ratePercentStr = mulRateToPercentString(configReport.rate.mul);
+
     final addStr = amountToString(U128(BigInt.from(configReport.rate.add)));
     final subtitle = Text('balance: $balanceStr'
             '\nlimit: ${amountToString(configReport.remoteMaxDebt)}' +
-        '\nrate: ${ratePercent.toStringAsFixed(2)}% + $addStr');
+        '\nrate: $ratePercentStr% + $addStr');
 
     final currencyColor = currencyReport == null
         ? Colors.grey
@@ -334,14 +335,12 @@ String _percentValidator(String percentString) {
     return 'Can not be empty!';
   }
 
-  final percent = double.parse(percentString);
-  if (percent == null) {
-    return 'Invalid percent value!';
+  try { 
+    final _ = percentStringToMulRate(percentString);
+  } on AmountError {
+    return 'Invalid value!';
   }
 
-  if (percent < 0.0 || percent > 100.0) {
-    return 'Value out of bounds';
-  }
   return null;
 }
 
@@ -383,6 +382,7 @@ class _CurrencySettingsState extends State<CurrencySettings> {
   final _formKey = GlobalKey<FormState>();
 
   int _mul;
+  String _percentString;
   int _add;
   U128 _creditLimit;
 
@@ -395,6 +395,7 @@ class _CurrencySettingsState extends State<CurrencySettings> {
     assert(currencyConfig != null);
 
     _mul = currencyConfig.rate.mul;
+    _percentString = mulRateToPercentString(_mul);
     _add = currencyConfig.rate.add;
     _creditLimit = currencyConfig.remoteMaxDebt;
   }
@@ -470,13 +471,21 @@ class _CurrencySettingsState extends State<CurrencySettings> {
                       hintText: 'Percent commission',
                       labelText: 'Percent commission',
                     ),
-                    initialValue:
-                        ((_mul / (1 << 32)) * 100.0).toStringAsFixed(2),
+                    initialValue: mulRateToPercentString(_mul),
                     validator: _percentValidator,
                     keyboardType: TextInputType.number,
-                    onSaved: (percentString) => _mul =
-                        ((double.parse(percentString) / 100.0) * (1 << 32))
-                            .ceil())),
+                    onSaved: (percentString) {
+                        // We only update _mul if the new string is different than the old one.
+                        // In the protocol, _mul is represented as 32 bits fixed fraction, and therefore
+                        // usually can not be represented as a short decimal fraction.
+                        //
+                        // If we update every time, the value will probably
+                        // change every time the user clicks on `Apply`.
+                        if (percentString != _percentString) {
+                          _percentString = percentString;
+                          _mul = percentStringToMulRate(percentString);
+                        }
+                    })),
             ListTile(
                 leading: FaIcon(FontAwesomeIcons.plus),
                 title: TextFormField(
