@@ -9,6 +9,9 @@ class AmountError extends AppError {
 // Amount of decimal places to keep after the decimal point:
 const int ACCURACY = 5;
 
+// Amount of decimal places to keep after the decimal point:
+const int PERCENT_ACCURACY = 3;
+
 /// Convert U128 amount, divided by 10^ACCURACY, to a string with a decimal point.
 String amountToString(U128 amount) {
   return bigIntToFixed(amount.inner, ACCURACY);
@@ -73,4 +76,29 @@ bool verifyBalanceString(String balanceString) {
   } on AmountError {
     return false;
   }
+}
+
+/// Convert a multiplicative rate to a decimal percent value.
+/// Examples:
+/// 0 -> '0'
+/// 2^16 -> '0.5'
+String mulRateToPercentString(int mulRate) {
+  final double ratePercent = (mulRate / (1 << 32)) * 100;
+  return ratePercent.toStringAsFixed(PERCENT_ACCURACY);
+}
+
+/// Convert a rate percent string to multiplicate rate
+int percentStringToMulRate(String percentString) {
+  double frac;
+  try {
+    frac = double.parse(percentString) / 100.0;
+  } catch (e) {
+    throw AmountError('Failed to parse value $percentString');
+  }
+
+  if (frac < 0.0 || frac > 1.0) {
+    throw AmountError('percentString out of range: $percentString');
+  }
+
+  return (frac * (1 << 32)).ceil();
 }

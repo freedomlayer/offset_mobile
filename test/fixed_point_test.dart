@@ -13,7 +13,7 @@ void main() {
       expect(stripTrailingZeroes('12340000'), '1234');
       expect(stripTrailingZeroes('0000'), '0');
     });
-    test('amountToString', () {
+    test('bigIntToFixed', () {
       expect(bigIntToFixed(BigInt.from(0), 5), "0");
       expect(bigIntToFixed(BigInt.from(1), 5), "0.00001");
       expect(bigIntToFixed(BigInt.from(12), 5), "0.00012");
