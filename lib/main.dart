@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:logger/logger.dart';
 
 import 'package:built_collection/built_collection.dart';
-import 'package:receive_file_intent/receive_file_intent.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 import 'dart:convert';
 import 'dart:async';
@@ -153,22 +153,26 @@ class MainAppState extends State<MainApp> {
     }));
 
     // Handle shared files:
-    final handleSharedFiles = (List<String> filePaths) {
-      if (filePaths == null) {
-        logger.w('handleSharedFiles(): Received null filePaths. Aborting');
+    final handleSharedFiles = (List<SharedMediaFile> sharedMediaFiles) {
+      if (sharedMediaFiles == null) {
+        logger.i('handleSharedFiles(): Received null filePaths. Aborting');
         return;
       }
-      if (filePaths.isEmpty) {
+      if (sharedMediaFiles.isEmpty) {
         logger.w('handleSharedFiles(): Received empty shared filePaths!');
         return;
       }
-      if (filePaths.length > 1) {
+      if (sharedMediaFiles.length > 1) {
         logger.w(
             'handleSharedFiles(): Received more than one file path! Aborting.');
         return;
       }
       // We received exactly one filePath:
-      final filePath = filePaths[0];
+      final filePath = sharedMediaFiles[0].path;
+        logger.w(
+            'handleSharedFiles(): fileType = ${sharedMediaFiles[0].type}');
+        logger.w(
+            'handleSharedFiles(): filePath = $filePath');
       // Queue shared file event:
       _eventController.add(AppEvent.sharedFile(filePath));
     };
@@ -176,15 +180,15 @@ class MainAppState extends State<MainApp> {
     // Listen to incoming shared files:
     // For sharing files coming from outside the app while the app is in the memory
     _streamSubs
-        .add(ReceiveFileIntent.getFileStream().listen((List<String> filePaths) {
-      handleSharedFiles(filePaths);
+        .add(ReceiveSharingIntent.getMediaStream().listen((List<SharedMediaFile> sharedMediaFiles) {
+      handleSharedFiles(sharedMediaFiles);
     }, onError: (err) {
       throw MainAppError('getIntentDataStreamError: $err');
     }));
 
     // For sharing files coming from outside the app while the app is closed
-    ReceiveFileIntent.getInitialFile().then((List<String> filePaths) {
-      handleSharedFiles(filePaths);
+    ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> sharedMediaFiles) {
+      handleSharedFiles(sharedMediaFiles);
     });
 
     final sendUserToServerAck = (UserToServerAck userToServerAck) {

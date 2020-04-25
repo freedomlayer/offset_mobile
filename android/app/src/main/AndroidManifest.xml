@@ -30,7 +30,7 @@
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="*/*" />
-                <data android:pathPattern=".*\\.(invoice|receipt|commit|friend|relay|index)" />
+                <data android:pathPattern=".*\\.(invoice|receipt|commit|friend|relay|index|rcard)" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

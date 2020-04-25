@@ -18,8 +18,12 @@ final logger = createLogger('logic::handle_shared_file');
 AppState handleSharedFile(AppState appState, String filePath) {
   // Are we in a state that may be interrupted? If not, return early.
   AppView oldAppView;
-  final interruptible = appState.viewState
-      .match(view: (appView) => true, transition: (_a, _b, _c, _d) => false);
+  final interruptible = appState.viewState.match(
+      view: (appView) {
+        oldAppView = appView;
+        return true;
+      },
+      transition: (_a, _b, _c, _d) => false);
 
   if (!interruptible) {
     return appState;
