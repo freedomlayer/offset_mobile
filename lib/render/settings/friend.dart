@@ -335,7 +335,7 @@ String _percentValidator(String percentString) {
     return 'Can not be empty!';
   }
 
-  try { 
+  try {
     final _ = percentStringToMulRate(percentString);
   } on AmountError {
     return 'Invalid value!';
@@ -475,16 +475,16 @@ class _CurrencySettingsState extends State<CurrencySettings> {
                     validator: _percentValidator,
                     keyboardType: TextInputType.number,
                     onSaved: (percentString) {
-                        // We only update _mul if the new string is different than the old one.
-                        // In the protocol, _mul is represented as 32 bits fixed fraction, and therefore
-                        // usually can not be represented as a short decimal fraction.
-                        //
-                        // If we update every time, the value will probably
-                        // change every time the user clicks on `Apply`.
-                        if (percentString != _percentString) {
-                          _percentString = percentString;
-                          _mul = percentStringToMulRate(percentString);
-                        }
+                      // We only update _mul if the new string is different than the old one.
+                      // In the protocol, _mul is represented as 32 bits fixed fraction, and therefore
+                      // usually can not be represented as a short decimal fraction.
+                      //
+                      // If we update every time, the value will probably
+                      // change every time the user clicks on `Apply`.
+                      if (percentString != _percentString) {
+                        _percentString = percentString;
+                        _mul = percentStringToMulRate(percentString);
+                      }
                     })),
             ListTile(
                 leading: FaIcon(FontAwesomeIcons.plus),
